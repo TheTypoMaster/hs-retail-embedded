@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TableLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="185sp">
+
+		<TableRow android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TextView android:text="付款"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+			</TextView>
+			<TextView android:id="@+id/paymentWelcome"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="210sp">
+			</TextView>
+		</TableRow>
+		
+		<TableRow android:layout_width="fill_parent"
+			android:layout_height="175sp">
+			<TextView android:text="左边"
+				android:layout_width="200sp"
+				android:layout_height="wrap_content">
+			</TextView>
+			<TextView 
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="右边">
+			</TextView>
+		</TableRow>
+	</TableLayout>
+
+	
+	<ImageButton android:id="@+id/paymentreturn"
+		android:layout_width="wrap_content" android:layout_height="30sp"
+		android:src="@+drawable/back" android:layout_marginTop="10sp">
+	</ImageButton>
+	
+</LinearLayout>
