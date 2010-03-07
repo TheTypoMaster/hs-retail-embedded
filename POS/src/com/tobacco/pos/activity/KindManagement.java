@@ -335,6 +335,14 @@ public class KindManagement extends Activity {
 				}// 点击TextView时的事件
 
 			});
+			t.setOnLongClickListener(new OnLongClickListener(){
+
+				public boolean onLongClick(View v) {
+					
+					return false;
+				}
+				
+			});
 
 			l.addView(t);
 
