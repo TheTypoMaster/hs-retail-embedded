@@ -20,7 +20,7 @@
 
 		<TableRow android:layout_width="fill_parent"
 			android:layout_height="175sp">
-			
+
 			<TableLayout android:layout_width="200sp"
 				android:layout_height="wrap_content">
 				<TableRow android:layout_width="wrap_content"
@@ -46,9 +46,10 @@
 					</EditText>
 				</TableRow>
 			</TableLayout>
-			<TextView android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="右边">
-			</TextView>
+			<TableLayout android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/salesBillTable">
+				
+			</TableLayout>
 		</TableRow>
 	</TableLayout>
 
