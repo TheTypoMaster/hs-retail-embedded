@@ -120,4 +120,20 @@ public class GoodsDAO extends SQLiteOpenHelper {
 		}
 		
 	}
+	public String getGoodsInfoByGoodsId(int goodsId, SQLiteDatabase db){
+		StringBuffer temp = new StringBuffer();
+		c = db.query("Goods", null, null, null, null, null, null);
+		for(int i=0;i<c.getCount();i++){
+			if(c.getInt(0) == goodsId){
+				temp.append(c.getString(1));
+				temp.append(";");
+				temp.append(c.getString(2));
+				temp.append(";");
+				temp.append(manufacturerDAO.getManufacturerNameById(c.getInt(3), db));
+				temp.append(";");
+				temp.append(kindDAO.getKindNameById(c.getInt(5), db));
+			}
+		}
+		return "";
+	}
 }
