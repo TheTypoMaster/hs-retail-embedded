@@ -51,5 +51,20 @@ public class KindDAO  extends SQLiteOpenHelper {
 		 
 		return 0;
 	}
+	public String getKindNameById(int kindId, SQLiteDatabase db){
+		 
+		c = db.query("GoodsKind", null, null, null, null, null, null);
+		c.moveToFirst();
+		for(int i=0;i<c.getCount();i++){
+			if(c.getInt(0) == kindId)
+				return c.getString(1);
+			
+			else
+				c.moveToNext();
+		}
+		
+		 
+		return "";
+	}
 
 }
