@@ -443,6 +443,7 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.clear();
 		value.put("goodsId", 1);//1号商品"红塔山"，每"包"进货时6.0元，售价7.0元
 		value.put("unitId", 1);
+		value.put("barcode", "gb1");
 		value.put("inPrice", 6.0);
 		value.put("outPrice", 7.0);
 		db.insertOrThrow(TABLE_NAME5, null, value);
@@ -450,6 +451,7 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.clear();
 		value.put("goodsId", 2);
 		value.put("unitId", 2);
+		value.put("barcode", "gb2");
 		value.put("inPrice", 50);
 		value.put("outPrice", 60);
 		db.insertOrThrow(TABLE_NAME5, null, value);
