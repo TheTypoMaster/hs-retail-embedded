@@ -42,5 +42,16 @@ public class ManufacturerDAO extends SQLiteOpenHelper {
 	 
 		return 0;
 	}
+	public String getManufacturerNameById(int mId, SQLiteDatabase db){
+		c = db.query("Manufacturer", null, null, null, null, null, null);
+		c.moveToFirst();
+		for(int i=0;i<c.getCount();i++){
+			if(c.getInt(0) == mId){
+				return c.getString(1);
+			}
+			c.moveToNext();
+		}
+		return "";
+	}
 
 }
