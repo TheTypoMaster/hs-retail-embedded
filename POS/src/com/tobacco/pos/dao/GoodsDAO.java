@@ -120,19 +120,16 @@ public class GoodsDAO extends SQLiteOpenHelper {
 		}
 		
 	}
-	public String getGoodsInfoByGoodsId(int goodsId, SQLiteDatabase db){
-		StringBuffer temp = new StringBuffer();
+	public String getGoodsNameByGoodsId(int goodsId, SQLiteDatabase db){//根据商品的ID查找商品的详细信息
+	
 		c = db.query("Goods", null, null, null, null, null, null);
+		c.moveToFirst();
 		for(int i=0;i<c.getCount();i++){
 			if(c.getInt(0) == goodsId){
-				temp.append(c.getString(1));
-				temp.append(";");
-				temp.append(c.getString(2));
-				temp.append(";");
-				temp.append(manufacturerDAO.getManufacturerNameById(c.getInt(3), db));
-				temp.append(";");
-				temp.append(kindDAO.getKindNameById(c.getInt(5), db));
+				return c.getString(2);//商品名字
+					
 			}
+			c.moveToNext();
 		}
 		return "";
 	}
