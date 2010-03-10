@@ -2,6 +2,7 @@ package com.tobacco.pos.activity;
 
 import com.tobacco.pos.dao.GoodsDAO;
 import com.tobacco.pos.dao.GoodsPriceDAO;
+import com.tobacco.pos.dao.UnitDAO;
 import com.tobacco.pos.dao.VIPInfoDAO;
 import com.tobacco.pos.util.Loginer;
 
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,15 +29,16 @@ public class PaymentManagement extends Activity {
 	private VIPInfoDAO vipInfoDAO = null;
 	private GoodsPriceDAO goodsPriceDAO = null;
 	private GoodsDAO gDAO = null;
+	private UnitDAO unitDAO = null;
 	private Loginer loginer = null;
 
 	private TextView paymentWelcome;
 	private ImageButton paymentreturn;// 返回首页的按钮
-	
+
 	private EditText barcodeEText;//条形码输入框
-	private EditText sGoodsNumEText;//数量的输入框
-	private TableLayout salesBillTable;//显示每一张销售单详细信息的表格
-	
+	private EditText sGoodsNumEText;// 数量的输入框
+	private TableLayout salesBillTable;// 显示每一张销售单详细信息的表格
+
 	private String userName = "";// 登陆用户的名字
 
 	@Override
@@ -62,42 +65,116 @@ public class PaymentManagement extends Activity {
 			}
 
 		});
-		barcodeEText = (EditText)this.findViewById(R.id.barcodeEText);
-		sGoodsNumEText = (EditText)this.findViewById(R.id.sGoodsNumEText);
-		sGoodsNumEText.setOnFocusChangeListener(new OnFocusChangeListener(){
+		barcodeEText = (EditText) this.findViewById(R.id.barcodeEText);
+		sGoodsNumEText = (EditText) this.findViewById(R.id.sGoodsNumEText);
+		sGoodsNumEText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			public void onFocusChange(View v, boolean hasFocus) {
-				
-				if(!hasFocus){
+
+				if (!hasFocus) {
 					int count = 0;
-					try{
-						count = Integer.parseInt(((EditText)v).getText().toString());
-					}
-					catch(Exception e){
-						((EditText)v).setText("");
+					try {
+						count = Integer.parseInt(((EditText) v).getText()
+								.toString());
+					} catch (Exception e) {
+						((EditText) v).setText("");
 					}
 					String barcode = barcodeEText.getText().toString();
-					if(!barcode.trim().equals(null) && count!=0){
-						goodsPriceDAO  = new GoodsPriceDAO(PaymentManagement.this);
+					if (!barcode.trim().equals(null) && count != 0) {
+						gDAO = new GoodsDAO(PaymentManagement.this);
+						goodsPriceDAO = new GoodsPriceDAO(
+								PaymentManagement.this);
+						unitDAO = new UnitDAO(PaymentManagement.this);
+
+						int goodsId = goodsPriceDAO.getGoodsIdByBarcode(
+								barcode, goodsPriceDAO.getReadableDatabase());
+						int unitId = goodsPriceDAO.getUnitIdByBarcode(barcode,
+								goodsPriceDAO.getReadableDatabase());
+
+						salesBillTable = (TableLayout) PaymentManagement.this
+								.findViewById(R.id.salesBillTable);
+						final TableRow r = new TableRow(PaymentManagement.this);
+						TextView goodsNameTView = new TextView(PaymentManagement.this);
+
+						goodsNameTView.setText(gDAO.getGoodsNameByGoodsId(goodsId, gDAO
+								.getReadableDatabase()));
+						r.addView(goodsNameTView);//商品名字
 						
-						int goodsId = goodsPriceDAO.getGoodsIdByBarcode(barcode, goodsPriceDAO.getReadableDatabase());
-						int unitId = goodsPriceDAO.getUnitIdByBarcode(barcode, goodsPriceDAO.getReadableDatabase());
-				
-						salesBillTable = (TableLayout)PaymentManagement.this.findViewById(R.id.salesBillTable);
-						TableRow r = new TableRow(PaymentManagement.this);
-						TextView t = new TextView(PaymentManagement.this);
-						t.setText(gDAO.getGoodsInfoByGoodsId(goodsId, gDAO.getReadableDatabase()));
-						r.addView(t);
+						TextView countTView = new TextView(PaymentManagement.this);
+						countTView.setText(""+count);
+						r.addView(countTView);//商品数量
+						
+						TextView unitTView = new TextView(PaymentManagement.this);
+						unitTView.setText(unitDAO.getUnitNameById(unitId, unitDAO.getReadableDatabase()));
+						r.addView(unitTView);//商品单价
+						
+						TextView priceTView = new TextView(PaymentManagement.this);
+						priceTView.setText(""+goodsPriceDAO.getOutPriceByBarcode(barcode, goodsPriceDAO.getReadableDatabase()));
+						r.addView(priceTView);	
+						
+						TextView barcodeTView = new TextView(PaymentManagement.this);
+						barcodeTView.setText(barcode);
+						r.addView(barcodeTView);
+						
 						ImageView i = new ImageView(PaymentManagement.this);
 						i.setImageResource(R.drawable.delete);
-					
+						i.setOnClickListener(new OnClickListener(){
+
+							public void onClick(View v) {
+								((TableLayout)v.getParent().getParent()).removeView(r);
+								if(salesBillTable.getChildCount()==2){
+									salesBillTable.removeViewAt(1);
+								}
+							}
+							
+						});
+
 						r.addView(i);
-						
+						if(salesBillTable.getChildCount()!=1){
+							salesBillTable.removeViewAt(salesBillTable.getChildCount()-1);
+						}
+					
 						salesBillTable.addView(r);
+						barcodeEText.setText("");
+						sGoodsNumEText.setText("");
+						
+						Button saveButton = new Button(PaymentManagement.this);
+						saveButton.setText("确定");
+						saveButton.setHeight(1);
+						saveButton.setTextSize(10);
+						TextView blank1 = new TextView(PaymentManagement.this);
+						blank1.setText("");
+						TextView blank2 = new TextView(PaymentManagement.this);
+						blank2.setText("");
+						TextView blank3 = new TextView(PaymentManagement.this);
+						blank3.setText("");
+						
+						Button cancelButton = new Button(PaymentManagement.this);
+						cancelButton.setText("取消");
+						cancelButton.setHeight(1);
+						cancelButton.setTextSize(10);
+						cancelButton.setOnClickListener(new OnClickListener(){
+
+							public void onClick(View v) {
+								salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//取消之前的所有销售项
+							}
+							
+						});
+						
+						TextView blank4 = new TextView(PaymentManagement.this);
+						blank4.setText("");
+						TableRow lastRow = new TableRow(PaymentManagement.this);
+						lastRow.addView(blank1);
+						lastRow.addView(blank2);
+						lastRow.addView(blank3);
+						lastRow.addView(saveButton);
+						lastRow.addView(cancelButton);
+						lastRow.addView(blank4);
+						salesBillTable.addView(lastRow);
 					}
 				}
 			}
-			
+
 		});
 	}
 
@@ -133,9 +210,10 @@ public class PaymentManagement extends Activity {
 
 					public void onClick(DialogInterface dialog, int which) {
 						vipInfoDAO = new VIPInfoDAO(PaymentManagement.this);
-						//根据会员号获取会员的ID
-						int flag = vipInfoDAO.verifyIsVIP(VIPNumEText.getText().toString(), vipInfoDAO.getReadableDatabase());
-					
+						// 根据会员号获取会员的ID
+						int flag = vipInfoDAO.verifyIsVIP(VIPNumEText.getText()
+								.toString(), vipInfoDAO.getReadableDatabase());
+
 					}
 
 				});
