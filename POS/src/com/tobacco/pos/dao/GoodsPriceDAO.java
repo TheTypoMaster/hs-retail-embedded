@@ -7,7 +7,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class GoodsPriceDAO  extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "POS.db";// Êý¾Ý¿âÃû³Æ
@@ -82,6 +81,16 @@ public class GoodsPriceDAO  extends SQLiteOpenHelper {
 		}
 		return -1;
 	}
-
+	public double getOutPriceByBarcode(String barcode, SQLiteDatabase db){
+		c = db.query("GoodsPrice", null, null, null, null, null, null);
+		c.moveToFirst();
+		for(int i=0;i<c.getCount();i++){
+			if(c.getString(3).equals(barcode)){
+				return c.getDouble(5);
+			}
+			c.moveToNext();
+		}
+		return 0;
+	}
 
 }
