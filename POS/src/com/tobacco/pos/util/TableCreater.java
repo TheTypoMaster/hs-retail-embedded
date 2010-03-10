@@ -114,7 +114,6 @@ public class TableCreater extends SQLiteOpenHelper {
 					+ " goodsCode varchar(50) not null unique ,"
 					+ "goodsName varchar(50) not null,"
 					+ " manufacturerId integer references  " + TABLE_NAME15 + " ( " + _ID + " ),"
-					+ "codeForShort vachar(50) ,"
 					+ "goodsFormat varchar(50)not null,"
 					+ "kindId integer references " + TABLE_NAME2 + " (" + _ID
 					+ ") )");
@@ -283,21 +282,21 @@ public class TableCreater extends SQLiteOpenHelper {
 		 
 		ContentValues value = new ContentValues();
 		
-		value.clear();
-		value.put("sBillNum", "S00001");
-		value.put("operId", 2);
-		Date d1 = new Date();
-		value.put("time", d1.toLocaleString());
-		value.put("VIPId", 1);
-		db.insertOrThrow(TABLE_NAME7, null , value);
-		
-		value.clear();
-		value.put("sBillNum", "S00002");
-		value.put("operId", 2);
-		Date d2 = new Date();
-		value.put("time", d2.toLocaleString());
-		value.put("VIPId", 2);
-		db.insertOrThrow(TABLE_NAME7, null , value);
+//		value.clear();
+//		value.put("sBillNum", "S00001");
+//		value.put("operId", 2);
+//		Date d1 = new Date();
+//		value.put("time", d1.toLocaleString());
+//		value.put("VIPId", 1);
+//		db.insertOrThrow(TABLE_NAME7, null , value);
+//		
+//		value.clear();
+//		value.put("sBillNum", "S00002");
+//		value.put("operId", 2);
+//		Date d2 = new Date();
+//		value.put("time", d2.toLocaleString());
+//		value.put("VIPId", 2);
+//		db.insertOrThrow(TABLE_NAME7, null , value);
 		
 		return true;
 		
@@ -374,7 +373,6 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.put("goodsCode", "G0001");
 		value.put("goodsName", "ºìËþÉ½");
 		value.put("manufacturerId", 1);
-		value.put("codeForShort", "1");
 		value.put("goodsFormat", "");
 		value.put("kindId", 8);
 		db.insertOrThrow(TABLE_NAME4, null, value);
@@ -383,7 +381,6 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.put("goodsCode", "G0002");
 		value.put("goodsName", "ºìÃ·");
 		value.put("manufacturerId", 1);
-		value.put("codeForShort", "2");
 		value.put("goodsFormat", "");
 		value.put("kindId", 8);
 		db.insertOrThrow(TABLE_NAME4, null, value);
@@ -392,7 +389,38 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.put("goodsCode", "G0003");
 		value.put("goodsName", "Ò»Æ·Ã·");
 		value.put("manufacturerId", 2);
-		value.put("codeForShort", "3");
+		value.put("goodsFormat", "");
+		value.put("kindId", 8);
+		db.insertOrThrow(TABLE_NAME4, null, value);
+		
+		value.clear();
+		value.put("goodsCode", "G0004");
+		value.put("goodsName", "¹þµÂÃÅ");
+		value.put("manufacturerId", 1);
+		value.put("goodsFormat", "");
+		value.put("kindId", 8);
+		db.insertOrThrow(TABLE_NAME4, null, value);
+		
+		value.clear();
+		value.put("goodsCode", "G0005");
+		value.put("goodsName", "»ÆºÓ");
+		value.put("manufacturerId", 1);
+		value.put("goodsFormat", "");
+		value.put("kindId", 8);
+		db.insertOrThrow(TABLE_NAME4, null, value);
+		
+		value.clear();
+		value.put("goodsCode", "G0006");
+		value.put("goodsName", "ÆßÆ¥ÀÇ");
+		value.put("manufacturerId", 1);
+		value.put("goodsFormat", "");
+		value.put("kindId", 8);
+		db.insertOrThrow(TABLE_NAME4, null, value);
+		
+		value.clear();
+		value.put("goodsCode", "G0007");
+		value.put("goodsName", "¹ÅÌï");
+		value.put("manufacturerId", 1);
 		value.put("goodsFormat", "");
 		value.put("kindId", 8);
 		db.insertOrThrow(TABLE_NAME4, null, value);
@@ -454,6 +482,38 @@ public class TableCreater extends SQLiteOpenHelper {
 		value.put("barcode", "gb2");
 		value.put("inPrice", 50);
 		value.put("outPrice", 60);
+		db.insertOrThrow(TABLE_NAME5, null, value);
+		
+		value.clear();
+		value.put("goodsId", 3);
+		value.put("unitId", 3);
+		value.put("barcode", "gb3");
+		value.put("inPrice", 70);
+		value.put("outPrice", 80);
+		db.insertOrThrow(TABLE_NAME5, null, value);
+		
+		value.clear();
+		value.put("goodsId", 4);
+		value.put("unitId", 3);
+		value.put("barcode", "gb4");
+		value.put("inPrice", 55);
+		value.put("outPrice", 64);
+		db.insertOrThrow(TABLE_NAME5, null, value);
+		
+		value.clear();
+		value.put("goodsId", 5);
+		value.put("unitId", 3);
+		value.put("barcode", "gb5");
+		value.put("inPrice", 90);
+		value.put("outPrice", 100);
+		db.insertOrThrow(TABLE_NAME5, null, value);
+		
+		value.clear();
+		value.put("goodsId", 6);
+		value.put("unitId", 3);
+		value.put("barcode", "gb6");
+		value.put("inPrice", 100);
+		value.put("outPrice", 110);
 		db.insertOrThrow(TABLE_NAME5, null, value);
 		
 		return true;
