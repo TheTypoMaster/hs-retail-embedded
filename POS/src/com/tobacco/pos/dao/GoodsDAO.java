@@ -41,16 +41,7 @@ public class GoodsDAO extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	public String[] getAllManufacturer(SQLiteDatabase db) {
-		c = db.query("Manufacturer", null, null, null, null, null, null);
-		String[] allManufacturer = new String[c.getCount()];
-		c.moveToFirst();
-		for (int i = 0; i < c.getCount(); i++) {
-			allManufacturer[i] = c.getString(1);// 获取所有厂家的名称
-			c.moveToNext();
-		}
-		return allManufacturer;
-	}
+	
 
 	public String[] getAllGoods(SQLiteDatabase db){
 		c = db.query("Goods", null, null, null, null, null, null);
