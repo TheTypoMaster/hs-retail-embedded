@@ -46,4 +46,18 @@ public class SalesBillDAO  extends SQLiteOpenHelper{
 		c.moveToLast();
 		return c.getInt(0);
 	}
+	
+	public String getSBillNumBySBillId(int sBillId, SQLiteDatabase db){
+		c = db.query("SalesBill", null, null, null, null, null, null);	
+		c.moveToFirst();
+		
+		for(int i=0;i<c.getCount();i++){
+			if(c.getInt(0) == sBillId){
+				return c.getString(1);
+			}
+			c.moveToNext();
+		}
+		
+		return "";
+	}
 }

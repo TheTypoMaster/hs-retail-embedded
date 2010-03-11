@@ -253,26 +253,26 @@ public class TableCreater extends SQLiteOpenHelper {
 	}
 
 	private boolean initSalesItem(SQLiteDatabase db) {
-	
-		ContentValues value = new ContentValues();
-		
-		value.clear();
-		value.put("salesBillId", 1);
-		value.put("sGoodsNum", 2);
-		value.put("sPriceId", 1);
-		db.insertOrThrow(TABLE_NAME8, null, value);
-		
-		value.clear();
-		value.put("salesBillId", 1);
-		value.put("sGoodsNum", 3);
-		value.put("sPriceId", 2);
-		db.insertOrThrow(TABLE_NAME8, null, value);
-
-		value.clear();
-		value.put("salesBillId", 2);
-		value.put("sGoodsNum", 3);
-		value.put("sPriceId", 2);
-		db.insertOrThrow(TABLE_NAME8, null, value);
+//	
+//		ContentValues value = new ContentValues();
+//		
+//		value.clear();
+//		value.put("salesBillId", 1);
+//		value.put("sGoodsNum", 2);
+//		value.put("sPriceId", 1);
+//		db.insertOrThrow(TABLE_NAME8, null, value);
+//		
+//		value.clear();
+//		value.put("salesBillId", 1);
+//		value.put("sGoodsNum", 3);
+//		value.put("sPriceId", 2);
+//		db.insertOrThrow(TABLE_NAME8, null, value);
+//
+//		value.clear();
+//		value.put("salesBillId", 2);
+//		value.put("sGoodsNum", 3);
+//		value.put("sPriceId", 2);
+//		db.insertOrThrow(TABLE_NAME8, null, value);
 		
 		return true;
 		
@@ -280,7 +280,7 @@ public class TableCreater extends SQLiteOpenHelper {
 
 	private boolean initSalesBill(SQLiteDatabase db) {
 		 
-		ContentValues value = new ContentValues();
+//		ContentValues value = new ContentValues();
 		
 //		value.clear();
 //		value.put("sBillNum", "S00001");
