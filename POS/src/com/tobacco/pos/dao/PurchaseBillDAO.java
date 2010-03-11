@@ -58,7 +58,7 @@ public class PurchaseBillDAO  extends SQLiteOpenHelper{
 		}
 		return str;
 	}
-	public boolean savePBill(String pBillNum, int operId, String time, String comment, SQLiteDatabase db){
+	public boolean addPBill(String pBillNum, int operId, String time, String comment, SQLiteDatabase db){
 
 		ContentValues value = new ContentValues();
 		

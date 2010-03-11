@@ -27,7 +27,7 @@ public class VIPInfoDAO  extends SQLiteOpenHelper{
 		 
 	}
 
-	public int verifyIsVIP(String VIPNum, SQLiteDatabase db){
+	public int getVIPIdByVIPNum(String VIPNum, SQLiteDatabase db){
 		c = db.query("VIPInfo", null, null, null, null, null, null);
 		c.moveToFirst();
 		for(int i=0;i<c.getCount();i++){
