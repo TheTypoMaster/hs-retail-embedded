@@ -92,5 +92,17 @@ public class GoodsPriceDAO  extends SQLiteOpenHelper {
 		}
 		return 0;
 	}
+	
+	public int getGoodsPriceIdByBarcode(String barcode, SQLiteDatabase db){
+		c = db.query("GoodsPrice", null, null, null, null, null, null);
+		c.moveToFirst();
+		for(int i=0;i<c.getCount();i++){
+			if(c.getString(3).equals(barcode)){
+				return c.getInt(0);
+			}
+			c.moveToNext();
+		}
+		return -1;
+	}
 
 }
