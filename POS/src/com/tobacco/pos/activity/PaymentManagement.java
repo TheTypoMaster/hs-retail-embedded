@@ -1,8 +1,13 @@
 package com.tobacco.pos.activity;
 
+import java.util.Date;
+
 import com.tobacco.pos.dao.GoodsDAO;
 import com.tobacco.pos.dao.GoodsPriceDAO;
+import com.tobacco.pos.dao.SalesBillDAO;
+import com.tobacco.pos.dao.SalesItemDAO;
 import com.tobacco.pos.dao.UnitDAO;
+import com.tobacco.pos.dao.UserInfoDAO;
 import com.tobacco.pos.dao.VIPInfoDAO;
 import com.tobacco.pos.util.Loginer;
 
@@ -21,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,6 +37,9 @@ public class PaymentManagement extends Activity {
 	private GoodsDAO gDAO = null;
 	private UnitDAO unitDAO = null;
 	private Loginer loginer = null;
+	private UserInfoDAO userInfoDAO  = null;
+	private SalesBillDAO sBillDAO = null;
+	private SalesItemDAO sItemDAO = null;
 
 	private TextView paymentWelcome;
 	private ImageButton paymentreturn;// 返回首页的按钮
@@ -40,6 +49,7 @@ public class PaymentManagement extends Activity {
 	private TableLayout salesBillTable;// 显示每一张销售单详细信息的表格
 
 	private String userName = "";// 登陆用户的名字
+	private int VIPId = -1;//
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +90,7 @@ public class PaymentManagement extends Activity {
 						((EditText) v).setText("");
 					}
 					String barcode = barcodeEText.getText().toString();
-					if (!barcode.trim().equals(null) && count != 0) {
+					if (!barcode.trim().equals("") && count != 0) {
 						gDAO = new GoodsDAO(PaymentManagement.this);
 						goodsPriceDAO = new GoodsPriceDAO(
 								PaymentManagement.this);
@@ -140,8 +150,29 @@ public class PaymentManagement extends Activity {
 						
 						Button saveButton = new Button(PaymentManagement.this);
 						saveButton.setText("确定");
-						saveButton.setHeight(1);
+					
 						saveButton.setTextSize(10);
+						saveButton.setOnClickListener(new OnClickListener(){
+
+							public void onClick(View v) {
+								sBillDAO = new SalesBillDAO(PaymentManagement.this);
+								sItemDAO = new SalesItemDAO(PaymentManagement.this);
+								userInfoDAO = new UserInfoDAO(PaymentManagement.this);
+							
+								
+								int userId = userInfoDAO.getUserIdByUserName(userName, userInfoDAO.getReadableDatabase());//取得销售的人员Id
+							
+								int newSBillId = sBillDAO.addSBill(userId, (new Date()).toLocaleString(), VIPId, sBillDAO.getWritableDatabase());//新增销售单的ID
+//								sItemDAO.addSalesItem(newSBillId, sGoodsNum, sPriceId, db);
+								for(int i=1;i<salesBillTable.getChildCount()-1;i++){
+									String theBarcode = ((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(4)).getText().toString();//取得每个销售项的条形码
+									int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());//取得每个销售项的数量
+									int sPriceId = goodsPriceDAO.getGoodsPriceIdByBarcode(theBarcode, goodsPriceDAO.getReadableDatabase());
+									sItemDAO.addSalesItem(newSBillId, goodsCount, sPriceId, sItemDAO.getWritableDatabase());
+								}
+							}
+							
+						});
 						TextView blank1 = new TextView(PaymentManagement.this);
 						blank1.setText("");
 						TextView blank2 = new TextView(PaymentManagement.this);
@@ -149,10 +180,11 @@ public class PaymentManagement extends Activity {
 						TextView blank3 = new TextView(PaymentManagement.this);
 						blank3.setText("");
 						
+					
 						Button cancelButton = new Button(PaymentManagement.this);
 						cancelButton.setText("取消");
-						cancelButton.setHeight(1);
 						cancelButton.setTextSize(10);
+			
 						cancelButton.setOnClickListener(new OnClickListener(){
 
 							public void onClick(View v) {
@@ -210,9 +242,24 @@ public class PaymentManagement extends Activity {
 
 					public void onClick(DialogInterface dialog, int which) {
 						vipInfoDAO = new VIPInfoDAO(PaymentManagement.this);
-						// 根据会员号获取会员的ID
-						int flag = vipInfoDAO.verifyIsVIP(VIPNumEText.getText()
+						
+						VIPId = vipInfoDAO.getVIPIdByVIPNum(VIPNumEText.getText()
 								.toString(), vipInfoDAO.getReadableDatabase());
+						if(VIPId == -1){
+							AlertDialog.Builder verifyVIPTip = new AlertDialog.Builder(PaymentManagement.this);
+							verifyVIPTip.setTitle("提示");
+							verifyVIPTip.setMessage("不存在该VIP客户");
+							verifyVIPTip.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									verifyVIPNum();//重新显示输入框
+								}
+								
+							});
+							verifyVIPTip.show();
+							
+						}
 
 					}
 
