@@ -163,13 +163,34 @@ public class PaymentManagement extends Activity {
 								int userId = userInfoDAO.getUserIdByUserName(userName, userInfoDAO.getReadableDatabase());//取得销售的人员Id
 							
 								int newSBillId = sBillDAO.addSBill(userId, (new Date()).toLocaleString(), VIPId, sBillDAO.getWritableDatabase());//新增销售单的ID
-//								sItemDAO.addSalesItem(newSBillId, sGoodsNum, sPriceId, db);
+
 								for(int i=1;i<salesBillTable.getChildCount()-1;i++){
 									String theBarcode = ((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(4)).getText().toString();//取得每个销售项的条形码
 									int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());//取得每个销售项的数量
 									int sPriceId = goodsPriceDAO.getGoodsPriceIdByBarcode(theBarcode, goodsPriceDAO.getReadableDatabase());
 									sItemDAO.addSalesItem(newSBillId, goodsCount, sPriceId, sItemDAO.getWritableDatabase());
 								}
+								AlertDialog.Builder finishPaymentTip = new AlertDialog.Builder(PaymentManagement.this);
+								finishPaymentTip.setTitle("完成购物");
+								if(VIPId == -1)
+									finishPaymentTip.setMessage("已为该普通客户创建销售单:" + sBillDAO.getSBillNumBySBillId(newSBillId, sBillDAO.getReadableDatabase()));
+								else{
+									vipInfoDAO = new VIPInfoDAO(PaymentManagement.this);
+									String VIPName = vipInfoDAO.getVIPNameByVIPId(VIPId, vipInfoDAO.getReadableDatabase());
+									finishPaymentTip.setMessage("已为VIP客户:" + VIPName + "创建销售单:" + sBillDAO.getSBillNumBySBillId(newSBillId, sBillDAO.getReadableDatabase()));
+									VIPId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
+								}
+								finishPaymentTip.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+									public void onClick(DialogInterface dialog,
+											int which) {
+										salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);
+									
+									}
+									
+								});
+								finishPaymentTip.show();
+							
 							}
 							
 						});
