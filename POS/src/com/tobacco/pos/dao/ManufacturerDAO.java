@@ -53,5 +53,15 @@ public class ManufacturerDAO extends SQLiteOpenHelper {
 		}
 		return "";
 	}
+	public String[] getAllManufacturer(SQLiteDatabase db) {
+		c = db.query("Manufacturer", null, null, null, null, null, null);
+		String[] allManufacturer = new String[c.getCount()];
+		c.moveToFirst();
+		for (int i = 0; i < c.getCount(); i++) {
+			allManufacturer[i] = c.getString(1);// 获取所有厂家的名称
+			c.moveToNext();
+		}
+		return allManufacturer;
+	}
 
 }
