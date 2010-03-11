@@ -7,6 +7,7 @@ import java.util.Vector;
 import com.tobacco.pos.dao.GoodsDAO;
 import com.tobacco.pos.dao.GoodsPriceDAO;
 import com.tobacco.pos.dao.KindDAO;
+import com.tobacco.pos.dao.ManufacturerDAO;
 import com.tobacco.pos.dao.PurchaseBillDAO;
 import com.tobacco.pos.dao.PurchaseItemDAO;
 import com.tobacco.pos.dao.UnitDAO;
@@ -43,6 +44,7 @@ public class PurchaseManagement extends Activity {
 	private GoodsPriceDAO gPriceDAO = null;
 	private PurchaseBillDAO pBillDAO = null;
 	private PurchaseItemDAO pItemDAO = null;
+	private ManufacturerDAO mDAO = null;
 	
 	private Button purchasereturn;
 	private TextView purchaseWelcome;
@@ -117,7 +119,7 @@ public class PurchaseManagement extends Activity {
 					savePBill.setOnClickListener(new OnClickListener() {// "保存"按钮的监听事件
 
 								public void onClick(View v) {
-									boolean flag = pBillDAO.savePBill(
+									boolean flag = pBillDAO.addPBill(
 											maxPBillNum, 1, theDate
 													.toLocaleString(),
 											pBillComment.getText().toString(),
@@ -161,6 +163,7 @@ public class PurchaseManagement extends Activity {
 					gPriceDAO = new GoodsPriceDAO(PurchaseManagement.this);
 					pBillDAO = new PurchaseBillDAO(PurchaseManagement.this);
 					pItemDAO = new PurchaseItemDAO(PurchaseManagement.this);
+					mDAO = new ManufacturerDAO(PurchaseManagement.this);
 					
 					lay.removeView(lay1);
 					lay.addView(lay2);
@@ -207,7 +210,7 @@ public class PurchaseManagement extends Activity {
 							TextView manufacturerName = new TextView(PurchaseManagement.this);
 							manufacturerName.setText("厂家名称:");
 							final Spinner allManufacturer = new Spinner(PurchaseManagement.this);
-							String allManufacturerName [] = gDAO.getAllManufacturer(gDAO.getReadableDatabase());
+							String allManufacturerName [] = mDAO.getAllManufacturer(mDAO.getReadableDatabase());
 							ArrayAdapter<String> allManufacturerAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allManufacturerName);
 							allManufacturer.setAdapter(allManufacturerAdapter);
 							
