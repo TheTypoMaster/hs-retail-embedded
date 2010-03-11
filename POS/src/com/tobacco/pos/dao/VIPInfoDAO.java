@@ -38,4 +38,16 @@ public class VIPInfoDAO  extends SQLiteOpenHelper{
 		}
 		return -1;
 	}
+	
+	public String getVIPNameByVIPId(int VIPId, SQLiteDatabase db){
+		c = db.query("VIPInfo", null, null, null, null, null, null);
+		c.moveToFirst();
+		for(int i=0;i<c.getCount();i++){
+			if(c.getInt(0) == VIPId){
+				return c.getString(2);
+			}
+			c.moveToNext();
+		}
+		return "";
+	}
 }
