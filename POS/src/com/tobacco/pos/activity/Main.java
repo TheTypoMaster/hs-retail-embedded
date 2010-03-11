@@ -4,17 +4,11 @@ import com.tobacco.pos.util.Loginer;
 import com.tobacco.pos.util.TableCreater;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 public class Main extends Activity {
 	private Button b1;// 收银按钮
@@ -40,37 +34,6 @@ public class Main extends Activity {
 		b1.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-//				AlertDialog.Builder loginPaymentDialog = new AlertDialog.Builder(
-//						Main.this);
-//				loginPaymentDialog.setTitle("登陆");
-//				TableLayout loginPaymentLayout = new TableLayout(Main.this);
-//				TableRow loginPaymentRow1 = new TableRow(Main.this);
-//				TextView nameTView = new TextView(Main.this);
-//				nameTView.setText("用户名:");
-//				loginPaymentRow1.addView(nameTView);
-//
-//				EditText nameEText = new EditText(Main.this);
-//				nameEText.setWidth(200);
-//				loginPaymentRow1.addView(nameEText);
-//				loginPaymentLayout.addView(loginPaymentRow1);
-//				loginPaymentDialog.setView(loginPaymentLayout);
-//
-//				loginPaymentDialog.setPositiveButton("确定",
-//						new DialogInterface.OnClickListener() {
-//
-//							public void onClick(DialogInterface dialog,
-//									int which) {
-//
-//							}
-//						});
-//				loginPaymentDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-//
-//					public void onClick(DialogInterface dialog, int which) {
-//				 
-//					}
-//					
-//				});
-//				loginPaymentDialog.show();
 				loginer = new Loginer(Main.this);
 				String userName = loginer.verifyIsSBOnline(loginer.getReadableDatabase());
 				if(userName == null)
@@ -85,9 +48,6 @@ public class Main extends Activity {
 					intent.putExtra("userName", userName);
 					startActivity(intent);
 				}
-			
-//				Intent intent = new Intent(Main.this, PaymentManagement.class);
-//				startActivity(intent);
 			}
 
 		});
@@ -115,6 +75,7 @@ public class Main extends Activity {
 				} else {
 					Intent intent = new Intent(Main.this, Login.class);
 					intent.putExtra("purpose", "PurchaseManagement");
+			
 					startActivity(intent);
 				}
 			}
