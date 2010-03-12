@@ -2,6 +2,7 @@ package com.tobacco.pos.activity;
 
 import com.tobacco.pos.util.Loginer;
 import com.tobacco.pos.util.TableCreater;
+import com.tobacco.R;
 
 import android.app.Activity;
 import android.content.Intent;

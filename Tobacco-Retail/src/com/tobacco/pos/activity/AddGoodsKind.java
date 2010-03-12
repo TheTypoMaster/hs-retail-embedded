@@ -3,6 +3,7 @@ package com.tobacco.pos.activity;
 import static android.provider.BaseColumns._ID;
 
 import com.tobacco.pos.util.TableCreater;
+import com.tobacco.R;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;

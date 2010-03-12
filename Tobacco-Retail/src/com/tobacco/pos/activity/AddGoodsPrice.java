@@ -2,6 +2,7 @@ package com.tobacco.pos.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.tobacco.R;
 
 public class AddGoodsPrice extends Activity {
 

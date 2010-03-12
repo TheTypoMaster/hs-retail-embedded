@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import com.tobacco.pos.activity.R;
+import com.tobacco.R;
 
 import com.tobacco.pos.dao.GoodsDAO;
 import com.tobacco.pos.dao.GoodsPriceDAO;

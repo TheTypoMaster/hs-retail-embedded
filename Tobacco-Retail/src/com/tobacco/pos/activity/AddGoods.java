@@ -1,5 +1,7 @@
 package com.tobacco.pos.activity;
 
+import com.tobacco.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;

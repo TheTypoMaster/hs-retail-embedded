@@ -10,6 +10,7 @@ import com.tobacco.pos.dao.UnitDAO;
 import com.tobacco.pos.dao.UserInfoDAO;
 import com.tobacco.pos.dao.VIPInfoDAO;
 import com.tobacco.pos.util.Loginer;
+import com.tobacco.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
