@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<ScrollView android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="380sp">
+
+		<TextView android:text="报表" android:id="@+id/TextView01"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+		</TextView>
+	</ScrollView>
+
+	<Button android:text="返回首页" android:id="@+id/reportreturn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10sp">
+	</Button>
+</LinearLayout>

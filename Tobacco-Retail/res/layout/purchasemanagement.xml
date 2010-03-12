@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TableLayout android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TableRow android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TextView android:text="进货管理" android:id="@+id/TextView01"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+			</TextView>
+			<TextView android:id="@+id/purchaseWelcome"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="你好:"
+				android:layout_marginLeft="320sp">
+			</TextView>
+		</TableRow>
+	</TableLayout>
+	<TabHost android:id="@android:id/tabhost"
+		android:layout_width="fill_parent"
+		android:layout_height="175sp" >
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<TabWidget android:id="@android:id/tabs"
+				android:layout_width="fill_parent" android:layout_height="30sp" />
+			<FrameLayout android:id="@android:id/tabcontent"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
+				<!-- 第一层 -->
+				<LinearLayout android:layout_height="wrap_content"
+					android:layout_width="fill_parent" android:id="@+id/lay1"
+					android:orientation="vertical">
+					<TableLayout android:layout_height="wrap_content"
+						android:visibility="visible" android:layout_width="fill_parent">
+						<TableRow android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:text="进货单号:"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
+							</TextView>
+							<TextView android:id="@+id/pBillIdTView"
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+							</TextView>
+						</TableRow>
+
+						<TableRow android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:text="时间:"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content" android:gravity="right">
+							</TextView>
+							<TextView android:id="@+id/pBillTimeTView"
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+							</TextView>
+						</TableRow>
+
+						<TableRow android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:text="备注:"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content" android:gravity="right">
+							</TextView>
+
+							<EditText android:layout_width="300sp"
+								android:id="@+id/pBillCommentEText"
+								android:layout_height="wrap_content" android:lines="1">
+							</EditText>
+						</TableRow>
+					</TableLayout>
+					<Button android:id="@+id/savePBillButton"
+						android:text="保存" android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:layout_marginLeft="315sp">
+					</Button>
+				</LinearLayout>
+				<!-- 第一层结束 -->
+				<!-- 第二层 -->
+				<LinearLayout android:id="@+id/lay2"
+					android:visibility="visible" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+					<TableLayout android:layout_width="fill_parent"
+						android:layout_height="wrap_content">
+						<TableRow android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:text="选择进货单:"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
+							</TextView>
+							<Spinner android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:id="@+id/wholePBill">
+							</Spinner>
+						</TableRow>
+					</TableLayout>
+					<Button android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="添加商品"
+						android:id="@+id/addGoodsButton">
+					</Button>
+
+					<Button android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="添加进货商品"
+						android:id="@+id/addGoodsIntoPBillButton">
+					</Button>
+				</LinearLayout>
+				<!-- 第二层结束 -->
+			</FrameLayout>
+		</LinearLayout>
+	</TabHost>
+
+	<ImageButton android:id="@+id/purchasereturn"
+		android:layout_width="wrap_content" android:layout_height="30sp"
+		android:src="@+drawable/back" android:layout_marginTop="2sp">
+	</ImageButton>
+</LinearLayout>
