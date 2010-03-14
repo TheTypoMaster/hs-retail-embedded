@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" android:layout_gravity="center">
+	<TableLayout>
+	<TableRow>
+		<TextView android:id="@+id/TextView01"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="用户名:">
+		</TextView>
+		<EditText android:id="@+id/login_username"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:width="250sp"
+			android:maxLines="1">
+		</EditText>
+	</TableRow>
+
+	<TableRow  
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/TextView02"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="密码:">
+		</TextView>
+		<EditText android:id="@+id/login_password"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:width="250sp" android:password="true">
+		</EditText>
+	</TableRow>
+	</TableLayout>
+	<TextView android:id="@+id/loginInfo" android:visibility="visible"></TextView>
+	<TableRow >
+		<Button android:text="确定" android:id="@+id/login_Ok"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginLeft="100sp">
+		</Button>
+		<Button android:text="取消" android:id="@+id/login_Reset"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+		</Button>
+	</TableRow>
+</TableLayout>

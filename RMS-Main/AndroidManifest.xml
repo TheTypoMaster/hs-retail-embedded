@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.tobacco.main"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:process="@string/app_name" android:sharedUserId="RMS">
+
+
+    <activity android:name=".activity.Login"><intent-filter><category android:name="android.intent.category.LAUNCHER"></category>
+<action android:name="android.intent.action.MAIN"></action>
+</intent-filter>
+
+</activity>
+<provider android:name="com.tobacco.main.provider.AccountProvider" android:authorities="com.tobacco.main.provider.accountprovider">
+</provider>
+<service android:name=".service.CurrentUserService"><intent-filter><category android:name="android.intent.category.DEFAULT"></category>
+<action android:name="com.tobacco.main.service.CurrentUserService.START"></action>
+<action android:name="com.tobacco.main.service.CurrentUserService.BIND"></action>
+</intent-filter>
+</service>
+</application>
+    <uses-sdk android:minSdkVersion="3" />
+
+
+</manifest> 

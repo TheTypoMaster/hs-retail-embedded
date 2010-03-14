@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World!</string>
+    <string name="app_name">烟草零售管理系统</string>
+<string name="login_text_useraccount">用户名：</string>
+<string name="login_text_password">密码：</string>
+<string name="login_button_ok">登录</string>
+<string name="login_success_btn_ok">OK</string>
+<string name="login_welcome">欢迎使用烟草零售管理系统</string>
+</resources>
