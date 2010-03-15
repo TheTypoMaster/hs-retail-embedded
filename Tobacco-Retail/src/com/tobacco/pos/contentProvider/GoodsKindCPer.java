@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class GoodsKindCPer extends ContentProvider {
 		private SQLiteDatabase     sqlDB;
@@ -173,6 +174,7 @@ public class GoodsKindCPer extends ContentProvider {
 
 	    @Override
 	    public int delete(Uri uri, String s, String[] as) {
+	    	Log.d("lyq", s);
 	        return 0;
 	    } 
 
