@@ -28,9 +28,6 @@ import android.graphics.Color;
 public class KindManagement extends Activity {
 	
 	private TextView kindInfoTView;//显示某种类的详细信息
-//	private static String[] FROM = { _ID, "name", "parent", "level", "comment" };
-//	private static final String TABLE_NAME = "GoodsKind";��ݱ�
-
 	public int maxLevel;//总共有几层，在显示的时候有用
 	
 	public TreeNode tree[];
