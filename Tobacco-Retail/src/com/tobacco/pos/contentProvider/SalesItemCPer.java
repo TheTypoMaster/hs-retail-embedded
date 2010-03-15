@@ -47,11 +47,12 @@ public class SalesItemCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " salesBillId integer references SalesBill ( " + _ID + " ), "
 						+ "sGoodsNum integer not null ,"
 					    + "sPriceId integer references GoodsPrice ( " + _ID + " ))");
+				initSalesItem(db);
 			}
 
 
@@ -63,6 +64,12 @@ public class SalesItemCPer extends ContentProvider {
 
 			@Override
 			public void onCreate(SQLiteDatabase db) {
+				
+			}
+
+			private boolean initSalesItem(SQLiteDatabase db) {
+
+				return true;
 				
 			}
 	    } 

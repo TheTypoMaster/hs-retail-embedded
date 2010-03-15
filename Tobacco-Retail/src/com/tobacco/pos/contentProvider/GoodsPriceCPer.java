@@ -17,7 +17,7 @@ import android.net.Uri;
 
 public class GoodsPriceCPer extends ContentProvider {
 
-	  private SQLiteDatabase     sqlDB;
+		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -47,7 +47,7 @@ public class GoodsPriceCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " goodsId integer references Goods " 
 						+ " (" + _ID + " ) ,"
@@ -55,6 +55,7 @@ public class GoodsPriceCPer extends ContentProvider {
 						+ _ID + " )," + " barcode varchar(20) unique ,"
 						+ "inPrice double not null,"
 						+ "outPrice double not null )");
+				initGoodsPrice(db);
 			}
 
 
@@ -67,6 +68,60 @@ public class GoodsPriceCPer extends ContentProvider {
 			@Override
 			public void onCreate(SQLiteDatabase db) {
 				
+			}
+			private boolean initGoodsPrice(SQLiteDatabase db){
+
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("goodsId", 1);
+				value.put("unitId", 1);
+				value.put("barcode", "gb1");
+				value.put("inPrice", 6.0);
+				value.put("outPrice", 7.0);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 2);
+				value.put("unitId", 2);
+				value.put("barcode", "gb2");
+				value.put("inPrice", 50);
+				value.put("outPrice", 60);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 3);
+				value.put("unitId", 3);
+				value.put("barcode", "gb3");
+				value.put("inPrice", 70);
+				value.put("outPrice", 80);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 4);
+				value.put("unitId", 3);
+				value.put("barcode", "gb4");
+				value.put("inPrice", 55);
+				value.put("outPrice", 64);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 5);
+				value.put("unitId", 3);
+				value.put("barcode", "gb5");
+				value.put("inPrice", 90);
+				value.put("outPrice", 100);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 6);
+				value.put("unitId", 3);
+				value.put("barcode", "gb6");
+				value.put("inPrice", 100);
+				value.put("outPrice", 110);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				return true;
 			}
 	    } 
 

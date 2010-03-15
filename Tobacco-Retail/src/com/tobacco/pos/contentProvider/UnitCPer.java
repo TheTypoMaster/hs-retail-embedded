@@ -52,6 +52,7 @@ public class UnitCPer extends ContentProvider {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " name varchar(20) not null unique )");
+				initUnit(db);
 			}
 
 
@@ -64,6 +65,27 @@ public class UnitCPer extends ContentProvider {
 			@Override
 			public void onCreate(SQLiteDatabase db) {
 				
+			}
+			private boolean initUnit(SQLiteDatabase db){
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("name", "包");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("name", "条");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("name", "箱");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("name", "斤");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				return true;
 			}
 	    } 
 

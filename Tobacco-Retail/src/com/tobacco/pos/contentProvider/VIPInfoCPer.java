@@ -47,11 +47,12 @@ public class VIPInfoCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " VIPNum varchar(20) unique not null, "
 						+ "VIPName varchar(20) not null ,"
 						+ "VIPDiscount double not null)");
+				initVIPInfo(db);
 			}
 
 
@@ -64,6 +65,42 @@ public class VIPInfoCPer extends ContentProvider {
 			@Override
 			public void onCreate(SQLiteDatabase db) {
 				
+			}
+			private boolean initVIPInfo(SQLiteDatabase db) {
+				
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("VIPNum", "VIP0001");
+				value.put("VIPName", "佟湘玉");
+				value.put("VIPDiscount", 0.9);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("VIPNum", "VIP0002");
+				value.put("VIPName", "白展堂");
+				value.put("VIPDiscount", 0.85);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("VIPNum", "VIP0003");
+				value.put("VIPName", "吕轻侯");
+				value.put("VIPDiscount", 0.9);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("VIPNum", "VIP0004");
+				value.put("VIPName", "郭芙蓉");
+				value.put("VIPDiscount", 0.9);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("VIPNum", "VIP0005");
+				value.put("VIPName", "莫小贝");
+				value.put("VIPDiscount", 0.8);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				return true;
 			}
 	    } 
 

@@ -17,7 +17,7 @@ import android.net.Uri;
 
 public class PurchaseItemCPer extends ContentProvider {
 
-	  private SQLiteDatabase     sqlDB;
+	  	private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -47,11 +47,12 @@ public class PurchaseItemCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " purchaseBillId integer references PurchaseBill ( " + _ID + " ), "
 						+ "pGoodsNum integer not null ,"
 					    + "pPriceId integer references GoodsPrice ( " + _ID + " ))");
+				initPurchaseItem(db);
 			}
 
 
@@ -63,6 +64,11 @@ public class PurchaseItemCPer extends ContentProvider {
 
 			@Override
 			public void onCreate(SQLiteDatabase db) {
+				
+			}
+			private boolean initPurchaseItem(SQLiteDatabase db) {
+				
+				return true;
 				
 			}
 	    } 

@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 public class GoodsCPer extends ContentProvider {
-	  private SQLiteDatabase     sqlDB;
+		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -46,7 +46,7 @@ public class GoodsCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " goodsCode varchar(50) not null unique ,"
 						+ "goodsName varchar(50) not null,"
@@ -54,6 +54,8 @@ public class GoodsCPer extends ContentProvider {
 						+ "goodsFormat varchar(50)not null,"
 						+ "kindId integer references GoodsKind  (" + _ID
 						+ ") )");
+				
+				initGoods(db);
 			}
 
 
@@ -67,6 +69,70 @@ public class GoodsCPer extends ContentProvider {
 			public void onCreate(SQLiteDatabase db) {
 				
 			}
+			  private boolean initGoods(SQLiteDatabase db){
+					
+					ContentValues value = new ContentValues();
+					
+					value.clear();
+					value.put("goodsCode", "G0001");
+					value.put("goodsName", "红塔山");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0002");
+					value.put("goodsName", "黄梅");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0003");
+					value.put("goodsName", "哈德门");
+					value.put("manufacturerId", 2);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0004");
+					value.put("goodsName", "古田");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0005");
+					value.put("goodsName", "七匹狼");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0006");
+					value.put("goodsName", "一品梅");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G0007");
+					value.put("goodsName", "黄山");
+					value.put("manufacturerId", 1);
+					value.put("goodsFormat", "");
+					value.put("kindId", 8);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					return true;
+				}
+				
+
 	    } 
 
 	    @Override
@@ -112,6 +178,7 @@ public class GoodsCPer extends ContentProvider {
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
 	    }
-
+	    
+	  
 
 }

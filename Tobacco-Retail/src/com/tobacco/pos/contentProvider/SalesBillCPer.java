@@ -47,12 +47,13 @@ public class SalesBillCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table  if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " sBillNum varchar(20) unique not null, "
 						+ "operId integer references UserInfo ( " + _ID + " ),"
 						+ "time date not null,"
 						+ "VIPId integer references VIPInfo ( " + _ID + " ))");
+				initSalesBill(db);
 			}
 
 
@@ -66,6 +67,12 @@ public class SalesBillCPer extends ContentProvider {
 			public void onCreate(SQLiteDatabase db) {
 				
 			}
+			private boolean initSalesBill(SQLiteDatabase db) {
+				 
+				return true;
+				
+			}
+
 	    } 
 
 	    @Override

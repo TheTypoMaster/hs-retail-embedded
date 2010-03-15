@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 public class GoodsKindCPer extends ContentProvider {
-	  private SQLiteDatabase     sqlDB;
+		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -36,7 +36,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
-			
+				
 			
 			}
 
@@ -46,12 +46,14 @@ public class GoodsKindCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " name varchar(50) not null, "
 						+ " parent integer references " + TABLE_NAME + " ( " + _ID
 						+ " )," + " level integer not null, "
 						+ " comment varchar(100) )");
+				
+				initGoodsKind(db);
 			}
 
 
@@ -65,6 +67,108 @@ public class GoodsKindCPer extends ContentProvider {
 			public void onCreate(SQLiteDatabase db) {
 				
 			}
+			private boolean initGoodsKind(SQLiteDatabase db) {// ������ݱ?����һЩ��ʼ���
+
+				ContentValues value = new ContentValues();
+				value.put("name", "衣服");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "必不可少");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "男装");
+				value.put("parent", 1);
+				value.put("level", 2);
+				value.put("comment", "彰显男儿本色");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "女装");
+				value.put("parent", 1);
+				value.put("level", 2);
+				value.put("comment", "女装。。。。。");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "女式围巾");
+				value.put("parent", 2);
+				value.put("level", 3);
+				value.put("comment", "冬天来了，不要冻到脖子了");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "裙子");
+				value.put("parent", 2);
+				value.put("level", 3);
+				value.put("comment", "裙子。。。。");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "男羽绒服");
+				value.put("parent", 1);
+				value.put("level", 2);
+				value.put("comment", "寒冷冬季必备");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+
+				value.clear();
+				value.put("name", "水果");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "多吃水果有益身体健康");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "卷烟");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "吸烟并不帅，身体更重要");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "软盒");
+				value.put("parent", 7);
+				value.put("level", 2);
+				value.put("comment", "软盒。。。。");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "文具");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "学习好帮手");
+
+				db.insert(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "钢笔");
+				value.put("parent", 10);
+				value.put("level", 2);
+				value.put("comment", "成功男士必备");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				value.clear();
+				value.put("name", "铅笔");
+				value.put("parent", 10);
+				value.put("level", 2);
+				value.put("comment", "使用的时候注意环保");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
+
+				return true;
+			}
+
 	    } 
 
 	    @Override

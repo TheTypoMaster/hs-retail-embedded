@@ -1,6 +1,8 @@
 package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
+
+import java.util.Date;
  
 import com.tobacco.pos.entity.AllTables;
 
@@ -16,7 +18,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 public class PurchaseBillCPer extends ContentProvider {
-	  private SQLiteDatabase     sqlDB;
+		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -46,12 +48,13 @@ public class PurchaseBillCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " pBillNum varchar(20) unique not null, "
 						+ " operId integer references UserInfo ( " + _ID + " ),"
 						+ " time date not null ," 
 						+ " comment varchar(255))");
+				initPurchaseBill(db);
 			}
 
 
@@ -63,6 +66,29 @@ public class PurchaseBillCPer extends ContentProvider {
 
 			@Override
 			public void onCreate(SQLiteDatabase db) {
+				
+			}
+			private boolean initPurchaseBill(SQLiteDatabase db) {
+				
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("pBillNum", "P1");
+				value.put("operId", 1);
+				Date d1 = new Date();
+				value.put("time", d1.toLocaleString());
+				value.put("comment", "第一张进货单");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("pBillNum", "P2");
+				value.put("operId", 1);
+				Date d2 = new Date();
+				value.put("time", d2.toLocaleString());
+				value.put("comment", "第二张进货单");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				return true;
 				
 			}
 	    } 

@@ -48,12 +48,13 @@ public class UserInfoCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " userName varchar(50) not null unique, "
 						+ " password varchar(50) ,"
 						+ " permission integer not null,"
 						+ " status integer not null )");
+				initUserInfo(db);
 			}
 
 
@@ -66,6 +67,26 @@ public class UserInfoCPer extends ContentProvider {
 			@Override
 			public void onCreate(SQLiteDatabase db) {
 				
+			}
+			private boolean initUserInfo(SQLiteDatabase db){
+				
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("userName", "laoda");
+				value.put("password", "123");
+				value.put("permission", 0);
+				value.put("status", 0);
+				db.insertOrThrow(TABLE_NAME, null , value);
+				
+				value.clear();
+				value.put("userName", "laoer");
+				value.put("password", "abc");
+				value.put("permission", 1);
+				value.put("status", 0);
+				db.insertOrThrow(TABLE_NAME, null , value);
+				
+				return true;
 			}
 	    } 
 

@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 public class ManufacturerCPer extends ContentProvider {
-	  private SQLiteDatabase     sqlDB;
+	  	private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -46,9 +46,10 @@ public class ManufacturerCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table " + TABLE_NAME + " ( " + _ID
+				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " mName varchar(50) not null unique )");
+				initManufacturer(db);
 			}
 
 
@@ -61,6 +62,28 @@ public class ManufacturerCPer extends ContentProvider {
 			@Override
 			public void onCreate(SQLiteDatabase db) {
 				
+			}
+			private boolean initManufacturer(SQLiteDatabase db){
+				
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("mName", "龙岩卷烟厂");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("mName", "厦门卷烟厂");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("mName", "泉州卷烟厂");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("mName", "福州卷烟厂");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				return true;
 			}
 	    } 
 
