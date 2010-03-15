@@ -1,6 +1,10 @@
 package com.tobacco.main.provider;
 
 import java.util.HashMap;
+
+import com.tobacco.main.util.MD5Hasher;
+import com.tobacco.main.util.UUIDGenerator;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -111,7 +115,8 @@ public class AccountProvider extends ContentProvider {
 					.execSQL("INSERT INTO "
 							+ USER_TABLE_NAME
 							+ " (_ID, username, password, priv, status)"
-							+ " VALUES ('1', 'zwd', '123', 'admin' , '0');");
+							+ " VALUES ('" +UUIDGenerator.generateUUID()+
+							"', 'zwd', '"+ MD5Hasher.hash("123")+"', 'admin' , '0');");
 
 			Log.i(TAG, "Init Data inserted...");
 		}

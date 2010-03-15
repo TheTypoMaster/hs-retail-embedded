@@ -4,6 +4,7 @@ import com.tobacco.main.R;
 import com.tobacco.main.entities.User;
 import com.tobacco.main.provider.AccountProvider;
 import com.tobacco.main.service.CurrentUserService;
+import com.tobacco.main.util.MD5Hasher;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -81,8 +82,9 @@ public class Login extends Activity {
 	private boolean verifyUser(String userName, String password) {
 
 		boolean ifSuccess = false;
-		String[] projection = new String[] { User.USERNAME, User.PASSWORD,
-				User.PRIV, User.STATUS };
+		String[] projection = new String[] { User._ID, User.USERNAME,
+				User.PASSWORD, User.PRIV, User.STATUS };
+		String curUserId = null;
 		String curUserName = null;
 		String curUserPwd = null;
 		String curUserPriv = null;
@@ -90,30 +92,34 @@ public class Login extends Activity {
 
 		// retrieve from db
 		Uri user = User.CONTENT_URI;
-		Cursor cur = managedQuery(user, projection, User.USERNAME + "= ?",
+		Cursor cursor = managedQuery(user, projection, User.USERNAME + "= ?",
 				new String[] { userName }, null);
 
 		// verify if user exists
-		if (cur.getCount() == 0)
+		if (cursor.getCount() == 0)
 			openfailDialog();
 
 		// verify pwd
-		if (cur.moveToFirst()) {
+		if (cursor.moveToFirst()) {
+			
+			int idColumn = cursor.getColumnIndex(User._ID);
+			int nameColumn = cursor.getColumnIndex(User.USERNAME);
+			int pwdColumn = cursor.getColumnIndex(User.PASSWORD);
+			int privColumn = cursor.getColumnIndex(User.PRIV);
+			int statusColumn = cursor.getColumnIndex(User.STATUS);
 
-			int nameColumn = cur.getColumnIndex(User.USERNAME);
-			int pwdColumn = cur.getColumnIndex(User.PASSWORD);
-			int privColumn = cur.getColumnIndex(User.PRIV);
-			int statusColumn = cur.getColumnIndex(User.STATUS);
+			curUserId = cursor.getString(idColumn);
+			curUserName = cursor.getString(nameColumn);
+			curUserPwd = cursor.getString(pwdColumn);
+			curUserPriv = cursor.getString(privColumn);
+			curUserStatus = cursor.getString(statusColumn);
 
-			curUserName = cur.getString(nameColumn);
-			curUserPwd = cur.getString(pwdColumn);
-			curUserPriv = cur.getString(privColumn);
-			curUserStatus = cur.getString(statusColumn);
-
-			if (password.equals(curUserPwd)) {
+			if (MD5Hasher.hash(password).equals(curUserPwd)) {
 				ifSuccess = true;
+				
 				Intent i = new Intent();
 				i.setAction(CurrentUserService.ACTION_START);
+				i.putExtra("curUserId", curUserId);
 				i.putExtra("curUserName", curUserName);
 				i.putExtra("curUserPriv", curUserPriv);
 				i.putExtra("curUserStatus", curUserStatus);

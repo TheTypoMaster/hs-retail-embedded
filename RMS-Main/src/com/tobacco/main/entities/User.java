@@ -14,6 +14,8 @@ public class User {
 
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
+	public static final String _ID = "";
+	
 	public static final String USERNAME = "username";
 	
 	public static final String PASSWORD = "password";
