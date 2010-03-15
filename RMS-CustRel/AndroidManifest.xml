@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.tobacco.custrel"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:sharedUserId="RMS">
+	package="com.tobacco.custrel" android:versionCode="1"
+	android:versionName="1.0">
+	<application android:icon="@drawable/icon" android:label="@string/app_name"
+		android:sharedUserId="RMS">
 
 
-    <activity android:name=".activity.TestActivity"><intent-filter><action android:name="com.tobacco.custrel.CUSTREL_START"></action>
-<category android:name="android.intent.category.DEFAULT"></category>
-</intent-filter>
-</activity>
-</application>
-    <uses-sdk android:minSdkVersion="3" />
+		<activity android:name=".activity.TestActivity">
+			<intent-filter>
+				<!--
+					<action android:name="com.tobacco.custrel.CUSTREL_START"></action>
+					<category
+					android:name="android.intent.category.DEFAULT"></category>
+				-->
+			</intent-filter>
+		</activity>
+		<activity android:name=".activity.TestCallerActivity">
+			<intent-filter>
+				<action android:name="com.tobacco.custrel.CUSTREL_START"></action>
+				<category android:name="android.intent.category.DEFAULT"></category>
+			</intent-filter>
+		</activity>
+	</application>
+	<uses-sdk android:minSdkVersion="3" />
 
 </manifest> 
