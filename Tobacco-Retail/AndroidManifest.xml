@@ -24,6 +24,18 @@
 		  <activity android:name=".pos.activity.AddGoodsPrice" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.Login" android:theme="@android:style/Theme.Dialog"></activity>
 		  
+		  <!-- ContentProvider -->
+		  <provider android:name=".pos.contentProvider.GoodsCPer" android:authorities="com.tobacco.contentProvider.GoodsCPer" />
+		  <provider android:name=".pos.contentProvider.GoodsKindCPer" android:authorities="com.tobacco.contentProvider.GoodsKindCPer" />
+		  <provider android:name=".pos.contentProvider.GoodsPriceCPer" android:authorities="com.tobacco.contentProvider.GoodsPriceCPer" />
+		  <provider android:name=".pos.contentProvider.ManufacturerCPer" android:authorities="com.tobacco.contentProvider.ManufacturerCPer" />
+		  <provider android:name=".pos.contentProvider.PurchaseBillCPer" android:authorities="com.tobacco.contentProvider.PurchaseBillCPer" />
+		  <provider android:name=".pos.contentProvider.PurchaseItemCPer" android:authorities="com.tobacco.contentProvider.PurchaseItemCPer" />
+		  <provider android:name=".pos.contentProvider.SalesBillCPer" android:authorities="com.tobacco.contentProvider.SalesBillCPer" />
+		  <provider android:name=".pos.contentProvider.SalesItemCPer" android:authorities="com.tobacco.contentProvider.SalesItemCPer" />
+		  <provider android:name=".pos.contentProvider.UnitCPer" android:authorities="com.tobacco.contentProvider.UnitCPer" />
+		  <provider android:name=".pos.contentProvider.UserInfoCPer" android:authorities="com.tobacco.contentProvider.UserInfoCPer" />
+		  <provider android:name=".pos.contentProvider.VIPInfoCPer" android:authorities="com.tobacco.contentProvider.VIPInfoCPer" />
     </application>
     <uses-sdk android:minSdkVersion="3" />
 
