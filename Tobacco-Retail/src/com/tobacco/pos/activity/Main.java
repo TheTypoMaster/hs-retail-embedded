@@ -1,7 +1,6 @@
 package com.tobacco.pos.activity;
 
 import com.tobacco.pos.util.Loginer;
-import com.tobacco.pos.util.TableCreater;
 import com.tobacco.R;
 
 import android.app.Activity;
@@ -12,20 +11,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class Main extends Activity {
-	private Button b1;// ÊÕÒø°´Å¥
-	private Button b2;// Àà±ğ¹ÜÀí°´Å¥
-	private Button b3;// ½ø»õ°´Å¥
-	private Button b4;// ±¨±í°´Å¥
-	private TableCreater tableHelper = null;
+	private Button b1;//é”€å”®
+	private Button b2;//ç§ç±»ç®¡ç†
+	private Button b3;//è¿›è´§ç®¡ç†
+	private Button b4;//æŠ¥è¡¨
+	
 	private Loginer loginer = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		tableHelper = new TableCreater(this);// ĞÂ½¨Êı¾İ¿â°ïÖúÀà
-		tableHelper.createTable(tableHelper.getWritableDatabase());
 
 		b1 = (Button) this.findViewById(R.id.payment);
 		b2 = (Button) this.findViewById(R.id.kind);
@@ -64,8 +60,8 @@ public class Main extends Activity {
 
 		b3.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {// ÏÈÑéÖ¤ÊÇ·ñÓĞÔÚÏßÔÚÓÃ»§£¬Èç¹ûÃ»ÓĞµÄ»°ĞèÒªÓÃ¹ÜÀíÔ±µÄÕË»§µÇÈë
-
+			public void onClick(View v) {//
+				
 				loginer = new Loginer(Main.this);
 				String userName = loginer.verify(loginer.getReadableDatabase());
 				if (userName != null) {
