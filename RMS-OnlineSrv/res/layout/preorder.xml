@@ -3,12 +3,93 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	<LinearLayout android:id="@+id/LinearLayout01"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品名称" android:id="@+id/TextView01"
+		<TextView android:text="商品名称:" android:id="@+id/TextView01"
 			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
 		<EditText android:text="@+id/EditText01" android:id="@+id/EditText01"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"></EditText>
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
 	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout02"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="商品数量:" android:id="@+id/TextView02"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText02" android:id="@+id/EditText02"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout03"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="商品规格:" android:id="@+id/TextView03"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText03" android:id="@+id/EditText03"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout04"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="预订单日期:" android:id="@+id/TextView04"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText04" android:id="@+id/EditText04"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout05"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="商品金额:" android:id="@+id/TextView05"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText05" android:id="@+id/EditText05"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout06"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="单位:" android:id="@+id/TextView06"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText01" android:id="@+id/EditText06"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout07"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="商品折扣:" android:id="@+id/TextView07"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText07" android:id="@+id/EditText07"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout08"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:text="备注:" android:id="@+id/TextView08"
+			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<EditText android:text="@+id/EditText08" android:id="@+id/EditText08"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout09"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<Button android:text="提交" android:id="@+id/Button01"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="100px"></Button>
+		<Button android:text="取消" android:id="@+id/Button02"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="30px"></Button>
+	</LinearLayout>
+
+
 </LinearLayout>
