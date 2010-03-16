@@ -1,0 +1,20 @@
+package com.tobacco.onlinesrv.activity;
+
+import com.tobacco.onlinesrv.R;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class AddPreOrderActivity extends Activity{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.preorder);
+		
+		Intent intent = getIntent();
+	}
+
+}
