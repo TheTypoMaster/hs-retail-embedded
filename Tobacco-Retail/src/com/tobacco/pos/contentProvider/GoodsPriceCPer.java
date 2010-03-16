@@ -47,6 +47,9 @@ public class GoodsPriceCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " goodsId integer references Goods " 
@@ -56,6 +59,7 @@ public class GoodsPriceCPer extends ContentProvider {
 						+ "inPrice double not null,"
 						+ "outPrice double not null )");
 				initGoodsPrice(db);
+				}
 			}
 
 
@@ -168,6 +172,47 @@ public class GoodsPriceCPer extends ContentProvider {
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
 	    }
+	    
+	    public int getGoodsIdByBarcode(String barcode){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+			c.moveToFirst();
 
+			if(c.getCount()>0)
+				return c.getInt(1);
+			else
+				return -1;
+		}
+	    
+	    public int getUnitIdByBarcode(String barcode){
+			Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+			
+			if(c.getCount()>0)
+			{
+				c.moveToFirst();
+				return c.getInt(2);
+			}
+			return -1;
+		}
+
+	    public double getOutPriceByBarcode(String barcode){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getDouble(5);
+	    	}
+	    	else
+	    		return 0;
+	    }
+	    public int getGoodsPriceIdByBarcode(String barcode){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(0);
+	    	}
+	    	else
+	    		return 0;
+	    }
 
 }

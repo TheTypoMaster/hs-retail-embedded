@@ -46,10 +46,14 @@ public class ManufacturerCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " mName varchar(50) not null unique )");
 				initManufacturer(db);
+				}
 			}
 
 

@@ -14,7 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
 
 public class UnitCPer extends ContentProvider {
 
@@ -48,11 +47,14 @@ public class UnitCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-	        	
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " name varchar(20) not null unique )");
 				initUnit(db);
+				}
 			}
 
 
@@ -131,6 +133,18 @@ public class UnitCPer extends ContentProvider {
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
+	    }
+	    
+	    public String getUnitNameById(int unitId){
+	    	Cursor c = this.query(AllTables.Unit.CONTENT_URI, null, " _id = " + unitId, null, null);
+	    	
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToFirst();
+	    		return c.getString(1);
+	    	}
+	    	return "";
+	    	
 	    }
 
 }

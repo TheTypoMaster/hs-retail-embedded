@@ -48,13 +48,18 @@ public class UserInfoCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
-				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
-						+ " integer primary key autoincrement,"
-						+ " userName varchar(50) not null unique, "
-						+ " password varchar(50) ,"
-						+ " permission integer not null,"
-						+ " status integer not null )");
-				initUserInfo(db);
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
+					db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
+							+ " integer primary key autoincrement,"
+							+ " userName varchar(50) not null unique, "
+							+ " password varchar(50) ,"
+							+ " permission integer not null,"
+							+ " status integer not null )");
+					initUserInfo(db);
+				}
+				
 			}
 
 
@@ -132,5 +137,14 @@ public class UserInfoCPer extends ContentProvider {
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
+	    }
+	    public int getUserIdByUserName(String userName){
+	    	Cursor c = this.query(AllTables.UserInfo.CONTENT_URI, null, " userName = ' " + userName + " '", null, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(0);
+	    	}
+	    	else
+	    		return -1;
 	    }
 }

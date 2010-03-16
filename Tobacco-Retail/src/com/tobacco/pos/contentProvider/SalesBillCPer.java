@@ -47,6 +47,9 @@ public class SalesBillCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table  if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " sBillNum varchar(20) unique not null, "
@@ -54,6 +57,7 @@ public class SalesBillCPer extends ContentProvider {
 						+ "time date not null,"
 						+ "VIPId integer references VIPInfo ( " + _ID + " ))");
 				initSalesBill(db);
+				}
 			}
 
 
@@ -117,6 +121,42 @@ public class SalesBillCPer extends ContentProvider {
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
+	    }
+	    
+	    public int addSBill(int operId, String time, int VIPId){
+	    	Cursor c =this.query(AllTables.SalesBill.CONTENT_URI, null, null, null, " order by sBillNum ");
+	    	String sBillNum;
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToLast();
+	    		String lastSBillNum = c.getString(1);
+	    		sBillNum = "" + (Integer.parseInt(lastSBillNum) + 1 );
+	    	}
+	    	else
+	    		sBillNum = "1";
+	    	
+	    	ContentValues value = new ContentValues();
+			
+			value.clear();
+			value.put("sBillNum", sBillNum);
+			value.put("operId", operId);
+			value.put("time", time);
+			value.put("VIPId", VIPId);
+			
+			this.insert(AllTables.SalesBill.CONTENT_URI, value);
+			
+			c = this.query(AllTables.SalesBill.CONTENT_URI, null, null, null, null);	
+			c.moveToLast();
+			return c.getInt(0);//获取最后添加的销售单的ID
+		}
+	    public int getSBillNumBySBillId(int newSBillId){
+	    	Cursor c = this.query(AllTables.SalesBill.CONTENT_URI, null, " _id = " + newSBillId, null, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(0);
+	    	}
+	    	return -1;
 	    }
 
 }

@@ -47,12 +47,16 @@ public class SalesItemCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " salesBillId integer references SalesBill ( " + _ID + " ), "
 						+ "sGoodsNum integer not null ,"
 					    + "sPriceId integer references GoodsPrice ( " + _ID + " ))");
 				initSalesItem(db);
+				}
 			}
 
 
@@ -116,5 +120,20 @@ public class SalesItemCPer extends ContentProvider {
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
+	    }
+	    public boolean addSalesItem(int newSBillId, int goodsCount, int sPriceId){
+	    	
+	    	ContentValues value = new ContentValues();
+			
+			value.clear();
+			value.put("salesBillId", newSBillId);
+			value.put("sGoodsNum", goodsCount);
+			value.put("sPriceId", sPriceId);
+		
+			Uri uri = this.insert(AllTables.SalesItem.CONTENT_URI, value);
+			if(uri!=null)
+				return true;
+			else
+				return false;
 	    }
 }

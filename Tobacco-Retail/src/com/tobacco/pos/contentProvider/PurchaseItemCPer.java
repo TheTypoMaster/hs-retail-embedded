@@ -47,12 +47,16 @@ public class PurchaseItemCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " purchaseBillId integer references PurchaseBill ( " + _ID + " ), "
 						+ "pGoodsNum integer not null ,"
 					    + "pPriceId integer references GoodsPrice ( " + _ID + " ))");
 				initPurchaseItem(db);
+				}
 			}
 
 

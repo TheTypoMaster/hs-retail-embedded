@@ -46,6 +46,9 @@ public class GoodsCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " goodsCode varchar(50) not null unique ,"
@@ -56,6 +59,7 @@ public class GoodsCPer extends ContentProvider {
 						+ ") )");
 				
 				initGoods(db);
+				}
 			}
 
 
@@ -177,6 +181,16 @@ public class GoodsCPer extends ContentProvider {
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
+	    }
+	    
+	    public String getGoodsNameByGoodsId(int goodsId){
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " _id = " + goodsId, null, null);
+	    	c.moveToFirst();
+	    	
+	    	if(c.getCount()>0)
+	    		return c.getString(2);
+	    	else
+	    		return "";
 	    }
 	    
 	  

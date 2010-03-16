@@ -48,6 +48,9 @@ public class PurchaseBillCPer extends ContentProvider {
 			}
 
 			private void createtable(SQLiteDatabase db) {
+				try {
+					db.query(TABLE_NAME, null, null, null, null, null, null);
+				} catch (Exception e) {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " pBillNum varchar(20) unique not null, "
@@ -55,6 +58,7 @@ public class PurchaseBillCPer extends ContentProvider {
 						+ " time date not null ," 
 						+ " comment varchar(255))");
 				initPurchaseBill(db);
+				}
 			}
 
 
