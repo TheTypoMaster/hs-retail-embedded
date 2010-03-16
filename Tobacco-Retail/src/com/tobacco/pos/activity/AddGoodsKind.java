@@ -36,6 +36,8 @@ public class AddGoodsKind extends Activity {
 		 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addeditkinddialog);
+		
+		this.setTitle("增加类别");
 	
 		parentText = (TextView)this.findViewById(R.id.parentName);
 		Intent intent = this.getIntent();

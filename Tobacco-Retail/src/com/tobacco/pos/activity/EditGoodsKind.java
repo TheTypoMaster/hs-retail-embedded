@@ -37,6 +37,8 @@ public class EditGoodsKind extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addeditkinddialog);
 
+		this.setTitle("编辑类别");
+		
 		parentText = (TextView) this.findViewById(R.id.parentName);
 		Intent intent = this.getIntent();
 		parentName = intent.getStringExtra("pName");
@@ -62,21 +64,29 @@ public class EditGoodsKind extends Activity {
 				if (afterName.trim().equals("")) {// 判断名字是否为空
 					Toast.makeText(EditGoodsKind.this, "名字不能为空", Toast.LENGTH_SHORT).show();
 				} else {
-
-					ContentValues value = new ContentValues();
-					value.put("name", afterName);
-					value.put("comment", afterComment);
-
-					int count = getContentResolver().update(AllTables.GoodsKind.CONTENT_URI, value, " _id = " + id , null) ;
-					
-					if(!previousName.equals(afterName) && count!=0)
+				
+					Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, " name = ? ", new String[]{afterName}, null);
+					if(c.getCount()>0)
 					{
-						Toast.makeText(EditGoodsKind.this, "成功将类别："+previousName+" 改名为："+afterName, Toast.LENGTH_SHORT).show();
+						Toast.makeText(EditGoodsKind.this, "已经有该类别了，更新失败", Toast.LENGTH_SHORT).show();
+						nameEText.setText("");
 					}
-					else if(!previousComment.equals(afterComment) && count!=0){
-						Toast.makeText(EditGoodsKind.this, "成功更新类别："+previousName+"的备注", Toast.LENGTH_SHORT).show();
+					else{
+						ContentValues value = new ContentValues();
+						value.put("name", afterName);
+						value.put("comment", afterComment);
+
+						int count = getContentResolver().update(AllTables.GoodsKind.CONTENT_URI, value, " _id = " + id , null) ;
+					
+						if(!previousName.equals(afterName) && count!=0)
+						{
+							Toast.makeText(EditGoodsKind.this, "成功将类别："+previousName+" 改名为："+afterName, Toast.LENGTH_SHORT).show();
+						}
+						else if(!previousComment.equals(afterComment) && count!=0){
+							Toast.makeText(EditGoodsKind.this, "成功更新类别："+previousName+"的备注", Toast.LENGTH_SHORT).show();
+						}
+						finish();
 					}
-					finish();
 				}
 				
 			}
@@ -99,10 +109,11 @@ public class EditGoodsKind extends Activity {
 			
 					String inputName = ((EditText)v).getText().toString();
 					if(!inputName.equals(previousName)){//有改名字
-						Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, " name = " + inputName, null, null);
+													  
+						Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, " name = ? ", new String[]{inputName}, null);
 						if(c.getCount()>0)
 						{
-							Toast.makeText(EditGoodsKind.this, "已有该类别,请重新输入", Toast.LENGTH_SHORT).show();
+							Toast.makeText(EditGoodsKind.this, "已有该类别,更新失败", Toast.LENGTH_SHORT).show();
 							nameEText.setText("");
 						}
 						if(nameEText.getText().toString().trim().equals("")){
