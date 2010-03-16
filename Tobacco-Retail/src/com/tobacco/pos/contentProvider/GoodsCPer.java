@@ -21,6 +21,7 @@ public class GoodsCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "Goods";
+	    private static Context ct = null;
 
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
@@ -32,7 +33,8 @@ public class GoodsCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
-		
+				ct = context;
+				
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
@@ -166,15 +168,15 @@ public class GoodsCPer extends ContentProvider {
 	        dbHelper = new DatabaseHelper(getContext());
 	        return (dbHelper == null) ? false : true;
 	    } 
-
+	   
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getReadableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 
@@ -184,9 +186,10 @@ public class GoodsCPer extends ContentProvider {
 	    }
 	    
 	    public String getGoodsNameByGoodsId(int goodsId){
-	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " _id = " + goodsId, null, null);
+	
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " _id = ? ", new String[]{goodsId+""}, null);
 	    	c.moveToFirst();
-	    	
+	    
 	    	if(c.getCount()>0)
 	    		return c.getString(2);
 	    	else

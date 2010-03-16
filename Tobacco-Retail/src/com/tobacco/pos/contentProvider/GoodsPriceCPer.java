@@ -22,7 +22,7 @@ public class GoodsPriceCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "GoodsPrice";
-
+	    private static Context ct = null;
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
 	    	private SQLiteDatabase db = null;
@@ -31,8 +31,9 @@ public class GoodsPriceCPer extends ContentProvider {
 			private Context ctx = null;
 
 			public DatabaseHelper(Context context) {
-					super(context, DATABASE_NAME, null, DATABASE_VERSION);
+				super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
+				ct = context;
 		
 				db = openDatabase(DATABASE_NAME);
 			
@@ -159,12 +160,13 @@ public class GoodsPriceCPer extends ContentProvider {
 
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	
+	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getReadableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 
@@ -174,17 +176,19 @@ public class GoodsPriceCPer extends ContentProvider {
 	    }
 	    
 	    public int getGoodsIdByBarcode(String barcode){
-	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
-			c.moveToFirst();
-
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
+			
 			if(c.getCount()>0)
+			{
+				c.moveToFirst();
 				return c.getInt(1);
+			}
 			else
 				return -1;
 		}
 	    
 	    public int getUnitIdByBarcode(String barcode){
-			Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+			Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
 			
 			if(c.getCount()>0)
 			{
@@ -195,7 +199,7 @@ public class GoodsPriceCPer extends ContentProvider {
 		}
 
 	    public double getOutPriceByBarcode(String barcode){
-	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
 	    	
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
@@ -205,7 +209,7 @@ public class GoodsPriceCPer extends ContentProvider {
 	    		return 0;
 	    }
 	    public int getGoodsPriceIdByBarcode(String barcode){
-	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ' " + barcode + " ' ", null, null);
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
 	    	
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
