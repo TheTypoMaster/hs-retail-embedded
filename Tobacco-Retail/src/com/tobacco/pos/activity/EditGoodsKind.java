@@ -1,17 +1,12 @@
 package com.tobacco.pos.activity;
 
-import static android.provider.BaseColumns._ID;
-
-import com.tobacco.pos.util.TableCreater;
 import com.tobacco.R;
+import com.tobacco.pos.entity.AllTables;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,33 +14,28 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditGoodsKind extends Activity {
-
-	private static final String TABLE_NAME = "GoodsKind";// Êı¾İ±í
-	private static String[] FROM = { _ID, "name", "parent", "level", "comment" };
-
-	private TableCreater tableHelper = null;
 
 	private TextView parentText;
 	private Button ok;
 	private Button reset;
 	private EditText nameEText;
 	private EditText commentEText;
-	private int id;// ÕâËÄ¸ö±äÁ¿´ÓÇ°ÃæµÄActivity»ñµÃ
-	private String previousName;//Ã»¸ÄÖ®Ç°µÄÃû×Ö
-	private String previousComment;//Ã»¸ÄÖ®Ç°µÄ±¸×¢
-	private String parentName;//¸ÄÀà±ğµÄ¸¸Àà±ğÃû³Æ
+	private int id;// è¿™å››ä¸ªå˜é‡ä»å‰é¢çš„Activityè·å¾—
+	private String previousName;// æ²¡æ”¹ä¹‹å‰çš„åå­—
+	private String previousComment;// æ²¡æ”¹ä¹‹å‰çš„å¤‡æ³¨
+	private String parentName;// æ”¹ç±»åˆ«çš„çˆ¶ç±»åˆ«åç§°
 	
-	private String afterName;//¸ÄÖ®ºóµÄÃû×Ö
-	private String afterComment;//¸ÄÖ®ºóµÄ±¸×¢
-
+	private String afterName;// æ”¹ä¹‹åçš„åå­—
+	private String afterComment;// æ”¹ä¹‹åçš„å¤‡æ³¨
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addeditkinddialog);
-		tableHelper = new TableCreater(this);
 
 		parentText = (TextView) this.findViewById(R.id.parentName);
 		Intent intent = this.getIntent();
@@ -69,41 +59,24 @@ public class EditGoodsKind extends Activity {
 				afterName = nameEText.getText().toString();
 				afterComment = commentEText.getText().toString();
 				
-				Builder b = new Builder(EditGoodsKind.this);
-				b.setTitle("ÌáÊ¾");
-				b.setPositiveButton("È·¶¨",
-						new DialogInterface.OnClickListener() {
-
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if(!afterName.trim().equals(""))
-									finish();
-							}
-
-						});
-				
-				
-
-				if (afterName.trim().equals("")) {// ÅĞ¶ÏÃû×ÖÊÇ·ñÎª¿Õ
-					b.setMessage("ÇëÊäÈëÃû×Ö");
-					b.show();
-				} else {//ÔÚ´Ë´¦ĞŞ¸Ä
-					SQLiteDatabase d = tableHelper.getWritableDatabase();
+				if (afterName.trim().equals("")) {// åˆ¤æ–­åå­—æ˜¯å¦ä¸ºç©º
+					Toast.makeText(EditGoodsKind.this, "åå­—ä¸èƒ½ä¸ºç©º", Toast.LENGTH_SHORT).show();
+				} else {
 
 					ContentValues value = new ContentValues();
 					value.put("name", afterName);
 					value.put("comment", afterComment);
 
-					d.update(TABLE_NAME, value, _ID + " = " + id, null);
-					d.close();
-					if(!previousName.equals(afterName))
+					int count = getContentResolver().update(AllTables.GoodsKind.CONTENT_URI, value, " _id = " + id , null) ;
+					
+					if(!previousName.equals(afterName) && count!=0)
 					{
-						b.setMessage("³É¹¦½«Àà±ğ£º"+previousName+" ¸ÄÃûÎª£º"+afterName);
-						b.show();
+						Toast.makeText(EditGoodsKind.this, "æˆåŠŸå°†ç±»åˆ«ï¼š"+previousName+" æ”¹åä¸ºï¼š"+afterName, Toast.LENGTH_SHORT).show();
 					}
-					else{
-						finish();
+					else if(!previousComment.equals(afterComment) && count!=0){
+						Toast.makeText(EditGoodsKind.this, "æˆåŠŸæ›´æ–°ç±»åˆ«ï¼š"+previousName+"çš„å¤‡æ³¨", Toast.LENGTH_SHORT).show();
 					}
+					finish();
 				}
 				
 			}
@@ -119,54 +92,27 @@ public class EditGoodsKind extends Activity {
 
 		nameEText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
+
 			public void onFocusChange(View v, boolean hasFocus) {
-
-				if (!hasFocus) {// Ê§È¥½¹µãÊ±²éÕÒÊı¾İ¿âÖĞÊÇ·ñÓĞÏàÍ¬Ãû×ÖµÄÀà±ğ
-					Builder b = new Builder(EditGoodsKind.this);
-					String inputName = ((EditText) v).getText().toString();
-					if (!inputName.equals(previousName)) {// Èç¹ûÓĞ¸ÄÀà±ğÃû×Ö
-						SQLiteDatabase db = tableHelper.getReadableDatabase();
-						Cursor c = db.query(TABLE_NAME, FROM, null, null, null,
-								null, null);
-
-						c.moveToFirst();
-						for (int i = 0; i < c.getCount(); i++) {
-							if (c.getString(1).equals(inputName)) {
-								b.setTitle("ÌáÊ¾");
-								b.setMessage("ÒÑÓĞ¸ÃÀà±ğ,ÇëÖØĞÂÊäÈë");
-								b.setPositiveButton("È·¶¨",
-										new DialogInterface.OnClickListener() {
-											public void onClick(
-													DialogInterface dialog,
-													int which) {
-												nameEText.setText("");
-											}
-
-										});
-								b.show();
-								break;
-							}
-							c.moveToNext();
+			
+				if(!hasFocus){// å¤±å»ç„¦ç‚¹æ—¶æŸ¥æ‰¾æ•°æ®åº“ä¸­æ˜¯å¦æœ‰ç›¸åŒåå­—çš„ç±»åˆ«
+			
+					String inputName = ((EditText)v).getText().toString();
+					if(!inputName.equals(previousName)){//æœ‰æ”¹åå­—
+						Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, " name = " + inputName, null, null);
+						if(c.getCount()>0)
+						{
+							Toast.makeText(EditGoodsKind.this, "å·²æœ‰è¯¥ç±»åˆ«,è¯·é‡æ–°è¾“å…¥", Toast.LENGTH_SHORT).show();
+							nameEText.setText("");
 						}
-						db.close();
-					}
-					if(nameEText.getText().toString().trim().equals("")){
-						b.setTitle("ÌáÊ¾");
-						b.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-						 
-							public void onClick(DialogInterface dialog,
-									int which) {
-							 
-							}
-							
-						});
-						b.setMessage("ÇëÊäÈëÃû×Ö!");
-						b.show();
+						if(nameEText.getText().toString().trim().equals("")){
+							Toast.makeText(EditGoodsKind.this, "è¯·è¾“å…¥åå­—", Toast.LENGTH_SHORT).show();
+							nameEText.setText("");
+						}
 					}
 				}
 			}
 		});
 	}
-
+			
 }

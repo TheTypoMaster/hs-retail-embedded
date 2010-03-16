@@ -1,6 +1,6 @@
 package com.tobacco.pos.activity;
 
-import com.tobacco.pos.util.Loginer;
+import com.tobacco.pos.contentProvider.Loginer;
 import com.tobacco.R;
 
 import android.app.Activity;
@@ -50,7 +50,7 @@ public class Login extends Activity {
 				boolean flag = loginer.login(userName, password, purpose,
 						loginer.getReadableDatabase());
 				if (!flag)
-					loginInfo.setText("È¨ÏÞ²»×ã»òÃÜÂë³ö´í");
+					loginInfo.setText("È¨ï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				else {
 					loginInfo.setText("");
 					if (purpose.equals("PurchaseManagement")) {

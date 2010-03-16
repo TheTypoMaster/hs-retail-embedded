@@ -46,6 +46,7 @@ public class KindManagement extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.kindmanagement);
 		
+		kindInfoTView = (TextView)KindManagement.this.findViewById(R.id.kindInfoTView);
 		lookup();
 	}
 
@@ -180,7 +181,7 @@ public class KindManagement extends Activity {
 					}
 				}
 				selectedName = ((TextView) v).getText().toString();
-				kindInfoTView = (TextView)KindManagement.this.findViewById(R.id.kindInfoTView);
+			
 				kindInfoTView.setText("\n\n\n"+moreInfo(selectedName));
 			}
 
@@ -288,36 +289,37 @@ public class KindManagement extends Activity {
 
 	private String moreInfo(String searchName) {// 点击某一类别，显示更加详细的信息
 		
+
 		if(searchName.equals("TOP")){
 			return "";//如果是TOP类别，不显示任何东西
 		}
 	
-		else {//选择了某一商品类别
+		else {// 选择了某一商品类别
 			StringBuffer sb = new StringBuffer();
 			
 			c.moveToFirst();
 			int pId = 0;// 父类别的ID
-			String pName = "";//父类别的名称
+			String pName = "";// 父类别的名称
 			for (int i = 0; i < c.getCount(); i++) {
 				if (c.getString(1).equals(searchName)) {
 					sb.append("ID:");
 					sb.append(c.getInt(0));
 					sb.append("\n");
 
-					sb.append("���:");
+					sb.append("名称:");
 					sb.append(c.getString(1));
 					sb.append("\n");
 
-					sb.append("�����:");
+					sb.append("父类别:");
 					sb.append(c.getInt(2));
 					pId = c.getInt(2);
 					sb.append("\n");
 
-					sb.append("���:");
+					sb.append("层次:");
 					sb.append(c.getInt(3));
 					sb.append("\n");
 
-					sb.append("��ע:");
+					sb.append("备注:");
 					sb.append(c.getString(4));
 					sb.append("\n");
 

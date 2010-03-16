@@ -6,14 +6,7 @@ import java.util.Vector;
 
 import com.tobacco.R;
 
-import com.tobacco.pos.dao.GoodsDAO;
-import com.tobacco.pos.dao.GoodsPriceDAO;
-import com.tobacco.pos.dao.KindDAO;
-import com.tobacco.pos.dao.ManufacturerDAO;
-import com.tobacco.pos.dao.PurchaseBillDAO;
-import com.tobacco.pos.dao.PurchaseItemDAO;
-import com.tobacco.pos.dao.UnitDAO;
-import com.tobacco.pos.util.Loginer;
+import com.tobacco.pos.contentProvider.Loginer;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -42,54 +35,38 @@ import android.widget.TabHost.OnTabChangeListener;
 
 public class PurchaseManagement extends TabActivity {
 	private Loginer loginer = null;
-	private GoodsDAO gDAO= null;
-	private UnitDAO uDAO = null;
-	private KindDAO kDAO = null;
-	private GoodsPriceDAO gPriceDAO = null;
-	private PurchaseBillDAO pBillDAO = null;
-	private PurchaseItemDAO pItemDAO = null;
-	private ManufacturerDAO mDAO = null;
 	
-	private ImageButton purchasereturn;
 	private TextView purchaseWelcome;
 
-	private TextView pBillIdTView;// ½ø»õµ¥±àºÅ
-	private TextView pBillTimeTView;// Ìí¼Ó½ø»õµ¥µÄÊ±¼ä
-	private EditText pBillCommentEText;// Ìí¼Ó½ø»õµ¥Ê±µÄ±¸×¢
-
+	private TextView pBillIdTView;
+	private TextView pBillTimeTView;
+	private EditText pBillCommentEText;
+	
 	private Button savePBillButton;
 
-	private String maxPBillNum;// Òª²åÈëµÄ½ø»õµ¥µÄ½ø»õºÅ
-	private Date theDate;// Òª²åÈëµÄ½ø»õµ¥µÄÊ±¼ä
+	private String maxPBillNum;
+	private Date theDate;
 	
-	private Spinner wholePBill;//ÏÂÀ­¿ò£¬ÓÃÓÚÏÔÊ¾ËùÓÐµÄ½ø»õµ¥£¬ÒÔ±ãÔÚÊäÈëÉÌÆ·ÊýÁ¿µÄÊ±ºò¿ÉÒÔÑ¡Ôñ
-	private Button addGoodsButton;//°´Å¥£¬µã»÷¸Ã°´Å¥¿ÉÒÔ¿ªÊ¼ÊäÈëÉÌÆ·µÄ»ù±¾ÐÅÏ¢£¬°üÀ¨µ¥Î»£¬¼Û¸ñµÈ¡£
-	private Button addGoodsIntoPBillButton;//°´Å¥£¬µã»÷¸Ã°´Å¥¿ÉÒÔ½«ÐÂÔöµÄÉÌÆ·¼ÓÈëÏàÓ¦µÄ½ø»õµ¥£¬ÊäÈëÊýÁ¿µÈ¡£
-
-	private String pBillCode = "";//½ø»õµ¥µÄ´úÂë
-	private int selectedPBillId = 0;//½ø»õµ¥µÄID
-	private int selectedPriceId = 0;//Ñ¡ÔñµÄ¼Û¸ñµÄID
+	private Spinner wholePBill;
+	private Button addGoodsButton;
+	private Button addGoodsIntoPBillButton;
 	
-	private String userName = "";//µÇÂ½ÓÃ»§µÄÃû×Ö
+	private String pBillCode = "";
+	private int selectedPBillId = 0;
+	private int selectedPriceId = 0;
+	
+	private String userName = "";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.purchasemanagement);
-		
-		//Ò»Ð©Êý¾Ý·ÃÎÊ¶ÔÏóµÄ³õÊ¼»¯
+	
 		loginer = new Loginer(PurchaseManagement.this);
-		gDAO = new GoodsDAO(PurchaseManagement.this);
-		uDAO = new UnitDAO(PurchaseManagement.this);
-		kDAO = new KindDAO(PurchaseManagement.this);
-		gPriceDAO = new GoodsPriceDAO(PurchaseManagement.this);
-		pBillDAO = new PurchaseBillDAO(PurchaseManagement.this);
-		pItemDAO = new PurchaseItemDAO(PurchaseManagement.this);
-		mDAO = new ManufacturerDAO(PurchaseManagement.this);
 		
 		userName = this.getIntent().getStringExtra("userName");
 		purchaseWelcome = (TextView) this.findViewById(R.id.purchaseWelcome);
-		purchaseWelcome.setText("ÄãºÃ£º" + userName);
+		purchaseWelcome.setText("ï¿½ï¿½Ã£ï¿½" + userName);
 	 
 		
 		TabHost mTabHost = getTabHost();
@@ -102,453 +79,439 @@ public class PurchaseManagement extends TabActivity {
 
 			public void onTabChanged(String tabId) {
 			
-				if(tabId.equals("pBill")){
-					pBillIdTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillIdTView);
-					pBillTimeTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillTimeTView);
-					
-					maxPBillNum = "P" + (Integer.parseInt(pBillDAO.getMaxPBillNum(pBillDAO.getReadableDatabase()).substring(1)) + 1);
-					
-					pBillIdTView.setText(maxPBillNum);
-					theDate = new Date();
-					pBillTimeTView.setText(theDate.toLocaleString());
-
-					pBillCommentEText = (EditText) PurchaseManagement.this
-										.findViewById(R.id.pBillCommentEText);
-					pBillCommentEText.setText("");
-
-					savePBillButton = (Button) PurchaseManagement.this
-										.findViewById(R.id.savePBillButton);
-					savePBillButton.setOnClickListener(new OnClickListener() {// "±£´æ"°´Å¥µÄ¼àÌýÊÂ¼þ
-						
-						public void onClick(View v) {
-							boolean flag = pBillDAO.addPBill(maxPBillNum, 1, theDate.toLocaleString(),pBillCommentEText.getText().toString(),pBillDAO.getWritableDatabase());
-							if(flag)
-								Toast.makeText(getApplicationContext(), "³É¹¦Ìí¼Ó½ø»õµ¥³É¹¦!", Toast.LENGTH_SHORT).show();
-							else
-								Toast.makeText(getApplicationContext(), "Ìí¼Ó½ø»õµ¥Ê§°Ü!", Toast.LENGTH_SHORT).show();
-							}
-						}
-					);
-				}
-				else{
-					wholePBill = (Spinner)PurchaseManagement.this.findViewById(R.id.wholePBill);
-					String allPBill [] = pBillDAO.getAllPBill(pBillDAO.getReadableDatabase());
-					ArrayAdapter<String> adapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allPBill);
-					wholePBill.setAdapter(adapter);
-
-					wholePBill.setOnItemSelectedListener(new OnItemSelectedListener(){
-						public void onItemSelected(AdapterView<?> arg0,View arg1, int arg2, long arg3) {
-							String temp = ((TextView)arg1).getText()+"";
-							pBillCode = temp.substring(0, temp.indexOf(":"));
-							selectedPBillId = pBillDAO.getPBillIdByCode(pBillCode, pBillDAO.getReadableDatabase());
-						}
-
-						public void onNothingSelected(AdapterView<?> arg0) {}
-						}
-					);
-								
-					addGoodsButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsButton);
-					addGoodsButton.setOnClickListener(new OnClickListener(){
-
-									public void onClick(View v) {
-										
-										Intent i = new Intent(PurchaseManagement.this, AddGoods.class);
-										PurchaseManagement.this.startActivity(i);
-									
-//										AlertDialog.Builder addGoodsDialog= new AlertDialog.Builder(PurchaseManagement.this);
-//										addGoodsDialog.setTitle("Ìí¼ÓÉÌÆ·");
+//				if(tabId.equals("pBill")){
+//					pBillIdTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillIdTView);
+//					pBillTimeTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillTimeTView);
+//					
+//					maxPBillNum = "P" + (Integer.parseInt(pBillDAO.getMaxPBillNum(pBillDAO.getReadableDatabase()).substring(1)) + 1);
+//					
+//					pBillIdTView.setText(maxPBillNum);
+//					theDate = new Date();
+//					pBillTimeTView.setText(theDate.toLocaleString());
+//
+//					pBillCommentEText = (EditText) PurchaseManagement.this
+//										.findViewById(R.id.pBillCommentEText);
+//					pBillCommentEText.setText("");
+//
+//					savePBillButton = (Button) PurchaseManagement.this
+//										.findViewById(R.id.savePBillButton);
+//					savePBillButton.setOnClickListener(new OnClickListener() {// "ï¿½ï¿½ï¿½ï¿½"ï¿½ï¿½Å¥ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+//						
+//						public void onClick(View v) {
+//							boolean flag = pBillDAO.addPBill(maxPBillNum, 1, theDate.toLocaleString(),pBillCommentEText.getText().toString(),pBillDAO.getWritableDatabase());
+//							if(flag)
+//								Toast.makeText(getApplicationContext(), "ï¿½É¹ï¿½ï¿½ï¿½Ó½ï¿½ï¿½É¹ï¿½!", Toast.LENGTH_SHORT).show();
+//							else
+//								Toast.makeText(getApplicationContext(), "ï¿½ï¿½Ó½ï¿½ï¿½Ê§ï¿½ï¿½!", Toast.LENGTH_SHORT).show();
+//							}
+//						}
+//					);
+//				}
+//				else{
+//					wholePBill = (Spinner)PurchaseManagement.this.findViewById(R.id.wholePBill);
+//					String allPBill [] = pBillDAO.getAllPBill(pBillDAO.getReadableDatabase());
+//					ArrayAdapter<String> adapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allPBill);
+//					wholePBill.setAdapter(adapter);
+//
+//					wholePBill.setOnItemSelectedListener(new OnItemSelectedListener(){
+//						public void onItemSelected(AdapterView<?> arg0,View arg1, int arg2, long arg3) {
+//							String temp = ((TextView)arg1).getText()+"";
+//							pBillCode = temp.substring(0, temp.indexOf(":"));
+//							selectedPBillId = pBillDAO.getPBillIdByCode(pBillCode, pBillDAO.getReadableDatabase());
+//						}
+//
+//						public void onNothingSelected(AdapterView<?> arg0) {}
+//						}
+//					);
+//								
+//					addGoodsButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsButton);
+//					addGoodsButton.setOnClickListener(new OnClickListener(){
+//
+//									public void onClick(View v) {
 //										
-//										EditText addGoodsLayout = (EditText)PurchaseManagement.this.findViewById(R.id.test);
-//										TextView t = new TextView(PurchaseManagement.this);
-//										t.setText("²âÊÔ");
-//										addGoodsDialog.setView(addGoodsLayout);
-//										final Vector allPrice = new Vector();//Ò»¼þÉÌÆ·µÄËùÓÐ¼Û¸ñ
-//										Button addPriceButton = (Button)PurchaseManagement.this.findViewById(R.id.addPriceButton);
-									/*	addPriceButton.setOnClickListener(new OnClickListener(){
-
-											public void onClick(View v) {
-												final Vector singlePrice = new Vector();//Ò»¼þÉÌÆ·µÄÒ»¸ö¼Û¸ñ£¬ÕâÐ©¼Û¸ñÖÐµÄµ¥Î»ÊÇ²»Ò»ÑùµÄ¡£
-												
-												AlertDialog.Builder addPriceDialog = new AlertDialog.Builder(PurchaseManagement.this);
-												
-												TableLayout priceLayout = new TableLayout(PurchaseManagement.this);
-												
-												TableRow pRow1 = new TableRow(PurchaseManagement.this);
-												TextView unitNameTextView = new TextView(PurchaseManagement.this);
-												unitNameTextView.setText("µ¥Î»:");
-												final Spinner unitNameSpinner = new Spinner(PurchaseManagement.this);//ËùÓÐµÄµ¥Î»Ãû³Æ
-												List<String> allUnitName = uDAO.getAllUnit(uDAO.getReadableDatabase());
-												
-												for(int i=0;i<allPrice.size();i++)//ÏòÁ¿allPrice´æ´¢×ÅÒ»¼þÉÌÆ·µÄ¶àÖÖ¼Û¸ñ£¬ÔÚ³õÊ¼»¯µÄÊ±ºòÐèÒª½«ÒÑÌîÈë¼Û¸ñµÄµ¥Î»È¥³ý
-												{
-													Vector temp = new Vector();
-													temp = (Vector) allPrice.get(i);
-													
-													if(allUnitName.contains(temp.get(0))){
-														allUnitName.remove(temp.get(0));
-													}
-													
-												}
-												ArrayAdapter<String> allUnitAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allUnitName);
-												unitNameSpinner.setAdapter(allUnitAdapter);
-												
-												pRow1.addView(unitNameTextView, 0);
-												pRow1.addView(unitNameSpinner, 1);
-												priceLayout.addView(pRow1);
-												
-												TableRow pRow2 = new TableRow(PurchaseManagement.this);
-												TextView barcodeTextView = new TextView(PurchaseManagement.this);
-												barcodeTextView.setText("ÌõÐÎÂë:");
-												final EditText barcodeEditText = new EditText(PurchaseManagement.this);
-												barcodeEditText.setWidth(200);
-												
-												pRow2.addView(barcodeTextView, 0);
-												pRow2.addView(barcodeEditText, 1);
-												priceLayout.addView(pRow2);
-												
-												TableRow pRow3 = new TableRow(PurchaseManagement.this);
-												TextView inPriceTextView = new TextView(PurchaseManagement.this);
-												inPriceTextView.setText("½ø»õ¼Û:");
-												final EditText inPriceEditText = new EditText(PurchaseManagement.this);
-												
-												inPriceEditText.setWidth(200);
-												
-												pRow3.addView(inPriceTextView, 0);
-												pRow3.addView(inPriceEditText, 1);
-												priceLayout.addView(pRow3);
-												
-												TableRow pRow4 = new TableRow(PurchaseManagement.this);
-												TextView outPriceTextView = new TextView(PurchaseManagement.this);
-												outPriceTextView.setText("ÊÛ¼Û:");
-												final EditText outPriceEditText = new EditText(PurchaseManagement.this);
-												outPriceEditText.setWidth(200);
-												
-												pRow4.addView(outPriceTextView, 0);
-												pRow4.addView(outPriceEditText, 1);
-												priceLayout.addView(pRow4);
-													
-												final TextView addPriceInfo = new TextView(PurchaseManagement.this);
-												addPriceInfo.setTextColor(Color.RED);
-												priceLayout.addView(addPriceInfo);
-												
-												addPriceDialog.setTitle("Ìí¼ÓÉÌÆ·¼Û¸ñ");
-											
-												inPriceEditText.setOnFocusChangeListener(new OnFocusChangeListener(){//ÅÐ¶Ï½ø»õ¼ÛµÄ¸ñÊ½
-
-													public void onFocusChange(View v,
-															boolean hasFocus) {
-														
-														if(!hasFocus){
-															String inPrice = ((EditText)v).getText().toString();
-															if(inPrice.trim().length()==0 || inPrice.equals(null)){
-																addPriceInfo.setText("ÇëÊäÈë½ø»õ¼Û");
-																inPriceEditText.setText("");
-															}
-															else {
-																try{
-																	Double.valueOf(inPrice);
-																}
-																catch(Exception e){
-																	addPriceInfo.setText("½ø»õ¼Û¸ñÊ½³ö´í");
-																	inPriceEditText.setText("");
-																}
-															}
-														}
-													}
-													
-												});
-												
-												outPriceEditText.setOnFocusChangeListener(new OnFocusChangeListener(){//ÅÐ¶ÏÊÛ¼ÛµÄ¸ñÊ½
-
-													public void onFocusChange(View v,
-															boolean hasFocus) {
-														 
-														if(!hasFocus){
-															String outPrice = ((EditText)v).getText().toString();
-															if(outPrice.trim().length()==0 || outPrice.equals(null)){
-																addPriceInfo.setText("ÇëÊäÈëÊÛ¼Û");
-																outPriceEditText.setText("");
-															}
-															else {
-																try{
-																	Double.valueOf(outPrice);
-																}
-																catch(Exception e){
-																	addPriceInfo.setText("ÊÛ¼Û¸ñÊ½³ö´í");
-																	outPriceEditText.setText("");
-																}
-															}
-														}
-													}
-													
-												});
-												addPriceDialog.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-													public void onClick(
-															DialogInterface dialog,
-															int which) {
-														
-														String inP = inPriceEditText.getText().toString();
-														String outP = outPriceEditText.getText().toString();
-														if(inP.trim().length() == 0 || inP.equals(null) || outP.trim().length() == 0 || outP.equals(null))
-															;
-														else{
-															try{
-																double inPrice = Double.valueOf(inP);//ÉÌÆ·µÄÃ¿Ò»Ñù¼Û¸ñ¶¼ÓÉ"µ¥Î»Ãû³Æ","ÌõÐÎÂë","½ø»õ¼Û","ÊÛ¼Û"×é³É
-																double outPrice = Double.valueOf(outP);
-																singlePrice.add(unitNameSpinner.getSelectedItem().toString());
-																singlePrice.add(barcodeEditText.getText().toString());
-																singlePrice.add(inPriceEditText.getText().toString());
-																singlePrice.add(outPriceEditText.getText().toString());
-																													
-																allPrice.add(singlePrice);
-															}
-															catch(Exception e){
-																
-															}
-														}
-										
-													}
-													
-												});
-												addPriceDialog.setNegativeButton("È¡Ïû",  new DialogInterface.OnClickListener(){
-
-													public void onClick(
-															DialogInterface dialog,
-															int which) {
-													}
-													
-												});
-												addPriceDialog.setView(priceLayout);
-												addPriceDialog.show();
-											}
-											
-										});*/
-									
-										
-									/*	addGoodsDialog.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-											 
-											public void onClick(DialogInterface dialog,
-													int which) {
-												String goodsName = goodsNameEditText.getText().toString();//ÉÌÆ·Ãû³Æ
-												String mName = allManufacturer.getSelectedItem().toString();//³§¼ÒÃû³Æ
-												String kindName = allKind.getSelectedItem().toString();//ÖÖÀàÃû³Æ
-
-												String addGoodsResult = gDAO.addGoods(goodsName, mName, kindName, allPrice, gDAO.getWritableDatabase());
-												AlertDialog.Builder addGoodsTip = new AlertDialog.Builder(PurchaseManagement.this);
-												addGoodsTip.setTitle("Ìí¼ÓÉÌÆ·ÌáÊ¾");
-												addGoodsTip.setMessage(addGoodsResult);
-												addGoodsTip.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-													public void onClick(
-															DialogInterface dialog,
-															int which) {
-													
-													}
-													
-												});
-												addGoodsTip.show();
-											}
-											
-										});*/
-//										addGoodsDialog.setNegativeButton("È¡Ïû", new DialogInterface.OnClickListener(){
+//										Intent i = new Intent(PurchaseManagement.this, AddGoods.class);
+//										PurchaseManagement.this.startActivity(i);
+//									
+////										AlertDialog.Builder addGoodsDialog= new AlertDialog.Builder(PurchaseManagement.this);
+////										addGoodsDialog.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½Æ·");
+////										
+////										EditText addGoodsLayout = (EditText)PurchaseManagement.this.findViewById(R.id.test);
+////										TextView t = new TextView(PurchaseManagement.this);
+////										t.setText("ï¿½ï¿½ï¿½ï¿½");
+////										addGoodsDialog.setView(addGoodsLayout);
+////										final Vector allPrice = new Vector();//Ò»ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼Û¸ï¿½
+////										Button addPriceButton = (Button)PurchaseManagement.this.findViewById(R.id.addPriceButton);
+//									/*	addPriceButton.setOnClickListener(new OnClickListener(){
+//
+//											public void onClick(View v) {
+//												final Vector singlePrice = new Vector();//Ò»ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½Ò»ï¿½ï¿½Û¸ï¿½ï¿½ï¿½Ð©ï¿½Û¸ï¿½ï¿½ÐµÄµï¿½Î»ï¿½Ç²ï¿½Ò»ï¿½ï¿½Ä¡ï¿½
+//												
+//												AlertDialog.Builder addPriceDialog = new AlertDialog.Builder(PurchaseManagement.this);
+//												
+//												TableLayout priceLayout = new TableLayout(PurchaseManagement.this);
+//												
+//												TableRow pRow1 = new TableRow(PurchaseManagement.this);
+//												TextView unitNameTextView = new TextView(PurchaseManagement.this);
+//												unitNameTextView.setText("ï¿½ï¿½Î»:");
+//												final Spinner unitNameSpinner = new Spinner(PurchaseManagement.this);//ï¿½ï¿½ï¿½ÐµÄµï¿½Î»ï¿½ï¿½ï¿½
+//												List<String> allUnitName = uDAO.getAllUnit(uDAO.getReadableDatabase());
+//												
+//												for(int i=0;i<allPrice.size();i++)//ï¿½ï¿½allPriceï¿½æ´¢ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ä¶ï¿½ï¿½Ö¼Û¸ï¿½ï¿½Ú³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½Äµï¿½Î»È¥ï¿½ï¿½
+//												{
+//													Vector temp = new Vector();
+//													temp = (Vector) allPrice.get(i);
+//													
+//													if(allUnitName.contains(temp.get(0))){
+//														allUnitName.remove(temp.get(0));
+//													}
+//													
+//												}
+//												ArrayAdapter<String> allUnitAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allUnitName);
+//												unitNameSpinner.setAdapter(allUnitAdapter);
+//												
+//												pRow1.addView(unitNameTextView, 0);
+//												pRow1.addView(unitNameSpinner, 1);
+//												priceLayout.addView(pRow1);
+//												
+//												TableRow pRow2 = new TableRow(PurchaseManagement.this);
+//												TextView barcodeTextView = new TextView(PurchaseManagement.this);
+//												barcodeTextView.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:");
+//												final EditText barcodeEditText = new EditText(PurchaseManagement.this);
+//												barcodeEditText.setWidth(200);
+//												
+//												pRow2.addView(barcodeTextView, 0);
+//												pRow2.addView(barcodeEditText, 1);
+//												priceLayout.addView(pRow2);
+//												
+//												TableRow pRow3 = new TableRow(PurchaseManagement.this);
+//												TextView inPriceTextView = new TextView(PurchaseManagement.this);
+//												inPriceTextView.setText("ï¿½ï¿½ï¿½ï¿½:");
+//												final EditText inPriceEditText = new EditText(PurchaseManagement.this);
+//												
+//												inPriceEditText.setWidth(200);
+//												
+//												pRow3.addView(inPriceTextView, 0);
+//												pRow3.addView(inPriceEditText, 1);
+//												priceLayout.addView(pRow3);
+//												
+//												TableRow pRow4 = new TableRow(PurchaseManagement.this);
+//												TextView outPriceTextView = new TextView(PurchaseManagement.this);
+//												outPriceTextView.setText("ï¿½Û¼ï¿½:");
+//												final EditText outPriceEditText = new EditText(PurchaseManagement.this);
+//												outPriceEditText.setWidth(200);
+//												
+//												pRow4.addView(outPriceTextView, 0);
+//												pRow4.addView(outPriceEditText, 1);
+//												priceLayout.addView(pRow4);
+//													
+//												final TextView addPriceInfo = new TextView(PurchaseManagement.this);
+//												addPriceInfo.setTextColor(Color.RED);
+//												priceLayout.addView(addPriceInfo);
+//												
+//												addPriceDialog.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Û¸ï¿½");
+//											
+//												inPriceEditText.setOnFocusChangeListener(new OnFocusChangeListener(){//ï¿½Ð¶Ï½ï¿½ï¿½ÛµÄ¸ï¿½Ê½
+//
+//													public void onFocusChange(View v,
+//															boolean hasFocus) {
+//														
+//														if(!hasFocus){
+//															String inPrice = ((EditText)v).getText().toString();
+//															if(inPrice.trim().length()==0 || inPrice.equals(null)){
+//																addPriceInfo.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+//																inPriceEditText.setText("");
+//															}
+//															else {
+//																try{
+//																	Double.valueOf(inPrice);
+//																}
+//																catch(Exception e){
+//																	addPriceInfo.setText("ï¿½ï¿½ï¿½Û¸ï¿½Ê½ï¿½ï¿½ï¿½");
+//																	inPriceEditText.setText("");
+//																}
+//															}
+//														}
+//													}
+//													
+//												});
+//												
+//												outPriceEditText.setOnFocusChangeListener(new OnFocusChangeListener(){//ï¿½Ð¶ï¿½ï¿½Û¼ÛµÄ¸ï¿½Ê½
+//
+//													public void onFocusChange(View v,
+//															boolean hasFocus) {
+//														 
+//														if(!hasFocus){
+//															String outPrice = ((EditText)v).getText().toString();
+//															if(outPrice.trim().length()==0 || outPrice.equals(null)){
+//																addPriceInfo.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¼ï¿½");
+//																outPriceEditText.setText("");
+//															}
+//															else {
+//																try{
+//																	Double.valueOf(outPrice);
+//																}
+//																catch(Exception e){
+//																	addPriceInfo.setText("ï¿½Û¼Û¸ï¿½Ê½ï¿½ï¿½ï¿½");
+//																	outPriceEditText.setText("");
+//																}
+//															}
+//														}
+//													}
+//													
+//												});
+//												addPriceDialog.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//
+//													public void onClick(
+//															DialogInterface dialog,
+//															int which) {
+//														
+//														String inP = inPriceEditText.getText().toString();
+//														String outP = outPriceEditText.getText().toString();
+//														if(inP.trim().length() == 0 || inP.equals(null) || outP.trim().length() == 0 || outP.equals(null))
+//															;
+//														else{
+//															try{
+//																double inPrice = Double.valueOf(inP);//ï¿½ï¿½Æ·ï¿½ï¿½Ã¿Ò»ï¿½ï¿½Û¸ï¿½ï¿½ï¿½"ï¿½ï¿½Î»ï¿½ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½","ï¿½Û¼ï¿½"ï¿½ï¿½ï¿½
+//																double outPrice = Double.valueOf(outP);
+//																singlePrice.add(unitNameSpinner.getSelectedItem().toString());
+//																singlePrice.add(barcodeEditText.getText().toString());
+//																singlePrice.add(inPriceEditText.getText().toString());
+//																singlePrice.add(outPriceEditText.getText().toString());
+//																													
+//																allPrice.add(singlePrice);
+//															}
+//															catch(Exception e){
+//																
+//															}
+//														}
+//										
+//													}
+//													
+//												});
+//												addPriceDialog.setNegativeButton("È¡ï¿½ï¿½",  new DialogInterface.OnClickListener(){
+//
+//													public void onClick(
+//															DialogInterface dialog,
+//															int which) {
+//													}
+//													
+//												});
+//												addPriceDialog.setView(priceLayout);
+//												addPriceDialog.show();
+//											}
+//											
+//										});*/
+//									
+//										
+//									/*	addGoodsDialog.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//											 
+//											public void onClick(DialogInterface dialog,
+//													int which) {
+//												String goodsName = goodsNameEditText.getText().toString();//ï¿½ï¿½Æ·ï¿½ï¿½ï¿½
+//												String mName = allManufacturer.getSelectedItem().toString();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//												String kindName = allKind.getSelectedItem().toString();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//
+//												String addGoodsResult = gDAO.addGoods(goodsName, mName, kindName, allPrice, gDAO.getWritableDatabase());
+//												AlertDialog.Builder addGoodsTip = new AlertDialog.Builder(PurchaseManagement.this);
+//												addGoodsTip.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½Ê¾");
+//												addGoodsTip.setMessage(addGoodsResult);
+//												addGoodsTip.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//
+//													public void onClick(
+//															DialogInterface dialog,
+//															int which) {
+//													
+//													}
+//													
+//												});
+//												addGoodsTip.show();
+//											}
+//											
+//										});*/
+////										addGoodsDialog.setNegativeButton("È¡ï¿½ï¿½", new DialogInterface.OnClickListener(){
+////
+////											public void onClick(DialogInterface dialog,
+////													int which) {
+////												
+////											}
+////										 
+////											
+////										});
+////										addGoodsDialog.show();
+//
+//									}
+//									
+//								});
+//								
+//								addGoodsIntoPBillButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsIntoPBillButton);
+//								addGoodsIntoPBillButton.setOnClickListener(new OnClickListener(){
+//
+//									public void onClick(View v) {
+//									
+//										AlertDialog.Builder addGoodsIntoPBillDialog = new AlertDialog.Builder(PurchaseManagement.this);
+//										addGoodsIntoPBillDialog.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½Æ·");
+//										TableLayout addGoodsIntoPBillTable = new TableLayout(PurchaseManagement.this);
+//								
+//										TableRow row1 = new TableRow(PurchaseManagement.this);//Ñ¡ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
+//										TextView tView1 = new TextView(PurchaseManagement.this);
+//										tView1.setText("ï¿½ï¿½Æ·:");
+//										
+//										Spinner goodsSpinner = new Spinner(PurchaseManagement.this);
+//										String [] allGoodsName = gDAO.getAllGoods(gDAO.getReadableDatabase());
+//										ArrayAdapter<String> allGoodsAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allGoodsName);
+//										goodsSpinner.setAdapter(allGoodsAdapter);
+//										
+//										
+//										row1.addView(tView1);
+//										row1.addView(goodsSpinner);
+//										addGoodsIntoPBillTable.addView(row1);
+//										
+//										TableRow row2 = new TableRow(PurchaseManagement.this);//Ñ¡ï¿½ï¿½Û¸ï¿½ï¿½ï¿½ï¿½
+//										TextView tView2 = new TextView(PurchaseManagement.this);
+//										tView2.setText("ï¿½Û¸ï¿½:");
+//										final Spinner goodsPriceSpinner = new Spinner(PurchaseManagement.this);
+//										row2.addView(tView2);
+//										row2.addView(goodsPriceSpinner);
+//										addGoodsIntoPBillTable.addView(row2);
+//										
+//									
+//										goodsSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+//
+//											public void onItemSelected(AdapterView<?> arg0,
+//													View arg1, int arg2, long arg3) {
+//												String selectedGoods = ((TextView)arg1).getText()+"";
+//												String selectedGoodsCode = selectedGoods.substring(0,selectedGoods.indexOf(":"));
+//												List<String> allPrice = gPriceDAO.getPriceByGoodsCode(selectedGoodsCode, gPriceDAO.getReadableDatabase());
+//											
+//												ArrayAdapter<String> allPriceAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allPrice);
+//												goodsPriceSpinner.setAdapter(allPriceAdapter);
+//												
+//											}
+//
+//											public void onNothingSelected(
+//													AdapterView<?> arg0) {
+//											}
+//											
+//										});
+//										goodsPriceSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+//											
+//											public void onItemSelected(AdapterView<?> arg0,
+//													View arg1, int arg2, long arg3) {
+//												String selectedPrice = ((TextView)arg1).getText()+"";
+//												selectedPriceId = Integer.parseInt(selectedPrice.substring(0, selectedPrice.indexOf(":")));
+//											
+//											}
+//											public void onNothingSelected(
+//													AdapterView<?> arg0) {
+//											
+//											}
+//										});
+//										
+//										TableRow row3 = new TableRow(PurchaseManagement.this);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//										TextView tView3 = new TextView(PurchaseManagement.this);
+//										tView3.setText("ï¿½ï¿½:");
+//										final EditText countEText = new EditText(PurchaseManagement.this);
+//										row3.addView(tView3);
+//										row3.addView(countEText);
+//										addGoodsIntoPBillTable.addView(row3);
+//										
+//										addGoodsIntoPBillDialog.setView(addGoodsIntoPBillTable);
+//							
+//										addGoodsIntoPBillDialog.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
 //
 //											public void onClick(DialogInterface dialog,
 //													int which) {
 //												
+//												try{//ï¿½ï¿½ï¿½Ä¸ï¿½Ê½ï¿½ï¿½È·
+//													int theCount = Integer.parseInt(countEText.getText().toString());
+//													
+//
+//													boolean flag = pItemDAO.addPurchaseItem(selectedPBillId, theCount, selectedPriceId, pItemDAO.getWritableDatabase());
+//												
+//													if(flag){
+//														AlertDialog.Builder addPItemTip = new AlertDialog.Builder(PurchaseManagement.this);
+//														addPItemTip.setTitle("ï¿½ï¿½Ê¾");
+//														addPItemTip.setMessage("ï¿½É¹ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Æ·");
+//														addPItemTip.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//
+//															public void onClick(
+//																	DialogInterface dialog,
+//																	int which) {
+//															 
+//															}
+//														});
+//														addPItemTip.show();
+//													}
+//												}
+//												catch(Exception e){//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·
+//													AlertDialog.Builder countConvertTip = new AlertDialog.Builder(PurchaseManagement.this);
+//													countConvertTip.setTitle("ï¿½ï¿½Ê¾");
+//													countConvertTip.setMessage("ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·");
+//													countConvertTip.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//
+//														public void onClick(
+//																DialogInterface dialog,
+//																int which) {
+//														 
+//														}
+//													});
+//													countConvertTip.show();
+//												}
 //											}
-//										 
 //											
 //										});
-//										addGoodsDialog.show();
-
-									}
-									
-								});
-								
-								addGoodsIntoPBillButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsIntoPBillButton);
-								addGoodsIntoPBillButton.setOnClickListener(new OnClickListener(){
-
-									public void onClick(View v) {
-									
-										AlertDialog.Builder addGoodsIntoPBillDialog = new AlertDialog.Builder(PurchaseManagement.this);
-										addGoodsIntoPBillDialog.setTitle("Íù½ø»õµ¥ÖÐ¼ÓÈëÉÌÆ·");
-										TableLayout addGoodsIntoPBillTable = new TableLayout(PurchaseManagement.this);
-								
-										TableRow row1 = new TableRow(PurchaseManagement.this);//Ñ¡ÔñÉÌÆ·µÄÐÐ
-										TextView tView1 = new TextView(PurchaseManagement.this);
-										tView1.setText("ÉÌÆ·:");
-										
-										Spinner goodsSpinner = new Spinner(PurchaseManagement.this);
-										String [] allGoodsName = gDAO.getAllGoods(gDAO.getReadableDatabase());
-										ArrayAdapter<String> allGoodsAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allGoodsName);
-										goodsSpinner.setAdapter(allGoodsAdapter);
-										
-										
-										row1.addView(tView1);
-										row1.addView(goodsSpinner);
-										addGoodsIntoPBillTable.addView(row1);
-										
-										TableRow row2 = new TableRow(PurchaseManagement.this);//Ñ¡Ôñ¼Û¸ñµÄÐÐ
-										TextView tView2 = new TextView(PurchaseManagement.this);
-										tView2.setText("¼Û¸ñ:");
-										final Spinner goodsPriceSpinner = new Spinner(PurchaseManagement.this);
-										row2.addView(tView2);
-										row2.addView(goodsPriceSpinner);
-										addGoodsIntoPBillTable.addView(row2);
-										
-									
-										goodsSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-											public void onItemSelected(AdapterView<?> arg0,
-													View arg1, int arg2, long arg3) {
-												String selectedGoods = ((TextView)arg1).getText()+"";
-												String selectedGoodsCode = selectedGoods.substring(0,selectedGoods.indexOf(":"));
-												List<String> allPrice = gPriceDAO.getPriceByGoodsCode(selectedGoodsCode, gPriceDAO.getReadableDatabase());
-											
-												ArrayAdapter<String> allPriceAdapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allPrice);
-												goodsPriceSpinner.setAdapter(allPriceAdapter);
-												
-											}
-
-											public void onNothingSelected(
-													AdapterView<?> arg0) {
-											}
-											
-										});
-										goodsPriceSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
-											
-											public void onItemSelected(AdapterView<?> arg0,
-													View arg1, int arg2, long arg3) {
-												String selectedPrice = ((TextView)arg1).getText()+"";
-												selectedPriceId = Integer.parseInt(selectedPrice.substring(0, selectedPrice.indexOf(":")));
-											
-											}
-											public void onNothingSelected(
-													AdapterView<?> arg0) {
-											
-											}
-										});
-										
-										TableRow row3 = new TableRow(PurchaseManagement.this);//ÊäÈëÊýÁ¿µÄÐÐ
-										TextView tView3 = new TextView(PurchaseManagement.this);
-										tView3.setText("ÊýÁ¿:");
-										final EditText countEText = new EditText(PurchaseManagement.this);
-										row3.addView(tView3);
-										row3.addView(countEText);
-										addGoodsIntoPBillTable.addView(row3);
-										
-										addGoodsIntoPBillDialog.setView(addGoodsIntoPBillTable);
-							
-										addGoodsIntoPBillDialog.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-											public void onClick(DialogInterface dialog,
-													int which) {
-												
-												try{//ÊýÁ¿µÄ¸ñÊ½ÕýÈ·
-													int theCount = Integer.parseInt(countEText.getText().toString());
-													
-
-													boolean flag = pItemDAO.addPurchaseItem(selectedPBillId, theCount, selectedPriceId, pItemDAO.getWritableDatabase());
-												
-													if(flag){
-														AlertDialog.Builder addPItemTip = new AlertDialog.Builder(PurchaseManagement.this);
-														addPItemTip.setTitle("ÌáÊ¾");
-														addPItemTip.setMessage("³É¹¦Ôö¼Ó½ø»õÉÌÆ·");
-														addPItemTip.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-															public void onClick(
-																	DialogInterface dialog,
-																	int which) {
-															 
-															}
-														});
-														addPItemTip.show();
-													}
-												}
-												catch(Exception e){//Èç¹ûÊýÁ¿µÄ¸ñÊ½²»ÕýÈ·
-													AlertDialog.Builder countConvertTip = new AlertDialog.Builder(PurchaseManagement.this);
-													countConvertTip.setTitle("ÌáÊ¾");
-													countConvertTip.setMessage("ÊýÁ¿¸ñÊ½²»ÕýÈ·");
-													countConvertTip.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-														public void onClick(
-																DialogInterface dialog,
-																int which) {
-														 
-														}
-													});
-													countConvertTip.show();
-												}
-											}
-											
-										});
-										addGoodsIntoPBillDialog.setNegativeButton("È¡Ïû", new DialogInterface.OnClickListener(){
-											public void onClick(DialogInterface dialog,
-													int which) {
-											
-											}
-										});
-										addGoodsIntoPBillDialog.show();
-									}
-									
-								});
-
-				}
+//										addGoodsIntoPBillDialog.setNegativeButton("È¡ï¿½ï¿½", new DialogInterface.OnClickListener(){
+//											public void onClick(DialogInterface dialog,
+//													int which) {
+//											
+//											}
+//										});
+//										addGoodsIntoPBillDialog.show();
+//									}
+//									
+//								});
+//
+//				}
+//			}
+//	    	
+//	    });
+//	
+//	    pBillIdTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillIdTView);
+//		pBillTimeTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillTimeTView);
+//		
+//		maxPBillNum = "P" + (Integer.parseInt(pBillDAO.getMaxPBillNum(pBillDAO.getReadableDatabase()).substring(1)) + 1);
+//		
+//		pBillIdTView.setText(maxPBillNum);
+//		theDate = new Date();
+//		pBillTimeTView.setText(theDate.toLocaleString());
+//
+//		pBillCommentEText = (EditText) PurchaseManagement.this
+//							.findViewById(R.id.pBillCommentEText);
+//		pBillCommentEText.setText("");
+//
+//		savePBillButton = (Button) PurchaseManagement.this
+//							.findViewById(R.id.savePBillButton);
+//		savePBillButton.setOnClickListener(new OnClickListener() {// "ï¿½ï¿½ï¿½ï¿½"ï¿½ï¿½Å¥ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+//			
+//			public void onClick(View v) {
+//				boolean flag = pBillDAO.addPBill(maxPBillNum, 1, theDate.toLocaleString(),pBillCommentEText.getText().toString(),pBillDAO.getWritableDatabase());
+//				if(flag)
+//					Toast.makeText(getApplicationContext(), "ï¿½É¹ï¿½ï¿½ï¿½Ó½ï¿½ï¿½É¹ï¿½!", Toast.LENGTH_SHORT).show();
+//				else
+//					Toast.makeText(getApplicationContext(), "ï¿½ï¿½Ó½ï¿½ï¿½Ê§ï¿½ï¿½!", Toast.LENGTH_SHORT).show();
+//				}
+//			}
+//		);
 			}
-	    	
-	    });
-	
-	    pBillIdTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillIdTView);
-		pBillTimeTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillTimeTView);
-		
-		maxPBillNum = "P" + (Integer.parseInt(pBillDAO.getMaxPBillNum(pBillDAO.getReadableDatabase()).substring(1)) + 1);
-		
-		pBillIdTView.setText(maxPBillNum);
-		theDate = new Date();
-		pBillTimeTView.setText(theDate.toLocaleString());
-
-		pBillCommentEText = (EditText) PurchaseManagement.this
-							.findViewById(R.id.pBillCommentEText);
-		pBillCommentEText.setText("");
-
-		savePBillButton = (Button) PurchaseManagement.this
-							.findViewById(R.id.savePBillButton);
-		savePBillButton.setOnClickListener(new OnClickListener() {// "±£´æ"°´Å¥µÄ¼àÌýÊÂ¼þ
-			
-			public void onClick(View v) {
-				boolean flag = pBillDAO.addPBill(maxPBillNum, 1, theDate.toLocaleString(),pBillCommentEText.getText().toString(),pBillDAO.getWritableDatabase());
-				if(flag)
-					Toast.makeText(getApplicationContext(), "³É¹¦Ìí¼Ó½ø»õµ¥³É¹¦!", Toast.LENGTH_SHORT).show();
-				else
-					Toast.makeText(getApplicationContext(), "Ìí¼Ó½ø»õµ¥Ê§°Ü!", Toast.LENGTH_SHORT).show();
-				}
-			}
-		);
-
-		
-		
-		purchasereturn = (ImageButton) this.findViewById(R.id.purchasereturn);
-		purchasereturn.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				
-				if(loginer.logout(userName, loginer.getWritableDatabase()))// µÇ³ö
-				{
-					Intent intent = new Intent(PurchaseManagement.this, Main.class);
-					PurchaseManagement.this.startActivity(intent);
-				}
-			}
-
-		});
-
+	    }
+	);
 	}
 
 	@Override
-	protected void onPause() {// °´·µ»Ø¼üµÄÊ±ºòÒªµÇ³ö
+	protected void onPause() {// ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ê±ï¿½ï¿½Òªï¿½Ç³ï¿½
 		super.onPause();
 
-		if(loginer.logout(userName, loginer.getWritableDatabase()))// µÇ³ö
+		if(loginer.logout(userName, loginer.getWritableDatabase()))// ï¿½Ç³ï¿½
 		{
 			Intent intent = new Intent(PurchaseManagement.this, Main.class);
 			PurchaseManagement.this.startActivity(intent);

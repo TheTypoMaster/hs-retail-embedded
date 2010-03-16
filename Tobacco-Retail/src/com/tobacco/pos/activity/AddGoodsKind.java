@@ -1,17 +1,13 @@
 package com.tobacco.pos.activity;
 
-import static android.provider.BaseColumns._ID;
-
-import com.tobacco.pos.util.TableCreater;
 import com.tobacco.R;
+import com.tobacco.pos.entity.AllTables;
 
-import android.app.Activity;
-import android.app.AlertDialog.Builder;
-import android.content.ContentValues;
-import android.content.DialogInterface;
+import android.app.Activity; 
+import android.content.ContentValues; 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor; 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,14 +15,10 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddGoodsKind extends Activity {
 
-	private static final String TABLE_NAME = "GoodsKind";// Êı¾İ±í
-	private static String[] FROM = { _ID, "name", "parent", "level", "comment" };
-	
-	private TableCreater tableHelper = null;
-	
 	private TextView parentText;
 	private Button ok;
 	private Button reset;
@@ -45,8 +37,6 @@ public class AddGoodsKind extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addeditkinddialog);
 	
-		tableHelper = new TableCreater(this);
-		
 		parentText = (TextView)this.findViewById(R.id.parentName);
 		Intent intent = this.getIntent();
 		parentId = intent.getIntExtra("parentId",0);
@@ -65,43 +55,25 @@ public class AddGoodsKind extends Activity {
 				name = nameEText.getText().toString();
 				comment = commentEText.getText().toString();
 				
-				if(name.equals("")){//ÅĞ¶ÏÃû×ÖÊÇ·ñÎª¿Õ
-					Builder b = new Builder(AddGoodsKind.this);
-					b.setTitle("ÌáÊ¾");
-					b.setMessage("ÇëÊäÈëÃû×Ö");
-					b.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-						public void onClick(DialogInterface dialog, int which) {
-						
-						}
-						
-					});
-					b.show();
+				if(name.equals("")){//åˆ¤æ–­åå­—æ˜¯å¦ä¸ºç©º
+					Toast.makeText(AddGoodsKind.this, "è¯·è¾“å…¥åå­—", Toast.LENGTH_SHORT).show();
 				}
 				else{
-				
-					Builder b = new Builder(AddGoodsKind.this);
-					b.setTitle("ÌáÊ¾");
-				
-					SQLiteDatabase db = tableHelper.getWritableDatabase();
+
 					ContentValues value = new ContentValues();
 					value.put("name", name);
 					value.put("parent", parentId);
 					value.put("level", parentLevel+1);
 					value.put("comment", comment);
-
-				    db.insertOrThrow(TABLE_NAME, null, value);
-				    db.close();
-					b.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-						
-					});
-					b.setMessage("³É¹¦Ìí¼ÓÖÖÀà:"+name);
-					b.show();
-			
+					
+					Uri result = getContentResolver().insert(AllTables.GoodsKind.CONTENT_URI, value);
+					if(result != null )
+					{
+						Toast.makeText(AddGoodsKind.this, "æˆåŠŸæ·»åŠ ç±»åˆ«:" + name, Toast.LENGTH_SHORT).show();
+						finish();//æˆåŠŸæ·»åŠ ç±»åˆ«ï¼Œå…³é—­å¯¹è¯æ¡†
+					}
+					else
+						Toast.makeText(AddGoodsKind.this, "æ·»åŠ ç±»åˆ«:" + name + "å¤±è´¥", Toast.LENGTH_SHORT).show();			
 				}
 			}
 			
@@ -118,30 +90,19 @@ public class AddGoodsKind extends Activity {
 
 			public void onFocusChange(View v, boolean hasFocus) {
 			
-				if(!hasFocus){//Ê§È¥½¹µãÊ±²éÕÒÊı¾İ¿âÖĞÊÇ·ñÓĞÏàÍ¬Ãû×ÖµÄÀà±ğ
-					Builder b = new Builder(AddGoodsKind.this);
+				if(!hasFocus){//å¤±å»ç„¦ç‚¹æ—¶æŸ¥æ‰¾æ•°æ®åº“ä¸­æ˜¯å¦æœ‰ç›¸åŒåå­—çš„ç±»åˆ«
+					Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, null, null, null);
 					String inputName = ((EditText)v).getText().toString();
-					SQLiteDatabase db = tableHelper.getReadableDatabase();
-					Cursor c = db.query(TABLE_NAME, FROM, null, null, null, null, null);
-				
 					c.moveToFirst();
 					for(int i=0;i<c.getCount();i++){
 						if(c.getString(1).equals(inputName)){
-							b.setTitle("ÌáÊ¾");
-							b.setMessage("ÒÑÓĞ¸ÃÀà±ğ,ÇëÖØĞÂÊäÈë");
-							b.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-								public void onClick(DialogInterface dialog, int which) {
-									nameEText.setText("");
-								}
-								
-							});
-							b.show();
+							Toast.makeText(AddGoodsKind.this, "å·²æœ‰è¯¥ç±»åˆ«ï¼Œè¯·é‡æ–°è¾“å…¥", Toast.LENGTH_SHORT).show();
+							nameEText.setText("");
 							break;
 						}
 						c.moveToNext();
 					}
-					db.close();
+
 				}
 			}
 		});

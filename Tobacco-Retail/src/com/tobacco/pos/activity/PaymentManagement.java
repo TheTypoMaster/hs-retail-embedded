@@ -2,14 +2,14 @@ package com.tobacco.pos.activity;
 
 import java.util.Date;
 
-import com.tobacco.pos.dao.GoodsDAO;
-import com.tobacco.pos.dao.GoodsPriceDAO;
-import com.tobacco.pos.dao.SalesBillDAO;
-import com.tobacco.pos.dao.SalesItemDAO;
-import com.tobacco.pos.dao.UnitDAO;
-import com.tobacco.pos.dao.UserInfoDAO;
-import com.tobacco.pos.dao.VIPInfoDAO;
-import com.tobacco.pos.util.Loginer;
+import com.tobacco.pos.contentProvider.GoodsCPer;
+import com.tobacco.pos.contentProvider.GoodsPriceCPer;
+import com.tobacco.pos.contentProvider.Loginer;
+import com.tobacco.pos.contentProvider.SalesBillCPer;
+import com.tobacco.pos.contentProvider.SalesItemCPer;
+import com.tobacco.pos.contentProvider.UnitCPer;
+import com.tobacco.pos.contentProvider.UserInfoCPer;
+import com.tobacco.pos.contentProvider.VIPInfoCPer;
 import com.tobacco.R;
 
 import android.app.Activity;
@@ -17,7 +17,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,57 +24,46 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PaymentManagement extends Activity {
-	private VIPInfoDAO vipInfoDAO = null;
-	private GoodsPriceDAO goodsPriceDAO = null;
-	private GoodsDAO gDAO = null;
-	private UnitDAO unitDAO = null;
+	
 	private Loginer loginer = null;
-	private UserInfoDAO userInfoDAO  = null;
-	private SalesBillDAO sBillDAO = null;
-	private SalesItemDAO sItemDAO = null;
-
+	private GoodsPriceCPer gPriceCPer = null;
+	private GoodsCPer gCPer = null;
+	private UnitCPer unitCPer = null;
+	private UserInfoCPer userInfoCPer = null;
+	private SalesBillCPer sBillCPer = null;
+	private SalesItemCPer sItemCPer = null;
+	private VIPInfoCPer vipInfoCPer = null;
+	
 	private TextView paymentWelcome;
-	private ImageButton paymentreturn;// ·µ»ØÊ×Ò³µÄ°´Å¥
-
-	private EditText barcodeEText;//ÌõÐÎÂëÊäÈë¿ò
-	private EditText sGoodsNumEText;// ÊýÁ¿µÄÊäÈë¿ò
-	private TableLayout salesBillTable;// ÏÔÊ¾Ã¿Ò»ÕÅÏúÊÛµ¥ÏêÏ¸ÐÅÏ¢µÄ±í¸ñ
-
-	private String userName = "";// µÇÂ½ÓÃ»§µÄÃû×Ö
-	private int VIPId = -1;//
-
+	
+	private EditText barcodeEText;
+	private EditText sGoodsNumEText;
+	private TableLayout salesBillTable;
+	
+	private String userName = "";
+	private int VIPId = -1;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.paymentmanagement);
+		
+		gPriceCPer = new GoodsPriceCPer();
+		gCPer = new GoodsCPer();
 
 		userName = this.getIntent().getStringExtra("userName");
 
 		paymentWelcome = (TextView) this.findViewById(R.id.paymentWelcome);
-		paymentWelcome.setText("ÄãºÃ:" + userName);
+		paymentWelcome.setText("ä½ å¥½:" + userName);
 
-		paymentreturn = (ImageButton) this.findViewById(R.id.paymentreturn);
-		paymentreturn.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				loginer = new Loginer(PaymentManagement.this);
-				if (loginer.logout(userName, loginer.getWritableDatabase()))// µÇ³ö
-				{
-					Intent intent = new Intent(PaymentManagement.this,
-							Main.class);
-					PaymentManagement.this.startActivity(intent);
-				}
-			}
-
-		});
+		
 		barcodeEText = (EditText) this.findViewById(R.id.barcodeEText);
 		sGoodsNumEText = (EditText) this.findViewById(R.id.sGoodsNumEText);
 		sGoodsNumEText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -92,35 +80,28 @@ public class PaymentManagement extends Activity {
 					}
 					String barcode = barcodeEText.getText().toString();
 					if (!barcode.trim().equals("") && count != 0) {
-						gDAO = new GoodsDAO(PaymentManagement.this);
-						goodsPriceDAO = new GoodsPriceDAO(
-								PaymentManagement.this);
-						unitDAO = new UnitDAO(PaymentManagement.this);
 
-						int goodsId = goodsPriceDAO.getGoodsIdByBarcode(
-								barcode, goodsPriceDAO.getReadableDatabase());
-						int unitId = goodsPriceDAO.getUnitIdByBarcode(barcode,
-								goodsPriceDAO.getReadableDatabase());
+						int goodsId = gPriceCPer.getGoodsIdByBarcode(barcode);
+						int unitId = gPriceCPer.getUnitIdByBarcode(barcode);
 
 						salesBillTable = (TableLayout) PaymentManagement.this
 								.findViewById(R.id.salesBillTable);
 						final TableRow r = new TableRow(PaymentManagement.this);
 						TextView goodsNameTView = new TextView(PaymentManagement.this);
 
-						goodsNameTView.setText(gDAO.getGoodsNameByGoodsId(goodsId, gDAO
-								.getReadableDatabase()));
-						r.addView(goodsNameTView);//ÉÌÆ·Ãû×Ö
+						goodsNameTView.setText(gCPer.getGoodsNameByGoodsId(goodsId));
+						r.addView(goodsNameTView);
 						
 						TextView countTView = new TextView(PaymentManagement.this);
 						countTView.setText(""+count);
-						r.addView(countTView);//ÉÌÆ·ÊýÁ¿
+						r.addView(countTView);
 						
 						TextView unitTView = new TextView(PaymentManagement.this);
-						unitTView.setText(unitDAO.getUnitNameById(unitId, unitDAO.getReadableDatabase()));
-						r.addView(unitTView);//ÉÌÆ·µ¥¼Û
+						unitTView.setText(unitCPer.getUnitNameById(unitId));
+						r.addView(unitTView);
 						
 						TextView priceTView = new TextView(PaymentManagement.this);
-						priceTView.setText(""+goodsPriceDAO.getOutPriceByBarcode(barcode, goodsPriceDAO.getReadableDatabase()));
+						priceTView.setText(""+gPriceCPer.getOutPriceByBarcode(barcode));
 						r.addView(priceTView);	
 						
 						TextView barcodeTView = new TextView(PaymentManagement.this);
@@ -150,48 +131,39 @@ public class PaymentManagement extends Activity {
 						sGoodsNumEText.setText("");
 						
 						Button saveButton = new Button(PaymentManagement.this);
-						saveButton.setText("È·¶¨");
+						saveButton.setText("ç¡®å®š");
 					
 						saveButton.setTextSize(10);
 						saveButton.setOnClickListener(new OnClickListener(){
 
-							public void onClick(View v) {
-								sBillDAO = new SalesBillDAO(PaymentManagement.this);
-								sItemDAO = new SalesItemDAO(PaymentManagement.this);
-								userInfoDAO = new UserInfoDAO(PaymentManagement.this);
-							
+							public void onClick(View v) {							
+								userInfoCPer = new UserInfoCPer();
+								sBillCPer = new SalesBillCPer();
+								int userId = userInfoCPer.getUserIdByUserName(userName);
 								
-								int userId = userInfoDAO.getUserIdByUserName(userName, userInfoDAO.getReadableDatabase());//È¡µÃÏúÊÛµÄÈËÔ±Id
-							
-								int newSBillId = sBillDAO.addSBill(userId, (new Date()).toLocaleString(), VIPId, sBillDAO.getWritableDatabase());//ÐÂÔöÏúÊÛµ¥µÄID
-
-								for(int i=1;i<salesBillTable.getChildCount()-1;i++){
-									String theBarcode = ((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(4)).getText().toString();//È¡µÃÃ¿¸öÏúÊÛÏîµÄÌõÐÎÂë
-									int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());//È¡µÃÃ¿¸öÏúÊÛÏîµÄÊýÁ¿
-									int sPriceId = goodsPriceDAO.getGoodsPriceIdByBarcode(theBarcode, goodsPriceDAO.getReadableDatabase());
-									sItemDAO.addSalesItem(newSBillId, goodsCount, sPriceId, sItemDAO.getWritableDatabase());
+								int newSBillId = sBillCPer.addSBill(userId, (new Date()).toLocaleString(), VIPId);//å¾—åˆ°æœ€åŽæ–°åŠ çš„é”€å”®å•çš„ID
+								sItemCPer = new SalesItemCPer();
+								gPriceCPer = new GoodsPriceCPer();
+								for(int i=1;i<salesBillTable.getChildCount()-1;i++){//å­˜å‚¨æœ€åŽçš„é”€å”®é¡¹
+									String theBarcode = ((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(4)).getText().toString();
+									int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
+									
+									int sPriceId = gPriceCPer.getGoodsPriceIdByBarcode(theBarcode);
+									sItemCPer.addSalesItem(newSBillId, goodsCount, sPriceId);
 								}
-								AlertDialog.Builder finishPaymentTip = new AlertDialog.Builder(PaymentManagement.this);
-								finishPaymentTip.setTitle("Íê³É¹ºÎï");
+								
 								if(VIPId == -1)
-									finishPaymentTip.setMessage("ÒÑÎª¸ÃÆÕÍ¨¿Í»§´´½¨ÏúÊÛµ¥:" + sBillDAO.getSBillNumBySBillId(newSBillId, sBillDAO.getReadableDatabase()));
-								else{
-									vipInfoDAO = new VIPInfoDAO(PaymentManagement.this);
-									String VIPName = vipInfoDAO.getVIPNameByVIPId(VIPId, vipInfoDAO.getReadableDatabase());
-									finishPaymentTip.setMessage("ÒÑÎªVIP¿Í»§:" + VIPName + "´´½¨ÏúÊÛµ¥:" + sBillDAO.getSBillNumBySBillId(newSBillId, sBillDAO.getReadableDatabase()));
-									VIPId = -1;//Íê³ÉÒ»µ¥ºóÒª½«VIPIdÖØÐÂÉèÖÃÎª-1£¬Òª²»»¹»áÊÇÉÏ´ÎÄÇ¸öVIP¿Í»§µÄ¡£
+								{
+									Toast.makeText(PaymentManagement.this, "å·²ä¸ºè¯¥æ™®é€šå®¢æˆ·åˆ›å»ºé”€å”®å•:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
 								}
-								finishPaymentTip.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
-
-									public void onClick(DialogInterface dialog,
-											int which) {
-										salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);
+								else{
+									vipInfoCPer = new VIPInfoCPer();
 									
-									}
+									String VIPName = vipInfoCPer.getVIPNameByVIPId(VIPId);
+									VIPId = -1;//å®Œæˆä¸€å•åŽè¦å°†VIPIdé‡æ–°è®¾ç½®ä¸º-1ï¼Œè¦ä¸è¿˜ä¼šæ˜¯ä¸Šæ¬¡é‚£ä¸ªVIPå®¢æˆ·çš„ã€‚
+									Toast.makeText(PaymentManagement.this, "å·²ä¸ºVIPå®¢æˆ·:" + VIPName + " åˆ›å»ºé”€å”®å•:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
 									
-								});
-								finishPaymentTip.show();
-							
+								}
 							}
 							
 						});
@@ -204,13 +176,13 @@ public class PaymentManagement extends Activity {
 						
 					
 						Button cancelButton = new Button(PaymentManagement.this);
-						cancelButton.setText("È¡Ïû");
+						cancelButton.setText("å–æ¶ˆ");
 						cancelButton.setTextSize(10);
 			
 						cancelButton.setOnClickListener(new OnClickListener(){
 
 							public void onClick(View v) {
-								salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//È¡ÏûÖ®Ç°µÄËùÓÐÏúÊÛÏî
+								salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//å–æ¶ˆä¹‹å‰çš„æ‰€æœ‰é”€å”®é¡¹
 							}
 							
 						});
@@ -235,7 +207,7 @@ public class PaymentManagement extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		menu.add(0, 0, 0, "ÎÒÊÇ»áÔ±");
+		menu.add(0, 0, 0, "æˆ‘æ˜¯ä¼šå‘˜");
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -254,39 +226,30 @@ public class PaymentManagement extends Activity {
 
 	private void verifyVIPNum() {
 		AlertDialog.Builder VIPIDDialog = new AlertDialog.Builder(this);
-		VIPIDDialog.setTitle("ÊäÈë»áÔ±ºÅ");
+		VIPIDDialog.setTitle("è¾“å…¥ä¼šå‘˜å·");
 		final EditText VIPNumEText = new EditText(this);
 		VIPNumEText.setWidth(100);
 		VIPNumEText.setSingleLine(true);
 		VIPIDDialog.setView(VIPNumEText);
-		VIPIDDialog.setPositiveButton("È·¶¨",
+		VIPIDDialog.setPositiveButton("ç¡®å®š",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
-						vipInfoDAO = new VIPInfoDAO(PaymentManagement.this);
+						vipInfoCPer = new VIPInfoCPer();
 						
-						VIPId = vipInfoDAO.getVIPIdByVIPNum(VIPNumEText.getText()
-								.toString(), vipInfoDAO.getReadableDatabase());
+						VIPId = vipInfoCPer.getVIPIdByVIPNum(VIPNumEText.getText()
+								.toString());
+						
 						if(VIPId == -1){
-							AlertDialog.Builder verifyVIPTip = new AlertDialog.Builder(PaymentManagement.this);
-							verifyVIPTip.setTitle("ÌáÊ¾");
-							verifyVIPTip.setMessage("²»´æÔÚ¸ÃVIP¿Í»§");
-							verifyVIPTip.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener(){
 
-								public void onClick(DialogInterface dialog,
-										int which) {
-									verifyVIPNum();//ÖØÐÂÏÔÊ¾ÊäÈë¿ò
-								}
-								
-							});
-							verifyVIPTip.show();
-							
+							Toast.makeText(PaymentManagement.this, "æ²¡æœ‰æ”¹ä¼šå‘˜", Toast.LENGTH_SHORT).show();
+						
 						}
 
 					}
 
 				});
-		VIPIDDialog.setNegativeButton("È¡Ïû",
+		VIPIDDialog.setNegativeButton("å–æ¶ˆ",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
@@ -303,7 +266,7 @@ public class PaymentManagement extends Activity {
 		super.onPause();
 
 		loginer = new Loginer(PaymentManagement.this);
-		if (loginer.logout(userName, loginer.getWritableDatabase()))// µÇ³ö
+		if (loginer.logout(userName, loginer.getWritableDatabase()))
 		{
 			Intent intent = new Intent(PaymentManagement.this, Main.class);
 			PaymentManagement.this.startActivity(intent);
