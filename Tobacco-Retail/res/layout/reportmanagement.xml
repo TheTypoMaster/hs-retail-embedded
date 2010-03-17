@@ -11,9 +11,4 @@
 		</TextView>
 	</ScrollView>
 
-	<Button android:text="返回首页" android:id="@+id/reportreturn"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="10sp">
-	</Button>
 </LinearLayout>
