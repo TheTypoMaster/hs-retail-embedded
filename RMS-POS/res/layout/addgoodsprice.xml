@@ -1,67 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" android:layout_gravity="center">
-	<TableLayout>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/TextView01"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="单位:">
-			</TextView>
-			<Spinner android:id="@+id/unitNameSpinner"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+	android:layout_height="wrap_content">
+	<TableLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center" >
+		<TableLayout>
 			
-		</TableRow>
+				<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+				<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/TextView01"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="单    位:">
+				</TextView>
+				<Spinner android:id="@+id/unitNameSpinner"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" />
+
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:text="条形码:"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+				</TextView>
+
+				<EditText android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:width="250sp"
+					android:id="@+id/barcodeEText" />
+
+
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/TextView02"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="进货价:">
+				</TextView>
+				<EditText android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:width="250sp"
+					android:id="@+id/inPriceEditText" />
+
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="售    价:">
+				</TextView>
+				<EditText android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:width="250sp"
+					android:id="@+id/outPriceEditText" />
+			</TableRow>
+
+		</TableLayout>
 
 		<TableRow android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<TextView android:text="条形码:" 
+
+			<Button android:text="确定" android:id="@+id/addGoodsPriceOk"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="100sp">
+			</Button>
+
+			<Button android:text="取消" android:id="@+id/addGoodsPriceReset"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content">
-			</TextView>
-
-			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:width="250sp" android:id="@+id/barcodeEText"/>
-			
+			</Button>
 
 		</TableRow>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/TextView02"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="进货价:">
-			</TextView>
-			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:width="250sp" android:id="@+id/inPriceEditText"/>
-			
-		</TableRow>
-		
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="价格:">
-			</TextView>
-			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:width="250sp" android:id="@+id/outPriceEditText"/>
-		</TableRow>
-		
+
 	</TableLayout>
-	
-<!-- 	<TableRow>
-		 
-			<Button android:text="确定" android:id="@+id/ok"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_marginLeft="100sp">
-			</Button>
-		 
-			<Button android:text="取消" android:id="@+id/reset"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" >
-			</Button>
-		 
-	</TableRow> -->
-	 
-</TableLayout>
+</ScrollView>

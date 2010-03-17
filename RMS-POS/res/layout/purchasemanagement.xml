@@ -90,7 +90,7 @@
 						android:layout_height="wrap_content">
 						<TableRow android:layout_width="fill_parent"
 							android:layout_height="wrap_content">
-							<TextView android:text="选择进货单:"
+							<TextView android:text="进货单:"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content">
 							</TextView>
@@ -100,7 +100,7 @@
 							</Spinner>
 						</TableRow>
 					</TableLayout>
-					<Button android:layout_width="wrap_content"
+					<!-- <Button android:layout_width="wrap_content"
 						android:layout_height="wrap_content" android:text="添加商品"
 						android:id="@+id/addGoodsButton">
 					</Button>
@@ -108,7 +108,7 @@
 					<Button android:layout_width="wrap_content"
 						android:layout_height="wrap_content" android:text="添加进货商品"
 						android:id="@+id/addGoodsIntoPBillButton">
-					</Button>
+					</Button> -->
 				</LinearLayout>
 				<!-- 第二层结束 -->
 			</FrameLayout>

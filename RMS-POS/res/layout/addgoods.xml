@@ -1,63 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" android:layout_gravity="center">
-	<TableLayout>
+	android:layout_height="wrap_content">
+	<LinearLayout android:layout_gravity="center"
+		android:orientation="vertical" android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
 
+		
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+				<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+				<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="">
+				</TextView>
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:text="商品名称:"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+				</TextView>
+				<EditText android:id="@+id/goodsNameEText"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:width="250sp"
+					android:singleLine="true">
+				</EditText>
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:text="厂家名称:"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+				</TextView>
+
+				<Spinner android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/allManufacturerSpinner" />
+
+			</TableRow>
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="种        类:">
+				</TextView>
+				<Spinner android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/allKindSpinner" />
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="价        格:">
+				</TextView>
+				<Button android:id="@+id/addPriceButton"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="添加价格"/>
+			</TableRow>
+
+		</TableLayout>
+		<TextView android:id="@+id/addGoodsInfo"
+			android:visibility="visible" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+		</TextView>
 		<TableRow android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<TextView android:id="@+id/TextView01"
+			<Button android:text="确定" android:id="@+id/addGoodsOk"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="商品名称:">
-			</TextView>
-			<EditText android:id="@+id/goodsNameEditText"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:width="250sp"
-				android:maxLines="1">
-			</EditText>
-		</TableRow>
-
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:text="厂家名称:" 
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="100sp">
+			</Button>
+			<Button android:text="取消" android:id="@+id/addGoodsReset"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content">
-			</TextView>
-
-			<Spinner android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/allManufacturerSpinner"/>
-
+			</Button>
 		</TableRow>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/TextView02"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="种类:">
-			</TextView>
-			<Spinner android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/allKindSpinner"/>
-		</TableRow>
-		
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="价格:">
-			</TextView>
-			<Button android:id="@+id/addPriceButton" android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-		</TableRow>
-	 
-	</TableLayout>
-	<TextView android:id="@+id/loginInfo" android:visibility="visible"></TextView>
-	<TableRow >
-		<Button android:text="确定" android:id="@+id/addGoodsOk"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_marginLeft="100sp">
-		</Button>
-		<Button android:text="取消" android:id="@+id/addGoodsReset"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-		</Button>
-	</TableRow>
-</TableLayout>
+	</LinearLayout>
+</ScrollView>
