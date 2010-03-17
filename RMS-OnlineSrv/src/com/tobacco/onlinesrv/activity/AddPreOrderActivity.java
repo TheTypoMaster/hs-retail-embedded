@@ -37,12 +37,17 @@ public class AddPreOrderActivity extends Activity {
 				startActivity(tempIntent);
 			}
 		});
+		EditText sd = (EditText) this.findViewById(R.id.EditText01);
 		Uri preorder = PreOrder.CONTENT_URI;
-		ContentProvider provider = new PreOrderProvider();
-		
-		Cursor cursor = provider.query(preorder, null, null, null, null);
+
+		Cursor cursor = this.managedQuery(preorder, null, null, null, null);
 		if (cursor.getCount() == 0)
 			openfailDialog();
+		else {
+			cursor.moveToFirst();
+			String s = cursor.getString(1);
+			sd.setText(s);
+		}
 	}
 
 	private void openfailDialog() {

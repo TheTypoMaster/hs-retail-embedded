@@ -1,8 +1,6 @@
 package com.tobacco.onlinesrv.provider;
 
-import com.tobacco.main.util.MD5Hasher;
-import com.tobacco.main.util.UUIDGenerator;
-import com.tobacco.onlinesrv.entities.PreOrder;
+
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -12,7 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.net.Uri;
 import android.util.Log;
 
@@ -77,11 +74,18 @@ public class PreOrderProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		// TODO Auto-generated method stub
 		Context s = getContext();
-		ContentResolver contentResolver = s.getContentResolver();
+//		ContentResolver contentResolver = s.getContentResolver();
 
-		Cursor c = contentResolver.query(uri, null, null,
-				null, null);
-		return c;
+//		Cursor c = query(uri, null, null,
+//				null, null);
+//		return c;
+		preOrderHelper = new DatabaseHelper(getContext());
+    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        SQLiteDatabase db = preOrderHelper.getWritableDatabase();
+        qb.setTables(DATABASE_TABLE_NAME);
+        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
+        return c;
 	}
 
 	@Override
