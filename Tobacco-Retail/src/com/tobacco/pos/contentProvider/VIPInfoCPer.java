@@ -22,6 +22,7 @@ public class VIPInfoCPer extends ContentProvider {
 	private static final String DATABASE_NAME = "AllTables.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String TABLE_NAME = "VIPInfo";
+	private static Context ct = null;
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -32,7 +33,8 @@ public class VIPInfoCPer extends ContentProvider {
 		public DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 			ctx = context;
-
+			ct = context;
+			
 			db = openDatabase(DATABASE_NAME);
 
 			createtable(db);
@@ -86,7 +88,7 @@ public class VIPInfoCPer extends ContentProvider {
 			db.insertOrThrow(TABLE_NAME, null, value);
 
 			value.clear();
-			value.put("VIPNum", "vipP0003");
+			value.put("VIPNum", "vip0003");
 			value.put("VIPName", "吕轻侯");
 			value.put("VIPDiscount", 0.9);
 			db.insertOrThrow(TABLE_NAME, null, value);
@@ -139,13 +141,13 @@ public class VIPInfoCPer extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-
+	  	 dbHelper = new DatabaseHelper(ct);
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		qb.setTables(TABLE_NAME);
-		Cursor c = qb.query(db, projection, selection, null, null, null,
+		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null,
 				sortOrder);
-		c.setNotificationUri(getContext().getContentResolver(), uri);
+		c.setNotificationUri(ct.getContentResolver(), uri);
 		return c;
 	}
 
@@ -164,7 +166,7 @@ public class VIPInfoCPer extends ContentProvider {
 		return "";
 	}
 	public int getVIPIdByVIPNum(String VIPNum){
-		Cursor c = this.query(AllTables.VIPInfo.CONTENT_URI, null, " VIPNum = " + VIPNum, null, null);
+		Cursor c = this.query(AllTables.VIPInfo.CONTENT_URI, null, " VIPNum = ? ", new String[]{VIPNum}, null);
 		if(c.getCount()>0){
 			c.moveToFirst();
 			return c.getInt(0);

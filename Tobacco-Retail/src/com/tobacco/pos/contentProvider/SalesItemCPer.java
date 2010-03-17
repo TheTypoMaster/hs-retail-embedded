@@ -22,7 +22,7 @@ public class SalesItemCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "SalesItem";
-
+	    private static Context ct = null;
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
 	    	private SQLiteDatabase db = null;
@@ -33,7 +33,8 @@ public class SalesItemCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
-		
+				ct = context;
+				
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
@@ -42,7 +43,7 @@ public class SalesItemCPer extends ContentProvider {
 			}
 
 			private SQLiteDatabase openDatabase(String databaseName) {
-				db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+				db = ctx.openOrCreateDatabase(DATABASE_NAME, 1, null);
 				return db;
 			}
 
@@ -90,11 +91,12 @@ public class SalesItemCPer extends ContentProvider {
 
 	    @Override
 	    public Uri insert(Uri uri, ContentValues contentvalues) {
+	    	 dbHelper = new DatabaseHelper(ct);
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -108,12 +110,12 @@ public class SalesItemCPer extends ContentProvider {
 
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	 dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	        SQLiteDatabase db = dbHelper.getReadableDatabase();
+	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 

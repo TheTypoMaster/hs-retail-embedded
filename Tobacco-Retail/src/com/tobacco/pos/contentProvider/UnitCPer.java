@@ -22,6 +22,7 @@ public class UnitCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "Unit";
+	    private static Context ct = null;
 
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
@@ -33,6 +34,7 @@ public class UnitCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
+				ct = context;
 		
 				db = openDatabase(DATABASE_NAME);
 			
@@ -121,12 +123,12 @@ public class UnitCPer extends ContentProvider {
 
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	 dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getReadableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 

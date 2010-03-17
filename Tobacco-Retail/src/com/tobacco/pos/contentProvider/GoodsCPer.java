@@ -173,7 +173,7 @@ public class GoodsCPer extends ContentProvider {
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	        SQLiteDatabase db = dbHelper.getReadableDatabase();
+	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	        c.setNotificationUri(ct.getContentResolver(), uri);

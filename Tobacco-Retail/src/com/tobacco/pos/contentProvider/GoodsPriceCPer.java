@@ -43,7 +43,7 @@ public class GoodsPriceCPer extends ContentProvider {
 			}
 
 			private SQLiteDatabase openDatabase(String databaseName) {
-				db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+				db = ctx.openOrCreateDatabase(DATABASE_NAME, 1, null);
 				return db;
 			}
 
@@ -163,7 +163,7 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	
 	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	        SQLiteDatabase db = dbHelper.getReadableDatabase();
+	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	        c.setNotificationUri(ct.getContentResolver(), uri);

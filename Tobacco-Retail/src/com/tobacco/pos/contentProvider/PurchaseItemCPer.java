@@ -109,7 +109,7 @@ public class PurchaseItemCPer extends ContentProvider {
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 	
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	        SQLiteDatabase db = dbHelper.getReadableDatabase();
+	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
 	        c.setNotificationUri(getContext().getContentResolver(), uri);

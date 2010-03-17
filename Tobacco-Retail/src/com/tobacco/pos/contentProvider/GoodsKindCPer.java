@@ -221,7 +221,7 @@ public class GoodsKindCPer extends ContentProvider {
 	
 	    	
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	        SQLiteDatabase db = dbHelper.getReadableDatabase();
+	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	       
 	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
