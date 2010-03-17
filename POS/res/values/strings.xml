@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="hello">Hello World, main!</string>
-    <string name="app_name">POS</string>
-    <string name="kind">类别管理</string>
-    <string name="payment">收银管理</string>
-    <string name="purchase">进货管理</string>
-    <string name="report">报表管理</string>
-</resources>
