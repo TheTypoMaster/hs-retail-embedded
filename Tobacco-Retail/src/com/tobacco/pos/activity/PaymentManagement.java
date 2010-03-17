@@ -17,11 +17,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,6 +62,7 @@ public class PaymentManagement extends Activity {
 		
 		gPriceCPer = new GoodsPriceCPer();
 		gCPer = new GoodsCPer();
+		unitCPer = new UnitCPer();
 
 		userName = this.getIntent().getStringExtra("userName");
 
@@ -66,11 +72,10 @@ public class PaymentManagement extends Activity {
 		
 		barcodeEText = (EditText) this.findViewById(R.id.barcodeEText);
 		sGoodsNumEText = (EditText) this.findViewById(R.id.sGoodsNumEText);
-		sGoodsNumEText.setOnFocusChangeListener(new OnFocusChangeListener() {
+		sGoodsNumEText.setOnKeyListener(new OnKeyListener(){
 
-			public void onFocusChange(View v, boolean hasFocus) {
-
-				if (!hasFocus) {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if(keyCode==66){
 					int count = 0;
 					try {
 						count = Integer.parseInt(((EditText) v).getText()
@@ -164,6 +169,7 @@ public class PaymentManagement extends Activity {
 									Toast.makeText(PaymentManagement.this, "已为VIP客户:" + VIPName + " 创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
 									
 								}
+								salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
 							}
 							
 						});
@@ -199,8 +205,10 @@ public class PaymentManagement extends Activity {
 						salesBillTable.addView(lastRow);
 					}
 				}
+			
+				return false;
 			}
-
+			
 		});
 	}
 
@@ -242,7 +250,7 @@ public class PaymentManagement extends Activity {
 						
 						if(VIPId == -1){
 
-							Toast.makeText(PaymentManagement.this, "没有改会员", Toast.LENGTH_SHORT).show();
+							Toast.makeText(PaymentManagement.this, "没有该会员", Toast.LENGTH_SHORT).show();
 						
 						}
 
