@@ -13,11 +13,11 @@
 </activity>
 <provider android:name="com.tobacco.main.provider.AccountProvider" android:authorities="com.tobacco.main.provider.accountprovider">
 </provider>
-<service android:name=".service.CurrentUserService"><intent-filter><category android:name="android.intent.category.DEFAULT"></category>
-<action android:name="com.tobacco.main.service.CurrentUserService.START"></action>
-<action android:name="com.tobacco.main.service.CurrentUserService.BIND"></action>
+
+<activity android:name=".activity.CurrentUserManager">
+<intent-filter><action android:name="com.tobacco.main.antivity.CurrentUserManager.USER_LOGON"></action>
 </intent-filter>
-</service>
+</activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 

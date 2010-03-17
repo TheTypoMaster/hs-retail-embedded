@@ -3,7 +3,6 @@ package com.tobacco.main.activity;
 import com.tobacco.main.R;
 import com.tobacco.main.entities.User;
 import com.tobacco.main.provider.AccountProvider;
-import com.tobacco.main.service.CurrentUserService;
 import com.tobacco.main.util.MD5Hasher;
 
 import android.app.Activity;
@@ -118,7 +117,7 @@ public class Login extends Activity {
 				ifSuccess = true;
 				
 				Intent i = new Intent();
-				i.setAction(CurrentUserService.ACTION_START);
+				i.setAction(CurrentUserManager.ACTION_USER_LOGON);
 				i.putExtra("curUserId", curUserId);
 				i.putExtra("curUserName", curUserName);
 				i.putExtra("curUserPriv", curUserPriv);
@@ -126,7 +125,7 @@ public class Login extends Activity {
 
 				// bindService(i, curUserSvcConn,
 				// CurrentUserService.BIND_AUTO_CREATE);
-				startService(i);
+				startActivity(i);
 
 			} else
 				openfailDialog();
