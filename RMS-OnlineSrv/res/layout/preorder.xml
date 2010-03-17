@@ -10,7 +10,8 @@
 		<EditText android:text="@+id/EditText01" android:id="@+id/EditText01"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout02"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -20,7 +21,8 @@
 		<EditText android:text="@+id/EditText02" android:id="@+id/EditText02"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout03"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -30,7 +32,8 @@
 		<EditText android:text="@+id/EditText03" android:id="@+id/EditText03"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout04"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -40,7 +43,8 @@
 		<EditText android:text="@+id/EditText04" android:id="@+id/EditText04"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:editable="false"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout05"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -50,17 +54,19 @@
 		<EditText android:text="@+id/EditText05" android:id="@+id/EditText05"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout06"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
 		<TextView android:text="单位:" android:id="@+id/TextView06"
 			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:text="@+id/EditText01" android:id="@+id/EditText06"
+		<EditText android:text="@+id/EditText06" android:id="@+id/EditText06"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout07"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -70,7 +76,8 @@
 		<EditText android:text="@+id/EditText07" android:id="@+id/EditText07"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout08"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -80,15 +87,18 @@
 		<EditText android:text="@+id/EditText08" android:id="@+id/EditText08"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"></EditText>
+			android:scrollHorizontally="true" android:gravity="fill_horizontal"
+			android:autoText="true"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout09"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
 		<Button android:text="提交" android:id="@+id/Button01"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="100px"></Button>
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="100px"></Button>
 		<Button android:text="取消" android:id="@+id/Button02"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="30px"></Button>
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="30px"></Button>
 	</LinearLayout>
 
 
