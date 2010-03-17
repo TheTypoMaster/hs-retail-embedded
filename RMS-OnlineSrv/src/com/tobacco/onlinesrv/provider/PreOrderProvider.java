@@ -1,12 +1,14 @@
 package com.tobacco.onlinesrv.provider;
 
-
+import com.tobacco.onlinesrv.entities.PreOrder;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -58,7 +60,15 @@ public class PreOrderProvider extends ContentProvider {
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
-		return null;
+		SQLiteDatabase sqlDB = preOrderHelper.getWritableDatabase();
+		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
+		if (rowId > 0) {
+			Uri rowUri = ContentUris.appendId(PreOrder.CONTENT_URI.buildUpon(),
+					rowId).build();
+			getContext().getContentResolver().notifyChange(rowUri, null);
+			return rowUri;
+		}
+		throw new SQLException("Failed to insert row into " + uri);
 	}
 
 	@Override
@@ -73,19 +83,14 @@ public class PreOrderProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		// TODO Auto-generated method stub
-		Context s = getContext();
-//		ContentResolver contentResolver = s.getContentResolver();
-
-//		Cursor c = query(uri, null, null,
-//				null, null);
-//		return c;
 		preOrderHelper = new DatabaseHelper(getContext());
-    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        SQLiteDatabase db = preOrderHelper.getWritableDatabase();
-        qb.setTables(DATABASE_TABLE_NAME);
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase db = preOrderHelper.getWritableDatabase();
+		qb.setTables(DATABASE_TABLE_NAME);
+		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
+				null, sortOrder);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
 	}
 
 	@Override
