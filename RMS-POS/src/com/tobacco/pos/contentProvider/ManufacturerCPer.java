@@ -1,6 +1,9 @@
 package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
+
+import java.util.ArrayList;
+import java.util.List;
  
 import com.tobacco.pos.entity.AllTables;
 
@@ -21,6 +24,7 @@ public class ManufacturerCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "Manufacturer";
+	    private static Context ct = null;
 
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
@@ -32,7 +36,8 @@ public class ManufacturerCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
-		
+				ct = context;
+				
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
@@ -121,12 +126,12 @@ public class ManufacturerCPer extends ContentProvider {
 
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 
@@ -134,6 +139,20 @@ public class ManufacturerCPer extends ContentProvider {
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
 	    }
+
+		public List<String> getAllManufacturerName() {
+			Cursor c = this.query(AllTables.Manufacturer.CONTENT_URI, null, null, null, null);
+			if(c.getCount()>0){
+				List<String> allManufacturer = new ArrayList<String>();
+				c.moveToFirst();
+				for(int i=0;i<c.getCount();i++){
+					allManufacturer.add(c.getString(1));
+					c.moveToNext();
+				}
+				return allManufacturer;
+			}
+			return null;
+		}
 
 
 }

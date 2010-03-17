@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -49,9 +51,7 @@ public class PurchaseManagement extends TabActivity {
 	private Button savePBillButton;
 	
 	private Spinner wholePBill;
-	private Button addGoodsButton;
-	private Button addGoodsIntoPBillButton;
-	
+
 	private String pBillCode = "";
 	private int selectedPBillId = 0;
 	private int selectedPriceId = 0;
@@ -103,16 +103,15 @@ public class PurchaseManagement extends TabActivity {
 						}
 					);
 								
-					addGoodsButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsButton);
-					addGoodsButton.setOnClickListener(new OnClickListener(){
-
-									public void onClick(View v) {
-										
-										Intent i = new Intent();
-										i.setAction("com.tobacco.pos.activity.AddGoods");
-										startActivity(i);
-									}
-					});
+//					addGoodsButton = (Button)PurchaseManagement.this.findViewById(R.id.addGoodsButton);
+//					addGoodsButton.setOnClickListener(new OnClickListener(){
+//
+//									public void onClick(View v) {
+//										
+//										Intent inten = new Intent(PurchaseManagement.this, AddGoods.class);
+//										startActivity(inten);
+//									}
+//					});
 									
 ////										AlertDialog.Builder addGoodsDialog= new AlertDialog.Builder(PurchaseManagement.this);
 ////										addGoodsDialog.setTitle("�����Ʒ");
@@ -490,14 +489,40 @@ public class PurchaseManagement extends TabActivity {
 	}
 
 	@Override
-	protected void onPause() {
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, 0, "添加商品");
+		menu.add(0, 1, 1, "添加进货商品");
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0://添加商品
+			Intent intent = new Intent(PurchaseManagement.this, AddGoods.class);
+			startActivity(intent);
+			break;
+		case 1://添加进货商品
+
+			break;
+	
+		
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onStop() {
 		super.onPause();
 
 		if(loginer.logout(userName, loginer.getWritableDatabase())){
 			Intent intent = new Intent(PurchaseManagement.this, Main.class);
 			PurchaseManagement.this.startActivity(intent);
+			
+		
 		}
 	}
+	
 	
 	private void displayPBill(){
 		pBillCPer = new PurchaseBillCPer();

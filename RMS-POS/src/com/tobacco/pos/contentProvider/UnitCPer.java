@@ -2,6 +2,9 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
@@ -148,5 +151,19 @@ public class UnitCPer extends ContentProvider {
 	    	return "";
 	    	
 	    }
+
+		public List<String> getAllUnitName() {
+			Cursor c = this.query(AllTables.Unit.CONTENT_URI, null, null, null, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				List<String> allUnitName = new ArrayList<String>();
+				for(int i=0;i<c.getCount();i++){
+					allUnitName.add(c.getString(1));
+					c.moveToNext();
+				}
+				return allUnitName;
+			}
+			return null;
+		}
 
 }

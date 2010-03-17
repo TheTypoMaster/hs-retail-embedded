@@ -2,6 +2,9 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
@@ -21,7 +24,8 @@ public class GoodsKindCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "GoodsKind";
-
+	    private static Context ct = null;
+	    
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
 	    	private SQLiteDatabase db = null;
@@ -32,7 +36,8 @@ public class GoodsKindCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
-		
+				ct = context;
+				
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
@@ -219,13 +224,13 @@ public class GoodsKindCPer extends ContentProvider {
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 	
-	    	
+	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
 	       
 	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        
 	        return c;
 	    } 
@@ -241,6 +246,20 @@ public class GoodsKindCPer extends ContentProvider {
 	         return count;
 	       
 	    }
+
+		public List<String> getAllGoodsKindName() {
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, null, null, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				List<String> allGoodsKindName = new ArrayList<String>();
+				for(int i=0;i<c.getCount();i++){
+					allGoodsKindName.add(c.getString(1));
+					c.moveToNext();
+				}
+				return allGoodsKindName;
+			}
+			return null;
+		}
 
 
 }
