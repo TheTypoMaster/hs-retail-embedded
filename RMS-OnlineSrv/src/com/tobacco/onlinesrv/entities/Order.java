@@ -6,7 +6,6 @@ import android.net.Uri;
 public class Order {
 	public static final Uri CONTENT_URI = Uri.parse("content://"
 			+ OrderProvider.CONTENT_URI + "/order");
-	public static final String DATABASE_TABLE_NAME = "order";
 	public static final String KEY_ID = "id";
 	public static final String KEY_BRANDCODE = "brandcode";
 	public static final String KEY_BRANDCOUNT = "brandcount";

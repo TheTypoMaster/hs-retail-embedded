@@ -7,7 +7,6 @@ import android.net.Uri;
 public class PreOrder {
 	public static final Uri CONTENT_URI = Uri.parse("content://"
 			+ PreOrderProvider.CONTENT_URI + "/preorder");
-	public static final String DATABASE_TABLE_NAME = "preorder";
 	public static final String KEY_ID = "id";
 	public static final String KEY_BRANDCODE = "brandcode";
 	public static final String KEY_BRANDCOUNT = "brandcount";
