@@ -22,27 +22,18 @@ public class PreOrderProvider extends ContentProvider {
 	private static final String TAG = "PreOrderProvider";
 	private static final String DATABASE_NAME = "RMS_OnlineSrv.db";
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_TABLE_NAME = "preorder";
-	private static final String KEY_ID = "id";
-	private static final String KEY_BRANDCODE = "brandcode";
-	private static final String KEY_BRANDCOUNT = "brandcount";
-	private static final String KEY_PREDATE = "predate";
-	private static final String KEY_USERNAME = "username";
-	private static final String KEY_VIPID = "vipid";
-	private static final String KEY_FORMAT = "format";
-	private static final String KEY_AMOUNT = "amount";
-	private static final String KEY_AGENTCYID = "agencyid";
-	private static final String KEY_DESCRIPTION = "description";
-	private static final String KEY_STATUS = "status";
+	private static final String DATABASE_TABLE_NAME = "preorderinfo";
 
-	private static final String DATABASE_CREATE = "create table "
-			+ DATABASE_TABLE_NAME + "(" + KEY_ID
-			+ " integer primary key autoincrement, " + KEY_BRANDCODE
-			+ " varchar(20), " + KEY_BRANDCOUNT + " integer, " + KEY_PREDATE
-			+ " date, " + KEY_USERNAME + " varchar(20), " + KEY_VIPID
-			+ " integer, " + KEY_FORMAT + " varchar(20), " + KEY_AMOUNT
-			+ " float, " + KEY_AGENTCYID + " integer, " + KEY_DESCRIPTION
-			+ " text, " + KEY_STATUS + " char(1))";
+	private static final String DATABASE_CREATE = "create table if not exists "
+			+ DATABASE_TABLE_NAME + "(" + PreOrder.KEY_ID
+			+ " integer primary key autoincrement, " + PreOrder.KEY_BRANDCODE
+			+ " varchar(20), " + PreOrder.KEY_BRANDCOUNT + " integer, "
+			+ PreOrder.KEY_PREDATE + " date, " + PreOrder.KEY_USERNAME
+			+ " varchar(20), " + PreOrder.KEY_VIPID + " integer, "
+			+ PreOrder.KEY_FORMAT + " varchar(20), " + PreOrder.KEY_AMOUNT
+			+ " float, " + PreOrder.KEY_AGENTCYID + " integer, "
+			+ PreOrder.KEY_DESCRIPTION + " text, " + PreOrder.KEY_STATUS
+			+ " char(1))";
 	private DatabaseHelper preOrderHelper = null;
 
 	@Override
@@ -60,12 +51,16 @@ public class PreOrderProvider extends ContentProvider {
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
+		Log.i(TAG, "step into insert");
 		SQLiteDatabase sqlDB = preOrderHelper.getWritableDatabase();
 		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
+		Log.i("rowId is", rowId + "");
 		if (rowId > 0) {
 			Uri rowUri = ContentUris.appendId(PreOrder.CONTENT_URI.buildUpon(),
 					rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
+			// Cursor c = query(PreOrder.CONTENT_URI, null, null, null, null);
+			// Log.i("After insert size", c.getCount()+"");
 			return rowUri;
 		}
 		throw new SQLException("Failed to insert row into " + uri);
@@ -115,14 +110,19 @@ public class PreOrderProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
 			db.execSQL(DATABASE_CREATE);
 			Log.i(TAG, "Table created...");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (id, brandcode,brandcount)"
-					+ " VALUES ('1','abc','12')");
-
-			Log.i(TAG, "Init Data inserted...");
+//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+//					+ " (brandcode,brandcount)"
+//					+ " VALUES ('abc','12')");
+//
+//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+//					+ " (brandcode,brandcount)"
+//					+ " VALUES ('def','1234')");
+//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+//					+ " (brandcode,brandcount)"
+//					+ " VALUES ('sdsad','3434')");
+//			Log.i(TAG, "Init Data inserted...");
 			// TODO Auto-generated method stub
 
 		}
@@ -157,7 +157,7 @@ public class PreOrderProvider extends ContentProvider {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-
+			
 		}
 	}
 

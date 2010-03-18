@@ -1,8 +1,6 @@
 package com.tobacco.onlinesrv.activity;
 
 import com.tobacco.onlinesrv.R;
-import com.tobacco.onlinesrv.provider.PreOrderProvider;
-
 import android.app.Activity;
 import android.content.ContentProvider;
 import android.content.Intent;
@@ -20,8 +18,8 @@ public class OptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		Button preOrderBtn = (Button) this.findViewById(R.id.Button01);
-		preOrderBtn.setOnClickListener(new OnClickListener() {
+		Button addPreBtn = (Button) this.findViewById(R.id.Button01);
+		addPreBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -30,7 +28,39 @@ public class OptionActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		Button queryPreBtn = (Button) this.findViewById(R.id.Button02);
+		queryPreBtn.setOnClickListener(new OnClickListener() {
 
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(OptionActivity.this,
+						QueryPreOrderActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		Button addOrderBtn = (Button) this.findViewById(R.id.Button03);
+		addOrderBtn.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(OptionActivity.this, AddOrderActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		Button queryOrderBtn = (Button) this.findViewById(R.id.Button04);
+		queryOrderBtn.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(OptionActivity.this, QueryOrderActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 }
