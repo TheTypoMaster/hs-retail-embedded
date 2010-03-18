@@ -20,9 +20,9 @@ public class AccountProvider extends ContentProvider {
 	public static final String CONTENT_URI = "com.tobacco.main.provider.accountprovider";
 
 	private static final String TAG = "AccountProvider";
-	
+
 	private static HashMap<String, String> usersProjectionMap;
-	
+
 	private static final String DATABASE_NAME = "RMS_MAIN.db";
 	private static final int DATABASE_VERSION = 2;
 	private static final String USER_TABLE_NAME = "users";
@@ -59,23 +59,29 @@ public class AccountProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		
-            qb.setTables(USER_TABLE_NAME);
-            qb.setProjectionMap(usersProjectionMap);
-           
 
-        // Get the database and run the query
-        SQLiteDatabase db = accountHelper.getReadableDatabase();
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+		qb.setTables(USER_TABLE_NAME);
+		qb.setProjectionMap(usersProjectionMap);
 
-        // Tell the cursor what uri to watch, so it knows when its source data changes
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;
+		// Get the database and run the query
+		SQLiteDatabase db = accountHelper.getReadableDatabase();
+		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
+				null, sortOrder);
+
+		// Tell the cursor what uri to watch, so it knows when its source data
+		// changes
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
 	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
+
+		// Get the database and run the query
+		SQLiteDatabase db = accountHelper.getReadableDatabase();
+
+		db.update(USER_TABLE_NAME, values, selection, selectionArgs);
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -103,20 +109,21 @@ public class AccountProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
+
+			// wipe old table
+			db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME + ";");
+			Log.i(TAG, "Older table removed...");
 			
-			//wipe old table
-			db.execSQL("DROP TABLE IF EXISTS "+ USER_TABLE_NAME+";");
-			
-			db.execSQL("CREATE TABLE IF NOT EXISTS " + USER_TABLE_NAME
-					+ " (_ID VARCHAR, username VARCHAR, password VARCHAR, priv VARCHAR, status VARCHAR)");
+			//create new table
+			db.execSQL("CREATE TABLE IF NOT EXISTS "
+							+ USER_TABLE_NAME
+							+ " (id VARCHAR, username VARCHAR, password VARCHAR, priv VARCHAR, status VARCHAR)");
 
 			Log.i(TAG, "Table created...");
-			db
-					.execSQL("INSERT INTO "
-							+ USER_TABLE_NAME
-							+ " (_ID, username, password, priv, status)"
-							+ " VALUES ('" +UUIDGenerator.generateUUID()+
-							"', 'zwd', '"+ MD5Hasher.hash("123")+"', 'admin' , '0');");
+			db.execSQL("INSERT INTO " + USER_TABLE_NAME
+					+ " (id, username, password, priv, status)" + " VALUES ('"
+					+ UUIDGenerator.generateUUID() + "', 'zwd', '"
+					+ MD5Hasher.hash("123") + "', 'admin' , '0');");
 
 			Log.i(TAG, "Init Data inserted...");
 		}

@@ -15,7 +15,8 @@
 </provider>
 
 <activity android:name=".activity.CurrentUserManager">
-<intent-filter><action android:name="com.tobacco.main.antivity.CurrentUserManager.USER_LOGON"></action>
+<intent-filter><action android:name="com.tobacco.main.activity.CurrentUserManager.USER_LOGON"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
 </intent-filter>
 </activity>
 </application>
