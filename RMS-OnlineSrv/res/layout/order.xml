@@ -36,7 +36,7 @@
 	<LinearLayout android:id="@+id/LinearLayout04"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="预订单日期:" android:id="@+id/TextView04"
+		<TextView android:text="订单日期:" android:id="@+id/TextView04"
 			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
 		<EditText android:id="@+id/OrderEditText04" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"

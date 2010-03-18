@@ -1,7 +1,12 @@
 package com.tobacco.onlinesrv.activity;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,6 +25,18 @@ import com.tobacco.onlinesrv.entities.PreOrder;
 
 public class AddPreOrderActivity extends Activity {
 
+	private int mYear;
+	private int mMonth;
+	private int mDay;
+	private EditText brandEdt;
+	private EditText countEdt;
+	private EditText dateEdt;
+	private EditText fomartEdt;
+	private EditText amountEdt;
+	private EditText agencyEdt;
+	private EditText vipEdt;
+	private EditText descEdt;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -26,25 +44,20 @@ public class AddPreOrderActivity extends Activity {
 		setContentView(R.layout.preorder);
 
 		Intent intent = getIntent();
-		final EditText brandEdt = (EditText) this.findViewById(R.id.EditText01);
-		final EditText countEdt = (EditText) this.findViewById(R.id.EditText02);
-		final EditText fomartEdt = (EditText) this
-				.findViewById(R.id.EditText03);
-		final EditText dateEdt = (EditText) this.findViewById(R.id.EditText04);
-		final EditText amountEdt = (EditText) this
-				.findViewById(R.id.EditText05);
-		final EditText agencyEdt = (EditText) this
-				.findViewById(R.id.EditText06);
-		final EditText vipEdt = (EditText) this.findViewById(R.id.EditText07);
-		final EditText descEdt = (EditText) this.findViewById(R.id.EditText08);
+		brandEdt = (EditText) this.findViewById(R.id.EditText01);
+		countEdt = (EditText) this.findViewById(R.id.EditText02);
+		fomartEdt = (EditText) this.findViewById(R.id.EditText03);
+		dateEdt = (EditText) this.findViewById(R.id.EditText04);
+		amountEdt = (EditText) this.findViewById(R.id.EditText05);
+		agencyEdt = (EditText) this.findViewById(R.id.EditText06);
+		vipEdt = (EditText) this.findViewById(R.id.EditText07);
+		descEdt = (EditText) this.findViewById(R.id.EditText08);
+
 		dateEdt.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent tempIntent = new Intent();
-				tempIntent.setClass(AddPreOrderActivity.this,
-						DatePickActivity.class);
-				startActivity(tempIntent);
+				showDialog(0);
 			}
 		});
 
@@ -89,4 +102,35 @@ public class AddPreOrderActivity extends Activity {
 		});
 
 	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		// TODO Auto-generated method stub
+		switch (id) {
+		case 0:
+			mYear = Calendar.getInstance().get(Calendar.YEAR);
+			mMonth = Calendar.getInstance().get(Calendar.MONTH);
+			mDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+					mDay);
+		}
+
+		return null;
+	}
+
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			mYear = year;
+			mMonth = monthOfYear;
+			mDay = dayOfMonth;
+			setDateFiled();
+		}
+
+		private void setDateFiled() {
+			// TODO Auto-generated method stub
+			dateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
+		}
+	};
+
 }

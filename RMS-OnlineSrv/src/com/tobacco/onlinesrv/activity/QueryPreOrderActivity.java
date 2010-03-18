@@ -1,45 +1,80 @@
 package com.tobacco.onlinesrv.activity;
 
-import com.tobacco.onlinesrv.R;
-import com.tobacco.onlinesrv.entities.PreOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+
+import com.tobacco.onlinesrv.R;
+import com.tobacco.onlinesrv.entities.PreOrder;
 
 public class QueryPreOrderActivity extends Activity {
+	private String query[] = { "最近一个月", "最近两个月", "最近三个月" };
+	private ArrayList<String> data = new ArrayList<String>();
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.preorder);
-
+		setContentView(R.layout.query);
+		String[] from = new String[] { "id", "brandcode", "brandcount",
+				"amount", "date" };
+		int[] to = new int[] { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
+				R.id.item5 };
+		List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
 		Uri preorder = PreOrder.CONTENT_URI;
-		final EditText brandEdt = (EditText) this.findViewById(R.id.EditText01);
-		final EditText countEdt = (EditText) this.findViewById(R.id.EditText02);
-		final EditText fomartEdt = (EditText) this
-				.findViewById(R.id.EditText03);
-		final EditText dateEdt = (EditText) this.findViewById(R.id.EditText04);
-		final EditText amountEdt = (EditText) this
-				.findViewById(R.id.EditText05);
-		final EditText agencyEdt = (EditText) this
-				.findViewById(R.id.EditText06);
-		final EditText vipEdt = (EditText) this.findViewById(R.id.EditText07);
-		final EditText descEdt = (EditText) this.findViewById(R.id.EditText08);
+
 		Cursor cursor = this.managedQuery(preorder, null, null, null, null);
+
 		if (cursor.getCount() == 0)
 			openfailDialog();
 		else {
 			Log.i("The size of cursor", cursor.getCount() + "");
 			cursor.moveToFirst();
-			String s = cursor.getString(1);
-			brandEdt.setText(s);
-			cursor.moveToNext();
-			countEdt.setText(cursor.getString(2));
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("id", cursor.getString(0));
+			map.put("brandcode", cursor.getString(1));
+			map.put("brandcount", cursor.getString(2));
+			map.put("amount", cursor.getString(7));
+			map.put("date", cursor.getString(3));
+
+			fillMaps.add(map);
+
+			while (cursor.moveToNext()) {
+				HashMap<String, String> map1 = new HashMap<String, String>();
+				map1.put("id", cursor.getString(0));
+				map1.put("brandcode", cursor.getString(1));
+				map1.put("brandcount", cursor.getString(2));
+				map1.put("amount", cursor.getString(7));
+				map1.put("date", cursor.getString(3));
+
+				fillMaps.add(map1);
+			}
 		}
+
+		ListView listView = (ListView) this.findViewById(R.id.ListView01);
+
+		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
+				R.layout.grid_item, from, to);
+		listView.setAdapter(adapter);
+		listView.setTextFilterEnabled(true);
+		Spinner sp = (Spinner) this.findViewById(R.id.Spinner01);
+		sp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, query)));
+
 	}
 
 	private void openfailDialog() {
