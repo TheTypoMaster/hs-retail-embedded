@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content" >
 	<LinearLayout android:layout_gravity="center"
 		android:orientation="vertical" android:layout_width="wrap_content"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content" android:id="@+id/addGoodsDialog">
 		<TableLayout android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 
 		
-			<TableRow android:layout_width="wrap_content"
+		  <TableRow android:layout_width="wrap_content"
 				android:layout_height="wrap_content">
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:text="">
@@ -101,10 +101,10 @@
 			</TableRow>
 
 		</TableLayout>
-		<TextView android:id="@+id/addGoodsInfo"
+		<!-- <TextView android:id="@+id/addGoodsInfo"
 			android:visibility="visible" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-		</TextView>
+		</TextView> -->
 		<TableRow android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<Button android:text="确定" android:id="@+id/addGoodsOk"
