@@ -7,6 +7,7 @@ import java.util.Vector;
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.ManufacturerCPer;
+import com.tobacco.pos.entity.SinglePrice;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,14 +27,13 @@ public class AddGoods extends Activity {
 	private Spinner allManufacturerSpinner;
 	private Spinner allKindSpinner;
 	private Button addPriceButton;
-	private TextView addGoodsInfo;
 	private Button addGoodsOk;
 	private Button addGoodsReset;
 	
 	private ManufacturerCPer mCPer;
 	private GoodsKindCPer goodsKindCPer;
 	
-	private Vector allPrice = new Vector();//一件商品的所有价格，allPrice由singlePrice组成，singlePrice由单位，条形码，进货价，售价组成。
+	private ArrayList allPrice = new ArrayList();//一件商品的所有价格，allPrice由singlePrice组成，singlePrice由单位，条形码，进货价，售价组成。
 	
 	public void onCreate(Bundle savedInstanceState) {
 		 
@@ -67,8 +67,9 @@ public class AddGoods extends Activity {
 					Intent intent = new Intent(AddGoods.this, AddGoodsPrice.class);//开始AddGoodsPrice，接收价格信息。
 					ArrayList<String> existingUnit = new ArrayList<String>() ;//取出allPrice中的所有单位，在AddGoodsPrice中就不显示出那些已经有价格的单位
 					for(int i=0;i<allPrice.size();i++){
-						Vector temp = (Vector) allPrice.get(i);
-						existingUnit.add(temp.get(0).toString());
+						
+						SinglePrice temp = (SinglePrice)allPrice.get(i);
+						existingUnit.add(temp.get("unitName").toString());
 					}
 					intent.putStringArrayListExtra("existingUnit", existingUnit);
 			
@@ -78,7 +79,7 @@ public class AddGoods extends Activity {
 			}
 			
 		});
-		addGoodsInfo = (TextView)this.findViewById(R.id.addGoodsInfo);
+		
 		addGoodsOk = (Button)this.findViewById(R.id.addGoodsOk);
 		addGoodsOk.setOnClickListener(new OnClickListener(){
 
@@ -86,10 +87,20 @@ public class AddGoods extends Activity {
 				if(goodsNameEText.getText().toString().trim().equals("") || goodsNameEText.getText().toString().trim() == null){
 					Toast.makeText(AddGoods.this, "请输入商品的名字", Toast.LENGTH_SHORT).show();
 				}
+				else if(allPrice.size() == 0){
+					Toast.makeText(AddGoods.this, "请为该商品输入价格", Toast.LENGTH_SHORT).show();
+				}
 				else{
 					Intent intent = new Intent(AddGoods.this, PurchaseManagement.class);
-					intent.putExtra("GoodsName", goodsNameEText.getText().toString());
+					intent.putParcelableArrayListExtra("allPrice", allPrice);//商品的所有价格
+					intent.putExtra("goodsName", goodsNameEText.getText().toString());//商品名称
+					intent.putExtra("mName", allManufacturerSpinner.getSelectedItem().toString());//厂家名称
+					intent.putExtra("goodsKind", allKindSpinner.getSelectedItem().toString());
+					
 					AddGoods.this.setResult(RESULT_OK, intent);
+					
+					finish();
+					
 				}
 			}
 			
@@ -98,7 +109,6 @@ public class AddGoods extends Activity {
 		addGoodsReset.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
-				addGoodsInfo.setText("");
 				finish();
 			}
 			
@@ -114,15 +124,13 @@ public class AddGoods extends Activity {
 			double inPrice = data.getDoubleExtra("inPrice", 0);
 			double outPrice = data.getDoubleExtra("outPrice", 0);
 			
-			Vector singlePrice = new Vector();
-			singlePrice.add(unitName);
-			singlePrice.add(barcode);
-			singlePrice.add(inPrice);
-			singlePrice.add(outPrice);
-			
-			allPrice.add(singlePrice);
-			
-						
+			SinglePrice sPrice = new SinglePrice();
+			sPrice.put("unitName", unitName);
+			sPrice.put("barcode", barcode);
+			sPrice.put("inPrice", ""+inPrice);
+			sPrice.put("outPrice", ""+outPrice);
+
+			allPrice.add(sPrice);
 		}
 	}
 	

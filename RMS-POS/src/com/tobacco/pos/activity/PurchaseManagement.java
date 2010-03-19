@@ -1,36 +1,28 @@
 package com.tobacco.pos.activity;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 
 import com.tobacco.R;
 
-import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.Loginer;
-import com.tobacco.pos.contentProvider.ManufacturerCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
+import com.tobacco.pos.entity.SinglePrice;
 
-import android.app.AlertDialog;
 import android.app.TabActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TableLayout;
@@ -86,13 +78,14 @@ public class PurchaseManagement extends TabActivity {
 	    mTabHost.setOnTabChangedListener(new OnTabChangeListener(){
 
 			public void onTabChanged(String tabId) {
-			
+				
+				displayPBill();
 				if(tabId.equals("pBill")){
-					displayPBill();
+					
 				}
 				else{
-					displayPBill();
-					wholePBill = (Spinner)PurchaseManagement.this.findViewById(R.id.wholePBill);
+				
+				/*	wholePBill = (Spinner)PurchaseManagement.this.findViewById(R.id.wholePBill);
 					String allPBill [] = pBillCPer.getAllPBill();
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(PurchaseManagement.this,android.R.layout.simple_spinner_item,allPBill);
 					wholePBill.setAdapter(adapter);
@@ -106,7 +99,7 @@ public class PurchaseManagement extends TabActivity {
 
 						public void onNothingSelected(AdapterView<?> arg0) {}
 						}
-					);
+					);*/
 
 			}
 	    }}
@@ -125,8 +118,98 @@ public class PurchaseManagement extends TabActivity {
 		
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == RESULT_OK){//如果成功接收到数据。
-			String goodsName = data.getStringExtra("GoodsName");
-			Toast.makeText(this, ""+goodsName, Toast.LENGTH_LONG).show();
+			TableLayout pItemTable = (TableLayout)this.findViewById(R.id.pItemTable);
+//			if(pItemTable.getChildCount()==0){
+//				TableRow title = new TableRow(this);
+//			
+//				TextView nameTView = new TextView(this);
+//				nameTView.setText("名字");
+//				
+//				TextView mTView = new TextView(this);
+//				mTView.setText("厂家");
+//				
+//				TextView kindTView = new TextView(this);
+//				kindTView.setText("类别");
+//				
+//				TextView barcodeTView = new TextView(this);
+//				barcodeTView.setText("条形码");
+//				
+//				TextView unitTView = new TextView(this);
+//				unitTView.setText("单位");
+//				
+//				TextView inPriceTView = new TextView(this);
+//				inPriceTView.setText("进货价");
+//				
+//				TextView outPriceTView = new TextView(this);
+//				outPriceTView.setText("售价");
+//				
+//				title.addView(nameTView);
+//				title.addView(mTView);
+//				title.addView(kindTView);
+//				title.addView(barcodeTView);
+//				title.addView(unitTView);
+//				title.addView(inPriceTView);
+//				title.addView(outPriceTView);
+//				
+//				pItemTable.addView(title);
+//				
+//			}
+			ArrayList<SinglePrice> allPrice = data.getParcelableArrayListExtra("allPrice");
+			String goodsName = data.getStringExtra("goodsName");
+			String mName = data.getStringExtra("mName");
+			String goodsKind = data.getStringExtra("goodsKind");
+			
+			for(int i=0;i<allPrice.size();i++){
+				TableRow content = new TableRow(this);
+				
+				TextView nameTV = new TextView(this);
+				nameTV.setText(goodsName);
+				
+				TextView mTV = new TextView(this);
+				mTV.setText(mName);
+				
+				TextView kindTV = new TextView(this);
+				kindTV.setText(goodsKind);
+				
+				SinglePrice temp = allPrice.get(i);
+				
+				TextView barcodeTV = new TextView(this);
+				barcodeTV.setText(temp.get("barcode"));
+				
+				TextView unitTV = new TextView(this);
+				unitTV.setText(temp.get("unitName"));
+				
+				TextView inPriceTV = new TextView(this);
+				inPriceTV.setText(temp.get("inPrice"));
+				
+				TextView outPriceTV = new TextView(this);
+				outPriceTV.setText(temp.get("outPrice"));
+				
+				ImageView deleteImage = new ImageView(PurchaseManagement.this);
+				deleteImage.setImageResource(R.drawable.delete);
+				deleteImage.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View v) {
+//						((TableLayout)v.getParent().getParent()).removeView(r);
+//						if(salesBillTable.getChildCount()==2){
+//							salesBillTable.removeViewAt(1);
+//						}
+					}
+					
+				});
+				
+				content.addView(nameTV);
+				content.addView(mTV);
+				content.addView(kindTV);
+				content.addView(barcodeTV);
+				content.addView(unitTV);
+				content.addView(inPriceTV);
+				content.addView(outPriceTV);
+				content.addView(deleteImage);
+				
+				
+				pItemTable.addView(content);
+			}
 		}
 	}
 
@@ -147,57 +230,6 @@ public class PurchaseManagement extends TabActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-//	
-//	private void addGoods(){
-//		ScrollView addGoodsDialog;
-//		EditText goodsNameEText;
-//		Spinner allManufacturerSpinner;
-//		Spinner allKindSpinner;
-//		Button addPriceButton;
-//		TextView addGoodsInfo;
-//
-//		
-//		ManufacturerCPer mCPer = new ManufacturerCPer();
-//		GoodsKindCPer goodsKindCPer = new GoodsKindCPer();
-//		
-//		addGoodsDialog = (ScrollView)findViewById(R.id.addGoodsDialog);
-//
-//		goodsNameEText = (EditText)this.findViewById(R.id.goodsNameEText);
-//		
-////		allManufacturerSpinner = (Spinner)this.findViewById(R.id.allManufacturerSpinner);
-////		ArrayAdapter<String> allManufacturerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mCPer.getAllManufacturerName());
-////		allManufacturerSpinner.setAdapter(allManufacturerAdapter);
-////		
-////		allKindSpinner = (Spinner)this.findViewById(R.id.allKindSpinner);
-////		ArrayAdapter<String> allGoodsKindAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,goodsKindCPer.getAllGoodsKindName());
-////		allKindSpinner.setAdapter(allGoodsKindAdapter);
-////		
-//		addPriceButton = (Button)this.findViewById(R.id.addPriceButton);
-//		addGoodsInfo = (TextView)this.findViewById(R.id.addGoodsInfo);
-//		
-//		AlertDialog.Builder addGDialog = new AlertDialog.Builder(this);
-//		addGDialog.setTitle("增加商品");
-//		addGDialog.setView(addGoodsDialog);
-////		addGDialog.set
-//		
-//		addGDialog.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-//
-//			public void onClick(DialogInterface dialog, int which) {
-//			
-//			}
-//			
-//		});
-//		addGDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-//
-//			public void onClick(DialogInterface dialog, int which) {
-//				
-//			}
-//			
-//		}).show();
-//		
-//	}
-
 
 	@Override
 	protected void onStop() {
@@ -249,3 +281,4 @@ public class PurchaseManagement extends TabActivity {
 	}
 
 }
+;
