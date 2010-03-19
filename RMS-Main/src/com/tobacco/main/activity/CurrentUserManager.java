@@ -74,11 +74,15 @@ public class CurrentUserManager extends Activity {
 
 	}
 
+	/**
+	 * @param intent
+	 */
 	private void userQuery(Intent intent) {
 
-		Log.i(TAG, "Query user...");
 		// get user that wanna be queried
 		String userName = intent.getStringExtra("userName");
+		Log.i(TAG, "Query user:" + userName);
+		Log.i(TAG, "Caller: "+ getCallingActivity().getClassName());
 
 		String[] projection = new String[] { User._ID, User.USERNAME,
 				User.PASSWORD, User.PRIV, User.STATUS };
@@ -89,12 +93,14 @@ public class CurrentUserManager extends Activity {
 
 		// retrieve from db
 		Uri user = User.CONTENT_URI;
-		Cursor cursor = managedQuery(user, projection, User.USERNAME + "= ?",
-				new String[] { userName }, null);
+		Cursor cursor = managedQuery(user, projection, User.USERNAME + "= '"
+				+ userName + "'", null, null);
 
-		// verify if user exists
+		// set up result intent
+		Intent resultIntent = new Intent(this,getCallingActivity().getClass());
 
-		// verify pwd
+		// query user via username
+
 		if (cursor.moveToFirst()) {
 
 			int idColumn = cursor.getColumnIndex(User._ID);
@@ -107,17 +113,15 @@ public class CurrentUserManager extends Activity {
 			queriedUserPriv = cursor.getString(privColumn);
 			queriedUserStatus = cursor.getString(statusColumn);
 
-			Intent i = new Intent();
-			i.setAction(CurrentUserManager.ACTION_USER_LOGON);
-			i.putExtra("curUserId", queriedUserId);
-			i.putExtra("curUserName", queriedUserName);
-			i.putExtra("curUserPriv", queriedUserPriv);
-			i.putExtra("curUserStatus", queriedUserStatus);
-
-			setResult(RESULT_OK, i);
-			finish();
-
 		}
+
+		resultIntent.putExtra("curUserId", queriedUserId);
+		resultIntent.putExtra("curUserName", queriedUserName);
+		resultIntent.putExtra("curUserPriv", queriedUserPriv);
+		resultIntent.putExtra("curUserStatus", queriedUserStatus);
+
+		setResult(RESULT_OK, resultIntent);
+		finish();
 
 	}
 
