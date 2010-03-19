@@ -20,12 +20,7 @@
           <activity android:name=".pos.activity.ReportManagement"></activity>
 		  <activity android:name=".pos.activity.AddGoodsKind" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.EditGoodsKind" android:theme="@android:style/Theme.Dialog"></activity>
-		  <activity android:name=".pos.activity.AddGoods" android:theme="@android:style/Theme.Dialog">
-		 	 <intent-filter>  
-				<action android:name="com.tobacco.pos.activity.AddGoods" />  
-				<category android:name="android.intent.category.DEFAULT" />  
-			</intent-filter>  
-		  </activity>
+		  <activity android:name=".pos.activity.AddGoods" android:theme="@android:style/Theme.Dialog"></activity>  
 		  <activity android:name=".pos.activity.AddGoodsPrice" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.Login" android:theme="@android:style/Theme.Dialog"></activity>
 		  
