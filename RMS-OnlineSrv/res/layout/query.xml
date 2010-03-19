@@ -33,16 +33,16 @@
 		</FrameLayout>
 		<LinearLayout android:id="@+id/LinearLayout03"
 			android:layout_width="wrap_content" android:layout_height="wrap_content">
-			<Button android:text="首页" android:id="@+id/Button01"
+			<Button android:text="首页" android:id="@+id/queryButton01"
 				android:layout_marginLeft="30dip" android:layout_width="wrap_content"
 				android:layout_height="wrap_content"></Button>
-			<Button android:text="上页" android:id="@+id/Button01"
+			<Button android:text="上页" android:id="@+id/queryButton02"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-			<Button android:text="下页" android:id="@+id/Button01"
+			<Button android:text="下页" android:id="@+id/queryButton03"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-			<Button android:text="尾页" android:id="@+id/Button01"
+			<Button android:text="尾页" android:id="@+id/queryButton04"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-			<Button android:text="返回" android:id="@+id/Button01"
+			<Button android:text="返回" android:id="@+id/queryButton05"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 		</LinearLayout>
 	</LinearLayout>

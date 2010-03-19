@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:id="@+id/preorderlayout" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout android:id="@+id/LinearLayout01"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
@@ -21,7 +21,8 @@
 		<EditText android:id="@+id/EditText02" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"
 			android:layout_marginRight="20dip" android:scrollHorizontally="true"
-			android:gravity="fill_horizontal" android:autoText="true" android:maxLines="1"></EditText>
+			android:gravity="fill_horizontal" android:autoText="true"
+			android:maxLines="1"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout03"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -31,7 +32,8 @@
 		<EditText android:id="@+id/EditText03" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"
 			android:layout_marginRight="20dip" android:scrollHorizontally="true"
-			android:gravity="fill_horizontal" android:autoText="true" android:maxLines="1"></EditText>
+			android:gravity="fill_horizontal" android:autoText="true"
+			android:maxLines="1"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout04"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -51,7 +53,8 @@
 		<EditText android:id="@+id/EditText05" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"
 			android:layout_marginRight="20dip" android:scrollHorizontally="true"
-			android:gravity="fill_horizontal" android:autoText="true" android:maxLines="1"></EditText>
+			android:gravity="fill_horizontal" android:autoText="true"
+			android:maxLines="1"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout06"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -61,7 +64,8 @@
 		<EditText android:id="@+id/EditText06" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"
 			android:layout_marginRight="20dip" android:scrollHorizontally="true"
-			android:gravity="fill_horizontal" android:autoText="true" android:maxLines="1"></EditText>
+			android:gravity="fill_horizontal" android:autoText="true"
+			android:maxLines="1"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout07"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -71,7 +75,8 @@
 		<EditText android:id="@+id/EditText07" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_marginLeft="20dip"
 			android:layout_marginRight="20dip" android:scrollHorizontally="true"
-			android:gravity="fill_horizontal" android:autoText="true" android:maxLines="1"></EditText>
+			android:gravity="fill_horizontal" android:autoText="true"
+			android:maxLines="1"></EditText>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout08"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

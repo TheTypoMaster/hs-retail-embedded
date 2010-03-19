@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -86,9 +87,9 @@ public class AddPreOrderActivity extends Activity {
 				Uri uri = getContentResolver().insert(PreOrder.CONTENT_URI,
 						values);
 				if (uri != null) {
-					Log.i("add preorderinfo", "success");
-					finish();
-				}
+					openSuccessDialog();
+				} else
+					openFailDialog();
 
 			}
 		});
@@ -133,4 +134,31 @@ public class AddPreOrderActivity extends Activity {
 		}
 	};
 
+	private void openSuccessDialog() {
+		// TODO Auto-generated method stub
+		new AlertDialog.Builder(AddPreOrderActivity.this).setTitle("")
+				.setMessage("添加成功").setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								finish();
+							}
+						}).show();
+	}
+
+	private void openFailDialog() {
+		// TODO Auto-generated method stub
+		new AlertDialog.Builder(AddPreOrderActivity.this).setTitle("")
+				.setMessage("添加失败").setPositiveButton("返回",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								finish();
+							}
+						}).show();
+	}
 }
