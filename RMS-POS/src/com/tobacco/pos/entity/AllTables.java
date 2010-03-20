@@ -115,7 +115,11 @@ public class AllTables {
 
 		public static final String sGoodsNum = "sGoodsNum";
 
-		public static final String sPriceId = "sPriceId";
+		public static final String barcode = "barcode";
+		
+		public static final String inPrice = "inPrice";
+		
+		public static final String outPrice = "outPrice";
 	
 	}
 	
