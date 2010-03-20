@@ -14,15 +14,13 @@
 			</TextView>
 			<TextView android:id="@+id/purchaseWelcome"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:text="你好:"
+				android:layout_height="wrap_content" android:text="你好:"
 				android:layout_marginLeft="320sp">
 			</TextView>
 		</TableRow>
 	</TableLayout>
 	<TabHost android:id="@android:id/tabhost"
-		android:layout_width="fill_parent"
-		android:layout_height="175sp" >
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent">
@@ -86,34 +84,56 @@
 					android:visibility="visible" android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:orientation="vertical">
-					<TableLayout android:layout_width="fill_parent"
+					<ScrollView android:layout_width="fill_parent"
 						android:layout_height="wrap_content">
-						<TableRow android:layout_width="fill_parent"
-							android:layout_height="wrap_content">
-							<TextView android:text="进货单:"
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content">
-							</TextView>
-							<Spinner android:layout_width="fill_parent"
+						<TableLayout android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/newGoodsTable">
+							<TableRow android:layout_width="fill_parent"
 								android:layout_height="wrap_content"
-								android:id="@+id/wholePBill">
-							</Spinner>
-						</TableRow>
-					</TableLayout>
-					<!-- <Button android:layout_width="wrap_content"
-						android:layout_height="wrap_content" android:text="添加商品"
-						android:id="@+id/addGoodsButton">
-					</Button>
+								android:id="@+id/pItemTitle">
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:text="名字        " />
 
-					<Button android:layout_width="wrap_content"
-						android:layout_height="wrap_content" android:text="添加进货商品"
-						android:id="@+id/addGoodsIntoPBillButton">
-					</Button> -->
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:text="厂家                " />
+
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:text="种类           " />
+
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:text="条形码               " />
+
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content" android:text="单位    " />
+
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content" android:text="进价    " />
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content" android:text="售价    " />
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content" android:text="  " />
+
+							</TableRow>
+						</TableLayout>
+					</ScrollView>
 				</LinearLayout>
 				<!-- 第二层结束 -->
 			</FrameLayout>
 		</LinearLayout>
 	</TabHost>
 
-	
+
 </LinearLayout>
