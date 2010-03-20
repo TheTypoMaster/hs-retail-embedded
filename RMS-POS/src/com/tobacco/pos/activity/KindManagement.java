@@ -2,6 +2,7 @@ package com.tobacco.pos.activity;
 
 import java.util.Vector;
 
+import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.util.ProcessStr;
 import com.tobacco.pos.util.TreeBranchNode;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import android.graphics.Color;
 
 public class KindManagement extends Activity {
+	private GoodsKindCPer kindCPer = null;
 	
 	private TextView kindInfoTView;//显示某种类的详细信息
 	public int maxLevel;//总共有几层，在显示的时候有用
@@ -33,12 +35,14 @@ public class KindManagement extends Activity {
 	public TreeNode tree[];
 	public TreeNode root[];
 
-	public Vector<Integer> levels = new Vector<Integer>();// ��Ų��
-	public Vector<String> names = new Vector<String>();// �������
-
+	public Vector<Integer> levels = new Vector<Integer>();
+	public Vector<String> names = new Vector<String>();
+	public Vector<Integer> ids = new Vector<Integer>();
+	
 	public Cursor c = null;
 
 	public String selectedName = "";// 选择种类的名字
+	public int selectedId = -1;//选择种类的ID
 	
 
 	@Override
@@ -180,9 +184,10 @@ public class KindManagement extends Activity {
 								.getTextColors());
 					}
 				}
+				selectedId = -1;
 				selectedName = ((TextView) v).getText().toString();
 			
-				kindInfoTView.setText("\n\n\n"+moreInfo(selectedName));
+				kindInfoTView.setText("\n\n\n"+moreInfo(selectedId));
 			}
 
 		});
@@ -244,15 +249,24 @@ public class KindManagement extends Activity {
 		ProcessStr pStr = new ProcessStr(sb.toString());
 		levels = pStr.getLevels();
 		names = pStr.getNames();
+		ids = pStr.getIds();
 
 		String name = "";// 每个商品种类要显示的名称
 		int level;
+		int id;
 		for (int i = 0; i < levels.size(); i++) {
 			t = new TextView(this);
 			name = names.get(i);
 			level = levels.get(i);
-
-			t.setText(name);
+			id = ids.get(i);
+			
+			if(name.contains(">"))
+				t.setText(name.substring(name.lastIndexOf(">")+1));
+			else
+				t.setText(name);
+			
+			t.setId(id);
+			
 			t.setTextColor(tempView.getTextColors());
 			t.setPadding(20 * (level + 1), 0, 0, 0);
 
@@ -261,6 +275,8 @@ public class KindManagement extends Activity {
 				public void onClick(View v) {
 
 					((TextView) v).setTextColor(Color.RED);// 点击的文本颜色改为红色
+//					Toast.makeText(KindManagement.this, ""+v.getId(), Toast.LENGTH_SHORT).show();
+					selectedId = v.getId();
 					for (int i = 0; i < l.getChildCount(); i++) {// 其他的文本改成白色
 						if (l.getChildAt(i) != v) {
 							((TextView) l.getChildAt(i)).setTextColor(tempView
@@ -269,7 +285,7 @@ public class KindManagement extends Activity {
 					}
 
 					selectedName = ((TextView) v).getText().toString();
-					kindInfoTView.setText("\n\n\n"+moreInfo(selectedName));
+					kindInfoTView.setText("\n\n\n"+moreInfo(selectedId));
 
 				}
 			});
@@ -287,61 +303,16 @@ public class KindManagement extends Activity {
 		}
 	}
 
-	private String moreInfo(String searchName) {// 点击某一类别，显示更加详细的信息
+	private String moreInfo(int selectedId) {// 点击某一类别，显示更加详细的信息
 		
 
-		if(searchName.equals("TOP")){
+		if(selectedId == -1){
 			return "";//如果是TOP类别，不显示任何东西
 		}
 	
 		else {// 选择了某一商品类别
-			StringBuffer sb = new StringBuffer();
-			
-			c.moveToFirst();
-			int pId = 0;// 父类别的ID
-			String pName = "";// 父类别的名称
-			for (int i = 0; i < c.getCount(); i++) {
-				if (c.getString(1).equals(searchName)) {
-					sb.append("ID:");
-					sb.append(c.getInt(0));
-					sb.append("\n");
-
-					sb.append("名称:");
-					sb.append(c.getString(1));
-					sb.append("\n");
-
-					sb.append("父类别:");
-					sb.append(c.getInt(2));
-					pId = c.getInt(2);
-					sb.append("\n");
-
-					sb.append("层次:");
-					sb.append(c.getInt(3));
-					sb.append("\n");
-
-					sb.append("备注:");
-					sb.append(c.getString(4));
-					sb.append("\n");
-
-					break;
-				}
-				c.moveToNext();
-			}
-			c.moveToFirst();
-			if (pId != 0) {// 根据ID查找类别名称，将父类别改成名称而不是ID
-				for (int i = 0; i < c.getCount(); i++) {
-					if (c.getInt(0) == pId) {
-						pName = c.getString(1);
-						break;
-					}
-					c.moveToNext();
-				}
-			} else {
-				pName = "TOP";
-			}
-			sb.replace(sb.indexOf("父类别:") + 4, sb.indexOf("\n层次"), pName);
-			
-			return sb.toString();
+			kindCPer = new GoodsKindCPer();
+			return kindCPer.getGoodsKindInfoByGoodsKindId(selectedId);
 		}
 		
 	}
