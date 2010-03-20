@@ -87,7 +87,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "男装");
+				value.put("name", "衣服->男装");
 				value.put("parent", 1);
 				value.put("level", 2);
 				value.put("comment", "男装Man");
@@ -95,7 +95,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "女装");
+				value.put("name", "衣服->女装");
 				value.put("parent", 1);
 				value.put("level", 2);
 				value.put("comment", "女装Woman");
@@ -103,7 +103,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "男羽绒服");
+				value.put("name", "衣服->男装->男羽绒服");
 				value.put("parent", 2);
 				value.put("level", 3);
 				value.put("comment", "冬天来了，有温度才有风度");
@@ -111,7 +111,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "男裤");
+				value.put("name", "衣服->男装->男裤");
 				value.put("parent", 2);
 				value.put("level", 3);
 				value.put("comment", "呵呵，可别忘了穿裤子喔，要不就糗大了");
@@ -119,7 +119,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "童装");
+				value.put("name", "衣服->童装");
 				value.put("parent", 1);
 				value.put("level", 2);
 				value.put("comment", "童装世界");
@@ -127,7 +127,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "女式围巾");
+				value.put("name", "衣服->女装->女式围巾");
 				value.put("parent", 3);
 				value.put("level", 3);
 				value.put("comment", "冷了，不要冻到脖子了");
@@ -151,7 +151,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "软盒");
+				value.put("name", "卷烟->软盒");
 				value.put("parent", 8);
 				value.put("level", 2);
 				value.put("comment", "软盒卷烟");
@@ -167,7 +167,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insert(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "铅笔");
+				value.put("name", "文具->铅笔");
 				value.put("parent", 11);
 				value.put("level", 2);
 				value.put("comment", "使用时要注意环保");
@@ -175,7 +175,7 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "钢笔");
+				value.put("name", "文具->钢笔");
 				value.put("parent", 11);
 				value.put("level", 2);
 				value.put("comment", "成功人士的必备之物");
@@ -259,6 +259,31 @@ public class GoodsKindCPer extends ContentProvider {
 				return allGoodsKindName;
 			}
 			return null;
+		}
+		
+		public int getGoodsKindIdByGoodsKindName(String gKindName){
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " name = ? ", new String[]{gKindName}, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getInt(0);
+			}
+			else
+				return -1;
+		}
+		
+		public String getGoodsKindInfoByGoodsKindId(int kindId){
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " _id = ? ", new String[]{kindId+""}, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				
+				StringBuffer strBuffer = new StringBuffer();
+				strBuffer.append("ID:"+kindId+"\n");
+				strBuffer.append("名字:"+c.getString(1)+"\n");
+				strBuffer.append("备注:"+c.getString(4));
+				
+				return strBuffer.toString();
+			}
+			return "";
 		}
 
 

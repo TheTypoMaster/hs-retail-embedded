@@ -2,6 +2,7 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+
 import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
@@ -142,11 +143,12 @@ public class GoodsPriceCPer extends ContentProvider {
 
 	    @Override
 	    public Uri insert(Uri uri, ContentValues contentvalues) {
+	    	dbHelper = new DatabaseHelper(ct);
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -208,6 +210,16 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	else
 	    		return 0;
 	    }
+	    public double getInPriceByBarcode(String barcode){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getDouble(4);
+	    	}
+	    	else
+	    		return 0;
+	    }
 	    public int getGoodsPriceIdByBarcode(String barcode){
 	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
 	    	
@@ -218,5 +230,21 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	else
 	    		return 0;
 	    }
+	    
+	    public boolean addGoodsPrice(int goodsId, int unitId, String barcode, double inPrice, double outPrice){
+			ContentValues value = new ContentValues();
+			value.clear();
+			value.put("goodsId", goodsId);
+			value.put("unitId", unitId);
+			value.put("barcode", barcode);
+			value.put("inPrice", inPrice);
+			value.put("outPrice", outPrice);
+			
+			Uri uri = this.insert(AllTables.GoodsPrice.CONTENT_URI, value);
+			if(uri!=null)
+				return true;
+			else
+				return false;
+		}
 
 }

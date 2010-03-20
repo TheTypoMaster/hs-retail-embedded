@@ -80,7 +80,7 @@ public class GoodsCPer extends ContentProvider {
 					ContentValues value = new ContentValues();
 					
 					value.clear();
-					value.put("goodsCode", "G0001");
+					value.put("goodsCode", "G1");
 					value.put("goodsName", "红塔山");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -88,7 +88,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0002");
+					value.put("goodsCode", "G2");
 					value.put("goodsName", "黄梅");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -96,7 +96,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0003");
+					value.put("goodsCode", "G3");
 					value.put("goodsName", "哈德门");
 					value.put("manufacturerId", 2);
 					value.put("goodsFormat", "");
@@ -104,7 +104,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0004");
+					value.put("goodsCode", "G4");
 					value.put("goodsName", "古田");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -112,7 +112,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0005");
+					value.put("goodsCode", "G5");
 					value.put("goodsName", "七匹狼");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -120,7 +120,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0006");
+					value.put("goodsCode", "G6");
 					value.put("goodsName", "一品梅");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -128,7 +128,7 @@ public class GoodsCPer extends ContentProvider {
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
-					value.put("goodsCode", "G0007");
+					value.put("goodsCode", "G7");
 					value.put("goodsName", "黄山");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
@@ -153,11 +153,12 @@ public class GoodsCPer extends ContentProvider {
 
 	    @Override
 	    public Uri insert(Uri uri, ContentValues contentvalues) {
+	    	dbHelper = new DatabaseHelper(ct);
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	           	ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -195,7 +196,32 @@ public class GoodsCPer extends ContentProvider {
 	    	else
 	    		return "";
 	    }
-	    
-	  
+	    public int addGoods(String goodsName, int mId, String goodsFormat, int kindId){//增加商品成功后腰返回刚加入的记录的ID，因为在后续的添加价格中需要用到这个ID
+	    	String goodsCode = "";//由于商品的代码是系统按照已有的数据生成的，所以不作为参数
+	    	ContentValues value = new ContentValues();
+	    	value.clear();
+	    	Cursor c1 = this.query(AllTables.Goods.CONTENT_URI, null, null, null, " _id ");
+	    	String maxGoodsCode = "";
+	    	if(c1.getCount()>0){
+	    		c1.moveToLast();
+	    		maxGoodsCode = c1.getString(1);
+	    		goodsCode = "G"+(Integer.parseInt(maxGoodsCode.substring(1)) + 1);
+	    	}
+			value.put("goodsCode", goodsCode);
+			value.put("goodsName", goodsName);
+			value.put("manufacturerId", mId);
+			value.put("goodsFormat", goodsFormat);
+			value.put("kindId", kindId);
+			
+			if(this.insert(AllTables.Goods.CONTENT_URI, value)!=null){
+				Cursor c2 = this.query(AllTables.Goods.CONTENT_URI, null, null, null, " _id ");
+				c2.moveToLast();
+				return c2.getInt(0);				
+			}
+			else
+				return -1;
 
+
+	    }
+	    
 }

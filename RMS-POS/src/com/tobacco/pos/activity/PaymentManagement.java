@@ -149,8 +149,11 @@ public class PaymentManagement extends Activity {
 									String theBarcode = ((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(4)).getText().toString();
 									int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
 									
-									int sPriceId = gPriceCPer.getGoodsPriceIdByBarcode(theBarcode);
-									sItemCPer.addSalesItem(newSBillId, goodsCount, sPriceId);
+//									int sPriceId = gPriceCPer.getGoodsPriceIdByBarcode(theBarcode);
+									double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
+									double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
+									sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice);
+//									sItemCPer.addSalesItem(newSBillId, goodsCount, sPriceId);
 								}
 								
 								if(VIPId == -1)

@@ -108,11 +108,12 @@ public class ManufacturerCPer extends ContentProvider {
 
 	    @Override
 	    public Uri insert(Uri uri, ContentValues contentvalues) {
+	    	  dbHelper = new DatabaseHelper(ct);
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -130,7 +131,7 @@ public class ManufacturerCPer extends ContentProvider {
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
@@ -152,6 +153,16 @@ public class ManufacturerCPer extends ContentProvider {
 				return allManufacturer;
 			}
 			return null;
+		}
+		
+		public int getMIdByMName(String mName){//根据厂家的名字查找该厂家的ID
+			Cursor c = this.query(AllTables.Manufacturer.CONTENT_URI, null, " mName = ? ", new String[]{mName}, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getInt(0);
+			}
+			else
+				return -1;
 		}
 
 

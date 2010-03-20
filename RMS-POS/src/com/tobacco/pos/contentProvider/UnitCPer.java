@@ -130,7 +130,7 @@ public class UnitCPer extends ContentProvider {
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getReadableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
@@ -150,6 +150,14 @@ public class UnitCPer extends ContentProvider {
 	    	}
 	    	return "";
 	    	
+	    }
+	    public int getUnitIdByUnitName(String unitName){
+	    	Cursor c = this.query(AllTables.Unit.CONTENT_URI, null, " name = ? ", new String[]{unitName}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(0);
+	    	}
+	    	return -1;
 	    }
 
 		public List<String> getAllUnitName() {

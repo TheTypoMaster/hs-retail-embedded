@@ -54,8 +54,10 @@ public class SalesItemCPer extends ContentProvider {
 				db.execSQL("create table if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " salesBillId integer references SalesBill ( " + _ID + " ), "
-						+ "sGoodsNum integer not null ,"
-					    + "sPriceId integer references GoodsPrice ( " + _ID + " ))");
+						+ " sGoodsNum integer not null ,"
+					    + " barcode varchar(20) references GoodsPrice ( barcode ),"
+					    + " inPrice double not null, " 
+					    + " outPrice double not null )" );
 				initSalesItem(db);
 				}
 			}
@@ -123,14 +125,16 @@ public class SalesItemCPer extends ContentProvider {
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
 	        return 0;
 	    }
-	    public boolean addSalesItem(int newSBillId, int goodsCount, int sPriceId){
+	    public boolean addSalesItem(int newSBillId, int goodsCount, String barcode, double inPrice, double outPrice){
 	    	
 	    	ContentValues value = new ContentValues();
 			
 			value.clear();
 			value.put("salesBillId", newSBillId);
 			value.put("sGoodsNum", goodsCount);
-			value.put("sPriceId", sPriceId);
+			value.put("barcode", barcode);
+			value.put("inPrice", inPrice);
+			value.put("outPrice", outPrice);
 		
 			Uri uri = this.insert(AllTables.SalesItem.CONTENT_URI, value);
 			if(uri!=null)
