@@ -5,16 +5,16 @@ import java.util.List;
 
 public abstract class TreeNode implements Comparable {
 
-	//¸¸½Úµã
+	//ï¿½ï¿½ï¿½Úµï¿½
 	private TreeNode pNode;
 
-	//Êý¾ÝÓò£¬½Úµã±àºÅ£¬²»ÄÜÐÞ¸Ä
+	//ï¿½ï¿½ï¿½ï¿½ò£¬½Úµï¿½ï¿½Å£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 	private int id;
 
-	//Êý¾ÝÓò£¬½ÚµãÃû×Ö£¬ÄÜÐÞ¸Ä
+	//ï¿½ï¿½ï¿½ï¿½ò£¬½Úµï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 	private String name;
 
-	//½ÚµãÉî¶È£¬¸ùÄ¬ÈÏÎª0
+	//ï¿½Úµï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Îª0
 	private int level;
 	
  
@@ -79,35 +79,35 @@ public abstract class TreeNode implements Comparable {
 		this.comment = comment;
 	}
 
-	//Ìí¼Ó×Ó½Úµã Ä¬ÈÏ²»Ö§³Ö£¬Ò¶×Ó½Úµã²»Ö§³Ö´Ë¹¦ÄÜ
+	//ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½ Ä¬ï¿½Ï²ï¿½Ö§ï¿½Ö£ï¿½Ò¶ï¿½Ó½Úµã²»Ö§ï¿½Ö´Ë¹ï¿½ï¿½ï¿½
 	public void addSubNode(TreeNode menuComponent) {
 		throw new UnsupportedOperationException();
 	}
 
-	//É¾³ý×Ó½Úµã Ä¬ÈÏ²»Ö§³Ö£¬Ò¶×Ó½Úµã²»Ö§³Ö´Ë¹¦ÄÜ
+	//É¾ï¿½ï¿½ï¿½Ó½Úµï¿½ Ä¬ï¿½Ï²ï¿½Ö§ï¿½Ö£ï¿½Ò¶ï¿½Ó½Úµã²»Ö§ï¿½Ö´Ë¹ï¿½ï¿½ï¿½
 	public void removeSubNode(TreeNode menuComponent) {
 		throw new UnsupportedOperationException();
 	}
 
-	//ÐÞ¸Ä½ÚµãÐÅÏ¢
+	//ï¿½Þ¸Ä½Úµï¿½ï¿½ï¿½Ï¢
 	public void modiNodeInfo(String nodeName) {
 		this.setName(nodeName);
 	}
 
-	//»ñÈ¡×Ó½Úµã Ä¬ÈÏ²»Ö§³Ö£¬Ò¶×Ó½Úµã²»Ö§³Ö´Ë¹¦ÄÜ
+	//ï¿½ï¿½È¡ï¿½Ó½Úµï¿½ Ä¬ï¿½Ï²ï¿½Ö§ï¿½Ö£ï¿½Ò¶ï¿½Ó½Úµã²»Ö§ï¿½Ö´Ë¹ï¿½ï¿½ï¿½
 	public List getSubNodes() {
 		throw new UnsupportedOperationException();
 	}
 
-	//´òÓ¡½ÚµãÐÅÏ¢
+	//ï¿½ï¿½Ó¡ï¿½Úµï¿½ï¿½ï¿½Ï¢
 	public String print() {
 		throw new UnsupportedOperationException();
 	}
 
-	//»ñÈ¡½ÚµãÐÅÏ¢
+	//ï¿½ï¿½È¡ï¿½Úµï¿½ï¿½ï¿½Ï¢
 	protected abstract StringBuffer getNodeInfo();
 
-	//Ìá¹©Éî¶Èµü´úÆ÷ Ä¬ÈÏ²»Ö§³Ö£¬Ò¶×Ó½Úµã²»Ö§³Ö´Ë¹¦ÄÜ
+	//ï¿½á¹©ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ Ä¬ï¿½Ï²ï¿½Ö§ï¿½Ö£ï¿½Ò¶ï¿½Ó½Úµã²»Ö§ï¿½Ö´Ë¹ï¿½ï¿½ï¿½
 	public Iterator createDepthOrderIterator() {
 		throw new UnsupportedOperationException();
 	}
@@ -118,10 +118,10 @@ public abstract class TreeNode implements Comparable {
 	}
 
 	/**
-	 * Ê¹ÓÃÊ÷µÄÏÈÐò±éÀúµÝ¹é·½Ê½²éÕÒÖ¸¶¨µÄ½Úµã
+	 * Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¹é·½Ê½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä½Úµï¿½
 	 * 
-	 * @param treeNode ²éÕÒµÄÆðÊ¼½Úµã
-	 * @param treeId ½Úµã±àºÅ
+	 * @param treeNode ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½Ê¼ï¿½Úµï¿½
+	 * @param treeId ï¿½Úµï¿½ï¿½ï¿½
 	 * @return
 	 */
 	protected TreeNode getNode(TreeNode treeNode, int treeId) {
@@ -143,7 +143,7 @@ public abstract class TreeNode implements Comparable {
 		}
 		TreeNode menu = (TreeNode) menuComponent;
 
-		// Èç¹ûÁ½¸ö½ÚµãµÄnodeIDÏàÓ¦ÔòÈÏÎªÊÇÍ¬Ò»½Úµã
+		// ï¿½ï¿½ï¿½}ï¿½ï¿½Úµï¿½ï¿½nodeIDï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Í¬Ò»ï¿½Úµï¿½
 		return this.getId() == menu.getId();
 	}
 }

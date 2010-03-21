@@ -3,8 +3,6 @@ package com.tobacco.pos.util;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import android.util.Log;
-
 public class ProcessStr {
 
 	public String str;
@@ -24,9 +22,7 @@ public class ProcessStr {
 				strV.remove(i);
 			}
 		}
-		for(int i=0;i<strV.size();i++){
-			Log.d("lyq", strV.get(i));
-		}
+	
 	}
 
 	public Vector<String> getStrV(){

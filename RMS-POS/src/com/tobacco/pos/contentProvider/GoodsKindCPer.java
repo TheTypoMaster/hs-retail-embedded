@@ -193,7 +193,7 @@ public class GoodsKindCPer extends ContentProvider {
 	         int count;
 	         
 	         count = db.delete(TABLE_NAME, s, null);
-	         getContext().getContentResolver().notifyChange(uri, null);
+	         ct.getContentResolver().notifyChange(uri, null);
 	         return count;
 	       
 	    } 
@@ -209,7 +209,7 @@ public class GoodsKindCPer extends ContentProvider {
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -242,7 +242,7 @@ public class GoodsKindCPer extends ContentProvider {
 	       
 	         count = db.update(TABLE_NAME, contentvalues, s, null);
 	     
-	         getContext().getContentResolver().notifyChange(uri, null);
+	         ct.getContentResolver().notifyChange(uri, null);
 	         return count;
 	       
 	    }
@@ -270,7 +270,14 @@ public class GoodsKindCPer extends ContentProvider {
 			else
 				return -1;
 		}
-		
+		public String getGoodsKindNameByGoodsKindId(int kindId){
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " _id = ? ", new String[]{kindId+""}, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getString(1);
+			}
+			return "";
+		}
 		public String getGoodsKindInfoByGoodsKindId(int kindId){
 			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " _id = ? ", new String[]{kindId+""}, null);
 			if(c.getCount()>0){
@@ -284,6 +291,21 @@ public class GoodsKindCPer extends ContentProvider {
 				return strBuffer.toString();
 			}
 			return "";
+		}
+		public boolean isAExistingKind(String kindName){//判断是否已经有同样名字的类别
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " name = ? ", new String[]{kindName}, null);
+			if(c.getCount()>0)
+				return true;//存在同样名字的类别
+			else
+				return false;//不存在同样的类别
+		}
+		public boolean hasChildrenKind(int kindId){//ID为kindID的类别是否还有子类别
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " parent = ? ", new String[]{kindId+""}, null);
+
+			if(c.getCount()>0)
+				return true;
+			else
+				return false;
 		}
 
 

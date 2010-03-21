@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TreeBranchNode extends TreeNode {
 
-	//´æ´¢×Ó½Úµã
+	//ï¿½æ´¢ï¿½Ó½Úµï¿½
 	List subNodesList = new ArrayList();
 
 	public TreeBranchNode(int nodeId, String nodeName, int pId, int level, String comment) {
@@ -19,47 +19,47 @@ public class TreeBranchNode extends TreeNode {
 		this.setComment(comment);
 	}
 
-	//Ìí¼Ó×Ó½Úµã
+	//ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½
 	public void addSubNode(TreeNode menuComponent) {
-		// ÉèÖÃ¸¸½Úµã
+		// ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½Úµï¿½
 		menuComponent.setPMenuComponent(this);
 
-		// ÉèÖÃ½ÚµãµÄÉî¶È
+		// ï¿½ï¿½ï¿½Ã½Úµï¿½ï¿½ï¿½ï¿½ï¿½
 		menuComponent.setLevel(this.getLevel() + 1);
 		subNodesList.add(menuComponent);
 	}
 
-	//É¾³ýÒ»¸ö×Ó½Úµã
+	//É¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ó½Úµï¿½
 	public void removeSubNode(TreeNode menuComponent) {
 		subNodesList.remove(menuComponent);
 	}
 
-	//»ñÈ¡×Ó½Úµã
+	//ï¿½ï¿½È¡ï¿½Ó½Úµï¿½
 	public List getSubNodes() {
 		return subNodesList;
 	}
 
-	//´òÓ¡½ÚµãÐÅÏ¢£¬ÒÔÊ÷µÄÐÎÊ½Õ¹Ê¾£¬ËùÒÔËü°üÀ¨ÁËËùÓÐ×Ó½ÚµãÐÅÏ¢
+	//ï¿½ï¿½Ó¡ï¿½Úµï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½Õ¹Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½ï¿½ï¿½Ï¢
 	public String print() {
 		
 //		System.out.println(this.getNodeInfo());
 		return this.getNodeInfo().toString();
 	}
 
-	//´òÓ¡½Úµã±¾ÉíÐÅÏ¢£¬²»µÝ¹é´òÓ¡×Ó½ÚµãÐÅÏ¢
+	//ï¿½ï¿½Ó¡ï¿½Úµã±¾ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½Ó¡ï¿½Ó½Úµï¿½ï¿½ï¿½Ï¢
 	public String toString() {
 		return getSefNodeInfo().toString();
 	}
 
-	// µÝ¹é´òÓ¡½ÚµãÐÅÏ¢ÊµÏÖ
+	// ï¿½Ý¹ï¿½ï¿½Ó¡ï¿½Úµï¿½ï¿½ï¿½Ï¢Êµï¿½ï¿½
 	protected StringBuffer getNodeInfo() {
 
 		StringBuffer sb = getSefNodeInfo();
 		sb.append(System.getProperty("line.separator"));
-		//Èç¹ûÓÐ×Ó½Úµã
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½
 		for (Iterator iter = subNodesList.iterator(); iter.hasNext();) {
 			TreeNode node = (TreeNode) iter.next();
-			//µÝ¹é´òÓ¡×Ó½ÚµãÐÅÏ¢
+			//ï¿½Ý¹ï¿½ï¿½Ó¡ï¿½Ó½Úµï¿½ï¿½ï¿½Ï¢
 			sb.append(node.getNodeInfo());
 
 			if (iter.hasNext()) {
@@ -70,15 +70,9 @@ public class TreeBranchNode extends TreeNode {
 		return sb;
 	}
 
-	//½Úµã±¾ÉíÐÅÏ¢£¬²»º¬×Ó½ÚµãÐÅÏ¢
+	//ï¿½Úµã±¾ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½ï¿½ï¿½Ï¢
 	private StringBuffer getSefNodeInfo() {
 		StringBuffer sb = new StringBuffer();
-
-//		// ´òÓ¡Ëõ½ø
-//		for (int i = 0; i < this.getLevel(); i++) {
-//			sb.append(' ');
-//		}
-//		sb.append("+--");
 
 		sb.append("[nodeId=");
 		sb.append(this.getId());
@@ -95,40 +89,40 @@ public class TreeBranchNode extends TreeNode {
 		return sb;
 	}
 
-	//ÎªÍâ½çÌá¹©±éÀú×éºÏ½á¹¹µÄµü´úÆ÷
+	//Îªï¿½ï¿½ï¿½ï¿½á¹©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï½á¹¹ï¿½Äµï¿½ï¿½ï¿½ï¿½
 	public Iterator createDepthOrderIterator() {
 		return new TreeOutOrder.DepthOrderIterator(this);
 	}
 
 
 	/**
-	 * Ê¹ÓÃÊ÷µÄÏÈÐò±éÀúµÝ¹é·½Ê½²éÕÒÖ¸¶¨µÄ½Úµã
+	 * Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¹é·½Ê½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä½Úµï¿½
 	 * 
-	 * @param treeNode ²éÕÒµÄÆðÊ¼½Úµã
-	 * @param treeId ½Úµã±àºÅ
+	 * @param treeNode ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½Ê¼ï¿½Úµï¿½
+	 * @param treeId ï¿½Úµï¿½ï¿½ï¿½
 	 * @return
 	 */
 	protected TreeNode getNode(TreeNode treeNode, int treeId) {
 
-		//Èç¹ûÕÒµ½£¬ÔòÍ£Ö¹ºóÐøËÑË÷£¬²¢°Ñ²éÕÒµ½µÄ½Úµã·µ»Ø¸øÉÏ²ãµ÷ÓÃÕß
-		if (treeNode.getId() == treeId) {//1¡¢ÏÈÓë¸¸½Úµã±È¶Ô
+		//ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ²ï¿½ï¿½Òµï¿½ï¿½Ä½Úµã·µï¿½Ø¸ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (treeNode.getId() == treeId) {//1ï¿½ï¿½ï¿½ï¿½ï¿½ë¸¸ï¿½Úµï¿½È¶ï¿½
 			return treeNode;
 		}
 
 		TreeNode tmp = null;
 
-		//Èç¹ûÎª·ÖÖ§½Úµã£¬Ôò±éÀú×Ó½Úµã
+		//ï¿½ï¿½ï¿½Îªï¿½ï¿½Ö§ï¿½Úµã£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½
 		if (treeNode instanceof TreeBranchNode) {
 
-			for (int i = 0; i < treeNode.getSubNodes().size(); i++) {//2¡¢ÔÙÓë×Ó½Úµã±È¶Ô
+			for (int i = 0; i < treeNode.getSubNodes().size(); i++) {//2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½È¶ï¿½
 				tmp = getNode((TreeNode) treeNode.getSubNodes().get(i), treeId);
-				if (tmp != null) {//Èç¹û²éÕÒµ½£¬Ôò·µ»ØÉÏ²ãµ÷ÓÃÕß
+				if (tmp != null) {//ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					return tmp;
 				}
 			}
 		}
 
-		//Èç¹ûÃ»ÓÐÕÒµ½£¬·µ»ØÉÏ²ãµ÷ÓÃÕß
+		//ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return null;
 	}
 }

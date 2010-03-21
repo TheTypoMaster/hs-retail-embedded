@@ -1,23 +1,23 @@
 package com.tobacco.pos.activity;
 
 import com.tobacco.R;
+import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.entity.AllTables;
 
 import android.app.Activity; 
 import android.content.ContentValues; 
 import android.content.Intent;
-import android.database.Cursor; 
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddGoodsKind extends Activity {
+	private GoodsKindCPer goodsKindCPer = null;
 
 	private TextView parentText;
 	private Button ok;
@@ -38,11 +38,16 @@ public class AddGoodsKind extends Activity {
 		setContentView(R.layout.addeditkinddialog);
 		
 		this.setTitle("增加类别");
-	
+		
+		goodsKindCPer = new GoodsKindCPer();
+		
 		parentText = (TextView)this.findViewById(R.id.parentName);
 		Intent intent = this.getIntent();
 		parentId = intent.getIntExtra("parentId",0);
 		parentName = intent.getStringExtra("parentName");
+		if(!parentName.equals("TOP")){//如果不是最高层，根据前面传来的父ID查找完整的名字
+			parentName = goodsKindCPer.getGoodsKindNameByGoodsKindId(parentId);
+		}
 		parentLevel = intent.getIntExtra("parentLevel", 0);
 		parentText.setText(parentName);
 		
@@ -61,21 +66,32 @@ public class AddGoodsKind extends Activity {
 					Toast.makeText(AddGoodsKind.this, "请输入名字", Toast.LENGTH_SHORT).show();
 				}
 				else{
-
-					ContentValues value = new ContentValues();
-					value.put("name", name);
-					value.put("parent", parentId);
-					value.put("level", parentLevel+1);
-					value.put("comment", comment);
-					
-					Uri result = getContentResolver().insert(AllTables.GoodsKind.CONTENT_URI, value);
-					if(result != null )
-					{
-						Toast.makeText(AddGoodsKind.this, "成功添加类别:" + name, Toast.LENGTH_SHORT).show();
-						finish();//成功添加类别，关闭对话框
-					}
+					String insertName = "";//将要插入的名字
+					if(parentName.equals("TOP"))
+						insertName = name;
 					else
-						Toast.makeText(AddGoodsKind.this, "添加类别:" + name + "失败", Toast.LENGTH_SHORT).show();			
+						insertName = parentName+"->"+name;
+					if(!goodsKindCPer.isAExistingKind(insertName)){//如果没有重名的
+					
+						ContentValues value = new ContentValues();
+						value.put("parent", parentId);
+						value.put("name", insertName);
+						value.put("level", parentLevel+1);
+						value.put("comment", comment);
+					
+						Uri result = getContentResolver().insert(AllTables.GoodsKind.CONTENT_URI, value);
+						if(result != null )
+						{
+							Toast.makeText(AddGoodsKind.this, "成功添加类别:" + name, Toast.LENGTH_SHORT).show();
+							finish();//成功添加类别，关闭对话框
+						}
+						else
+							Toast.makeText(AddGoodsKind.this, "添加类别:" + name + "失败", Toast.LENGTH_SHORT).show();			
+					}
+					else{//有重名的
+						Toast.makeText(AddGoodsKind.this, "该类别已在父类别中存在", Toast.LENGTH_SHORT).show();
+						nameEText.setText("");
+					}
 				}
 			}
 			
@@ -88,26 +104,6 @@ public class AddGoodsKind extends Activity {
 			
 		});
 
-		nameEText.setOnFocusChangeListener(new OnFocusChangeListener(){
-
-			public void onFocusChange(View v, boolean hasFocus) {
-			
-				if(!hasFocus){//失去焦点时查找数据库中是否有相同名字的类别
-					Cursor c = getContentResolver().query(AllTables.GoodsKind.CONTENT_URI, null, null, null, null);
-					String inputName = ((EditText)v).getText().toString();
-					c.moveToFirst();
-					for(int i=0;i<c.getCount();i++){
-						if(c.getString(1).equals(inputName)){
-							Toast.makeText(AddGoodsKind.this, "已有该类别，请重新输入", Toast.LENGTH_SHORT).show();
-							nameEText.setText("");
-							break;
-						}
-						c.moveToNext();
-					}
-
-				}
-			}
-		});
 	}
 
 }

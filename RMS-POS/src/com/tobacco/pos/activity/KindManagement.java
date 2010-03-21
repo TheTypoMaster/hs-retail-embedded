@@ -30,7 +30,7 @@ public class KindManagement extends Activity {
 	private GoodsKindCPer kindCPer = null;
 	
 	private TextView kindInfoTView;//显示某种类的详细信息
-	public int maxLevel;//总共有几层，在显示的时候有用
+	public int maxLevel = 0;//总共有几层，在显示的时候有用
 	
 	public TreeNode tree[];
 	public TreeNode root[];
@@ -87,38 +87,29 @@ public class KindManagement extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void add() {
 
-		if (selectedName.equals("")) {
+		if(selectedId == -1 && !selectedName.equals("TOP")){
 			Toast.makeText(this, "请先选择父类别", Toast.LENGTH_SHORT).show();
-		} else {// selectedName有值，代表有选择父类了。
-			if (selectedName.equals("TOP")) {//选择了最高类别
-				Intent intent = new Intent(this, AddGoodsKind.class);
+		}
+		else{
+			Intent intent = new Intent(this, AddGoodsKind.class);
+			if(selectedName.equals("TOP")){//选择是最高的级别
 				intent.putExtra("parentName", "TOP");
 				intent.putExtra("parentId", 0);
 				intent.putExtra("parentLevel", 0);
-				this.startActivity(intent);
-			} else {
-				int id = 0;
-				int level = 0;
-				Intent intent = new Intent(this, AddGoodsKind.class);
-				intent.putExtra("parentName", selectedName);// ��Ÿ���������
-				c.moveToFirst();
-				for (int i = 0; i < c.getCount(); i++) {
-					if (c.getString(1).equals(selectedName)) {
-						id = c.getInt(0);
-						level = c.getInt(3);
-						break;
-					}
-					c.moveToNext();
-				}
-				intent.putExtra("parentId", id);// ��Ÿ�����ID
-				intent.putExtra("parentLevel", level);// ��Ÿ����Ĳ��
-				this.startActivity(intent);
-
+				
 			}
+			else{
+			
+				intent.putExtra("parentName", selectedName);
+				intent.putExtra("parentId", selectedId);
+				intent.putExtra("parentLevel", levels.get(ids.indexOf(selectedId)));
+			}
+			this.startActivity(intent);
 		}
+
 	}
 	private void delete() {
 
@@ -126,41 +117,27 @@ public class KindManagement extends Activity {
 			Toast.makeText(this, "请选择要删除的类别", Toast.LENGTH_SHORT).show();
 
 		} else {
-			int deleteKId = 0;//要删除的类别ID
-			boolean flag = true;//是否可删除的标志,有子类的类别不能删除
-			c.moveToFirst();
-			for (int i = 0; i < c.getCount(); i++) {//根据名字查找选择类别的ID
-				if (c.getString(1).equals(selectedName)) {
-					deleteKId = c.getInt(0);
-					break;
-				}
-				c.moveToNext();
-			}
-			c.moveToFirst();
-			for (int i = 0; i < c.getCount(); i++) {
-				if (c.getInt(2) == deleteKId) {
-					flag = false;
-					break;
-				}
-				c.moveToNext();
-			}
-			if (flag) {// 可删除
-
-				//传递给GoodsKindCPer删除
-				getContentResolver().delete(AllTables.GoodsKind.CONTENT_URI, " _id = " + deleteKId, null);
-
-				Toast.makeText(this, "成功删除类别:" + selectedName, Toast.LENGTH_SHORT).show();
-				selectedName = "";
-				this.onResume();//
-			} else {
+			if(selectedName.equals("TOP"))
 				Toast.makeText(this, "该类别不能删除", Toast.LENGTH_SHORT).show();
+			else{
+				boolean flag = kindCPer.hasChildrenKind(selectedId);
+				if(flag)
+					Toast.makeText(this, "该类别不能删除", Toast.LENGTH_SHORT).show();
+				else{
+					int count = getContentResolver().delete(AllTables.GoodsKind.CONTENT_URI, " _id = " + selectedId, null);
+					if(count>0){
+						Toast.makeText(this, "成功删除类别:" + selectedName, Toast.LENGTH_SHORT).show();
+						this.onResume();
+					}
+					else
+						Toast.makeText(this, "删除类别:"+selectedName+"失败", Toast.LENGTH_SHORT).show();
+				}
 
 			}
 		}
 	}
 	
 	private void lookup() {
-		int temp = 0;// 取最大层数时要用到的临时变量
 		
 		final LinearLayout l = (LinearLayout) this
 				.findViewById(R.id.wholeLayout);
@@ -208,45 +185,67 @@ public class KindManagement extends Activity {
 
 		for (int i = 0; i < c.getCount(); i++) {
 
-			if (c.getInt(3) > temp) {
-				temp = c.getInt(3);
-
+			if (c.getInt(3) > maxLevel) {
+				maxLevel = c.getInt(3);
 			}
 			c.moveToNext();
 		}
-		maxLevel = temp;
+		
 		c.moveToFirst();
-
-		tree = new TreeNode[c.getCount()];
-
-		for (int i = 0; i < c.getCount(); i++) {
-
-			if (c.getInt(3) == maxLevel) {
-				tree[i] = new TreeLeafNode(c.getInt(0), c.getString(1), c
-						.getInt(2), c.getInt(3) - 1, c.getString(4));
-			} else {
-				tree[i] = new TreeBranchNode(c.getInt(0), c.getString(1), c
-						.getInt(2), c.getInt(3) - 1, c.getString(4));
+		
+		StringBuffer sb = new StringBuffer();
+		
+		if(maxLevel != 1){
+			c.moveToFirst();
+			tree = new TreeNode[c.getCount()];
+			
+			for (int i = 0; i < c.getCount(); i++) {
+				if (c.getInt(3) == maxLevel) {
+					tree[i] = new TreeLeafNode(c.getInt(0), c.getString(1), c
+						.getInt(2), c.getInt(3)-1, c.getString(4));
+				} else {
+					tree[i] = new TreeBranchNode(c.getInt(0), c.getString(1), c
+						.getInt(2), c.getInt(3)-1, c.getString(4));
+				}
+				c.moveToNext();
 			}
-
-			c.moveToNext();
-		}
-
-		for (int i = 0; i < tree.length; i++) {
-			for (int j = i; j < tree.length; j++) {
-				if (tree[j].getPId() == tree[i].getId()) {
-					tree[i].addSubNode(tree[j]);
+		
+			
+			for (int i = 0; i < tree.length; i++) {
+				for (int j = i; j < tree.length; j++) {
+					if (tree[j].getPId() == tree[i].getId()) {
+						tree[i].addSubNode(tree[j]);
+					}
 				}
 			}
+			
+			for (int i = 0; i < tree.length; i++) {
+		
+				if (tree[i].getLevel() == 0)
+					sb.append(tree[i].print());
+			}
 		}
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < tree.length; i++) {
-			if (tree[i].getLevel() == 0)
-				sb.append(tree[i].print());
 
+		else{//如果最大只有1层
+			c.moveToFirst();
+			for(int i=0;i<c.getCount();i++){
+				sb.append("[nodeId=");
+				sb.append(c.getInt(0));
+				sb.append(" nodeName=");
+				sb.append(c.getString(1));
+				sb.append(" pId=");
+				sb.append(c.getInt(2));
+				sb.append(" level=");
+				sb.append(c.getInt(3));
+				sb.append(" comment=");
+				sb.append(c.getString(4));
+				sb.append(']');
+				c.moveToNext();
+			}
 		}
-
+		
 		ProcessStr pStr = new ProcessStr(sb.toString());
+		
 		levels = pStr.getLevels();
 		names = pStr.getNames();
 		ids = pStr.getIds();
@@ -268,14 +267,18 @@ public class KindManagement extends Activity {
 			t.setId(id);
 			
 			t.setTextColor(tempView.getTextColors());
-			t.setPadding(20 * (level + 1), 0, 0, 0);
+		
+			if(maxLevel == 1)
+				t.setPadding(20 * level, 0, 0, 0);
+			else
+				t.setPadding(20 * (level+1), 0, 0, 0);
+			
 
 			t.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
 
 					((TextView) v).setTextColor(Color.RED);// 点击的文本颜色改为红色
-//					Toast.makeText(KindManagement.this, ""+v.getId(), Toast.LENGTH_SHORT).show();
 					selectedId = v.getId();
 					for (int i = 0; i < l.getChildCount(); i++) {// 其他的文本改成白色
 						if (l.getChildAt(i) != v) {

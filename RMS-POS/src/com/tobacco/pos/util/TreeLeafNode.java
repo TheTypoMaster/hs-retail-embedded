@@ -9,11 +9,11 @@ public class TreeLeafNode extends TreeNode {
 		this.setComment(comment);
 	}
 
-	// »ñÈ¡Ò¶×Ó½ÚµãÐÅÏ¢
+	// ï¿½ï¿½È¡Ò¶ï¿½Ó½Úµï¿½ï¿½ï¿½Ï¢
 	protected StringBuffer getNodeInfo() {
 		StringBuffer sb = new StringBuffer();
 
-//		// ´òÓ¡Ëõ½ø
+//		// ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½
 //		for (int i = 0; i < this.getLevel(); i++) {
 //			sb.append(' ');
 //		}
