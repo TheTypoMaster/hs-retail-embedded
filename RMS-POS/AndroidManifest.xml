@@ -23,6 +23,7 @@
 		  <activity android:name=".pos.activity.AddGoods" android:theme="@android:style/Theme.Dialog"></activity>  
 		  <activity android:name=".pos.activity.AddGoodsPrice" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.Login" android:theme="@android:style/Theme.Dialog"></activity>
+		  <activity android:name=".pos.activity.AddPBill" android:theme="@android:style/Theme.Dialog"></activity>
 		  
 		  <!-- ContentProvider -->
 		  <provider android:name=".pos.contentProvider.GoodsCPer" android:authorities="com.tobacco.contentProvider.GoodsCPer" />
