@@ -57,6 +57,7 @@ public class KindManagement extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		kindInfoTView.setText("");
 		lookup();
 	}
 
@@ -328,37 +329,34 @@ public class KindManagement extends Activity {
 			Toast.makeText(this, "请先选择某一类别", Toast.LENGTH_SHORT).show();
 		}
 		else{
-			int eId = 0;//要编辑类别的ID，不可改变
+			int eId = selectedId;//要编辑类别的ID，不可改变
 			String eName = "";//要编辑类别的名字
 			String eComment = "";//要编辑的备注
-			int pId = 0;//根据该父类别ID查找父类别名字
+//			int pId = 0;//根据该父类别ID查找父类别名字
 			String pName = "";//要编辑类别的父类别名字
 			eName = selectedName;
 			
 			c.moveToFirst();
 			
 			for(int i=0;i<c.getCount();i++){
-				if(c.getString(1).equals(eName)){
-					eId = c.getInt(0);
-					eComment = c.getString(4);
-					pId = c.getInt(2);
-					
+				if(c.getInt(0) == selectedId){
+					eComment = c.getString(4);//获取要更改的备注
+//					pId = c.getInt(2);//获取要更改类别的父类别ID
+					eName = c.getString(1);
 					break;
 				}
 				c.moveToNext();
 			}
-			if(pId == 0)
-				pName = "TOP";
-			else{
-				c.moveToFirst();
-				for(int i=0;i<c.getCount();i++){
-					if(c.getInt(0) == pId){
-						pName = c.getString(1);
-						break;
-					}
-					c.moveToNext();
-				}
+			if(eName.contains(">")){
+				String temp = eName;
+				pName = temp.substring(0, temp.lastIndexOf(">")-1);
+				eName = temp.substring(temp.lastIndexOf(">")+1);
 			}
+			else{
+				pName = "TOP";
+				
+			}
+
 			Intent intent = new Intent(this,EditGoodsKind.class);
 			intent.putExtra("eId", eId);
 			intent.putExtra("eName", eName);
