@@ -1,7 +1,8 @@
 package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 import com.tobacco.R;
 
@@ -15,8 +16,8 @@ import com.tobacco.pos.contentProvider.PurchaseItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.entity.SinglePrice;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,20 +26,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TabHost.OnTabChangeListener;
 
-public class PurchaseManagement extends TabActivity {
+public class PurchaseManagement extends Activity {
 	private Loginer loginer = null;
 	private GoodsCPer gCPer = null;
 	private PurchaseBillCPer pBillCPer = null;
@@ -49,17 +47,17 @@ public class PurchaseManagement extends TabActivity {
 	private UnitCPer unitCPer = null;
 	
 	private TextView purchaseWelcome;
-
-	private TextView pBillIdTView;
-	private TextView pBillTimeTView;
-	private EditText pBillCommentEText;
 	
-	private Button savePBillButton;
-	
-	private TabHost mTabHost;
+	private LinearLayout addGoodsTable = null;
+	private LinearLayout addGoodsIntoPBillTable = null;
 	
 	private String userName = "";
 	
+	private int selectedPBillId = -1;//选择的进货单的ID
+	
+	private List<Vector> goodsVector;
+	private List<Vector> newGoods;
+	private List<Integer> newGoodsIds;//新增加的商品ID
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,30 +69,18 @@ public class PurchaseManagement extends TabActivity {
 		purchaseWelcome = (TextView) this.findViewById(R.id.purchaseWelcome);
 		purchaseWelcome.setText("你好:" + userName);
 	 
-		
-		mTabHost = getTabHost();
 	
-		mTabHost.addTab(mTabHost.newTabSpec("pBill").setIndicator("H1", getResources().getDrawable(R.drawable.addpbill)).setContent(R.id.lay1));
-	    mTabHost.addTab(mTabHost.newTabSpec("pItem").setIndicator("H2", getResources().getDrawable(R.drawable.addpitem)).setContent(R.id.lay2));
-	    mTabHost.setCurrentTab(0);
-	    
-	    displayPBill();
+		addGoodsTable = (LinearLayout)this.findViewById(R.id.addGoodsTable);
+		addGoodsIntoPBillTable = (LinearLayout)this.findViewById(R.id.addGoodsIntoPBillTable);
 		
-	    mTabHost.setOnTabChangedListener(new OnTabChangeListener(){
-
-			public void onTabChanged(String tabId) {
-				
-				displayPBill();
-				if(tabId.equals("pBill")){
-					
-				}
-	    }}
-	);
+		addGoodsIntoPBillTable.setVisibility(8);
+		addGoodsTable.setVisibility(8);
+	
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 0, 0, "添加商品");
+		menu.add(0, 0, 0, "添加商品信息");
 		menu.add(0, 1, 1, "添加进货商品");
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -103,7 +89,7 @@ public class PurchaseManagement extends TabActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {//接受从AddGoods传来的数据
 		
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == RESULT_OK){//如果成功接收到数据。
+		if(resultCode == RESULT_OK && requestCode == 0){//如果成功接收到数据。
 			
 			final TableLayout newGoodsTable = (TableLayout)this.findViewById(R.id.newGoodsTable);
 			if(newGoodsTable.getChildCount()>=2)
@@ -185,33 +171,76 @@ public class PurchaseManagement extends TabActivity {
 					gPriceCPer = new GoodsPriceCPer();
 					unitCPer = new UnitCPer();
 					
-					int mId = mCPer.getMIdByMName(mName);
-					int kindId = gKindCPer.getGoodsKindIdByGoodsKindName(goodsKind);
-					int newGoodsId = gCPer.addGoods(goodsName, mId, "", kindId);//如果成功添加商品的话会返回新加的商品ID
+					goodsVector = new ArrayList<Vector>();
+					newGoods = new ArrayList<Vector>();
+					newGoodsIds = new ArrayList<Integer>();
+
+					for(int i=1;i<newGoodsTable.getChildCount()-1;i++){
 					
-					if(newGoodsId!=-1){
-						boolean flag = true;
-						for(int i=0;i<allPrice.size();i++)
-						{
-							SinglePrice temp = allPrice.get(i);
-							int unitId = unitCPer.getUnitIdByUnitName(temp.get("unitName"));
-							flag = gPriceCPer.addGoodsPrice(newGoodsId, unitId, temp.get("barcode"), Double.parseDouble(temp.get("inPrice")), Double.parseDouble(temp.get("outPrice")));
-							if(!flag){
-								Toast.makeText(PurchaseManagement.this, "增加新商品失败", Toast.LENGTH_SHORT).show();
-								break;
-							}
-							
-//							Toast.makeText(PurchaseManagement.this, temp.get("unitName")+":"+temp.get("barcode")+":"+temp.get("inPrice")+":"+temp.get("outPrice"), Toast.LENGTH_LONG).show();
-						}
-						if(flag){
-							newGoodsTable.removeViews(1, newGoodsTable.getChildCount()-1);//添加完进货项后将记录删除
-							Toast.makeText(PurchaseManagement.this, "增加新商品成功", Toast.LENGTH_SHORT).show();
+						TableRow row = (TableRow)newGoodsTable.getChildAt(i);
+						Vector t = new Vector();
+						TextView name = (TextView) row.getChildAt(0);
+						TextView m = (TextView)row.getChildAt(1);
+						TextView kind = (TextView)row.getChildAt(2);
+						t.add(name.getText().toString());
+						t.add(m.getText().toString());
+						t.add(kind.getText().toString());
+						goodsVector.add(t);
+				
+					}
+					
+					for(int i=0;i<goodsVector.size();i++){
+						Vector temp = goodsVector.get(i);
+						if(!newGoods.contains(temp))
+							newGoods.add(temp);
+					}
+				
+					for(int i=0;i<newGoods.size();i++){//开始存储商品信息，商品名字，厂家，种类
+						Vector temp = newGoods.get(i);
+
+						int newGoodsId =  gCPer.addGoods(temp.get(0).toString(),
+								mCPer.getMIdByMName(temp.get(1).toString()), "", 
+								gKindCPer.getGoodsKindIdByGoodsKindName(temp.get(2).toString()));
+						
+						if(newGoodsId!=-1)
+							newGoodsIds.add(newGoodsId);//新增商品成功
+						else{
+							Toast.makeText(PurchaseManagement.this, "增加新商品:"+temp.get(0).toString()+" 失败", Toast.LENGTH_SHORT).show();
+							break;
 						}
 						
 					}
-					else{
-						Toast.makeText(PurchaseManagement.this, "增加新商品失败", Toast.LENGTH_SHORT).show();
+
+					for(int i=1;i<newGoodsTable.getChildCount()-1;i++){//取得新加商品的ID
+						TableRow row = (TableRow)newGoodsTable.getChildAt(i);
+						TextView name = (TextView) row.getChildAt(0);
+						TextView m = (TextView)row.getChildAt(1);
+						TextView kind = (TextView)row.getChildAt(2);
+						TextView barcode = (TextView)row.getChildAt(3);
+						TextView unit = (TextView)row.getChildAt(4);
+						TextView inPrice = (TextView)row.getChildAt(5);
+						TextView outPrice = (TextView)row.getChildAt(6);
+						
+						Vector t = new Vector();
+						t.add(name.getText().toString());
+						t.add(m.getText().toString());
+						t.add(kind.getText().toString());
+						
+						if(newGoods.contains(t)){
+							int theGoodsId = newGoodsIds.get(newGoods.indexOf(t));
+							int theUnitId = unitCPer.getUnitIdByUnitName(unit.getText().toString());
+							String theBarcode = barcode.getText().toString();
+							double theInPrice = Double.parseDouble(inPrice.getText().toString());
+							double theOutPrice = Double.parseDouble(outPrice.getText().toString());
+							
+							gPriceCPer.addGoodsPrice(theGoodsId, theUnitId, theBarcode, theInPrice, theOutPrice);//往商品价格表里增加数据
+							
+						}
+						
 					}
+					
+					newGoodsTable.removeViews(1, newGoodsTable.getChildCount()-1);
+
 				}
 				
 			});
@@ -220,6 +249,7 @@ public class PurchaseManagement extends TabActivity {
 			addNewGoodsReset.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
+					goodsVector.clear();
 					newGoodsTable.removeViews(1, newGoodsTable.getChildCount()-1);
 				}
 				
@@ -230,23 +260,20 @@ public class PurchaseManagement extends TabActivity {
 			newGoodsTable.addView(lastRow);
 			
 		}
+	
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		if(mTabHost.getCurrentTab() == 1){//如果当前的Tab是"添加进货商品"
 			switch (item.getItemId()) {
 			case 0://添加商品
-				Intent intent = new Intent(PurchaseManagement.this, AddGoods.class);
-				this.startActivityForResult(intent, 0);
-				
+				addGoods();
 				break;
 			case 1://添加进货商品
-
+				addGoodsIntoPBill();
 				break;
 			}
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -256,48 +283,79 @@ public class PurchaseManagement extends TabActivity {
 
 		if(loginer.logout(userName, loginer.getWritableDatabase())){
 			Intent intent = new Intent(PurchaseManagement.this, Main.class);
-			PurchaseManagement.this.startActivity(intent);
-			
+			PurchaseManagement.this.startActivity(intent);		
 		
 		}
 	}
 
 
-	private void displayPBill(){
-		pBillCPer = new PurchaseBillCPer();
-		pBillIdTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillIdTView);
-		pBillTimeTView = (TextView) PurchaseManagement.this.findViewById(R.id.pBillTimeTView);
-
-		pBillIdTView.setText("P" + (Integer.parseInt(pBillCPer.getMaxPBillNum()) + 1));
-
-		pBillTimeTView.setText((new Date()).toLocaleString());
-
-		pBillCommentEText = (EditText) PurchaseManagement.this
-							.findViewById(R.id.pBillCommentEText);
-		pBillCommentEText.setText("");
-
-		savePBillButton = (Button) PurchaseManagement.this
-							.findViewById(R.id.savePBillButton);
-		savePBillButton.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				boolean flag = pBillCPer.addPBill(pBillIdTView.getText().toString(), 1, pBillTimeTView.getText().toString(),pBillCommentEText.getText().toString());
-				if(flag){
-					Toast.makeText(getApplicationContext(), "添加进货单成功!", Toast.LENGTH_SHORT).show();
-					
-					pBillIdTView.setText("P" + (Integer.parseInt(pBillCPer.getMaxPBillNum()) + 1));
-					pBillTimeTView.setText((new Date()).toLocaleString());
-					pBillCommentEText.setText("");
-
-				}
-					
-				else
-					Toast.makeText(getApplicationContext(), "添加进货单失败!", Toast.LENGTH_SHORT).show();
-				}
-				
-			}
-		);
+	public void addGoods(){
+		addGoodsTable.setVisibility(0);
+		addGoodsIntoPBillTable.setVisibility(8);
+		
+		Intent intent = new Intent(PurchaseManagement.this, AddGoods.class);
+		this.startActivityForResult(intent, 0);
 	}
+	
+	public void addGoodsIntoPBill(){
+		addGoodsIntoPBillTable.setVisibility(0);
+		addGoodsTable.setVisibility(8);
+		
+		AlertDialog.Builder addPBillTip = new AlertDialog.Builder(this);
+		addPBillTip.setTitle("提示");
+		addPBillTip.setMessage("是否添加新的进货单？");
+		addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
 
+			public void onClick(DialogInterface dialog, int which) {
+				addPBill();
+			}
+			
+		});
+		addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
+
+			public void onClick(DialogInterface dialog, int which) {
+			
+				selectPBill();
+			}
+			
+		});
+		addPBillTip.show();
+	}
+	private void addPBill(){//添加新的进货单
+
+		Intent intent = new Intent(PurchaseManagement.this, AddPBill.class);
+		intent.putExtra("userName", userName);
+		this.startActivityForResult(intent, 1);
+	}
+	private void selectPBill(){//选择进货单
+		AlertDialog.Builder selectPBillDialog = new AlertDialog.Builder(this);
+		selectPBillDialog.setTitle("选择进货单");
+		
+		pBillCPer = new PurchaseBillCPer();
+		final Spinner allPBillSpinner = new Spinner(this);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pBillCPer.getAllPBill());
+		allPBillSpinner.setAdapter(adapter);
+		
+		selectPBillDialog.setView(allPBillSpinner);
+		selectPBillDialog.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+			public void onClick(DialogInterface dialog, int which) {
+				String selected = allPBillSpinner.getSelectedItem().toString();
+				String selectedPNum = selected.substring(0, selected.indexOf(":"));
+				selectedPBillId = pBillCPer.getPBillIdByPBillNum(selectedPNum);
+			
+			}
+			
+		});
+		selectPBillDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+
+			public void onClick(DialogInterface dialog, int which) {
+			
+			}
+			
+		});
+		selectPBillDialog.show();
+	
+	}
 }
 ;
