@@ -21,101 +21,83 @@
 	</TableLayout>
 
 	<LinearLayout android:id="@+id/addGoodsTable"
-					android:visibility="visible" android:layout_width="fill_parent"
+		android:visibility="visible" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<ScrollView android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TableLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/newGoodsTable">
+				<TableRow android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:orientation="vertical">
-					<ScrollView android:layout_width="fill_parent"
-						android:layout_height="wrap_content">
-						<TableLayout android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:id="@+id/newGoodsTable">
-							<TableRow android:layout_width="fill_parent"
-								android:layout_height="wrap_content"
-								android:id="@+id/pItemTitle">
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="名字        " />
+					android:id="@+id/pItemTitle">
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="名字        " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="厂家                " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="厂家                " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="种类           " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="种类           " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="条形码               " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="条形码               " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="单位    " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="单位    " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="进价    " />
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="售价    " />
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="  " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="进价    " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="售价    " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="  " />
 
-							</TableRow>
-						</TableLayout>
-					</ScrollView>
-				</LinearLayout>
-				<!-- 第一层结束 -->
-				<!-- 第二层 -->
-				<LinearLayout android:id="@+id/addGoodsIntoPBillTable"
-					android:visibility="visible" android:layout_width="fill_parent"
+				</TableRow>
+			</TableLayout>
+		</ScrollView>
+	</LinearLayout>
+	<!-- 第一层结束 -->
+	<!-- 第二层 -->
+	<LinearLayout android:id="@+id/addGoodsIntoPBillTable"
+		android:visibility="visible" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<ScrollView android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TableLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/goodsIntoPBillTable">
+				<TableRow android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:orientation="vertical">
-					<ScrollView android:layout_width="fill_parent"
-						android:layout_height="wrap_content">
-						<TableLayout android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:id="@+id/goodsIntoPBillTable">
-							<TableRow android:layout_width="fill_parent"
-								android:layout_height="wrap_content"
-								android:id="@+id/pItemTitle">
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="名字        " />
-									
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="单位                " />
+					android:id="@+id/pItemTitle">
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="名字                                                " />
 
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content"
-									android:text="数量     " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="单位                " />
 
-		
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="进价    " />
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="售价    " />
-								<TextView
-									android:layout_width="fill_parent"
-									android:layout_height="wrap_content" android:text="  " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="数量     " />
 
-							</TableRow>
-						</TableLayout>
-					</ScrollView>
-				</LinearLayout>
-				<!-- 第二层结束 -->
-		
+
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="进价    " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="售价    " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="  " />
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:text="  " />
+
+				</TableRow>
+			</TableLayout>
+		</ScrollView>
+	</LinearLayout>
+	<!-- 第二层结束 -->
+
 
 
 
