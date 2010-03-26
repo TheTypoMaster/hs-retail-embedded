@@ -155,7 +155,7 @@ public class PurchaseBillCPer extends ContentProvider {
 	    		return "";
 	    }
 	    
-	    public boolean addPBill(String pBillNum, int operId, String time, String comment){
+	    public int addPBill(String pBillNum, int operId, String time, String comment){//添加进货单，成功的话返回新加的进货单号，否则返回-1
 	    	ContentValues value = new ContentValues();
 			
 			value.clear();
@@ -165,10 +165,17 @@ public class PurchaseBillCPer extends ContentProvider {
 			value.put("comment", comment);
 		
 	    	Uri uri = this.insert(AllTables.PurchaseBill.CONTENT_URI, value);
-	    	if(uri == null)
-	    		return false;
+	    	if(uri != null){
+	    		Cursor c = this.query(AllTables.PurchaseBill.CONTENT_URI, null, null, null, " time ");
+	    		if(c.getCount()>0){
+	    			c.moveToLast();
+	    			return c.getInt(0);
+	    		}
+	    		else
+	    			return -1;
+	    	}
 	    	else
-	    		return true;
+	    		return -1;
 	    }
 	    public String[] getAllPBill(){//获取所有的进货单，时间最晚的排在最前，格式是：进货单号+时间
 	    	String str [];

@@ -3,6 +3,7 @@ package com.tobacco.pos.activity;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,11 +52,19 @@ public class AddPBill extends Activity{
 
 			public void onClick(View v) {
 				userName = getIntent().getStringExtra("userName");
-				boolean flag = pBillCPer.addPBill(pBillNumTView.getText().toString(), userInfoCPer.getUserIdByUserName(userName), pTimeTView.getText().toString(), pCommentEText.getText().toString());
-				if(flag)
+				int newPBillId = pBillCPer.addPBill(pBillNumTView.getText().toString(), userInfoCPer.getUserIdByUserName(userName), pTimeTView.getText().toString(), pCommentEText.getText().toString());
+				if(newPBillId!=-1)
 				{
+					Intent intent = new Intent(AddPBill.this, PurchaseManagement.class);
+					intent.putExtra("newPBillId", newPBillId);
+					AddPBill.this.setResult(RESULT_OK, intent);
+					
 					Toast.makeText(AddPBill.this, "成功添加进货单:"+pBillNumTView.getText(), Toast.LENGTH_SHORT).show();
+					
 					finish();
+				}
+				else{
+					Toast.makeText(AddPBill.this, "添加进货单失败", Toast.LENGTH_SHORT).show();
 				}
 			}
 			

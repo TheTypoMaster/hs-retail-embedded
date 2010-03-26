@@ -61,6 +61,7 @@ public class PurchaseManagement extends Activity {
 	private String userName = "";
 	
 	private int selectedPBillId = -1;//选择的进货单的ID
+	private int newPBillId = -1;//新建的进货单的ID
 	
 	private int selectedGoodsId = -1;//在入货的时候选择的商品ID
 	
@@ -270,6 +271,10 @@ public class PurchaseManagement extends Activity {
 			newGoodsTable.addView(lastRow);
 			
 		}
+		if(requestCode == 1){
+			newPBillId = data.getIntExtra("newPBillId", -1);
+			Log.d("lyq", "(P) The new PBill's id is " + newPBillId);
+		}
 	
 	}
 
@@ -312,8 +317,12 @@ public class PurchaseManagement extends Activity {
 		addGoodsTable.setVisibility(8);
 		
 		TableLayout goodsIntoPBillTable = (TableLayout)this.findViewById(R.id.goodsIntoPBillTable);
-		goodsIntoPBillTable.removeViews(1, goodsIntoPBillTable.getChildCount()-1);
 		
+		this.addPItem(goodsIntoPBillTable);
+	}
+	private void addPItem(final TableLayout goodsIntoPBillTable){//增加进货项
+		if(goodsIntoPBillTable.getChildCount()>1)
+			goodsIntoPBillTable.removeViewAt(goodsIntoPBillTable.getChildCount()-1);
 		final Map<Integer, String> allGoodsMap = gCPer.getAllGoodsName();//取得所有的商品名字，格式是商品ID+商品名字。
 		List<String> allGoodsName = new ArrayList<String>();//取得所有商品的名字（不包含商品ID）。
 		
@@ -400,14 +409,16 @@ public class PurchaseManagement extends Activity {
 			
 		});
 		
-		ImageView add = new ImageView(this);
-		add.setImageResource(R.drawable.add);
 		ImageView delete = new ImageView(this);
 		delete.setImageResource(R.drawable.delete);
 		delete.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
-				((TableLayout)v.getParent().getParent()).removeView((TableRow)v.getParent());
+				TableLayout t = (TableLayout)v.getParent().getParent();
+				t.removeView((TableRow)v.getParent());
+				if(t.getChildCount()==2)
+					t.removeViewAt(1);
+					
 			}
 			
 		});
@@ -419,31 +430,71 @@ public class PurchaseManagement extends Activity {
 		row.addView(countEText);
 		row.addView(inPriceTView);
 		row.addView(outPriceTView);
-		row.addView(add);
+	
 		row.addView(delete);
 		
 		goodsIntoPBillTable.addView(row);
-
 		
-//		AlertDialog.Builder addPBillTip = new AlertDialog.Builder(this);
-//		addPBillTip.setTitle("提示");
-//		addPBillTip.setMessage("是否添加新的进货单？");
-//		addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
-//
-//			public void onClick(DialogInterface dialog, int which) {
-//				addPBill();
-//			}
-//			
-//		});
-//		addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
-//
-//			public void onClick(DialogInterface dialog, int which) {
-//			
-//				selectPBill();
-//			}
-//			
-//		});
-//		addPBillTip.show();
+		ImageView add = new ImageView(this);
+		add.setImageResource(R.drawable.add);
+		
+		add.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				addPItem(goodsIntoPBillTable);
+			}
+			
+		});
+		
+		
+		Button addGoodsIntoPBillOk = new Button(this);//确定
+		addGoodsIntoPBillOk.setText("确定");
+		addGoodsIntoPBillOk.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				AlertDialog.Builder addPBillTip = new AlertDialog.Builder(PurchaseManagement.this);
+				addPBillTip.setTitle("提示");
+				addPBillTip.setMessage("是否添加新的进货单？");
+				addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
+		
+					public void onClick(DialogInterface dialog, int which) {
+						addPBill();
+					}
+					
+				});
+				addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
+		
+					public void onClick(DialogInterface dialog, int which) {
+					
+						selectPBill();
+					}
+					
+				});
+				addPBillTip.show();
+			}
+			
+		});
+		
+		Button addGoodsIntoPBillReset = new Button(this);//取消
+		addGoodsIntoPBillReset.setText("取消");
+		addGoodsIntoPBillReset.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				((TableLayout)v.getParent().getParent()).removeViews(1, ((TableLayout)v.getParent().getParent()).getChildCount()-1);
+			}
+			
+		});
+		
+		TableRow theLastRow = new TableRow(this);
+		theLastRow.addView(new TextView(this));
+		theLastRow.addView(new TextView(this));
+		
+		theLastRow.addView(add);
+		theLastRow.addView(addGoodsIntoPBillOk);
+		theLastRow.addView(addGoodsIntoPBillReset);
+		
+		goodsIntoPBillTable.addView(theLastRow);
+		
 	}
 	private void addPBill(){//添加新的进货单
 
@@ -468,6 +519,7 @@ public class PurchaseManagement extends Activity {
 				String selectedPNum = selected.substring(0, selected.indexOf(":"));
 				selectedPBillId = pBillCPer.getPBillIdByPBillNum(selectedPNum);
 			
+				Log.d("lyq", "The selected PBill id is " + selectedPBillId);
 			}
 			
 		});
