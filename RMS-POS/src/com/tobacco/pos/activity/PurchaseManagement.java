@@ -2,6 +2,8 @@ package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.tobacco.R;
@@ -21,13 +23,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -35,6 +41,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class PurchaseManagement extends Activity {
 	private Loginer loginer = null;
@@ -55,6 +62,8 @@ public class PurchaseManagement extends Activity {
 	
 	private int selectedPBillId = -1;//选择的进货单的ID
 	
+	private int selectedGoodsId = -1;//在入货的时候选择的商品ID
+	
 	private List<Vector> goodsVector;
 	private List<Vector> newGoods;
 	private List<Integer> newGoodsIds;//新增加的商品ID
@@ -64,6 +73,13 @@ public class PurchaseManagement extends Activity {
 		setContentView(R.layout.purchasemanagement);
 	
 		loginer = new Loginer(PurchaseManagement.this);
+		gCPer = new GoodsCPer();
+		pBillCPer = new PurchaseBillCPer();
+		pItemCPer = new PurchaseItemCPer();
+		mCPer = new ManufacturerCPer();
+		gKindCPer = new GoodsKindCPer();
+		gPriceCPer = new GoodsPriceCPer();
+		unitCPer = new UnitCPer();
 		
 		userName = this.getIntent().getStringExtra("userName");
 		purchaseWelcome = (TextView) this.findViewById(R.id.purchaseWelcome);
@@ -164,12 +180,6 @@ public class PurchaseManagement extends Activity {
 			addNewGoodsOk.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
-
-					gCPer = new GoodsCPer();
-					mCPer = new ManufacturerCPer();
-					gKindCPer = new GoodsKindCPer();
-					gPriceCPer = new GoodsPriceCPer();
-					unitCPer = new UnitCPer();
 					
 					goodsVector = new ArrayList<Vector>();
 					newGoods = new ArrayList<Vector>();
@@ -301,25 +311,139 @@ public class PurchaseManagement extends Activity {
 		addGoodsIntoPBillTable.setVisibility(0);
 		addGoodsTable.setVisibility(8);
 		
-		AlertDialog.Builder addPBillTip = new AlertDialog.Builder(this);
-		addPBillTip.setTitle("提示");
-		addPBillTip.setMessage("是否添加新的进货单？");
-		addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
+		TableLayout goodsIntoPBillTable = (TableLayout)this.findViewById(R.id.goodsIntoPBillTable);
+		goodsIntoPBillTable.removeViews(1, goodsIntoPBillTable.getChildCount()-1);
+		
+		final Map<Integer, String> allGoodsMap = gCPer.getAllGoodsName();//取得所有的商品名字，格式是商品ID+商品名字。
+		List<String> allGoodsName = new ArrayList<String>();//取得所有商品的名字（不包含商品ID）。
+		
+		for(Object o : allGoodsMap.keySet()){
+			allGoodsName.add(allGoodsMap.get(o));
+		}
+		
+		Spinner allGoodsSpinner = new Spinner(this);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, allGoodsName);
+		allGoodsSpinner.setAdapter(adapter);
+			
+		final Spinner unitSpinner = new Spinner(this);
+		
+		allGoodsSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
-			public void onClick(DialogInterface dialog, int which) {
-				addPBill();
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				int index = 0;
+				for(Object o : allGoodsMap.keySet()){
+					
+					if(index==arg2){
+						selectedGoodsId = (Integer)o;
+						ArrayAdapter<String> unitAdapter = new ArrayAdapter<String>(PurchaseManagement.this, android.R.layout.simple_spinner_item, gPriceCPer.getUnitNameByGoodsId(selectedGoodsId));
+					
+						unitSpinner.setAdapter(unitAdapter);
+					}
+					index++;
+				}
+		
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			
 			}
 			
 		});
-		addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
+		
+		final EditText countEText = new EditText(this);
+		countEText.setWidth(7);
+		countEText.setSingleLine(true);
+		countEText.addTextChangedListener(new TextWatcher(){
 
-			public void onClick(DialogInterface dialog, int which) {
+			public void afterTextChanged(Editable s) {
+				String theCount = countEText.getText().toString();
+				if(theCount.length()>0){
+					try{
+						Integer.parseInt(theCount);
+					}
+					catch(Exception e){
+						s.clear();
+						Toast.makeText(PurchaseManagement.this, "数量格式不正确", Toast.LENGTH_SHORT).show();
+					
+					}
+				}
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				
+			}
 			
-				selectPBill();
+		});//输入的内容有改变时
+		final TextView inPriceTView = new TextView(this);
+		final TextView outPriceTView = new TextView(this);
+		
+		unitSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				String selectedUnitName = ((TextView)arg1).getText().toString();
+				int selectedUnitId = unitCPer.getUnitIdByUnitName(selectedUnitName);
+				inPriceTView.setText(gPriceCPer.getInPriceByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId)+"");
+				outPriceTView.setText(gPriceCPer.getOutPriceByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId)+"");
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				
 			}
 			
 		});
-		addPBillTip.show();
+		
+		ImageView add = new ImageView(this);
+		add.setImageResource(R.drawable.add);
+		ImageView delete = new ImageView(this);
+		delete.setImageResource(R.drawable.delete);
+		delete.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				((TableLayout)v.getParent().getParent()).removeView((TableRow)v.getParent());
+			}
+			
+		});
+		
+		TableRow row = new TableRow(this);
+		row.addView(allGoodsSpinner);
+		
+		row.addView(unitSpinner);
+		row.addView(countEText);
+		row.addView(inPriceTView);
+		row.addView(outPriceTView);
+		row.addView(add);
+		row.addView(delete);
+		
+		goodsIntoPBillTable.addView(row);
+
+		
+//		AlertDialog.Builder addPBillTip = new AlertDialog.Builder(this);
+//		addPBillTip.setTitle("提示");
+//		addPBillTip.setMessage("是否添加新的进货单？");
+//		addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
+//
+//			public void onClick(DialogInterface dialog, int which) {
+//				addPBill();
+//			}
+//			
+//		});
+//		addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
+//
+//			public void onClick(DialogInterface dialog, int which) {
+//			
+//				selectPBill();
+//			}
+//			
+//		});
+//		addPBillTip.show();
 	}
 	private void addPBill(){//添加新的进货单
 
