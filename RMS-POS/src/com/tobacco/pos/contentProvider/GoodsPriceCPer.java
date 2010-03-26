@@ -2,6 +2,9 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 import com.tobacco.pos.entity.AllTables;
 
@@ -20,6 +23,8 @@ public class GoodsPriceCPer extends ContentProvider {
 
 		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
+	    private UnitCPer unitCPer = null;
+	    
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "GoodsPrice";
@@ -125,6 +130,22 @@ public class GoodsPriceCPer extends ContentProvider {
 				value.put("barcode", "gb6");
 				value.put("inPrice", 100);
 				value.put("outPrice", 110);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 7);
+				value.put("unitId", 1);
+				value.put("barcode", "gb7");
+				value.put("inPrice", 10);
+				value.put("outPrice", 12);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 7);
+				value.put("unitId", 2);
+				value.put("barcode", "gb8");
+				value.put("inPrice", 100);
+				value.put("outPrice", 120);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				return true;
@@ -246,5 +267,41 @@ public class GoodsPriceCPer extends ContentProvider {
 			else
 				return false;
 		}
+	    
+	    public List<String> getUnitNameByGoodsId(int goodsId){//根据商品的ID查找单位的名字（一件商品可能有多种单位，比如红塔山的烟有”包“，”条“
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " goodsId = ? ", new String[]{goodsId+""}, null);
+	    	List<String> allUnitByGoodsId = new ArrayList<String>();
+	  
+	    	unitCPer = new UnitCPer();
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			allUnitByGoodsId.add(unitCPer.getUnitNameById(c.getInt(2)));
+	    			c.moveToNext();
+	    		}
+	    		
+	    		return allUnitByGoodsId;
+	    	}
+	    	return null;
+	    }
+	    //根据商品的Id和单位Id查找进货价
+	    public double getInPriceByGoodsIdAndUnitId(int goodsId, int unitId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " goodsId = ? and unitId = ? ", new String[]{goodsId+"", unitId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getDouble(4);
+	    	}
+	    	return 0;
+	    }
+	    //根据商品的Id和单位Id查找售价
+	    public double getOutPriceByGoodsIdAndUnitId(int goodsId, int unitId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " goodsId = ? and unitId = ? ", new String[]{goodsId+"", unitId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getDouble(5);
+	    	}
+	    	return 0;
+	    }
 
 }

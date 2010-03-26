@@ -2,6 +2,9 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
@@ -18,6 +21,9 @@ import android.net.Uri;
 public class GoodsCPer extends ContentProvider {
 		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
+	    private GoodsKindCPer gKindCPer = null;
+	    private ManufacturerCPer mCPer = null;
+	    
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "Goods";
@@ -220,8 +226,29 @@ public class GoodsCPer extends ContentProvider {
 			}
 			else
 				return -1;
-
-
+	    }
+	    public Map<Integer, String> getAllGoodsName(){//以Map的形式返回，格式是商品ID+商品名字+厂家+类别
+	    	gKindCPer = new GoodsKindCPer();
+	    	mCPer = new ManufacturerCPer();
+	    	
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, null, null, null);
+	    	
+	    	Map<Integer, String> theMap = new Hashtable<Integer, String>();
+	   
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			String kindName = gKindCPer.getGoodsKindNameByGoodsKindId(c.getInt(5));
+	    			if(kindName.contains("->"))
+	    				kindName = kindName.substring(kindName.lastIndexOf("->")+2);
+	    			theMap.put(c.getInt(0), 
+	    					c.getString(2) + "-" + mCPer.getMNameByMId(c.getInt(3)) + "-" + kindName);
+	    			c.moveToNext();
+	    		}
+	    		return theMap;
+	    	}
+	    	else
+	    		return null;
 	    }
 	    
 }

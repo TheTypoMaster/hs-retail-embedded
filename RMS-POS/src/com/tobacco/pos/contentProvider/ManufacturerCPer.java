@@ -165,5 +165,14 @@ public class ManufacturerCPer extends ContentProvider {
 				return -1;
 		}
 
+		public String getMNameByMId(int mId) {
+			Cursor c = this.query(AllTables.Manufacturer.CONTENT_URI, null, " _id = ? ", new String[]{mId + ""}, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getString(1);
+			}
+			return "";
+		}
+
 
 }
