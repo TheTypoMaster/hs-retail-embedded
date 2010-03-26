@@ -98,7 +98,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "黄梅");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 10);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
