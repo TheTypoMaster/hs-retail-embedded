@@ -240,7 +240,7 @@ public class GoodsKindCPer extends ContentProvider {
 	    	 SQLiteDatabase db = dbHelper.getWritableDatabase();
 	         int count;
 	       
-	         count = db.update(TABLE_NAME, contentvalues, s, null);
+	         count = db.update(TABLE_NAME, contentvalues, s, as);
 	     
 	         ct.getContentResolver().notifyChange(uri, null);
 	         return count;

@@ -22,6 +22,7 @@ public class PurchaseItemCPer extends ContentProvider {
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "PurchaseItem";
+	    private static Context ct = null;
 
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
@@ -33,7 +34,8 @@ public class PurchaseItemCPer extends ContentProvider {
 			public DatabaseHelper(Context context) {
 					super(context, DATABASE_NAME, null, DATABASE_VERSION);
 				ctx = context;
-		
+				ct = context;
+				
 				db = openDatabase(DATABASE_NAME);
 			
 				createtable(db);
@@ -89,11 +91,12 @@ public class PurchaseItemCPer extends ContentProvider {
 
 	    @Override
 	    public Uri insert(Uri uri, ContentValues contentvalues) {
+	    	dbHelper = new DatabaseHelper(ct);
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
 	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
-	            getContext().getContentResolver().notifyChange(rowUri, null);
+	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
 	        throw new SQLException("Failed to insert row into " + uri);
@@ -107,19 +110,58 @@ public class PurchaseItemCPer extends ContentProvider {
 
 	    @Override
 	    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	
+	    	dbHelper = new DatabaseHelper(ct);
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
-	        c.setNotificationUri(getContext().getContentResolver(), uri);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
 
 	    @Override
 	    public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
-	        return 0;
+	    	dbHelper = new DatabaseHelper(ct);
+	    	 SQLiteDatabase db = dbHelper.getWritableDatabase();
+	         int count;
+	       
+	         count = db.update(TABLE_NAME, contentvalues, s, as);
+	     
+	         ct.getContentResolver().notifyChange(uri, null);
+	         return count;
+	       
 	    }
 
+	    public boolean addPItem(int pBillId, int priceId, int count){
+	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " purchaseBillId = ? and pPriceId = ? ", new String[]{pBillId+"", priceId+""}, null);
+	    	if(c.getCount() == 0){
+	    	
+	    		ContentValues value = new ContentValues();
+	    		value.put("purchaseBillId", pBillId);
+	    		value.put("pGoodsNum", count);
+	    		value.put("pPriceId", priceId);
+	    	
+	    		Uri uri = this.insert(AllTables.PurchaseItem.CONTENT_URI, value);
+	    		if(uri!=null)
+	    			return true;
+	    		return false;
+	    	}
+	    	else{
+	    		c.moveToFirst();
+	    		int originalCount = c.getInt(2);
+	    		ContentValues value = new ContentValues();
+	    		value.put("purchaseBillId", pBillId);
+	    		value.put("pGoodsNum", originalCount + count);
+	    		value.put("pPriceId", priceId);
+	    		int updateCount = this.update(AllTables.PurchaseItem.CONTENT_URI, value, " purchaseBillId = ? and pPriceId = ? ", new String[]{pBillId+"", priceId+""});
+	    		if(updateCount>0) 
+	    			return true;
+	    		 	    		
+	    		else 
+	    			return false;
+	    		 
+	    			
+	    	}
+	    }
 
 }

@@ -59,8 +59,6 @@ public class AddPBill extends Activity{
 					intent.putExtra("newPBillId", newPBillId);
 					AddPBill.this.setResult(RESULT_OK, intent);
 					
-					Toast.makeText(AddPBill.this, "成功添加进货单:"+pBillNumTView.getText(), Toast.LENGTH_SHORT).show();
-					
 					finish();
 				}
 				else{
@@ -72,6 +70,11 @@ public class AddPBill extends Activity{
 		addPBillReset.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
+				Intent intent = new Intent(AddPBill.this, PurchaseManagement.class);
+				intent.putExtra("newPBillId", -1);
+				AddPBill.this.setResult(RESULT_OK, intent);
+				
+				Toast.makeText(AddPBill.this, "取消添加进货单", Toast.LENGTH_SHORT).show();
 				finish();
 			}
 			

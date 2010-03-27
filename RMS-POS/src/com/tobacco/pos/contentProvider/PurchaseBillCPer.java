@@ -198,5 +198,15 @@ public class PurchaseBillCPer extends ContentProvider {
 	    	}
 	    	return -1;
 	    }
+	    
+	    public String getPBillNumByPBillId(int pBillId){
+	    	Cursor c = this.query(AllTables.PurchaseBill.CONTENT_URI, null, " _id = ?", new String[]{pBillId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getString(1);
+	    		
+	    	}
+	    	return "";
+	    }
 
 }

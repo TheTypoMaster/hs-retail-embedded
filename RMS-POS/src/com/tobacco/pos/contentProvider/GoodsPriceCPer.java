@@ -303,5 +303,15 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	}
 	    	return 0;
 	    }
+	    //根据商品的Id和单位Id查找价格项Id
+	    public int getPriceIdByGoodsIdAndUnitId(int goodsId, int unitId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI,  null, " goodsId = ? and unitId = ? ", new String[]{goodsId+"", unitId+""}, null);
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToFirst();
+	    		return c.getInt(0);
+	    	}
+	    	return -1;
+	    }
 
 }

@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import com.tobacco.R;
@@ -26,10 +25,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -57,6 +59,7 @@ public class PurchaseManagement extends Activity {
 	
 	private LinearLayout addGoodsTable = null;
 	private LinearLayout addGoodsIntoPBillTable = null;
+	private TableLayout goodsIntoPBillTable = null;
 	
 	private String userName = "";
 	
@@ -64,6 +67,10 @@ public class PurchaseManagement extends Activity {
 	private int newPBillId = -1;//新建的进货单的ID
 	
 	private int selectedGoodsId = -1;//在入货的时候选择的商品ID
+	private int selectedUnitId = -1;//在入货的时候根据商品选择的单位ID
+	
+	private List<Integer> priceIdList  = new ArrayList<Integer>();//存储将要添加到进货单里的商品的价格项Id
+	private List<Integer> countList = new ArrayList<Integer>();//存储将要添加到进货单里的商品的数量
 	
 	private List<Vector> goodsVector;
 	private List<Vector> newGoods;
@@ -89,6 +96,7 @@ public class PurchaseManagement extends Activity {
 	
 		addGoodsTable = (LinearLayout)this.findViewById(R.id.addGoodsTable);
 		addGoodsIntoPBillTable = (LinearLayout)this.findViewById(R.id.addGoodsIntoPBillTable);
+		goodsIntoPBillTable = (TableLayout)this.findViewById(R.id.goodsIntoPBillTable);
 		
 		addGoodsIntoPBillTable.setVisibility(8);
 		addGoodsTable.setVisibility(8);
@@ -274,6 +282,40 @@ public class PurchaseManagement extends Activity {
 		if(requestCode == 1){
 			newPBillId = data.getIntExtra("newPBillId", -1);
 			Log.d("lyq", "(P) The new PBill's id is " + newPBillId);
+			if(newPBillId != -1){
+
+				List<Integer> pIdList = new ArrayList<Integer>();
+				List<Integer> cList = new ArrayList<Integer>();
+				for(int i=0;i<priceIdList.size();i++){
+					if(!pIdList.contains(priceIdList.get(i))){
+						pIdList.add(priceIdList.get(i));
+						cList.add(countList.get(i));
+					}
+					else{
+						int theP = pIdList.indexOf(priceIdList.get(i));
+						int original = cList.get(theP);
+					
+						cList.set(theP, original+countList.get(i));
+					}
+				}
+				boolean wholeFlag = true;
+				for(int i=0;i<pIdList.size();i++){
+					boolean flag = pItemCPer.addPItem(newPBillId, pIdList.get(i), cList.get(i));
+					if(!flag){
+						Toast.makeText(PurchaseManagement.this, "添加进货项失败", Toast.LENGTH_SHORT).show();
+						wholeFlag = false;
+					}
+				}
+				if(wholeFlag){
+					String newPBillNum = pBillCPer.getPBillNumByPBillId(newPBillId);
+					Toast.makeText(PurchaseManagement.this, "恭喜，成功往新进货单:" + newPBillNum + "添加进货项", Toast.LENGTH_SHORT).show();
+				}
+				
+				goodsIntoPBillTable.removeViews(1, goodsIntoPBillTable.getChildCount()-1);
+				priceIdList.clear();
+				countList.clear();
+			}
+
 		}
 	
 	}
@@ -317,6 +359,8 @@ public class PurchaseManagement extends Activity {
 		addGoodsTable.setVisibility(8);
 		
 		TableLayout goodsIntoPBillTable = (TableLayout)this.findViewById(R.id.goodsIntoPBillTable);
+		if(goodsIntoPBillTable.getChildCount()>1)
+			goodsIntoPBillTable.removeViews(1, goodsIntoPBillTable.getChildCount()-1);
 		
 		this.addPItem(goodsIntoPBillTable);
 	}
@@ -390,15 +434,27 @@ public class PurchaseManagement extends Activity {
 			}
 			
 		});//输入的内容有改变时
+
+		countEText.setOnFocusChangeListener(new OnFocusChangeListener(){
+
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					priceIdList.add(gPriceCPer.getPriceIdByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId));
+					countList.add(Integer.parseInt(countEText.getText().toString()));//将该进货项的数量加入到countList中。
+				
+				}
+			}
+			
+		});
 		final TextView inPriceTView = new TextView(this);
 		final TextView outPriceTView = new TextView(this);
-		
+	
 		unitSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				String selectedUnitName = ((TextView)arg1).getText().toString();
-				int selectedUnitId = unitCPer.getUnitIdByUnitName(selectedUnitName);
+				selectedUnitId = unitCPer.getUnitIdByUnitName(selectedUnitName);
 				inPriceTView.setText(gPriceCPer.getInPriceByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId)+"");
 				outPriceTView.setText(gPriceCPer.getOutPriceByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId)+"");
 			}
@@ -415,10 +471,20 @@ public class PurchaseManagement extends Activity {
 
 			public void onClick(View v) {
 				TableLayout t = (TableLayout)v.getParent().getParent();
+				
+				priceIdList.remove(t.indexOfChild((TableRow)v.getParent())-1);
+				countList.remove(t.indexOfChild((TableRow)v.getParent())-1);
+
+				
 				t.removeView((TableRow)v.getParent());
-				if(t.getChildCount()==2)
+			
+				if(t.getChildCount()==2){
 					t.removeViewAt(1);
-					
+					priceIdList.clear();
+					countList.clear();
+				}
+				
+			
 			}
 			
 		});
@@ -441,7 +507,12 @@ public class PurchaseManagement extends Activity {
 		add.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
-				addPItem(goodsIntoPBillTable);
+				if(countEText.getText().toString() == null || countEText.getText().toString().trim().equals("")){
+					Toast.makeText(PurchaseManagement.this, "请输入商品的进货量", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					addPItem(goodsIntoPBillTable);
+				}
 			}
 			
 		});
@@ -451,28 +522,31 @@ public class PurchaseManagement extends Activity {
 		addGoodsIntoPBillOk.setText("确定");
 		addGoodsIntoPBillOk.setOnClickListener(new OnClickListener(){
 
-			public void onClick(View v) {
-				AlertDialog.Builder addPBillTip = new AlertDialog.Builder(PurchaseManagement.this);
-				addPBillTip.setTitle("提示");
-				addPBillTip.setMessage("是否添加新的进货单？");
-				addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
-		
-					public void onClick(DialogInterface dialog, int which) {
-						addPBill();
-					}
-					
-				});
-				addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
-		
-					public void onClick(DialogInterface dialog, int which) {
-					
-						selectPBill();
-					}
-					
-				});
-				addPBillTip.show();
-			}
+			public void onClick(final View v) {
 			
+					AlertDialog.Builder addPBillTip = new AlertDialog.Builder(PurchaseManagement.this);
+					addPBillTip.setTitle("提示");
+					addPBillTip.setMessage("是否添加新的进货单？");
+					addPBillTip.setPositiveButton("是", new DialogInterface.OnClickListener(){
+		
+						public void onClick(DialogInterface dialog, int which) {
+							addPBill();
+					
+						}
+					
+					});
+					addPBillTip.setNegativeButton("否", new DialogInterface.OnClickListener(){
+		
+						public void onClick(DialogInterface dialog, int which) {
+					
+							selectPBill();
+							
+						}
+					
+					});
+					addPBillTip.show();
+				
+				}
 		});
 		
 		Button addGoodsIntoPBillReset = new Button(this);//取消
@@ -520,13 +594,44 @@ public class PurchaseManagement extends Activity {
 				selectedPBillId = pBillCPer.getPBillIdByPBillNum(selectedPNum);
 			
 				Log.d("lyq", "The selected PBill id is " + selectedPBillId);
+
+				List<Integer> pIdList = new ArrayList<Integer>();
+				List<Integer> cList = new ArrayList<Integer>();
+				for(int i=0;i<priceIdList.size();i++){
+					if(!pIdList.contains(priceIdList.get(i))){
+						pIdList.add(priceIdList.get(i));
+						cList.add(countList.get(i));
+					}
+					else{
+						int theP = pIdList.indexOf(priceIdList.get(i));
+						int original = cList.get(theP);
+					
+						cList.set(theP, original+countList.get(i));
+					}
+				}
+				boolean wholeFlag = true;
+				for(int i=0;i<pIdList.size();i++){
+					boolean flag = pItemCPer.addPItem(selectedPBillId, pIdList.get(i), cList.get(i));
+					if(!flag){
+						Toast.makeText(PurchaseManagement.this, "添加进货项失败", Toast.LENGTH_SHORT).show();
+						wholeFlag = false;
+					}
+				}
+				if(wholeFlag){
+					String selectedPBillNum = pBillCPer.getPBillNumByPBillId(selectedPBillId);
+					Toast.makeText(PurchaseManagement.this, "恭喜，成功往进货单:"+selectedPBillNum+" 添加进货项", Toast.LENGTH_SHORT).show();
+				}
+				pIdList.clear();
+				cList.clear();
+				goodsIntoPBillTable.removeViews(1, goodsIntoPBillTable.getChildCount()-1);
+				priceIdList.clear();
+				countList.clear();
 			}
 			
 		});
 		selectPBillDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
 
 			public void onClick(DialogInterface dialog, int which) {
-			
 			}
 			
 		});
