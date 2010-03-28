@@ -1,5 +1,8 @@
 package com.tobacco.pos.activity;
 
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
@@ -15,7 +18,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +46,7 @@ public class KindManagement extends Activity {
 	public String selectedName = "";// 选择种类的名字
 	public int selectedId = -1;//选择种类的ID
 	
+	private Map<Integer, Integer> clickCount = new Hashtable<Integer, Integer>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,9 @@ public class KindManagement extends Activity {
 		setContentView(R.layout.kindmanagement);
 		
 		kindInfoTView = (TextView)KindManagement.this.findViewById(R.id.kindInfoTView);
+		
+		kindCPer = new GoodsKindCPer();
+		
 		lookup();
 	}
 
@@ -149,6 +155,9 @@ public class KindManagement extends Activity {
 
 		final TextView top = new TextView(this);
 		top.setText("TOP");
+		top.setId(-1);
+		clickCount.put(-1, 0);
+	
 		top.setTextColor(tempView.getTextColors());
 		top.setOnClickListener(new OnClickListener() {
 
@@ -172,7 +181,26 @@ public class KindManagement extends Activity {
 		top.setOnLongClickListener(new OnLongClickListener(){
 
 			public boolean onLongClick(View v) {
-			    Log.d("lyq",""+((TextView)v).getText());
+				
+				int tempClickCount = clickCount.get(-1);
+				
+				if(tempClickCount%2 == 0){
+					for(int i=2;i<l.getChildCount();i++){
+						TextView temp = (TextView)l.getChildAt(i);
+						temp.setHeight(0);
+					}
+				}
+				else{
+					for(int i=2;i<l.getChildCount();i++){
+						TextView temp = (TextView)l.getChildAt(i);
+						temp.setHeight(top.getHeight());
+					}
+				}
+				tempClickCount++;
+				
+				clickCount.remove(-1);
+				clickCount.put(-1, tempClickCount);
+				
 				return false;
 			}
 			
@@ -267,6 +295,8 @@ public class KindManagement extends Activity {
 			
 			t.setId(id);
 			
+			clickCount.put(id, 0);
+			
 			t.setTextColor(tempView.getTextColors());
 		
 			if(maxLevel == 1)
@@ -293,10 +323,35 @@ public class KindManagement extends Activity {
 
 				}
 			});
+		
 			t.setOnLongClickListener(new OnLongClickListener(){
 
 				public boolean onLongClick(View v) {
+				
+					List<Integer> allDescendantId = kindCPer.getAllDescendantByAncestorId(v.getId());
 					
+					int tempClickCount = clickCount.get(v.getId());
+					
+					if(tempClickCount%2 == 0){
+						for(int i=2;i<l.getChildCount();i++){
+							TextView temp = (TextView)l.getChildAt(i);
+							if(allDescendantId.contains(temp.getId())){
+								temp.setHeight(0);
+							}
+						}
+					}
+					else{
+						for(int i=2;i<l.getChildCount();i++){
+							TextView temp = (TextView)l.getChildAt(i);
+							if(allDescendantId.contains(temp.getId())){
+								temp.setHeight(top.getHeight());
+							}
+						}
+					}
+					tempClickCount++;
+					clickCount.remove(v.getId());
+					clickCount.put(v.getId(), tempClickCount);
+				
 					return false;
 				}
 				
@@ -315,7 +370,7 @@ public class KindManagement extends Activity {
 		}
 	
 		else {// 选择了某一商品类别
-			kindCPer = new GoodsKindCPer();
+			
 			return kindCPer.getGoodsKindInfoByGoodsKindId(selectedId);
 		}
 		
@@ -332,7 +387,6 @@ public class KindManagement extends Activity {
 			int eId = selectedId;//要编辑类别的ID，不可改变
 			String eName = "";//要编辑类别的名字
 			String eComment = "";//要编辑的备注
-//			int pId = 0;//根据该父类别ID查找父类别名字
 			String pName = "";//要编辑类别的父类别名字
 			eName = selectedName;
 			
@@ -341,7 +395,6 @@ public class KindManagement extends Activity {
 			for(int i=0;i<c.getCount();i++){
 				if(c.getInt(0) == selectedId){
 					eComment = c.getString(4);//获取要更改的备注
-//					pId = c.getInt(2);//获取要更改类别的父类别ID
 					eName = c.getString(1);
 					break;
 				}

@@ -308,5 +308,38 @@ public class GoodsKindCPer extends ContentProvider {
 				return false;
 		}
 
+		public List<Integer> getChildrenByParentId(int parentId){
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " parent = ? ", new String[]{parentId+""}, null);
+			if(c.getCount()>0){
+				List<Integer> temp = new ArrayList<Integer>();
+				c.moveToFirst();
+				for(int i=0;i<c.getCount();i++){
+					temp.add(c.getInt(0));
+					c.moveToNext();
+				}
+				return temp;
+			}
+			return new ArrayList<Integer>();
+			
+		}
+		public List<Integer> getAllDescendantByAncestorId(int ancestorId){
+			List<Integer> t = new ArrayList<Integer>();
+			List<Integer> temp = new ArrayList<Integer>();
+			temp = this.getChildrenByParentId(ancestorId);
+			
+			for(int i=0;i<temp.size();i++){
+				t.add(temp.get(i));
+			}
+			for(int i=0;i<t.size();i++){
+				Integer tempId = t.get(i);
+				temp = this.getChildrenByParentId(tempId);
+				
+				for(int j=0;j<temp.size();j++){
+					t.add(temp.get(j));
+				}
+			}
+			
+			return t;
+		}
 
 }
