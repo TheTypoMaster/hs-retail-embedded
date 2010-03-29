@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 	<string-array name="select_consume_function_items">
 		<item>增加溢耗</item>
@@ -11,4 +13,10 @@
 		<item>增加退货</item>
 		<item>查询退货</item>
 	</string-array>
+	
+	<array name="reportKind">
+		<item>@string/purchaseReport</item>
+		<item>@string/salesReport</item>
+		<item>@string/inventoryReport</item>
+	</array>
 </resources>
