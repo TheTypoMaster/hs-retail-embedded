@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+	<LinearLayout android:layout_gravity="center"
+		android:orientation="vertical" android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+ 
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingTop="100sp">
+				<TextView android:text="类别:"
+					style="@style/DialogTextViewfillWrapMediumStyle">
+				</TextView>
+				<!-- 
+				<TextView android:text="类别:"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+				</TextView>
+				<TextView android:id="@+id/goodsKindShowGoodsDetail"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:width="250sp"
+					android:singleLine="true">
+				</TextView>
+				 -->
+				<EditText android:id="@+id/goodsKindShowGoodsDetail"
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:width="250sp"
+					android:enabled="false"
+					>
+				</EditText>
+				<!-- 
+				<TextView android:id="@+id/goodsKindShowGoodsDetail"
+					android:width="200sp"
+					style="@style/TextViewfillWrapMediumStyle">
+				</TextView>
+				 -->
+				
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:text="厂家:"
+					style="@style/DialogTextViewfillWrapMediumStyle">
+				</TextView>
+
+				<EditText android:id="@+id/manuNameShowGoodsDetail"
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:width="250sp"
+					android:enabled="false">
+				</EditText>
+
+			</TableRow>
+			
+			<!-- 
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:text="代码:"
+					style="@style/TextViewfillWrapMediumStyle">
+				</TextView>
+
+				<TextView android:id="@+id/goodsCodeShowGoodsDetail"
+					android:width="200sp"
+					style="@style/TextViewfillWrapMediumStyle">
+				</TextView>
+
+			</TableRow>
+			 -->
+			
+			
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:text="名称:">
+				</TextView>
+
+				<EditText android:id="@+id/goodsNameShowGoodsDetail"
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:width="250sp"
+					android:enabled="false">
+				</EditText>
+			</TableRow>
+
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView style="@style/DialogTextViewfillWrapMediumStyle" android:text="单位:">
+				</TextView>
+
+				<EditText android:id="@+id/unitNameShowGoodsDetail"
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:width="250sp"
+					android:enabled="false">
+				</EditText>
+			</TableRow>
+			
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView style="@style/DialogTextViewfillWrapMediumStyle" android:text="进价:">
+				</TextView>
+
+				<EditText android:id="@+id/goodsPriceShowGoodsDetail"
+					style="@style/DialogTextViewfillWrapMediumStyle"
+					android:width="250sp"
+					android:enabled="false">
+				</EditText>
+			</TableRow>
+			
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView style="@style/DialogTextViewfillWrapMediumStyle"
+					 android:text="  ">
+				</TextView>
+				<Button android:text="确定" android:id="@+id/okButtonShowGoodsDetail"
+				android:layout_width="80dip"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_marginLeft="90sp"
+				android:layout_marginRight="30sp">
+				</Button>
+			</TableRow>
+			
+		</TableLayout>
+	</LinearLayout>
+</ScrollView>

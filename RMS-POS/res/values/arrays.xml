@@ -1,0 +1,14 @@
+<resources>
+	<string-array name="select_consume_function_items">
+		<item>增加溢耗</item>
+		<item>查询溢耗</item>
+	</string-array>
+	<string-array name="select_complaint_function_items">
+		<item>增加投诉</item>
+		<item>查询投诉</item>
+	</string-array>
+	<string-array name="select_return_function_items">
+		<item>增加退货</item>
+		<item>查询退货</item>
+	</string-array>
+</resources>

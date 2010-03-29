@@ -174,4 +174,13 @@ public class UnitCPer extends ContentProvider {
 			return null;
 		}
 
+		public String getAttributeById(String attribute,String id){
+			Cursor c = this.query(AllTables.Unit.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getString(0);
+			}else{
+				return null;
+			}
+		}
 }

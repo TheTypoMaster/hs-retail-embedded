@@ -149,4 +149,13 @@ public class UserInfoCPer extends ContentProvider {
 	    	else
 	    		return -1;
 	    }
+	    public String getUserNameByUserId(String UserId){
+	    	Cursor c = this.query(AllTables.UserInfo.CONTENT_URI, null, " _id = ? " , new String[]{UserId}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getString(1);
+	    	}
+	    	else
+	    		return null;
+	    }
 }

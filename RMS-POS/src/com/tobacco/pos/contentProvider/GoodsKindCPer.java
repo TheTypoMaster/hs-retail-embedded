@@ -301,7 +301,6 @@ public class GoodsKindCPer extends ContentProvider {
 		}
 		public boolean hasChildrenKind(int kindId){//ID为kindID的类别是否还有子类别
 			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " parent = ? ", new String[]{kindId+""}, null);
-
 			if(c.getCount()>0)
 				return true;
 			else
@@ -340,6 +339,16 @@ public class GoodsKindCPer extends ContentProvider {
 			}
 			
 			return t;
+		}
+		
+		public String getAttributeById(String attribute,String id){
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				return c.getString(0);
+			}else{
+				return null;
+			}
 		}
 
 }

@@ -4,6 +4,8 @@ import com.tobacco.pos.contentProvider.Loginer;
 import com.tobacco.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,9 @@ public class Main extends Activity {
 	private Button b2;//种类管理
 	private Button b3;//进货管理
 	private Button b4;//报表
+	private Button b5;//溢耗管理
+	private Button b6;//投诉管理
+	private Button b7;//退货管理
 	
 	private Loginer loginer = null;
 
@@ -27,6 +32,9 @@ public class Main extends Activity {
 		b2 = (Button) this.findViewById(R.id.kind);
 		b3 = (Button) this.findViewById(R.id.purchase);
 		b4 = (Button) this.findViewById(R.id.report);
+		b5 = (Button) this.findViewById(R.id.consume);
+		b6 = (Button) this.findViewById(R.id.complaint);
+		b7 = (Button) this.findViewById(R.id.returnGoods);
 
 		b1.setOnClickListener(new OnClickListener() {
 
@@ -86,6 +94,87 @@ public class Main extends Activity {
 				startActivity(intent);
 			}
 
+		});
+		
+		b5.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(Main.this)
+				.setTitle("选择功能")
+				.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Intent intent = null;
+						if(which == 0){
+							intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
+						}else{
+							intent = new Intent("com.tobacco.pos.activity.ConsumeSelect");
+						}
+						
+						startActivity(intent);
+					}
+					
+				}).create().show();
+			}
+        	
+        });
+		
+		b6.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(Main.this)
+				.setTitle("选择功能")
+				.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Intent intent = null;
+						if(which == 0){
+							intent = new Intent("com.tobacco.pos.activity.ComplaintInsertDialog");
+						}else{
+							intent = new Intent("com.tobacco.pos.activity.ComplaintSelect");
+						}
+						
+						startActivity(intent);
+					}
+					
+				}).create().show();
+			}
+			
+		});
+		
+		b7.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(Main.this)
+				.setTitle("选择功能")
+				.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Intent intent = null;
+						if(which == 0){
+							intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
+						}else{
+							intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
+						}
+						
+						startActivity(intent);
+					}
+					
+				}).create().show();
+			}
+			
 		});
 	}
 }

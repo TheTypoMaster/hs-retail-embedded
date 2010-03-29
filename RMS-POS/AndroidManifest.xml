@@ -25,6 +25,87 @@
 		  <activity android:name=".pos.activity.Login" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.AddPBill" android:theme="@android:style/Theme.Dialog"></activity>
 		  
+		  <activity android:name=".pos.activity.ConsumeInsert"  android:label="Consume_Insert">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.CosumeInsert" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+          <activity android:name=".pos.activity.ConsumeInsertDialog" android:label="Consume_Insert_Dialog"
+        		  android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ConsumeInsertDialog" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+          <activity android:name=".pos.activity.ConsumeSelect" android:label="Consume_Select" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ConsumeSelect" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ComplaintInsertDialog" 
+        		  android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ComplaintInsertDialog" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ComplaintSelect" android:label="Complaint_Select" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ComplaintSelect" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ReturnInsert" android:label="Return_Insert" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ReturnInsert" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ReturnInsertDialog" 
+				android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ReturnInsertDialog" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ReturnSelect" android:label="Return_Select" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ReturnSelect" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+          <activity android:name=".pos.common.ShowGoodsDetail" 
+          		android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ShowGoodsDetail" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.common.ShowCountGoodsDetail" 
+          		android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ShowCountGoodsDetail" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+          <activity android:name=".pos.common.SelectTimeRange" android:label="SelectTimeRange" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.SelectTimeRange" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <!-- 
+		  <activity android:name=".pos.util.QueryDataFromTables" android:label="QueryDataFromDiffTable" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.QueryDataFromTables" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		   -->
+		  
+		  
 		  <!-- ContentProvider -->
 		  <provider android:name=".pos.contentProvider.GoodsCPer" android:authorities="com.tobacco.contentProvider.GoodsCPer" />
 		  <provider android:name=".pos.contentProvider.GoodsKindCPer" android:authorities="com.tobacco.contentProvider.GoodsKindCPer" />
@@ -37,6 +118,10 @@
 		  <provider android:name=".pos.contentProvider.UnitCPer" android:authorities="com.tobacco.contentProvider.UnitCPer" />
 		  <provider android:name=".pos.contentProvider.UserInfoCPer" android:authorities="com.tobacco.contentProvider.UserInfoCPer" />
 		  <provider android:name=".pos.contentProvider.VIPInfoCPer" android:authorities="com.tobacco.contentProvider.VIPInfoCPer" />
+   		  <provider android:name=".pos.contentProvider.ConsumeCPer" android:authorities="com.tobacco.contentProvider.ConsumeCPer"/>
+   		  <provider android:name=".pos.contentProvider.ComplaintCPer" android:authorities="com.tobacco.contentProvider.ComplaintCPer"/>
+		  <provider android:name=".pos.contentProvider.ReturnCPer" android:authorities="com.tobacco.contentProvider.ReturnCPer"/>
+		<service android:name=".pos.service.ScanInputService"/>
     </application>
     <uses-sdk android:minSdkVersion="3" />
 

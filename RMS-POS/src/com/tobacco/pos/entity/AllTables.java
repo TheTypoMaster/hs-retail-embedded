@@ -158,4 +158,173 @@ public class AllTables {
 		public static final String mName = "mName";
 	}
 
+	public static class Consume implements BaseColumns{
+
+		
+		public static final String AUTHORITY = "com.tobacco.contentProvider.ConsumeCPer";
+		/**
+	    * The content:// style URL for this table
+	    */
+	    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/consumes");
+
+	   /**
+	    * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+	    */
+	    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.consume";
+
+	   /**
+	    * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+	    */
+	    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.consume";
+
+	   /**
+	    * The default sort order for this table
+	    */
+	    public static final String DEFAULT_SORT_ORDER = "modified DESC";
+
+	   /**
+	    * The number of the consume goods
+	    * <P>Type: INTEGER</P>
+	    */
+	    public static final String NUMBER = "number";
+
+	   /**
+	    * The number of the operater
+	    * <P>Type: INTEGER</P>
+	    */
+	    public static final String OPERATOR = "operator";
+	    
+	    /**
+	     * The number of the goods
+	     * <P>Type: INTEGER</P>
+	     */
+	    public static final String GOODS = "goods";
+
+	   /**
+	    * The timestamp for when the consume was created
+	    * <P>Type: INTEGER (long from System.curentTimeMillis())</P>
+	    */
+	    public static final String CREATED_DATE = "creat_day";
+	    
+	    /**
+	     * The flag to identify the consume type.
+	     * <P>Type: BOLLEAN</P>
+	     */
+	    public static final String FLAG = "flag";
+	    
+	    /**
+	     * The comment to show the reason
+	     * <P>Type: TEXT</P>
+	     */
+	    public static final String COMMENT = "comment";
+	}
+	
+	public static class Complaint implements BaseColumns{
+		
+		public static final String AUTHORITY = "com.tobacco.contentProvider.ComplaintCPer";
+		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/complaints");
+		/**
+		 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+		 */
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.complaint";
+		/**
+		 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+		 */
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.complaint";
+		/**
+		 * The id of the operator
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String OPER_ID = "operId";
+		/**
+		 * The time complaint create;
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String CREATE_DATE = "createDay";
+		/**
+		 * The id of the VIP customer
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String VIP_ID = "vipId";
+		/**
+		 * The id of the goods
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String GOODS_ID = "goodsId";
+		/**
+		 * The reason for complaint
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String CONTENT = "content";
+		/**
+		 * The comment for this complaint
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String COMMENT = "comment";
+		/**
+		 * The default sort order for this table
+		 */
+		public static final String DEFAULT_SORT_ORDER = "modified DESC";
+		
+	}
+	
+public static class Return implements BaseColumns{
+		
+		public static final String AUTHORITY = "com.tobacco.contentProvider.ReturnCPer";
+		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/returns");
+		/**
+		 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+		 */
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.return";
+		/**
+		 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+		 */
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.return";
+		/**
+		 * The id of the operator
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String OPER_ID = "operId";
+		/**
+		 * The time complaint create;
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String CREATE_DATE = "createDay";
+		/**
+		 * The id of the VIP customer
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String VIP_ID = "vipId";
+		/**
+		 * The id of the goods
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String GOODS_ID = "goodsId";	
+		/**
+		    * The number of the consume goods
+		    * <P>Type: INTEGER</P>
+		    */
+		public static final String NUMBER = "number";
+		/**
+		 * The reason for complaint
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String CONTENT = "content";
+		/**
+		 * The comment for this complaint
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String COMMENT = "comment";
+		/**
+		 * The default sort order for this table
+		 */
+		public static final String DEFAULT_SORT_ORDER = "modified DESC";
+		
+	}
 }

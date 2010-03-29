@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class VIPInfoCPer extends ContentProvider {
 
@@ -47,6 +48,7 @@ public class VIPInfoCPer extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
+			
 			try {
 				db.query(TABLE_NAME, null, null, null, null, null, null);
 			} catch (Exception e) {
@@ -72,9 +74,14 @@ public class VIPInfoCPer extends ContentProvider {
 		}
 
 		private boolean initVIPInfo(SQLiteDatabase db) {
-
 			ContentValues value = new ContentValues();
 
+			value.clear();
+			value.put("VIPNum", "common");
+			value.put("VIPName", "普通客户");
+			value.put("VIPDiscount", 1);
+			db.insertOrThrow(TABLE_NAME, null, value);
+			
 			value.clear();
 			value.put("VIPNum", "vip0001");
 			value.put("VIPName", "佟湘玉");
@@ -172,5 +179,25 @@ public class VIPInfoCPer extends ContentProvider {
 			return c.getInt(0);
 		}
 		return -1;
+	}
+	
+	public String getAttributeById(String attribute,String id){
+		Cursor c = this.query(AllTables.VIPInfo.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
+	}
+
+    public String getAttributeByAttribute(String attribute,String attribute2,String value){
+		Cursor c = this.query(AllTables.VIPInfo.CONTENT_URI, new String[]{attribute}, attribute2+" = "+"'"+value+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
 	}
 }
