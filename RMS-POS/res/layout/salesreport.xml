@@ -5,7 +5,7 @@
 	<ScrollView android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="380sp">
 
-		<TextView android:text="报表" android:id="@+id/TextView01"
+		<TextView android:text="销售报表" 
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 		</TextView>
