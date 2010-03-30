@@ -2,6 +2,7 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
  
 import com.tobacco.pos.entity.AllTables;
@@ -75,6 +76,7 @@ public class PurchaseBillCPer extends ContentProvider {
 				
 			}
 			private boolean initPurchaseBill(SQLiteDatabase db) {
+				SimpleDateFormat dateFormater = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 				
 				ContentValues value = new ContentValues();
 				
@@ -82,7 +84,7 @@ public class PurchaseBillCPer extends ContentProvider {
 				value.put("pBillNum", "P1");
 				value.put("operId", 1);
 				Date d1 = new Date();
-				value.put("time", d1.toLocaleString());
+				value.put("time", dateFormater.format(d1));
 				value.put("comment", "第一张进货单");
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
@@ -90,7 +92,9 @@ public class PurchaseBillCPer extends ContentProvider {
 				value.put("pBillNum", "P2");
 				value.put("operId", 1);
 				Date d2 = new Date();
-				value.put("time", d2.toLocaleString());
+				if(d1.getSeconds()<57)
+					d2.setSeconds(d1.getSeconds()+3);
+				value.put("time", dateFormater.format(d2));
 				value.put("comment", "第二张进货单");
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
@@ -207,6 +211,56 @@ public class PurchaseBillCPer extends ContentProvider {
 	    		
 	    	}
 	    	return "";
+	    }
+	    
+	    public String getTimeByPBillId(int pBillId){//根据进货单的ID查找时间
+	    	Cursor c = this.query(AllTables.PurchaseBill.CONTENT_URI, null, " _id = ?", new String[]{pBillId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getString(3);
+	    		
+	    	}
+	    	return "";
+	    }
+	    public int getPBillIdAccordingTimeAndPBillNum(String startTime, String endTime, String pBillNum){
+	    	int pBillId = this.getPBillIdByPBillNum(pBillNum);
+	    	if(pBillId == -1)
+	    		return -1;
+	    	else{//找到相应编号的进货单，开始时间比较
+	    		if(startTime.equals("开始时间") && endTime.equals("结束时间"))
+	    			return pBillId;
+	    		else if(startTime.equals("开始时间") && !endTime.equals("结束时间")){
+	    			String theTime = this.getTimeByPBillId(pBillId);
+		    		
+	    			endTime += " 23:59:59";
+		    		
+		    		if(endTime.compareTo(theTime) >=0 )
+		    			return pBillId;
+		    		else
+		    			return -1;
+	    		}
+	    		else if(!startTime.equals("开始时间") && endTime.equals("结束时间")){
+	    			String theTime = this.getTimeByPBillId(pBillId);
+		    		
+	    			startTime += " 00:00:00";
+		    		
+		    		if(startTime.compareTo(theTime) <=0 )
+		    			return pBillId;
+		    		else
+		    			return -1;
+	    		}
+	    		else{
+	    			String theTime = this.getTimeByPBillId(pBillId);
+	    		
+	    			startTime += " 00:00:00";
+	    			endTime += " 23:59:59";
+	    			
+	    			if((startTime.compareTo(theTime)<0 && theTime.compareTo(endTime)<0) || startTime.equals(theTime) || endTime.equals(theTime))
+	    				return pBillId;
+	    			else
+	    				return -1;
+	    		}
+	    	}
 	    }
 
 }
