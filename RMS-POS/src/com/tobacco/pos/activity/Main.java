@@ -36,6 +36,7 @@ public class Main extends Activity {
 		b6 = (Button) this.findViewById(R.id.complaint);
 		b7 = (Button) this.findViewById(R.id.returnGoods);
 
+
 		b1.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -90,24 +91,34 @@ public class Main extends Activity {
 		b4.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(Main.this, ReportManagement.class);
-				startActivity(intent);
+
+				AlertDialog.Builder selectReportKindTip = new AlertDialog.Builder(Main.this);
+				selectReportKindTip.setTitle("报表类型");
+				selectReportKindTip.setItems(R.array.reportKind, new DialogInterface.OnClickListener(){
+
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(Main.this, ReportManagement.class);
+						intent.putExtra("reportKind", which);
+						startActivity(intent);
+					}
+					
+				});
+				
+				selectReportKindTip.show();
 			}
 
 		});
 		
 		b5.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+		 
+			public void onClick(View v) { 
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+			 
+					public void onClick(DialogInterface dialog, int which) { 
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
@@ -125,16 +136,14 @@ public class Main extends Activity {
 		
 		b6.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			 
+			public void onClick(View v) { 
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+					 
+					public void onClick(DialogInterface dialog, int which) { 
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.ComplaintInsertDialog");
@@ -152,16 +161,13 @@ public class Main extends Activity {
 		
 		b7.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+		 
+			public void onClick(View v) { 
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+ 
+					public void onClick(DialogInterface dialog, int which) { 
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
