@@ -1,5 +1,6 @@
 package com.tobacco.pos.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -28,6 +29,8 @@ public class AddPBill extends Activity{
 	private Button addPBillReset = null;
 
 	private String userName = "";
+	
+	private SimpleDateFormat dateFormater = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +46,7 @@ public class AddPBill extends Activity{
 		pBillNumTView.setText("P"+(Integer.parseInt(maxPBillNum)+1));
 		
 		pTimeTView = (TextView)this.findViewById(R.id.pTimeTView);
-		pTimeTView.setText((new Date()).toLocaleString());
+		pTimeTView.setText(dateFormater.format(new Date()));
 		pCommentEText = (EditText)this.findViewById(R.id.pCommentEText);
 		addPBillOk = (Button)this.findViewById(R.id.addPBillOk);
 		addPBillReset = (Button)this.findViewById(R.id.addPBillReset);
