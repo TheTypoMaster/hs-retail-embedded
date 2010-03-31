@@ -23,6 +23,7 @@ public class GoodsPriceCPer extends ContentProvider {
 		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private UnitCPer unitCPer = null;
+	    private GoodsCPer gCPer = null;
 	    
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -176,7 +177,7 @@ public class GoodsPriceCPer extends ContentProvider {
 
 	    @Override
 	    public boolean onCreate() {
-	        dbHelper = new DatabaseHelper(getContext());
+	        dbHelper = new DatabaseHelper(getContext());	    
 	        return (dbHelper == null) ? false : true;
 	    } 
 
@@ -271,8 +272,8 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " goodsId = ? ", new String[]{goodsId+""}, null);
 	    	List<String> allUnitByGoodsId = new ArrayList<String>();
 	  
-	    	unitCPer = new UnitCPer();
-	    	
+	     	unitCPer = new UnitCPer();
+	   
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
 	    		for(int i=0;i<c.getCount();i++){
@@ -313,6 +314,24 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	return -1;
 	    }
 
+	    public List<String> getInfoByGPriceId(int goodsPriceId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? ", new String[]{goodsPriceId+""}, null);
+	    	if(c.getCount()>0){
+	    		gCPer = new GoodsCPer();
+	    		unitCPer = new UnitCPer();
+	    		c.moveToFirst();
+	    		List<String> info = new ArrayList<String>();
+	    		
+	    		info.add(gCPer.getGoodsNameByGoodsId(c.getInt(1)));
+	    		info.add(gCPer.getUnitNameByGoodsId(c.getInt(1)));
+	    		info.add(unitCPer.getUnitNameById(c.getInt(2)));
+	    		info.add(""+c.getDouble(4));
+	    		info.add(""+c.getDouble(5));
+	    		
+	    		return info;
+	    	}
+	    	return null;
+		}
 	    public String getBarcodeIdByGoodsPriceId(String id){
 	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? " , new String[]{id}, null);
 	    	
@@ -342,4 +361,5 @@ public class GoodsPriceCPer extends ContentProvider {
 				return null;
 			}
 		}
+
 }
