@@ -25,7 +25,8 @@ public class PurchaseBillCPer extends ContentProvider {
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "PurchaseBill";
 	    private static Context ct = null;
-
+	    
+		
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
 	    	private SQLiteDatabase db = null;
@@ -161,8 +162,10 @@ public class PurchaseBillCPer extends ContentProvider {
 	    
 	    public int addPBill(String pBillNum, int operId, String time, String comment){//添加进货单，成功的话返回新加的进货单号，否则返回-1
 	    	ContentValues value = new ContentValues();
+	    	 
+			 
 			
-			value.clear();
+		 	value.clear();
 			value.put("pBillNum", pBillNum);
 			value.put("operId", operId);
 			value.put("time", time);
@@ -222,7 +225,7 @@ public class PurchaseBillCPer extends ContentProvider {
 	    	}
 	    	return "";
 	    }
-	    public int getPBillIdAccordingTimeAndPBillNum(String startTime, String endTime, String pBillNum){
+	    public int getPBillIdByTimeAndPBillNum(String startTime, String endTime, String pBillNum){
 	    	int pBillId = this.getPBillIdByPBillNum(pBillNum);
 	    	if(pBillId == -1)
 	    		return -1;

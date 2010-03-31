@@ -1,6 +1,9 @@
 package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
+
+import java.util.ArrayList;
+import java.util.List;
  
 import com.tobacco.pos.entity.AllTables;
 
@@ -14,6 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class PurchaseItemCPer extends ContentProvider {
 
@@ -162,6 +166,33 @@ public class PurchaseItemCPer extends ContentProvider {
 	    		 
 	    			
 	    	}
+	    }
+	    public List<Integer> getAllPCountByPBillId(int pBillId){
+	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " purchaseBillId = ? ", new String[]{pBillId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		List<Integer> allCountId = new ArrayList<Integer>();
+	    		for(int i=0;i<c.getCount();i++){
+	    			allCountId.add(c.getInt(2));
+	    			c.moveToNext();
+	    		}
+	    		return allCountId;
+	    	}
+	    	return null;
+	    }
+	    public List<Integer> getAllPriceIdByPBillId(int pBillId){
+	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " purchaseBillId = ? ", new String[]{pBillId+""}, null);
+	    
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		List<Integer> allPriceId = new ArrayList<Integer>();
+	    		for(int i=0;i<c.getCount();i++){
+	    			allPriceId.add(c.getInt(3));
+	    			c.moveToNext();
+	    		}
+	    		return allPriceId;
+	    	}
+	    	return new ArrayList<Integer>();
 	    }
 
 }
