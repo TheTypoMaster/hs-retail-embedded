@@ -2,7 +2,9 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import com.tobacco.pos.entity.AllTables;
@@ -23,6 +25,10 @@ public class GoodsCPer extends ContentProvider {
 	    private DatabaseHelper    dbHelper;
 	    private GoodsKindCPer gKindCPer = null;
 	    private ManufacturerCPer mCPer = null;
+	    private GoodsPriceCPer gPriceCPer = null;
+	    private PurchaseItemCPer pItemCPer = null;
+	    private PurchaseBillCPer pBillCPer = null;
+	    private UnitCPer unitCPer = null;
 	    
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
@@ -259,8 +265,75 @@ public class GoodsCPer extends ContentProvider {
 	    	}
 	    	return "";
 	    }
+	    public ArrayList<ArrayList<String>> getPInfoByGoodsName(String goodsName){//根据商品的名字查询关于该商品的进货信息，此处需要模糊查找。
+	    	gPriceCPer = new GoodsPriceCPer();
+	    	pItemCPer = new PurchaseItemCPer();
+	    	List<Integer> goodsIdList = new ArrayList<Integer>();
+	    	List<Integer> priceIdList = new ArrayList<Integer>();
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " goodsName like '%" + goodsName + "%'", null, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			goodsIdList.add(c.getInt(0));
+	    			c.moveToNext();
+	    		}
+	    		for(int i=0;i<goodsIdList.size();i++){
+	    			List<Integer> temp = gPriceCPer.getGoodsPriceIdByGoodsId(goodsIdList.get(i));
+	    			for(int j=0;j<temp.size();j++){
+	    				priceIdList.add(temp.get(j));
+	    			}
+	    		}
+	    		ArrayList<ArrayList<Integer>> allPItem = new ArrayList<ArrayList<Integer>>();
+	    		for(int i=0;i<priceIdList.size();i++){
+	    		
+	    			ArrayList<ArrayList<Integer>> temp = pItemCPer.getPItemByPriceId(priceIdList.get(i));
+	    			allPItem.addAll(temp);
+	    		}
+	    		pBillCPer = new PurchaseBillCPer();
+	    		unitCPer = new UnitCPer();
+	    		ArrayList<ArrayList<String>> pInfoList = new ArrayList<ArrayList<String>>();
+	    		for(int i=0;i<allPItem.size();i++){
+	    			ArrayList<Integer> temp = allPItem.get(i);
+	    			
+	    			int pBillId = temp.get(1);
+	    			int pPriceId = temp.get(3);
+	    			
+	    			String pBillNum = pBillCPer.getPBillNumByPBillId(pBillId);//进货单号
+	    			String allGoodsName = this.getGoodsNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品的全名
+	    			String goodsKind = this.getGoodsKindNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品种类
+	    			if(goodsKind.contains("->"))
+	    				goodsKind = goodsKind.substring(goodsKind.lastIndexOf("->")+2);
+	    			int pCount = temp.get(2);//进货数量
+	    			String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(pPriceId));
+	    			double inPrice = gPriceCPer.getInPriceByGoodsPriceId(pPriceId);
+	    			double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(pPriceId);
+	    			ArrayList<String> t = new ArrayList<String>();
+	    			t.add(pBillNum);
+	    			t.add(allGoodsName);
+	    			t.add(goodsKind);
+	    			t.add(pCount+"");
+	    			t.add(unitName);
+	    			t.add(inPrice+"");
+	    			t.add(outPrice+"");
+	    			pInfoList.add(t);
+//	    			pInfoList.add(pBillNum + "-" + allGoodsName + "-" + goodsKind + "-" + pCount + "-" + unitName + "-" + inPrice + "-" + outPrice);
+	    		}
+	    		return pInfoList;
+	    	}
+	    	return null;
+	    }
+	    public String getGoodsKindNameByGoodsId(int goodsId){
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " _id = ? ", new String[]{goodsId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		gKindCPer = new GoodsKindCPer();
+	    		return gKindCPer.getGoodsKindNameByGoodsKindId(c.getInt(5));
+	    		
+	    	}
+	    	return "";
+	    }
 	    public String getAttributeById(String attribute,String id){
-			Cursor c = this.query(AllTables.Goods.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);
+			Cursor c = this.query(AllTables.Goods.CONTENT_URI, new String[]{attribute}, " _id = "+"'"+id+"'" , null, null);
 			if(c.getCount()>0){
 				c.moveToFirst();
 				return c.getString(0);
@@ -268,7 +341,7 @@ public class GoodsCPer extends ContentProvider {
 				return null;
 			}
 		}
-	    
+	   
 	    public String getAttributeByAttribute(String attribute,String attribute2,String value){
 			Cursor c = this.query(AllTables.Goods.CONTENT_URI, new String[]{attribute}, attribute2+" = "+"'"+value+"'" , null, null);
 			if(c.getCount()>0){
@@ -280,3 +353,4 @@ public class GoodsCPer extends ContentProvider {
 		}
 
 }
+;

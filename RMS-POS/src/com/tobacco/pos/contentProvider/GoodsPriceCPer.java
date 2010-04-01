@@ -251,7 +251,19 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	else
 	    		return 0;
 	    }
-	    
+	    public List<Integer> getGoodsPriceIdByGoodsId(int goodsId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " goodsId = ? ", new String[]{goodsId+""}, null);
+	    	if(c.getCount()>0){
+	    		List<Integer> priceIdList = new ArrayList<Integer>();
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			priceIdList.add(c.getInt(0));
+	    			c.moveToNext();
+	    		}
+	    		return priceIdList;
+	    	}
+	    	return new ArrayList<Integer>();
+	    }
 	    public boolean addGoodsPrice(int goodsId, int unitId, String barcode, double inPrice, double outPrice){
 			ContentValues value = new ContentValues();
 			value.clear();
@@ -341,6 +353,41 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	}
 	    	else
 	    		return null;
+	    }
+	    public int getGoodsIdByGoodsPriceId(int priceId){//根据商品价格的Id查找商品Id
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? ", new String[]{priceId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(1);
+	    	}
+	    	return -1;
+	    }
+	    public int getUnitIdByGoodsPriceId(int priceId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? ", new String[]{priceId+""}, null);
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToFirst();
+	    		return c.getInt(2);
+	    	}
+	    	return -1;
+	    }
+	    public double getInPriceByGoodsPriceId(int priceId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? ", new String[]{priceId+""}, null);
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToFirst();
+	    		return c.getDouble(4);
+	    	}
+	    	return 0;
+	    }
+	    public double getOutPriceByGoodsPriceId(int priceId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? ", new String[]{priceId+""}, null);
+	    	if(c.getCount()>0)
+	    	{
+	    		c.moveToFirst();
+	    		return c.getDouble(5);
+	    	}
+	    	return 0;
 	    }
 	    public String getAttributeById(String attribute,String id){
 			Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);

@@ -17,7 +17,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
 
 public class PurchaseItemCPer extends ContentProvider {
 
@@ -78,6 +77,35 @@ public class PurchaseItemCPer extends ContentProvider {
 			}
 			private boolean initPurchaseItem(SQLiteDatabase db) {
 				
+				ContentValues value = new ContentValues();
+				
+				value.clear();
+				value.put("purchaseBillId", 1);
+				value.put("pGoodsNum", 4);
+				value.put("pPriceId", 7);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 2);
+				value.put("pGoodsNum", 2);
+				value.put("pPriceId", 7);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 2);
+				value.put("pGoodsNum", 4);
+				value.put("pPriceId", 8);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 1);
+				value.put("pGoodsNum", 10);
+				value.put("pPriceId", 3);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
 				return true;
 				
 			}
@@ -194,5 +222,25 @@ public class PurchaseItemCPer extends ContentProvider {
 	    	}
 	    	return new ArrayList<Integer>();
 	    }
-
+	    public ArrayList<ArrayList<Integer>> getPItemByPriceId(int priceId){
+	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " pPriceId = ? ",  new String[]{priceId+""}, null);
+	    	if(c.getCount()>0){
+	    	
+	    		c.moveToFirst();
+	    		ArrayList<ArrayList<Integer>> allPItem = new ArrayList<ArrayList<Integer>>();
+	    		for(int i=0;i<c.getCount();i++){
+	    			ArrayList<Integer> temp = new ArrayList<Integer>();
+	    			temp.add(c.getInt(0));
+	    			temp.add(c.getInt(1));
+	    			temp.add(c.getInt(2));
+	    			temp.add(c.getInt(3));
+	    			
+	    			allPItem.add(temp);
+	    			
+	    			c.moveToNext();
+	    		}
+	    		return allPItem;
+	    	}
+	    	return new ArrayList<ArrayList<Integer>>();
+	    }
 }
