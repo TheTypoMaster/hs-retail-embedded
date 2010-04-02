@@ -265,7 +265,8 @@ public class GoodsCPer extends ContentProvider {
 	    	}
 	    	return "";
 	    }
-	    public ArrayList<ArrayList<String>> getPInfoByGoodsName(String goodsName){//根据商品的名字查询关于该商品的进货信息，此处需要模糊查找。
+	    public ArrayList<ArrayList<String>> getPInfoByGoodsName(String startTime, String endTime, String goodsName){//根据商品的名字查询关于该商品的进货信息，此处需要模糊查找。
+	    
 	    	gPriceCPer = new GoodsPriceCPer();
 	    	pItemCPer = new PurchaseItemCPer();
 	    	List<Integer> goodsIdList = new ArrayList<Integer>();
@@ -298,25 +299,56 @@ public class GoodsCPer extends ContentProvider {
 	    			int pBillId = temp.get(1);
 	    			int pPriceId = temp.get(3);
 	    			
-	    			String pBillNum = pBillCPer.getPBillNumByPBillId(pBillId);//进货单号
-	    			String allGoodsName = this.getGoodsNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品的全名
-	    			String goodsKind = this.getGoodsKindNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品种类
-	    			if(goodsKind.contains("->"))
-	    				goodsKind = goodsKind.substring(goodsKind.lastIndexOf("->")+2);
-	    			int pCount = temp.get(2);//进货数量
-	    			String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(pPriceId));
-	    			double inPrice = gPriceCPer.getInPriceByGoodsPriceId(pPriceId);
-	    			double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(pPriceId);
-	    			ArrayList<String> t = new ArrayList<String>();
-	    			t.add(pBillNum);
-	    			t.add(allGoodsName);
-	    			t.add(goodsKind);
-	    			t.add(pCount+"");
-	    			t.add(unitName);
-	    			t.add(inPrice+"");
-	    			t.add(outPrice+"");
-	    			pInfoList.add(t);
-//	    			pInfoList.add(pBillNum + "-" + allGoodsName + "-" + goodsKind + "-" + pCount + "-" + unitName + "-" + inPrice + "-" + outPrice);
+	    			boolean flag = true;//时间是否符合的标志
+	    			
+	    			if(startTime.equals("开始时间") && endTime.equals("结束时间"))//没设时间
+	    				flag = true;
+	    			else if(!startTime.equals("开始时间") && endTime.equals("结束时间")){//有设开始时间，没设结束时间
+	    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+	    				startTime += " 00:00:00";
+	    				if(pTime.compareTo(startTime) > 0)
+	    					flag = true;
+	    				else
+	    					flag = false;
+	    			}
+	    			else if(startTime.equals("开始时间") && !endTime.equals("结束时间")){//没设开始时间，有设结束时间
+	    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+	    				endTime += " 23:59:59";
+	    				if(pTime.compareTo(endTime) < 0)
+	    					flag = true;
+	    				else
+	    					flag = false;
+	    			}
+	    			else{//有设开始时间，也有设结束时间
+	    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+	    				startTime += " 00:00:00";
+	    				endTime += " 23:59:59";
+	    				if(startTime.compareTo(pTime) < 0 && pTime.compareTo(endTime) < 0)
+	    					flag = true;
+	    				else
+	    					flag = false;
+	    			}
+	    			
+	    			if(flag){
+	    				String pBillNum = pBillCPer.getPBillNumByPBillId(pBillId);//进货单号
+	    				String allGoodsName = this.getGoodsNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品的全名
+	    				String goodsKind = this.getGoodsKindNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品种类
+	    				if(goodsKind.contains("->"))
+	    					goodsKind = goodsKind.substring(goodsKind.lastIndexOf("->")+2);
+	    				int pCount = temp.get(2);//进货数量
+	    				String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(pPriceId));
+	    				double inPrice = gPriceCPer.getInPriceByGoodsPriceId(pPriceId);
+	    				double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(pPriceId);
+	    				ArrayList<String> t = new ArrayList<String>();
+	    				t.add(pBillNum);
+	    				t.add(allGoodsName);
+	    				t.add(goodsKind);
+	    				t.add(pCount+"");
+	    				t.add(unitName);
+	    				t.add(inPrice+"");
+	    				t.add(outPrice+"");
+	    				pInfoList.add(t);
+	    			}
 	    		}
 	    		return pInfoList;
 	    	}
