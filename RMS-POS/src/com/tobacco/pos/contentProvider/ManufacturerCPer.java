@@ -92,6 +92,10 @@ public class ManufacturerCPer extends ContentProvider {
 				value.put("mName", "福州卷烟厂");
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
+				value.clear();
+				value.put("mName", "福州衣服厂");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
 				return true;
 			}
 	    } 
