@@ -100,6 +100,10 @@ public class UnitCPer extends ContentProvider {
 				value.put("name", "支");
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
+				value.clear();
+				value.put("name", "张");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
 				return true;
 			}
 	    } 

@@ -25,11 +25,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -212,6 +214,7 @@ public class PurchaseManagement extends Activity {
 							newGoods.add(temp);
 					}
 				
+					boolean addGoodsFlag = true;
 					for(int i=0;i<newGoods.size();i++){//开始存储商品信息，商品名字，厂家，种类
 						Vector temp = newGoods.get(i);
 
@@ -222,11 +225,14 @@ public class PurchaseManagement extends Activity {
 						if(newGoodsId!=-1)
 							newGoodsIds.add(newGoodsId);//新增商品成功
 						else{
+							addGoodsFlag = false;
 							Toast.makeText(PurchaseManagement.this, "增加新商品:"+temp.get(0).toString()+" 失败", Toast.LENGTH_SHORT).show();
 							break;
 						}
 						
 					}
+					if(addGoodsFlag)
+						Toast.makeText(PurchaseManagement.this, "成功增加所有新商品", Toast.LENGTH_SHORT).show();
 
 					for(int i=1;i<newGoodsTable.getChildCount()-1;i++){//取得新加商品的ID
 						TableRow row = (TableRow)newGoodsTable.getChildAt(i);
@@ -401,7 +407,7 @@ public class PurchaseManagement extends Activity {
 			}
 			
 		});
-		
+		final ImageView add = new ImageView(this);
 		final EditText countEText = new EditText(this);
 		countEText.setWidth(7);
 		countEText.setSingleLine(true);
@@ -433,17 +439,24 @@ public class PurchaseManagement extends Activity {
 			
 		});//输入的内容有改变时
 
-		countEText.setOnFocusChangeListener(new OnFocusChangeListener(){
+		countEText.setOnKeyListener(new OnKeyListener(){
 
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus){
-					priceIdList.add(gPriceCPer.getPriceIdByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId));
-					countList.add(Integer.parseInt(countEText.getText().toString()));//将该进货项的数量加入到countList中。
-				
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+					if(((TextView)v).getText().toString().equals("") || ((TextView)v).getText().toString() == null)
+						;
+					else{
+						priceIdList.add(gPriceCPer.getPriceIdByGoodsIdAndUnitId(selectedGoodsId, selectedUnitId));
+						countList.add(Integer.parseInt(countEText.getText().toString()));//将该进货项的数量加入到countList中。
+					
+						return true;
+					}
 				}
+				return false;
 			}
 			
 		});
+
 		final TextView inPriceTView = new TextView(this);
 		final TextView outPriceTView = new TextView(this);
 	
@@ -499,8 +512,9 @@ public class PurchaseManagement extends Activity {
 		
 		goodsIntoPBillTable.addView(row);
 		
-		ImageView add = new ImageView(this);
+		
 		add.setImageResource(R.drawable.add);
+		
 		
 		add.setOnClickListener(new OnClickListener(){
 
@@ -521,7 +535,10 @@ public class PurchaseManagement extends Activity {
 		addGoodsIntoPBillOk.setOnClickListener(new OnClickListener(){
 
 			public void onClick(final View v) {
-			
+				if(countEText.getText().toString() == null || countEText.getText().toString().trim().equals("")){
+					Toast.makeText(PurchaseManagement.this, "请输入商品的进货量", Toast.LENGTH_SHORT).show();
+				}
+				else{
 					AlertDialog.Builder addPBillTip = new AlertDialog.Builder(PurchaseManagement.this);
 					addPBillTip.setTitle("提示");
 					addPBillTip.setMessage("是否添加新的进货单？");
@@ -545,6 +562,7 @@ public class PurchaseManagement extends Activity {
 					addPBillTip.show();
 				
 				}
+			}
 		});
 		
 		Button addGoodsIntoPBillReset = new Button(this);//取消
