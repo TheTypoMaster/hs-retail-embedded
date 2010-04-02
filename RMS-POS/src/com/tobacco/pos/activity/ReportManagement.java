@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.GoodsCPer;
+import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
@@ -33,6 +34,7 @@ public class ReportManagement extends Activity {
 	private PurchaseItemCPer pItemCPer = null;
 	private GoodsPriceCPer gPriceCPer = null;
 	private GoodsCPer gCPer = null;
+	private GoodsKindCPer gKindCPer = null;
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ReportManagement extends Activity {
 	        pItemCPer = new PurchaseItemCPer();
 	        gPriceCPer = new GoodsPriceCPer();
 	        gCPer = new GoodsCPer();
+	        gKindCPer = new GoodsKindCPer();
 	        
 	        int reportKind = getIntent().getIntExtra("reportKind", 0);
 	        if(reportKind == 0){//选择的类型如果是进货报表
@@ -194,7 +197,23 @@ public class ReportManagement extends Activity {
 								}
 							}
 							else if(conditionSpinner.getSelectedItemId() == 2){//根据商品的种类查找，要支持模糊搜索
+								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+								ArrayList<ArrayList<String>> pInfo = gCPer.getPInfoByGoodsKindName(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
 								
+								if(pInfo == null || pInfo.size() == 0)
+									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+								else{
+									for(int i=0;i<pInfo.size();i++){
+										ArrayList<String> temp = pInfo.get(i);
+										TableRow theResultRow = new TableRow(ReportManagement.this);
+										for(int j=0;j<temp.size();j++){
+											TextView tView = new TextView(ReportManagement.this);
+											tView.setText(temp.get(j));
+											theResultRow.addView(tView);
+										}
+										purchaseReportTable.addView(theResultRow);
+									}
+								}
 							}
 							
 							((TextView)v).setText("");

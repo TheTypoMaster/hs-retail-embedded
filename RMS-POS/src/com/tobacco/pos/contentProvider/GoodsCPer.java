@@ -147,6 +147,14 @@ public class GoodsCPer extends ContentProvider {
 					value.put("kindId", 8);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
+					value.clear();
+					value.put("goodsCode", "G8");
+					value.put("goodsName", "白衬衫");
+					value.put("manufacturerId", 5);
+					value.put("goodsFormat", "");
+					value.put("kindId", 2);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
 					return true;
 				}
 				
@@ -264,6 +272,106 @@ public class GoodsCPer extends ContentProvider {
 	    		return gKindCPer.getGoodsKindNameByGoodsKindId(c.getInt(5));
 	    	}
 	    	return "";
+	    }
+	    public ArrayList<ArrayList<String>> getPInfoByGoodsKindName(String startTime, String endTime,String kindName){
+	    	gKindCPer = new GoodsKindCPer();
+	    	gPriceCPer = new GoodsPriceCPer();
+	    	pItemCPer = new PurchaseItemCPer();
+	    	pBillCPer = new PurchaseBillCPer();
+			unitCPer = new UnitCPer();
+			
+	    	List<Integer> satisfiedKindIdList = gKindCPer.getGoodsKindIdListByGoodsKind(kindName);
+	    	
+	    	if(satisfiedKindIdList.size()>0){
+	    		Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, null, null, null);
+	    		if(c.getCount()>0){
+	    		
+	    			List<Integer> satisfiedGoodsIdList = new ArrayList<Integer>();//种类名称包含kindName的商品的Id。
+	    			c.moveToFirst();
+	    			for(int i=0;i<c.getCount();i++){
+	    				int tempGoodsId = c.getInt(0);
+	    				int tempGoodsKindId = c.getInt(5);
+	    				if(satisfiedKindIdList.contains(tempGoodsKindId)){
+	    					satisfiedGoodsIdList.add(tempGoodsId);
+	    				}
+	    				c.moveToNext();
+	    			}
+	    			List<Integer> satisfiedGoodsPriceIdList = new ArrayList<Integer>();//
+	    			for(int i=0;i<satisfiedGoodsIdList.size();i++){
+	    				List<Integer> tempPriceList = gPriceCPer.getGoodsPriceIdByGoodsId(satisfiedGoodsIdList.get(i));
+	    				satisfiedGoodsPriceIdList.addAll(tempPriceList);
+	    			}
+	    			ArrayList<ArrayList<String>> pInfoList = new ArrayList<ArrayList<String>>();
+	    			ArrayList<ArrayList<Integer>> allPItemList = new ArrayList<ArrayList<Integer>>();
+	    			for(int i=0;i<satisfiedGoodsPriceIdList.size();i++){
+	    				
+	    				ArrayList<ArrayList<Integer>> temp = pItemCPer.getPItemByPriceId(satisfiedGoodsPriceIdList.get(i));
+	    				allPItemList.addAll(temp);
+	    				
+	    			}
+	    			for(int i=0;i<allPItemList.size();i++){
+	    				ArrayList<Integer> t = allPItemList.get(i);
+	    				int pBillId = t.get(1);//进货单Id
+	    				int pPriceId = t.get(3);
+	    				
+	    				boolean flag = true;//时间是否符合的标志
+	    				
+	    				if(startTime.equals("开始时间") && endTime.equals("结束时间"))//没设时间
+		    				flag = true;
+		    			else if(!startTime.equals("开始时间") && endTime.equals("结束时间")){//有设开始时间，没设结束时间
+		    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+		    				startTime += " 00:00:00";
+		    				if(pTime.compareTo(startTime) > 0)
+		    					flag = true;
+		    				else
+		    					flag = false;
+		    			}
+		    			else if(startTime.equals("开始时间") && !endTime.equals("结束时间")){//没设开始时间，有设结束时间
+		    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+		    				endTime += " 23:59:59";
+		    				if(pTime.compareTo(endTime) < 0)
+		    					flag = true;
+		    				else
+		    					flag = false;
+		    			}
+		    			else{//有设开始时间，也有设结束时间
+		    				String pTime = pBillCPer.getTimeByPBillId(pBillId);
+		    				startTime += " 00:00:00";
+		    				endTime += " 23:59:59";
+		    				if(startTime.compareTo(pTime) < 0 && pTime.compareTo(endTime) < 0)
+		    					flag = true;
+		    				else
+		    					flag = false;
+		    			}
+		    			
+	    				if(flag){
+	    					
+	    					String pBillNum = pBillCPer.getPBillNumByPBillId(pBillId);//进货单号
+		    				String allGoodsName = this.getGoodsNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品的全名
+		    				String goodsKind = this.getGoodsKindNameByGoodsId(gPriceCPer.getGoodsIdByGoodsPriceId(pPriceId));//商品种类
+		    				if(goodsKind.contains("->"))
+		    					goodsKind = goodsKind.substring(goodsKind.lastIndexOf("->")+2);
+		    				int pCount = t.get(2);//进货数量
+		    				String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(pPriceId));
+		    				double inPrice = gPriceCPer.getInPriceByGoodsPriceId(pPriceId);
+		    				double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(pPriceId);
+		    				ArrayList<String> te = new ArrayList<String>();
+		    				te.add(pBillNum);
+		    				te.add(allGoodsName);
+		    				te.add(goodsKind);
+		    				te.add(pCount+"");
+		    				te.add(unitName);
+		    				te.add(inPrice+"");
+		    				te.add(outPrice+"");
+		    				pInfoList.add(te);
+	    				}
+	    				
+	    			}
+	    			return pInfoList;
+	    		}
+	    		return null;
+	    	}
+	    	return null;
 	    }
 	    public ArrayList<ArrayList<String>> getPInfoByGoodsName(String startTime, String endTime, String goodsName){//根据商品的名字查询关于该商品的进货信息，此处需要模糊查找。
 	    
