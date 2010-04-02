@@ -87,20 +87,6 @@ public class PurchaseItemCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
-				value.put("purchaseBillId", 2);
-				value.put("pGoodsNum", 2);
-				value.put("pPriceId", 7);
-				
-				db.insertOrThrow(TABLE_NAME, null, value);
-				
-				value.clear();
-				value.put("purchaseBillId", 2);
-				value.put("pGoodsNum", 4);
-				value.put("pPriceId", 8);
-				
-				db.insertOrThrow(TABLE_NAME, null, value);
-				
-				value.clear();
 				value.put("purchaseBillId", 1);
 				value.put("pGoodsNum", 10);
 				value.put("pPriceId", 3);
@@ -118,6 +104,34 @@ public class PurchaseItemCPer extends ContentProvider {
 				value.put("purchaseBillId", 1);
 				value.put("pGoodsNum", 10);
 				value.put("pPriceId", 9);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 1);
+				value.put("pGoodsNum", 3);
+				value.put("pPriceId", 1);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 2);
+				value.put("pGoodsNum", 2);
+				value.put("pPriceId", 7);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 2);
+				value.put("pGoodsNum", 4);
+				value.put("pPriceId", 8);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 2);
+				value.put("pGoodsNum", 3);
+				value.put("pPriceId", 6);
 				
 				db.insertOrThrow(TABLE_NAME, null, value);
 				return true;

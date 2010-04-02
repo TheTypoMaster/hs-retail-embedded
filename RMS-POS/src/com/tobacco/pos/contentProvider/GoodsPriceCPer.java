@@ -156,6 +156,22 @@ public class GoodsPriceCPer extends ContentProvider {
 				value.put("outPrice", 250);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
+				value.clear();
+				value.put("goodsId", 9);
+				value.put("unitId", 1);
+				value.put("barcode", "gb10");
+				value.put("inPrice", 1.4);
+				value.put("outPrice", 2);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("goodsId", 10);
+				value.put("unitId", 6);
+				value.put("barcode", "gb11");
+				value.put("inPrice", 4);
+				value.put("outPrice", 6);
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
 				return true;
 			}
 	    } 

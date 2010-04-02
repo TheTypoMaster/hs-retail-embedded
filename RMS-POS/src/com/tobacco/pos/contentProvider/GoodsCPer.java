@@ -155,6 +155,30 @@ public class GoodsCPer extends ContentProvider {
 					value.put("kindId", 2);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
+					value.clear();
+					value.put("goodsCode", "G9");
+					value.put("goodsName", "香芋饼");
+					value.put("manufacturerId", 6);
+					value.put("goodsFormat", "");
+					value.put("kindId", 14);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G10");
+					value.put("goodsName", "麦克笔");
+					value.put("manufacturerId", 9);
+					value.put("goodsFormat", "");
+					value.put("kindId", 11);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
+					value.clear();
+					value.put("goodsCode", "G11");
+					value.put("goodsName", "宣纸");
+					value.put("manufacturerId", 9);
+					value.put("goodsFormat", "");
+					value.put("kindId", 11);
+					db.insertOrThrow(TABLE_NAME, null, value);
+					
 					return true;
 				}
 				

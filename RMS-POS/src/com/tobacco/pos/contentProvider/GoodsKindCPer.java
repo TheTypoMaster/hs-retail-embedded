@@ -181,6 +181,14 @@ public class GoodsKindCPer extends ContentProvider {
 				value.put("comment", "成功人士的必备之物");
 
 				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("name", "饼干");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "民以食为天");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
 
 				return true;
 			}
