@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tobacco.R;
+import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
@@ -31,6 +32,7 @@ public class ReportManagement extends Activity {
 	private PurchaseBillCPer pBillCPer = null;
 	private PurchaseItemCPer pItemCPer = null;
 	private GoodsPriceCPer gPriceCPer = null;
+	private GoodsCPer gCPer = null;
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class ReportManagement extends Activity {
 	        pBillCPer = new PurchaseBillCPer();
 	        pItemCPer = new PurchaseItemCPer();
 	        gPriceCPer = new GoodsPriceCPer();
+	        gCPer = new GoodsCPer();
 	        
 	        int reportKind = getIntent().getIntExtra("reportKind", 0);
 	        if(reportKind == 0){//选择的类型如果是进货报表
@@ -128,7 +131,7 @@ public class ReportManagement extends Activity {
 	        	});
 	        	
 	        	final Spinner conditionSpinner = (Spinner)this.findViewById(R.id.conditionSpinner);
-	        	String[] conditionStr = new String[]{"进货单号", "Text"};
+	        	String[] conditionStr = new String[]{"进货单号", "商品名称", "商品种类"};
 	        	ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, conditionStr);
 	        	conditionSpinner.setAdapter(conditionAdapter);
 	        	
@@ -146,35 +149,52 @@ public class ReportManagement extends Activity {
 								allPriceId = pItemCPer.getAllPriceIdByPBillId(searchPBillId);
 								countList = pItemCPer.getAllPCountByPBillId(searchPBillId);
 								
-								for(int i=0;i<allPriceId.size();i++){
-									TableRow theResultRow = new TableRow(ReportManagement.this);
+								if(allPriceId == null || allPriceId.size() == 0)
+									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+								else{
+									for(int i=0;i<allPriceId.size();i++){
+										TableRow theResultRow = new TableRow(ReportManagement.this);
 									
-									TextView pBillNumTView = new TextView(ReportManagement.this);
-									pBillNumTView.setText("" + content);
-									theResultRow.addView(pBillNumTView);
+										TextView pBillNumTView = new TextView(ReportManagement.this);
+										pBillNumTView.setText("" + content);
+										theResultRow.addView(pBillNumTView);
 									
-									List<String> info = gPriceCPer.getInfoByGPriceId(allPriceId.get(i));
-									for(int j=0;j<info.size();j++){
-										if(j==2){
-											TextView countTView = new TextView(ReportManagement.this);
-											countTView.setText(countList.get(i)+"");
-											theResultRow.addView(countTView);
-										}
+										List<String> info = gPriceCPer.getInfoByGPriceId(allPriceId.get(i));
+										for(int j=0;j<info.size();j++){
+											if(j==2){
+												TextView countTView = new TextView(ReportManagement.this);
+												countTView.setText(countList.get(i)+"");
+												theResultRow.addView(countTView);
+											}
 											
-										TextView infoTView = new TextView(ReportManagement.this);
-										infoTView.setText("" + info.get(j));
-										theResultRow.addView(infoTView);
-										
-									}
-									
+											TextView infoTView = new TextView(ReportManagement.this);
+											infoTView.setText("" + info.get(j));
+											theResultRow.addView(infoTView);
+										}
 									purchaseReportTable.addView(theResultRow);
+									}
 								}
-								
-							
-
 							}
-							else if(conditionSpinner.getSelectedItemId() == 1){
-								Log.d("lyq", "Select the second");
+							else if(conditionSpinner.getSelectedItemId() == 1){//以商品名称进行模糊搜索
+								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+								ArrayList<ArrayList<String>> pInfo = gCPer.getPInfoByGoodsName(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
+								if(pInfo == null || pInfo.size() == 0)
+									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+								else{
+									for(int i=0;i<pInfo.size();i++){
+										ArrayList<String> temp = pInfo.get(i);
+										TableRow theResultRow = new TableRow(ReportManagement.this);
+										for(int j=0;j<temp.size();j++){
+											TextView tView = new TextView(ReportManagement.this);
+											tView.setText(temp.get(j));
+											theResultRow.addView(tView);
+										}
+										purchaseReportTable.addView(theResultRow);
+									}
+								}
+							}
+							else if(conditionSpinner.getSelectedItemId() == 2){//根据商品的种类查找，要支持模糊搜索
+								
 							}
 							
 							((TextView)v).setText("");
