@@ -92,6 +92,10 @@ public class UnitCPer extends ContentProvider {
 				value.put("name", "斤");
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
+				value.clear();
+				value.put("name", "件");
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
 				return true;
 			}
 	    } 
