@@ -319,7 +319,7 @@ public class GoodsPriceCPer extends ContentProvider {
 	    		
 	    		return allUnitByGoodsId;
 	    	}
-	    	return null;
+	    	return new ArrayList<String>();
 	    }
 	    //根据商品的Id和单位Id查找进货价
 	    public double getInPriceByGoodsIdAndUnitId(int goodsId, int unitId){
