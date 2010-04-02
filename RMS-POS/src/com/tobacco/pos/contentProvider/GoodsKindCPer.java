@@ -340,6 +340,42 @@ public class GoodsKindCPer extends ContentProvider {
 			
 			return t;
 		}
+		public List<Integer> getGoodsKindIdListByGoodsKind(String kindName){//根据商品的类别名称，查找所有的类别Id，支持模糊搜索，返回的是List
+			 
+			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, null, null, null);
+			if(c.getCount()>0){
+				c.moveToFirst();
+				List<String> allKindName = new ArrayList<String>();//所有类别的名字
+				List<Integer> allKindId = new ArrayList<Integer>();
+				
+				List<String> satisfiedKindName = new ArrayList<String>();//所有满足的类别的名字
+				List<Integer> satisfiedKindId = new ArrayList<Integer>();
+				for(int i=0;i<c.getCount();i++){
+					String temp = c.getString(1);
+					
+					if(temp.contains("->")){
+						temp = temp.substring(temp.lastIndexOf("->")+2);
+						allKindName.add(temp);
+					}
+					else
+						allKindName.add(temp);
+					
+					allKindId.add(c.getInt(0));
+			
+					
+					c.moveToNext();
+				}
+				for(int i=0;i<allKindName.size();i++){
+					if(allKindName.get(i).contains(kindName)){
+						satisfiedKindName.add(allKindName.get(i));
+						satisfiedKindId.add(allKindId.get(i));
+					}
+				}
+				
+				return satisfiedKindId;
+			}
+			return new ArrayList<Integer>();
+		}
 		
 		public String getAttributeById(String attribute,String id){
 			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, new String[]{attribute}, "_id = "+"'"+id+"'" , null, null);
@@ -350,5 +386,4 @@ public class GoodsKindCPer extends ContentProvider {
 				return null;
 			}
 		}
-
 }
