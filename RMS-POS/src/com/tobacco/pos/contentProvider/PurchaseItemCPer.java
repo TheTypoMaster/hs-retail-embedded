@@ -106,6 +106,20 @@ public class PurchaseItemCPer extends ContentProvider {
 				value.put("pPriceId", 3);
 				
 				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 1);
+				value.put("pGoodsNum", 10);
+				value.put("pPriceId", 2);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("purchaseBillId", 1);
+				value.put("pGoodsNum", 10);
+				value.put("pPriceId", 9);
+				
+				db.insertOrThrow(TABLE_NAME, null, value);
 				return true;
 				
 			}
