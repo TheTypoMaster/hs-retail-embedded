@@ -76,6 +76,31 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
+		  <activity android:name=".pos.activity.InventoryInsert" android:label="库存盘点" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.InventoryInsert" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.AddInventoryGoods" android:label="增加盘点物品" 
+		  		android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.AddInventoryGoods" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.InventoryBillSelect" android:label="盘点查询" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.InventoryBillSelect" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <activity android:name=".pos.activity.ShowInventoryItem" android:label="盘点详细" >
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.ShowInventoryItem" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
           <activity android:name=".pos.common.ShowGoodsDetail" 
           		android:theme="@android:style/Theme.Dialog">
 			  <intent-filter>
@@ -121,6 +146,8 @@
    		  <provider android:name=".pos.contentProvider.ConsumeCPer" android:authorities="com.tobacco.contentProvider.ConsumeCPer"/>
    		  <provider android:name=".pos.contentProvider.ComplaintCPer" android:authorities="com.tobacco.contentProvider.ComplaintCPer"/>
 		  <provider android:name=".pos.contentProvider.ReturnCPer" android:authorities="com.tobacco.contentProvider.ReturnCPer"/>
+		  <provider android:name=".pos.contentProvider.InventoryBillCPer" android:authorities="com.tobacco.contentProvider.InventoryBillCPer"/>
+		  <provider android:name=".pos.contentProvider.InventoryItemCPer" android:authorities="com.tobacco.contentProvider.InventoryItemCPer"/>
 		<service android:name=".pos.service.ScanInputService"/>
     </application>
     <uses-sdk android:minSdkVersion="3" />

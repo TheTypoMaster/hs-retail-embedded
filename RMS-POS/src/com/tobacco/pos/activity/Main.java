@@ -20,6 +20,7 @@ public class Main extends Activity {
 	private Button b5;//溢耗管理
 	private Button b6;//投诉管理
 	private Button b7;//退货管理
+	private Button b8;//库存管理
 	
 	private Loginer loginer = null;
 
@@ -35,7 +36,7 @@ public class Main extends Activity {
 		b5 = (Button) this.findViewById(R.id.consume);
 		b6 = (Button) this.findViewById(R.id.complaint);
 		b7 = (Button) this.findViewById(R.id.returnGoods);
-
+		b8 = (Button) this.findViewById(R.id.inventory);
 
 		b1.setOnClickListener(new OnClickListener() {
 
@@ -91,34 +92,24 @@ public class Main extends Activity {
 		b4.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-
-				AlertDialog.Builder selectReportKindTip = new AlertDialog.Builder(Main.this);
-				selectReportKindTip.setTitle("报表类型");
-				selectReportKindTip.setItems(R.array.reportKind, new DialogInterface.OnClickListener(){
-
-					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(Main.this, ReportManagement.class);
-						intent.putExtra("reportKind", which);
-						startActivity(intent);
-					}
-					
-				});
-				
-				selectReportKindTip.show();
+				Intent intent = new Intent(Main.this, ReportManagement.class);
+				startActivity(intent);
 			}
 
 		});
 		
 		b5.setOnClickListener(new OnClickListener(){
 
-		 
-			public void onClick(View v) { 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
 
-			 
-					public void onClick(DialogInterface dialog, int which) { 
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
@@ -136,14 +127,16 @@ public class Main extends Activity {
 		
 		b6.setOnClickListener(new OnClickListener(){
 
-			 
-			public void onClick(View v) { 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
 
-					 
-					public void onClick(DialogInterface dialog, int which) { 
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.ComplaintInsertDialog");
@@ -161,18 +154,48 @@ public class Main extends Activity {
 		
 		b7.setOnClickListener(new OnClickListener(){
 
-		 
-			public void onClick(View v) { 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
- 
-					public void onClick(DialogInterface dialog, int which) { 
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
 						Intent intent = null;
 						if(which == 0){
 							intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
 						}else{
 							intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
+						}
+						
+						startActivity(intent);
+					}
+					
+				}).create().show();
+			}
+			
+		});
+		
+		b8.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(Main.this)
+				.setTitle("选择功能")
+				.setItems(R.array.select_inventory_function_items, new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Intent intent = null;
+						if(which == 0){
+							intent = new Intent("com.tobacco.pos.activity.InventoryInsert");
+						}else{
+							intent = new Intent("com.tobacco.pos.activity.InventoryBillSelect");
 						}
 						
 						startActivity(intent);

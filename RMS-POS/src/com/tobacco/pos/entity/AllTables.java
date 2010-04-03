@@ -327,4 +327,108 @@ public static class Return implements BaseColumns{
 		public static final String DEFAULT_SORT_ORDER = "modified DESC";
 		
 	}
+
+	public static class InventoryBill implements BaseColumns{
+		
+		public static final String AUTHORITY = "com.tobacco.contentProvider.InventoryBillCPer";
+		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/inventoryBills");
+		/**
+		 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+		 */
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.inventoryBill";
+		/**
+		 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+		 */
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.inventoryBill";
+		/**
+		 * The id of the inventory bill
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String IBILL_NUM = "IBillNum";
+		/**
+		 * The id of the operator
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String OPER_ID = "operId";
+		/**
+		 * The time inventory create;
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String CREATE_DATE = "createDay";
+		/**
+		 * The state of the inventory
+		 * <P>Type: BOOLEAN</P>
+		 */
+		public static final String FINISHED = "finished";
+		/**
+		 * The inventory result
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String RESULT = "result";		
+		/**
+		 * The comment for this inventory
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String COMMENT = "comment";
+		/**
+		 * The default sort order for this table
+		 */
+		public static final String DEFAULT_SORT_ORDER = "modified DESC";
+		
+	}
+	
+	public static class InventoryItem implements BaseColumns{
+		
+		public static final String AUTHORITY = "com.tobacco.contentProvider.InventoryItemCPer";
+		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/inventoryItems");
+		/**
+		 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+		 */
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.inventoryItem";
+		/**
+		 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+		 */
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.inventoryItem";
+		/**
+		 * The id of the inventory bill
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String IBILL_ID = "IBillId";
+		/**
+		 * The id of the goodsPrice
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String GOODS_PRICE_ID = "goodsPriceId";
+		/**
+		 * Goods' expect count in the system
+		 * <p>TypE: INTEGER</>
+		 */
+		public static final String EXPECT_NUM = "expectNum";	
+		/**
+		 * Goods' real count in the stock
+		 * <P>Type: INTEGER</P>
+		 */
+		public static final String REAL_NUM = "realNum";	
+		/**
+		 * Goods' inventory result
+		 * <p>Type: DOUBLE</> 
+		 */
+		public static final String ITEM_RESULT = "itemResult";
+		/**
+		 * The comment for this inventory
+		 * <p>TypE: TEXT</>
+		 */
+		public static final String COMMENT = "comment";
+		/**
+		 * The default sort order for this table
+		 */
+		public static final String DEFAULT_SORT_ORDER = "modified DESC";
+	
+	}
 }

@@ -31,4 +31,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="35sp" android:textSize="10sp">
 	</Button>
+	<Button android:text="库存管理" android:id="@+id/inventory"
+		android:layout_width="wrap_content"
+		android:layout_height="35sp" android:textSize="10sp">
+	</Button>
 </LinearLayout>
