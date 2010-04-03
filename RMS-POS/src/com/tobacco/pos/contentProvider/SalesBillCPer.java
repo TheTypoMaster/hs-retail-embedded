@@ -1,6 +1,11 @@
 package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
  
 import com.tobacco.pos.entity.AllTables;
 
@@ -115,7 +120,7 @@ public class SalesBillCPer extends ContentProvider {
 	    	SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 	        SQLiteDatabase db = dbHelper.getWritableDatabase();
 	        qb.setTables(TABLE_NAME);
-	        Cursor c = qb.query(db, projection, selection, null, null, null, sortOrder);
+	        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	        c.setNotificationUri(ct.getContentResolver(), uri);
 	        return c;
 	    } 
@@ -125,7 +130,8 @@ public class SalesBillCPer extends ContentProvider {
 	        return 0;
 	    }
 	    
-	    public int addSBill(int operId, String time, int VIPId){
+	    public int addSBill(int operId, int VIPId){
+	    	SimpleDateFormat dateFormater = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 	    	Cursor c =this.query(AllTables.SalesBill.CONTENT_URI, null, null, null, " sBillNum ");
 	    	String sBillNum;
 	    	if(c.getCount()>0)
@@ -142,7 +148,8 @@ public class SalesBillCPer extends ContentProvider {
 			value.clear();
 			value.put("sBillNum", sBillNum);
 			value.put("operId", operId);
-			value.put("time", time);
+			Date d = new Date();
+			value.put("time", dateFormater.format(d));
 			value.put("VIPId", VIPId);
 			
 			this.insert(AllTables.SalesBill.CONTENT_URI, value);
@@ -159,6 +166,28 @@ public class SalesBillCPer extends ContentProvider {
 	    		return c.getInt(0);
 	    	}
 	    	return -1;
+	    }
+	    public List<Integer> getSalesBillIdByVIPId(String startTime, String endTime, int VIPId){//根据时间，客户Id查找满足条件的所有SalesBill的Id
+	    	Cursor c = null;
+	    	if(startTime.equals("开始时间") && endTime.equals("结束时间"))//没有时间限制
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " VIPId = ? ", new String[]{VIPId+""},null);
+	    	else if(!startTime.equals("开始时间") && endTime.equals("结束时间"))//有限制开始时间
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time >= ? and VIPId = ? ", new String[]{startTime, VIPId+""}, null);
+	    	else if(startTime.equals("开始时间") && !endTime.equals("结束时间"))//有设置结束时间
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time <= ? and VIPId = ? ", new String[]{endTime, VIPId+""}, null);
+	    	else
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time between ? and ?  and VIPId = ? ", new String[]{startTime, endTime, VIPId+""}, null);
+	    	if(c.getCount()>0){
+	    		List<Integer> sBillIdList = new ArrayList<Integer>();
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			sBillIdList.add(c.getInt(0));
+	    			c.moveToFirst();
+	    		}
+	    		return sBillIdList;
+	    	}
+	    	else
+	    		return new ArrayList<Integer>();
 	    }
 
 }

@@ -5,10 +5,11 @@ import java.util.List;
 
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.GoodsCPer;
-import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
+import com.tobacco.pos.contentProvider.SalesItemCPer;
+import com.tobacco.pos.contentProvider.VIPInfoCPer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +23,7 @@ import android.view.View.OnKeyListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,7 +36,8 @@ public class ReportManagement extends Activity {
 	private PurchaseItemCPer pItemCPer = null;
 	private GoodsPriceCPer gPriceCPer = null;
 	private GoodsCPer gCPer = null;
-	private GoodsKindCPer gKindCPer = null;
+	private SalesItemCPer sItemCPer = null;
+	private VIPInfoCPer vipInfoCPer = null;
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,7 @@ public class ReportManagement extends Activity {
 	        pItemCPer = new PurchaseItemCPer();
 	        gPriceCPer = new GoodsPriceCPer();
 	        gCPer = new GoodsCPer();
-	        gKindCPer = new GoodsKindCPer();
+	        sItemCPer = new SalesItemCPer();
 	        
 	        int reportKind = getIntent().getIntExtra("reportKind", 0);
 	        if(reportKind == 0){//选择的类型如果是进货报表
@@ -138,8 +141,8 @@ public class ReportManagement extends Activity {
 	        	ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, conditionStr);
 	        	conditionSpinner.setAdapter(conditionAdapter);
 	        	
-	        	TextView contentTView = (TextView)this.findViewById(R.id.contentTView);
-	        	contentTView.setOnKeyListener(new OnKeyListener(){
+	        	EditText contentEText = (EditText)this.findViewById(R.id.contentEText);
+	        	contentEText.setOnKeyListener(new OnKeyListener(){
 
 					public boolean onKey(View v, int keyCode, KeyEvent event) {
 						String content = ((TextView)v).getText().toString();
@@ -225,8 +228,130 @@ public class ReportManagement extends Activity {
 	        	});
 	        }
 	        	
-	        else if(reportKind == 1){
+	        else if(reportKind == 1){//选择的是销售报表
 	        	setContentView(R.layout.salesreport);
+	        	
+	        	final Button salesStartTimeButton = (Button)this.findViewById(R.id.salesBillStartTimeButton);
+	        	salesStartTimeButton.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View v) {
+						final DatePicker startTimePicker = new DatePicker(ReportManagement.this);
+						startTimePicker.setVerticalScrollBarEnabled(true);
+						AlertDialog.Builder startTimeDialog = new AlertDialog.Builder(ReportManagement.this);
+						startTimeDialog.setTitle("开始时间");
+						startTimeDialog.setView(startTimePicker);
+						startTimeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								int day = startTimePicker.getDayOfMonth();
+								String dayStr = "";
+								if(day<10)
+									dayStr = "0" + day;
+								else
+									dayStr = "" + day;
+								int month = startTimePicker.getMonth()+1;
+								String monthStr = "";
+								if(month<10)
+									monthStr = "0" + month;
+								else
+									monthStr = "" + month;
+								int year = startTimePicker.getYear();
+								salesStartTimeButton.setText(year+"-"+monthStr+"-"+dayStr);
+							}
+							
+						});
+						startTimeDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+							public void onClick(DialogInterface dialog,
+									int which) {
+								
+							}
+						});
+						startTimeDialog.show();
+					}
+	        		
+					
+	        	});
+	        	final Button salesEndTimeButton = (Button)this.findViewById(R.id.salesBillEndTimeButton);
+	        	salesEndTimeButton.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View v) {
+						final DatePicker endTimePicker = new DatePicker(ReportManagement.this);
+						AlertDialog.Builder endTimeDialog = new AlertDialog.Builder(ReportManagement.this);
+						endTimeDialog.setTitle("结束时间");
+						endTimeDialog.setView(endTimePicker);
+						endTimeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								int day = endTimePicker.getDayOfMonth();
+								String dayStr = "";
+								if(day<10)
+									dayStr = "0" + day;
+								else
+									dayStr = "" + day;
+								int month = endTimePicker.getMonth()+1;
+								String monthStr = "";
+								if(month<10)
+									monthStr = "0" + month;
+								else
+									monthStr = "" + month;
+								int year = endTimePicker.getYear();
+								salesEndTimeButton.setText(year+"-"+monthStr+"-"+dayStr);
+							}
+							
+						});
+						endTimeDialog.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+							public void onClick(DialogInterface dialog,
+									int which) {
+								
+							}
+						});
+						endTimeDialog.show();
+					}
+					
+	        	});
+	        	
+	        	final Spinner salesConditionSpinner = (Spinner)this.findViewById(R.id.salesConditionSpinner);
+	        	String[] conditionStr = new String[]{"销售单号", "商品名称", "商品种类", "会员编号"};
+	        	ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, conditionStr);
+	        	salesConditionSpinner.setAdapter(conditionAdapter);
+	        	
+	        	final EditText salesContentTView = (EditText)this.findViewById(R.id.salesContentEText);
+	        	
+	        	salesContentTView.setOnKeyListener(new OnKeyListener(){
+
+					public boolean onKey(View v, int keyCode, KeyEvent event) {
+						String content = salesContentTView.getText().toString();
+						if(keyCode == 66 && content!=null && content.length()>0){
+							if(salesConditionSpinner.getSelectedItemId() == 0){//根据销售单号查找，准确查找
+								
+							}
+							else if(salesConditionSpinner.getSelectedItemId() == 1){//根据销售商品的名称查询，模糊搜索
+								
+							}
+							else if(salesConditionSpinner.getSelectedItemId() == 2){//根据销售商品的种类查询
+								
+							}
+							else if(salesConditionSpinner.getSelectedItemId() == 3){//根据客户编号，VIPNum
+								vipInfoCPer = new VIPInfoCPer();
+								int VIPId = vipInfoCPer.getVIPIdByVIPNum(((TextView)v).getText().toString());
+								if(VIPId == -1){
+									Toast.makeText(ReportManagement.this, "抱歉，没有该VIP客户", Toast.LENGTH_SHORT).show();
+								}
+								else{
+									Toast.makeText(ReportManagement.this, vipInfoCPer.getVIPNameByVIPId(VIPId), Toast.LENGTH_SHORT).show();
+									sItemCPer.getSalesInfoByVIPNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), VIPId);
+								}
+								
+							}
+							((TextView)v).setText("");
+						}
+						return false;
+					}
+	        		
+	        	});
+	        	
 	        }
 	        else if(reportKind == 2){
 	        	setContentView(R.layout.inventoryreport);

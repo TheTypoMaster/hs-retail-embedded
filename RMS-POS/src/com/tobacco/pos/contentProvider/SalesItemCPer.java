@@ -1,6 +1,8 @@
 package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
+
+import java.util.List;
  
 import com.tobacco.pos.entity.AllTables;
 
@@ -14,15 +16,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class SalesItemCPer extends ContentProvider {
 
-	  private SQLiteDatabase     sqlDB;
+		private SQLiteDatabase     sqlDB;
 	    private DatabaseHelper    dbHelper;
 	    private static final String  DATABASE_NAME     = "AllTables.db";
 	    private static final int        DATABASE_VERSION         = 1;
 	    private static final String TABLE_NAME   = "SalesItem";
 	    private static Context ct = null;
+	    private SalesBillCPer sBillCPer = null;
+	    
 	    private static class DatabaseHelper extends SQLiteOpenHelper {
 	    	
 	    	private SQLiteDatabase db = null;
@@ -141,5 +146,17 @@ public class SalesItemCPer extends ContentProvider {
 				return true;
 			else
 				return false;
+	    }
+	    
+	    public void getSalesInfoByVIPNum(String startTime, String endTime, int VIPId){
+	    	sBillCPer = new SalesBillCPer();
+	    	
+	    	if(!startTime.equals("开始时间"))
+	    		startTime += " 00:00:00";
+	    	if(!endTime.equals("结束时间"))
+	    		endTime += " 23:59:59";
+	    	
+	    	List<Integer> sBillIdList = sBillCPer.getSalesBillIdByVIPId(startTime, endTime, VIPId);
+	    	Log.d("lyq", ".........." + sBillIdList.size());	
 	    }
 }

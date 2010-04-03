@@ -201,7 +201,7 @@ public class PaymentManagement extends Activity {
 																	
 																		int userId = userInfoCPer.getUserIdByUserName(userName);
 																
-																		newSBillId = sBillCPer.addSBill(userId, (new Date()).toLocaleString(), VIPId);//得到最后新加的销售单的ID
+																		newSBillId = sBillCPer.addSBill(userId, VIPId);//得到最后新加的销售单的ID
 																	
 																		for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 																			String theBarcode = barcodeList.get(i-1);
@@ -226,7 +226,7 @@ public class PaymentManagement extends Activity {
 																{
 																	int userId = userInfoCPer.getUserIdByUserName(userName);
 																	
-																	newSBillId = sBillCPer.addSBill(userId, (new Date()).toLocaleString(), -1);//得到最后新加的销售单的ID
+																	newSBillId = sBillCPer.addSBill(userId, -1);//得到最后新加的销售单的ID
 																
 																	for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 																		String theBarcode = barcodeList.get(i-1);
