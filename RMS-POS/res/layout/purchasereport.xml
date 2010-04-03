@@ -34,7 +34,7 @@
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="  查询内容" />
 		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:id="@+id/contentTView"
+			android:layout_height="wrap_content" android:id="@+id/contentEText"
 			android:singleLine="true" />
 	</LinearLayout>
 	<ScrollView android:layout_width="wrap_content"
