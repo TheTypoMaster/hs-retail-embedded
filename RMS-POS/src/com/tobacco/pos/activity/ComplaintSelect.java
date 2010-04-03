@@ -54,6 +54,8 @@ public class ComplaintSelect extends Activity{
 		final Cursor cursor = this.managedQuery(ComplaintFull.CONTENT_URI, ComplaintFull.PROJECTION, null, null, null);
 		cursor.moveToFirst();
 		for(int i = 0;i<cursor.getCount();i++){
+			int goodsPriceIdIndex = cursor.getColumnIndex(ComplaintFull.GOODS_PRICE_ID);
+			final String goodsPriceId = cursor.getString(goodsPriceIdIndex);
 			int goodsNameIndex = cursor.getColumnIndex(ComplaintFull.GOODS_NAME);
 			String goodsName = cursor.getString(goodsNameIndex);
 			int vipNameIndex = cursor.getColumnIndex(ComplaintFull.VIP_NAME);
@@ -95,9 +97,7 @@ public class ComplaintSelect extends Activity{
 						@Override
 						public boolean onMenuItemClick(MenuItem item) {
 							// TODO Auto-generated method stub
-							Intent intent = new Intent("com.tobacco.pos.activity.ShowGoodsDetail");
-							int goodsPriceIdIndex = cursor.getColumnIndex(ComplaintFull.GOODS_PRICE_ID);
-							String goodsPriceId = cursor.getString(goodsPriceIdIndex);
+							Intent intent = new Intent("com.tobacco.pos.activity.ShowGoodsDetail");			
 							intent.putExtra(GoodsPrice._ID, goodsPriceId);
 							ComplaintSelect.this.startActivity(intent);
 							return true;
