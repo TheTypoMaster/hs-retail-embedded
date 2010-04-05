@@ -2,6 +2,7 @@ package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.GoodsCPer;
@@ -20,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -55,7 +57,14 @@ public class ReportManagement extends Activity {
 	        	
 	        	final Button startTimeButton = (Button)this.findViewById(R.id.startTimeButton);
 	        	final TableLayout purchaseReportTable = (TableLayout)this.findViewById(R.id.purchaseReportTable);
-	        
+	        	startTimeButton.setOnLongClickListener(new OnLongClickListener(){
+
+					public boolean onLongClick(View v) {
+						((Button)v).setText("开始时间");
+						return false;
+					}
+	        		
+	        	});
 	        	startTimeButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
@@ -97,6 +106,14 @@ public class ReportManagement extends Activity {
 	        	});
 	        	
 	        	final Button endTimeButton = (Button)this.findViewById(R.id.endTimeButton);
+	        	endTimeButton.setOnLongClickListener(new OnLongClickListener(){
+
+					public boolean onLongClick(View v) {
+						((Button)v).setText("结束时间");
+						return false;
+					}
+	        		
+	        	});
 	        	endTimeButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
@@ -232,6 +249,15 @@ public class ReportManagement extends Activity {
 	        	setContentView(R.layout.salesreport);
 	        	
 	        	final Button salesStartTimeButton = (Button)this.findViewById(R.id.salesBillStartTimeButton);
+	        	final TableLayout salesReportTable = (TableLayout)this.findViewById(R.id.salesReportTable);
+	        	salesStartTimeButton.setOnLongClickListener(new OnLongClickListener(){
+
+					 public boolean onLongClick(View v) {
+						((Button)v).setText("开始时间");
+						return false;
+					}
+	        		
+	        	});
 	        	salesStartTimeButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
@@ -273,6 +299,14 @@ public class ReportManagement extends Activity {
 					
 	        	});
 	        	final Button salesEndTimeButton = (Button)this.findViewById(R.id.salesBillEndTimeButton);
+	        	salesEndTimeButton.setOnLongClickListener(new OnLongClickListener(){
+
+					public boolean onLongClick(View v) {
+						((Button)v).setText("结束时间");
+						return false;
+					}
+	        		
+	        	});
 	        	salesEndTimeButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
@@ -325,6 +359,27 @@ public class ReportManagement extends Activity {
 						String content = salesContentTView.getText().toString();
 						if(keyCode == 66 && content!=null && content.length()>0){
 							if(salesConditionSpinner.getSelectedItemId() == 0){//根据销售单号查找，准确查找
+								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+								Map<String,ArrayList<ArrayList<String>>> sItemResultMap = sItemCPer.getSalesInfoBySalesBillNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
+								
+								if(sItemResultMap.size() == 0)
+									Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+								else{
+									String VIPName = sItemResultMap.keySet().iterator().next();
+									Toast.makeText(ReportManagement.this, "该单客户为:" + VIPName, Toast.LENGTH_SHORT).show();
+									ArrayList<ArrayList<String>> sItemResult = sItemResultMap.get(VIPName);
+									for(int i=0;i<sItemResult.size();i++){
+										TableRow resultRow = new TableRow(ReportManagement.this);
+										ArrayList<String> tempList = sItemResult.get(i);
+										for(int j=0;j<tempList.size();j++){
+											TextView t = new TextView(ReportManagement.this);
+											t.setText(tempList.get(j));
+											resultRow.addView(t);
+										}
+										salesReportTable.addView(resultRow);
+										
+									}
+								}
 								
 							}
 							else if(salesConditionSpinner.getSelectedItemId() == 1){//根据销售商品的名称查询，模糊搜索
@@ -340,10 +395,27 @@ public class ReportManagement extends Activity {
 									Toast.makeText(ReportManagement.this, "抱歉，没有该VIP客户", Toast.LENGTH_SHORT).show();
 								}
 								else{
-									Toast.makeText(ReportManagement.this, vipInfoCPer.getVIPNameByVIPId(VIPId), Toast.LENGTH_SHORT).show();
-									sItemCPer.getSalesInfoByVIPNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), VIPId);
+									salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+									ArrayList<ArrayList<ArrayList<String>>> result  = sItemCPer.getSalesInfoByVIPNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), VIPId);
+									if(result.size() == 0)
+										Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+									else{
+										for(int i=0;i<result.size();i++){
+											ArrayList<ArrayList<String>> temp = result.get(i);
+										
+											for(int j=0;j<temp.size();j++){
+												ArrayList<String> t = temp.get(j);
+												TableRow theResultRow = new TableRow(ReportManagement.this);
+												for(int z=0;z<t.size();z++){
+													TextView t1 = new TextView(ReportManagement.this);
+													t1.setText(t.get(z));
+													theResultRow.addView(t1);
+												}
+												salesReportTable.addView(theResultRow);
+											}
+										}
+									}
 								}
-								
 							}
 							((TextView)v).setText("");
 						}

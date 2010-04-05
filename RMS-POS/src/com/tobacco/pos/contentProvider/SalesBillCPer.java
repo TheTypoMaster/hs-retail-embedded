@@ -158,8 +158,26 @@ public class SalesBillCPer extends ContentProvider {
 			c.moveToLast();
 			return c.getInt(0);//获取最后添加的销售单的ID
 		}
-	    public int getSBillNumBySBillId(int newSBillId){
+	    public String getSBillNumBySBillId(int newSBillId){
 	    	Cursor c = this.query(AllTables.SalesBill.CONTENT_URI, null, " _id = " + newSBillId, null, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getString(1);
+	    	}
+	    	return "";
+	    }
+	    public int getSBillIdBySBillNum(String startTime, String endTime, String salesBillNum){//根据销售单的编号以及时间查找销售单Id,
+	    	Cursor c = null;
+	    	
+	    	if(startTime.equals("开始时间") && endTime.equals("结束时间"))//没时间约束
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " sBillNum = ? ", new String[]{salesBillNum}, null);
+	    	else if(!startTime.equals("开始时间") && endTime.equals("结束时间"))//限定开始时间
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time >= ? and sBillNum = ? ", new String[]{startTime, salesBillNum}, null);
+	    	else if(startTime.equals("开始时间") && !endTime.equals("结束时间"))//有限定结束时间
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time <= ? and sBillNum = ? ", new String[]{endTime, salesBillNum}, null);
+	    	else//有开始时间限制也有结束时间限制
+	    		c = this.query(AllTables.SalesBill.CONTENT_URI, null, " time between ? and ? and sBillNum = ? ", new String[]{startTime, endTime, salesBillNum}, null);
 	    	
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
@@ -167,6 +185,23 @@ public class SalesBillCPer extends ContentProvider {
 	    	}
 	    	return -1;
 	    }
+	    public String getSTimeBySBillId(int salesBillId){//根据销售单的Id查找时间
+	    	Cursor c = this.query(AllTables.SalesBill.CONTENT_URI, null, " _id = ? ", new String[]{""+salesBillId}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getString(3);
+	    	}
+	    	return "";
+	    }
+	    public int getVIPIdBySBillId(int salesBillId){//根据销售单的Id查找客户Id
+	    	Cursor c = this.query(AllTables.SalesBill.CONTENT_URI, null, " _id = ? ", new String[]{""+salesBillId}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(4);
+	    	}
+	    	return -1;
+	    }
+	   
 	    public List<Integer> getSalesBillIdByVIPId(String startTime, String endTime, int VIPId){//根据时间，客户Id查找满足条件的所有SalesBill的Id
 	    	Cursor c = null;
 	    	if(startTime.equals("开始时间") && endTime.equals("结束时间"))//没有时间限制
@@ -182,7 +217,7 @@ public class SalesBillCPer extends ContentProvider {
 	    		c.moveToFirst();
 	    		for(int i=0;i<c.getCount();i++){
 	    			sBillIdList.add(c.getInt(0));
-	    			c.moveToFirst();
+	    			c.moveToNext();
 	    		}
 	    		return sBillIdList;
 	    	}

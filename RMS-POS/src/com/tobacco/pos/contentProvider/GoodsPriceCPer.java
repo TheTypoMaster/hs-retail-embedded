@@ -102,7 +102,7 @@ public class GoodsPriceCPer extends ContentProvider {
 				
 				value.clear();
 				value.put("goodsId", 3);
-				value.put("unitId", 3);
+				value.put("unitId", 2);
 				value.put("barcode", "gb3");
 				value.put("inPrice", 70);
 				value.put("outPrice", 80);
