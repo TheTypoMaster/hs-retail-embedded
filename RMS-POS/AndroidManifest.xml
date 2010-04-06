@@ -25,7 +25,7 @@
 		  <activity android:name=".pos.activity.Login" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.AddPBill" android:theme="@android:style/Theme.Dialog"></activity>
 		  
-		  <activity android:name=".pos.activity.ConsumeInsert"  android:label="Consume_Insert">
+		<!--  <activity android:name=".pos.activity.ConsumeInsert"  android:label="Consume_Insert">
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.CosumeInsert" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -120,7 +120,7 @@
                 <action android:name="com.tobacco.pos.activity.SelectTimeRange" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
-		  </activity>
+		  </activity>  -->
 		  <!-- 
 		  <activity android:name=".pos.util.QueryDataFromTables" android:label="QueryDataFromDiffTable" >
 			  <intent-filter>
@@ -143,13 +143,23 @@
 		  <provider android:name=".pos.contentProvider.UnitCPer" android:authorities="com.tobacco.contentProvider.UnitCPer" />
 		  <provider android:name=".pos.contentProvider.UserInfoCPer" android:authorities="com.tobacco.contentProvider.UserInfoCPer" />
 		  <provider android:name=".pos.contentProvider.VIPInfoCPer" android:authorities="com.tobacco.contentProvider.VIPInfoCPer" />
-   		  <provider android:name=".pos.contentProvider.ConsumeCPer" android:authorities="com.tobacco.contentProvider.ConsumeCPer"/>
+
+    	  <!-- Service -->
+    	  <service android:name=".pos.service.PrintService">
+    	  	<intent-filter >
+    	  	<action android:value="com.tobacco.pos.service.PrintService" android:name="com.tobacco.pos.service.PrintService"/>
+    	  	</intent-filter>
+    	  	
+    	  </service>
+
+   		<!--  <provider android:name=".pos.contentProvider.ConsumeCPer" android:authorities="com.tobacco.contentProvider.ConsumeCPer"/>
    		  <provider android:name=".pos.contentProvider.ComplaintCPer" android:authorities="com.tobacco.contentProvider.ComplaintCPer"/>
 		  <provider android:name=".pos.contentProvider.ReturnCPer" android:authorities="com.tobacco.contentProvider.ReturnCPer"/>
 		  <provider android:name=".pos.contentProvider.InventoryBillCPer" android:authorities="com.tobacco.contentProvider.InventoryBillCPer"/>
 		  <provider android:name=".pos.contentProvider.InventoryItemCPer" android:authorities="com.tobacco.contentProvider.InventoryItemCPer"/>
-		<service android:name=".pos.service.ScanInputService"/>
+		<service android:name=".pos.service.ScanInputService"/> --> 
     </application>
+
     <uses-sdk android:minSdkVersion="3" />
 
 </manifest> 
