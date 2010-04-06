@@ -496,6 +496,14 @@ public class GoodsCPer extends ContentProvider {
 	    	}
 	    	return "";
 	    }
+	    public int getGoodsKindIdByGoodsId(int goodsId){//根据商品的Id查找其类别的Id
+	    	Cursor c = this.query(AllTables.Goods.CONTENT_URI, null, " _id = ? ", new String[]{goodsId+""}, null);
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(5);
+	    	}
+	    	return -1;
+	    }
 	    public String getAttributeById(String attribute,String id){
 			Cursor c = this.query(AllTables.Goods.CONTENT_URI, new String[]{attribute}, " _id = "+"'"+id+"'" , null, null);
 			if(c.getCount()>0){

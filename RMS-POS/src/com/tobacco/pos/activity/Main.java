@@ -100,14 +100,14 @@ public class Main extends Activity {
 		
 		b5.setOnClickListener(new OnClickListener(){
 
-			@Override
+		 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
+					 
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						Intent intent = null;
@@ -127,14 +127,14 @@ public class Main extends Activity {
 		
 		b6.setOnClickListener(new OnClickListener(){
 
-			@Override
+			 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
+				 
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						Intent intent = null;
@@ -154,14 +154,14 @@ public class Main extends Activity {
 		
 		b7.setOnClickListener(new OnClickListener(){
 
-			@Override
+			 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
+					 
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						Intent intent = null;
@@ -181,14 +181,14 @@ public class Main extends Activity {
 		
 		b8.setOnClickListener(new OnClickListener(){
 
-			@Override
+			 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(Main.this)
 				.setTitle("选择功能")
 				.setItems(R.array.select_inventory_function_items, new DialogInterface.OnClickListener(){
 
-					@Override
+				 
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						Intent intent = null;

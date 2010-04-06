@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tobacco.pos.contentProvider.GoodsCPer;
+import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.Loginer;
 import com.tobacco.pos.contentProvider.SalesBillCPer;
@@ -40,6 +41,7 @@ public class PaymentManagement extends Activity {
 	private SalesBillCPer sBillCPer = null;
 	private SalesItemCPer sItemCPer = null;
 	private VIPInfoCPer vipInfoCPer = null;
+	private GoodsKindCPer gKindCPer = null;
 	
 	private TextView paymentWelcome;
 	
@@ -200,40 +202,132 @@ public class PaymentManagement extends Activity {
 //																	PaymentManagement.this.startActivityForResult(getVIPInfoIntent, 0);//此处调用回去VIP信息的方法。
 																	
 																	vipId = vipInfoCPer.getVIPIdByVIPNum(VIPNumEText.getText().toString());
+																	vipDiscountRate = 0.8;
 																	if(vipId == -1)
 																		Toast.makeText(PaymentManagement.this, "没有该会员", Toast.LENGTH_SHORT).show();
 																	else{
+																		gKindCPer = new GoodsKindCPer();
+																		final List<Integer> allCigaretteKindId = gKindCPer.getCigaretteKindId();
+																		//处理销售单的增加以及打印
 																	
-																		int userId = userInfoCPer.getUserIdByUserName(userName);
-																
-																		newSBillId = sBillCPer.addSBill(userId, vipId, 100);//得到最后新加的销售单的ID
-																		//////////////////////////////////////////////////////////////////////////////////////////////
-																
+																		final ArrayList<String> goodsNameList = new ArrayList<String>();//存储商品名字的List
+																		final ArrayList<String> countList = new ArrayList<String>();//存储销量的List
+																		final ArrayList<String> outPriceList = new ArrayList<String>();//存储单价的List
+																		final ArrayList<String> tMoneyList = new ArrayList<String>();//单项总额的List
+																		final ArrayList<String> flagList = new ArrayList<String>();//有否打折的标志，普通客户都为""
+																	
 																		for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 																			String theBarcode = barcodeList.get(i-1);
+																			
+																			int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
 																			int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
-																	
-																			double inPrice = Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
+																
+																		
 																			double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
-																			sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, vipDiscountRate);
+																			if(allCigaretteKindId.contains(kindId)){
+																				totalMoney += goodsCount*outPrice*vipDiscountRate;
+																			 
+																				flagList.add("*");//如果是烟类有打折，用*标志
+																				tMoneyList.add(goodsCount*outPrice*vipDiscountRate+"");
+																			}
+																			else{
+																				totalMoney += goodsCount*outPrice;
+																				 
+																				flagList.add("");//没打折，不做标志
+																				tMoneyList.add(goodsCount*outPrice+"");
+																			}
+																			
+																			goodsNameList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(0)).getText().toString());
+																			countList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
+																			outPriceList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
+																		
 																		}
+
+																		AlertDialog.Builder payMoneyTip = new AlertDialog.Builder(PaymentManagement.this);
+																		payMoneyTip.setTitle("付款");
+																		payMoneyTip.setMessage("总额为:" + totalMoney);
+																		final EditText payMoneyEText = new EditText(PaymentManagement.this);
 																		
+																		payMoneyEText.setWidth(120);
+																		payMoneyTip.setView(payMoneyEText);
 																		
-																		vipName = vipInfoCPer.getVIPNameByVIPId(vipId);
-																		
-																		Toast.makeText(PaymentManagement.this, "已为VIP客户:" + vipName + " 创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
-																		salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
-																		barcodeList.clear();
-																		
-																		vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
-																		vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
-																		vipName = "";
-																		
-																		//开始打印销售单
-																		Intent printService = new Intent();
-																		printService.setAction("com.tobacco.pos.service.PrintService");
-																		PaymentManagement.this.startService(printService);
-																		
+																		payMoneyTip.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+																			public void onClick(
+																					DialogInterface dialog,
+																					int which) {
+																				try{
+																				int userId = userInfoCPer.getUserIdByUserName(userName);
+																				double payMoney =  Double.parseDouble(payMoneyEText.getText().toString());
+																				if(payMoney>totalMoney){
+																					
+																					newSBillId = sBillCPer.addSBill(userId, vipId, Double.parseDouble(payMoneyEText.getText().toString()));//得到最后新加的销售单的ID
+																					
+																					String sTime = sBillCPer.getSTimeBySBillId(newSBillId);//获得刚加入的销售单的时间
+																					String newSBillNum = sBillCPer.getSBillNumBySBillId(newSBillId);//获取刚加入的销售单的编号
+																					
+																					for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
+																						String theBarcode = barcodeList.get(i-1);
+																						
+																						int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
+																						int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
+																			
+																						double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
+																						double outPrice = Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
+																						
+																						if(allCigaretteKindId.contains(kindId)){
+																						 
+																							sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, vipDiscountRate);//如果是烟类，则打折
+																							 
+																						}
+																						else{
+																							 
+																							sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, 1);//不是烟类，不打折
+																						 
+																						}
+																					}
+																				
+																					vipName = vipInfoCPer.getVIPNameByVIPId(vipId);
+																				
+																					Toast.makeText(PaymentManagement.this, "已为VIP客户:" + vipName + " 创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
+																					salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
+																					barcodeList.clear();
+																				
+																					vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
+																					vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
+																					vipName = "";
+																				
+																					//开始打印销售单
+																					Intent printService = new Intent();
+																					printService.setAction("com.tobacco.pos.service.PrintService");
+																					printService.putExtra("sTime", sTime);//传入销售时间
+																					printService.putExtra("userName", userName);//传入处理者名字
+																					printService.putExtra("totalMoney", totalMoney);//传入总额
+																					printService.putExtra("payMoney", payMoney);//传入付款																					
+																					printService.putExtra("newSBillNum", newSBillNum);//传入销售单的编号
+																					printService.putStringArrayListExtra("goodsNameList", goodsNameList);
+																					printService.putStringArrayListExtra("countList", countList);
+																					printService.putStringArrayListExtra("outPriceList", outPriceList);
+																					printService.putStringArrayListExtra("tMoneyList", tMoneyList);
+																					printService.putStringArrayListExtra("flagList", flagList);
+																				
+																					PaymentManagement.this.startService(printService);
+																				
+																					totalMoney = 0;
+																				}
+																				else{
+																					Toast.makeText(PaymentManagement.this, "付款怎能比总额少呢！", Toast.LENGTH_SHORT).show();
+																					totalMoney = 0;
+																				}
+																				
+																			}catch(NumberFormatException e){
+																				Toast.makeText(PaymentManagement.this, "数据格式不符合", Toast.LENGTH_SHORT).show();
+																				totalMoney = 0;
+																			}
+																			}	
+																		});
+																	
+																    	payMoneyTip.show();
 																	}
 																}
 																
@@ -396,12 +490,13 @@ public class PaymentManagement extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+		//startForResult返回后获取VIP信息
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == 0 && resultCode == RESULT_OK){//请求VIP信息
 			vipId = data.getIntExtra("vipId", -1);
 			vipName = data.getStringExtra("vipName");
 			vipDiscountRate = data.getDoubleExtra("vipDiscountRate ", 0);
+			
 		}
 	}
 

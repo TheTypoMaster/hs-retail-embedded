@@ -33,6 +33,7 @@ public class PrintService extends Service {
 	public void onStart(Intent intent, int startId) {//在这里接受要打印的数据，然后调用汉林的打印函数
 		 
 		super.onStart(intent, startId);
+		Log.d("lyq", "print start..............");
 		String newSBillNum = intent.getStringExtra("newSBillNum");//销售单号
 		String sTime = intent.getStringExtra("sTime");//销售日期
 		String userName = intent.getStringExtra("userName");//收银员
@@ -54,6 +55,7 @@ public class PrintService extends Service {
 		for(int i=0;i<goodsNameList.size();i++){
 			Log.d("lyq", goodsNameList.get(i) + "-" + countList.get(i) + "-" + outPriceList.get(i) + "-" + tMoneyList.get(i) + "-" + flagList.get(i));
 		}
+		Log.d("lyq", "print end..............");
 	}
 	
 
