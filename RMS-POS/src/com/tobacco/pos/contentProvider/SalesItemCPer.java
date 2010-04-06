@@ -166,7 +166,7 @@ public class SalesItemCPer extends ContentProvider {
 	    	}
 	    	return new ArrayList<ArrayList<String>>();
 	    }
-	    public boolean addSalesItem(int newSBillId, int goodsCount, String barcode, double inPrice, double outPrice){
+	    public boolean addSalesItem(int newSBillId, int goodsCount, String barcode, double inPrice, double outPrice, double vipDiscountRate){
 	    	
 	    	ContentValues value = new ContentValues();
 			
@@ -175,7 +175,7 @@ public class SalesItemCPer extends ContentProvider {
 			value.put("sGoodsNum", goodsCount);
 			value.put("barcode", barcode);
 			value.put("inPrice", inPrice);
-			value.put("outPrice", outPrice);
+			value.put("outPrice", outPrice * vipDiscountRate);
 		
 			Uri uri = this.insert(AllTables.SalesItem.CONTENT_URI, value);
 			if(uri!=null)

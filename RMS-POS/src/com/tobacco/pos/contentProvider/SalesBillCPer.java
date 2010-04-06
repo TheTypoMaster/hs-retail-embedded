@@ -59,9 +59,10 @@ public class SalesBillCPer extends ContentProvider {
 				db.execSQL("create table  if not exists " + TABLE_NAME + " ( " + _ID
 						+ " integer primary key autoincrement,"
 						+ " sBillNum varchar(20) unique not null, "
-						+ "operId integer references UserInfo ( " + _ID + " ),"
-						+ "time date not null,"
-						+ "VIPId integer references VIPInfo ( " + _ID + " ))");
+						+ " operId integer references UserInfo ( " + _ID + " ),"
+						+ " time date not null,"
+						+ " VIPId integer references VIPInfo ( " + _ID + " ),"
+						+ " payMoney double not null )");
 				initSalesBill(db);
 				}
 			}
@@ -130,7 +131,7 @@ public class SalesBillCPer extends ContentProvider {
 	        return 0;
 	    }
 	    
-	    public int addSBill(int operId, int VIPId){
+	    public int addSBill(int operId, int VIPId, double payMoney){
 	    	SimpleDateFormat dateFormater = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 	    	Cursor c =this.query(AllTables.SalesBill.CONTENT_URI, null, null, null, " sBillNum ");
 	    	String sBillNum;
@@ -151,6 +152,7 @@ public class SalesBillCPer extends ContentProvider {
 			Date d = new Date();
 			value.put("time", dateFormater.format(d));
 			value.put("VIPId", VIPId);
+			value.put("payMoney", payMoney);
 			
 			this.insert(AllTables.SalesBill.CONTENT_URI, value);
 			
