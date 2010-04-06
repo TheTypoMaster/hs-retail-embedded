@@ -1,7 +1,6 @@
 package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.tobacco.pos.contentProvider.GoodsCPer;
@@ -49,7 +48,12 @@ public class PaymentManagement extends Activity {
 	private TableLayout salesBillTable;
 	
 	private String userName = "";
-	private int VIPId = -1;
+	private int vipId = -1;
+	private String vipName = "";
+	private double vipDiscountRate = 1;
+	
+	private int newSBillId = -1;//新增的销售单Id
+	private double totalMoney = 0;	
 	
 	private List<String> barcodeList = new ArrayList<String>();
 	
@@ -97,8 +101,7 @@ public class PaymentManagement extends Activity {
 									if(!barcodeList.contains(barcode))
 										barcodeList.add(barcode);
 									
-									String goodsName = gCPer.getGoodsNameByGoodsId(goodsId);
-									String unitName = unitCPer.getUnitNameById(unitId);
+									String goodsName = gCPer.getGoodsNameByGoodsId(goodsId) + "(" + unitCPer.getUnitNameById(unitId) + ")";
 									
 									
 									salesBillTable = (TableLayout) PaymentManagement.this
@@ -107,13 +110,14 @@ public class PaymentManagement extends Activity {
 									for(int i=1;i<salesBillTable.getChildCount()-1;i++){//同样单位同样的商品已经在购物单中
 										TableRow compareRow = (TableRow) salesBillTable.getChildAt(i);
 										TextView compareNameTView = (TextView) compareRow.getChildAt(0);
-										TextView compareUnitTView = (TextView) compareRow.getChildAt(2);
 										
-										if(compareNameTView.getText().toString().equals(goodsName) 
-												&& compareUnitTView.getText().toString().equals(unitName)){
+										if(compareNameTView.getText().toString().equals(goodsName)){
 											TextView cTView = (TextView)compareRow.getChildAt(1);
-											TextView tMoneyTView = (TextView)compareRow.getChildAt(4);
-											TextView oPTView = (TextView)compareRow.getChildAt(3);
+										 
+											TextView tMoneyTView = (TextView)compareRow.getChildAt(3);
+											 
+											TextView oPTView = (TextView)compareRow.getChildAt(2);
+											 
 											
 											int originalCount = Integer.parseInt(cTView.getText().toString());
 											cTView.setText(""+(originalCount+count));
@@ -137,10 +141,6 @@ public class PaymentManagement extends Activity {
 										TextView countTView = new TextView(PaymentManagement.this);
 										countTView.setText(""+count);
 										r.addView(countTView);
-									
-										TextView unitTView = new TextView(PaymentManagement.this);
-										unitTView.setText(unitName);
-										r.addView(unitTView);
 									
 										TextView priceTView = new TextView(PaymentManagement.this);
 										priceTView.setText(""+gPriceCPer.getOutPriceByBarcode(barcode));
@@ -190,56 +190,141 @@ public class PaymentManagement extends Activity {
 														new DialogInterface.OnClickListener() {
 
 															public void onClick(DialogInterface dialog, int which) {
-																int newSBillId = -1;
+																
 																
 																String VIPNum = VIPNumEText.getText().toString();
 																if(VIPNum.length() != 0){
-																	VIPId = vipInfoCPer.getVIPIdByVIPNum(VIPNumEText.getText().toString());
-																	if(VIPId == -1)
+//																	Intent getVIPInfoIntent = new Intent();
+//																	getVIPInfoIntent.setAction("com.tobacco.custrel.activity.bm.VipDiscountManager.GET_VIP_DISCOUNT");
+//																	getVIPInfoIntent.putExtra("vipNum", VIPNumEText.getText().toString());
+//																	PaymentManagement.this.startActivityForResult(getVIPInfoIntent, 0);//此处调用回去VIP信息的方法。
+																	
+																	vipId = vipInfoCPer.getVIPIdByVIPNum(VIPNumEText.getText().toString());
+																	if(vipId == -1)
 																		Toast.makeText(PaymentManagement.this, "没有该会员", Toast.LENGTH_SHORT).show();
 																	else{
 																	
 																		int userId = userInfoCPer.getUserIdByUserName(userName);
 																
-																		newSBillId = sBillCPer.addSBill(userId, VIPId);//得到最后新加的销售单的ID
-																	
+																		newSBillId = sBillCPer.addSBill(userId, vipId, 100);//得到最后新加的销售单的ID
+																		//////////////////////////////////////////////////////////////////////////////////////////////
+																
 																		for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 																			String theBarcode = barcodeList.get(i-1);
 																			int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
 																	
-																			double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
+																			double inPrice = Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
 																			double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
-																			sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice);
+																			sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, vipDiscountRate);
 																		}
 																		
 																		
-																		String VIPName = vipInfoCPer.getVIPNameByVIPId(VIPId);
-																		VIPId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
-																		Toast.makeText(PaymentManagement.this, "已为VIP客户:" + VIPName + " 创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
+																		vipName = vipInfoCPer.getVIPNameByVIPId(vipId);
+																		
+																		Toast.makeText(PaymentManagement.this, "已为VIP客户:" + vipName + " 创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
 																		salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
 																		barcodeList.clear();
+																		
+																		vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
+																		vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
+																		vipName = "";
+																		
+																		//开始打印销售单
+																		Intent printService = new Intent();
+																		printService.setAction("com.tobacco.pos.service.PrintService");
+																		PaymentManagement.this.startService(printService);
+																		
 																	}
 																}
 																
 																
 																else
 																{
-																	int userId = userInfoCPer.getUserIdByUserName(userName);
 																	
-																	newSBillId = sBillCPer.addSBill(userId, -1);//得到最后新加的销售单的ID
-																
-																	for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
-																		String theBarcode = barcodeList.get(i-1);
-																		int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
-																
-																		double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
-																		double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
-																		sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice);
+																	for(int i=1;i<salesBillTable.getChildCount()-1;i++){
+																		totalMoney += Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(3)).getText().toString());
 																	}
-																	Toast.makeText(PaymentManagement.this, "已为该普通客户创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
+																	AlertDialog.Builder payMoneyTip = new AlertDialog.Builder(PaymentManagement.this);
+																	payMoneyTip.setTitle("付款");
+																	payMoneyTip.setMessage("总额为:" + totalMoney);
+																	final EditText payMoneyEText = new EditText(PaymentManagement.this);
+																	payMoneyEText.setWidth(120);
+																	payMoneyTip.setView(payMoneyEText);
+																	payMoneyTip.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+																		public void onClick(
+																				DialogInterface dialog,
+																				int which) {
+																		
+																			try{
+																				int userId = userInfoCPer.getUserIdByUserName(userName);
+																				
+																				double payMoney =  Double.parseDouble(payMoneyEText.getText().toString());
+																				if(payMoney>=totalMoney){
+																					//增加新销售单
+																					newSBillId = sBillCPer.addSBill(userId, -1, Double.parseDouble(payMoneyEText.getText().toString()));//得到最后新加的销售单的ID
+																					
+																					//处理销售单的增加以及打印
+																					String sTime = sBillCPer.getSTimeBySBillId(newSBillId);//获得刚加入的销售单的时间
+																					String newSBillNum = sBillCPer.getSBillNumBySBillId(newSBillId);//获取刚加入的销售单的编号
+																					ArrayList<String> goodsNameList = new ArrayList<String>();//存储商品名字的List
+																					ArrayList<String> countList = new ArrayList<String>();//存储销量的List
+																					ArrayList<String> outPriceList = new ArrayList<String>();//存储单价的List
+																					ArrayList<String> tMoneyList = new ArrayList<String>();//单项总额的List
+																					ArrayList<String> flagList = new ArrayList<String>();//有否打折的标志，普通客户都为""
+																					for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
+																						
+																						String theBarcode = barcodeList.get(i-1);
+																						int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
+																				
+																						double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
+																						double outPrice = Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
+																						sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, 1);
+																						
+																						goodsNameList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(0)).getText().toString());
+																						countList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
+																						outPriceList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
+																						tMoneyList.add(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(3)).getText().toString());
+																						flagList.add("");
+																					}
+																					Toast.makeText(PaymentManagement.this, "已为该普通客户创建销售单:" + sBillCPer.getSBillNumBySBillId(newSBillId), Toast.LENGTH_SHORT).show();
+																					
+																					salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
+																					barcodeList.clear();
+																				
+																					//开始打印销售单
+																					Intent printService = new Intent();
+																					printService.setAction("com.tobacco.pos.service.PrintService");
+																					printService.putExtra("sTime", sTime);//传入销售时间
+																					printService.putExtra("userName", userName);//传入处理者名字
+																					printService.putExtra("totalMoney", totalMoney);//传入总额
+																					printService.putExtra("payMoney", payMoney);//传入付款																					
+																					printService.putExtra("newSBillNum", newSBillNum);//传入销售单的编号
+																					printService.putStringArrayListExtra("goodsNameList", goodsNameList);
+																					printService.putStringArrayListExtra("countList", countList);
+																					printService.putStringArrayListExtra("outPriceList", outPriceList);
+																					printService.putStringArrayListExtra("tMoneyList", tMoneyList);
+																					printService.putStringArrayListExtra("flagList", flagList);
+																					
+																					PaymentManagement.this.startService(printService);
+																					
+																					totalMoney = 0;
+																				}
+																				else{
+																					Toast.makeText(PaymentManagement.this, "付款怎能比总额少呢！", Toast.LENGTH_SHORT).show();
+																					totalMoney = 0;
+																				}
+
+																			}catch(NumberFormatException e){
+																				Toast.makeText(PaymentManagement.this, "数据格式不符合", Toast.LENGTH_SHORT).show();
+																				totalMoney = 0;
+																			}
+																		}
+																		
+																	});
+																	payMoneyTip.show();
 																	
-																	salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
-																	barcodeList.clear();
+																
 																}
 															}
 
@@ -261,10 +346,7 @@ public class PaymentManagement extends Activity {
 										blank1.setText("");
 										TextView blank2 = new TextView(PaymentManagement.this);
 										blank2.setText("");
-										TextView blank3 = new TextView(PaymentManagement.this);
-										blank3.setText("");
-									
-								
+										
 										Button cancelButton = new Button(PaymentManagement.this);
 										cancelButton.setText("取消");
 										cancelButton.setTextSize(10);
@@ -278,15 +360,14 @@ public class PaymentManagement extends Activity {
 										
 										});
 									
-										TextView blank4 = new TextView(PaymentManagement.this);
-										blank4.setText("");
+										TextView blank3 = new TextView(PaymentManagement.this);
+										blank3.setText("");
 										TableRow lastRow = new TableRow(PaymentManagement.this);
 										lastRow.addView(blank1);
 										lastRow.addView(blank2);
-										lastRow.addView(blank3);
 										lastRow.addView(saveButton);
 										lastRow.addView(cancelButton);
-										lastRow.addView(blank4);
+										lastRow.addView(blank3);
 										salesBillTable.addView(lastRow);
 									}
 									
@@ -301,6 +382,8 @@ public class PaymentManagement extends Activity {
 							catch(Exception e){
 								Toast.makeText(PaymentManagement.this, "不正确的数量格式", Toast.LENGTH_SHORT).show();
 								sGoodsNumEText.setText("");
+								
+						
 							}
 						}
 					}
@@ -309,6 +392,17 @@ public class PaymentManagement extends Activity {
 			}
 			
 		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 0 && resultCode == RESULT_OK){//请求VIP信息
+			vipId = data.getIntExtra("vipId", -1);
+			vipName = data.getStringExtra("vipName");
+			vipDiscountRate = data.getDoubleExtra("vipDiscountRate ", 0);
+		}
 	}
 
 	@Override
