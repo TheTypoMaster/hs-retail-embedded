@@ -92,8 +92,20 @@ public class Main extends Activity {
 		b4.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent intent = new Intent(Main.this, ReportManagement.class);
-				startActivity(intent);
+
+				AlertDialog.Builder selectReportKindTip = new AlertDialog.Builder(Main.this);
+				selectReportKindTip.setTitle("报表类型");
+				selectReportKindTip.setItems(R.array.reportKind, new DialogInterface.OnClickListener(){
+
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(Main.this, ReportManagement.class);
+						intent.putExtra("reportKind", which);
+						startActivity(intent);
+					}
+					
+				});
+				
+				selectReportKindTip.show();
 			}
 
 		});
