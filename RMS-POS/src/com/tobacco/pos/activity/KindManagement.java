@@ -1,12 +1,15 @@
 package com.tobacco.pos.activity;
 
+import static android.provider.BaseColumns._ID;
+
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
-import com.tobacco.pos.entity.AllTables;
+import com.tobacco.pos.extentActivity.KindManagementExtention;
 import com.tobacco.pos.util.ProcessStr;
 import com.tobacco.pos.util.TreeBranchNode;
 import com.tobacco.pos.util.TreeLeafNode;
@@ -18,6 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +33,12 @@ import android.widget.Toast;
 import android.graphics.Color;
 
 public class KindManagement extends Activity {
-	private GoodsKindCPer kindCPer = null;
-	
+	public static final int DELETEFLAG = 1;
+	public static final int INFOFLAG = 2;
+	public static final int EDITFLAG = 3;
+	public static final int ADDFLAG = 4;
+//	public static final int ZOOMFLAG = 5;
+
 	private TextView kindInfoTView;//显示某种类的详细信息
 	public int maxLevel = 0;//总共有几层，在显示的时候有用
 	
@@ -47,7 +55,7 @@ public class KindManagement extends Activity {
 	public int selectedId = -1;//选择种类的ID
 	
 	private Map<Integer, Integer> clickCount = new Hashtable<Integer, Integer>();
-
+//	private ArrayList<Integer> allDescendantId = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,15 +63,6 @@ public class KindManagement extends Activity {
 		
 		kindInfoTView = (TextView)KindManagement.this.findViewById(R.id.kindInfoTView);
 		
-		kindCPer = new GoodsKindCPer();
-		
-		lookup();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		kindInfoTView.setText("");
 		lookup();
 	}
 
@@ -101,20 +100,24 @@ public class KindManagement extends Activity {
 			Toast.makeText(this, "请先选择父类别", Toast.LENGTH_SHORT).show();
 		}
 		else{
-			Intent intent = new Intent(this, AddGoodsKind.class);
+			Intent addIntent = new Intent(this, KindManagementExtention.class);
+			addIntent.putExtra("REQUESTCODE", ADDFLAG);
 			if(selectedName.equals("TOP")){//选择是最高的级别
-				intent.putExtra("parentName", "TOP");
-				intent.putExtra("parentId", 0);
-				intent.putExtra("parentLevel", 0);
+				addIntent.putExtra("parentName", "TOP");
+				addIntent.putExtra("parentId", 0);
+				addIntent.putExtra("parentLevel", 0);
 				
 			}
 			else{
+				 Cursor c = getContentResolver().query(GoodsKindCPer.CONTENT_URI, null, _ID + " = ? ", new String[]{selectedId+""}, null);
+				 c.moveToFirst();
 			
-				intent.putExtra("parentName", selectedName);
-				intent.putExtra("parentId", selectedId);
-				intent.putExtra("parentLevel", levels.get(ids.indexOf(selectedId)));
+				addIntent.putExtra("parentName", c.getString(1));
+				addIntent.putExtra("parentId", selectedId);
+				addIntent.putExtra("parentLevel", levels.get(ids.indexOf(selectedId))+1);
 			}
-			this.startActivity(intent);
+			this.startActivityForResult(addIntent, ADDFLAG);
+	
 		}
 
 	}
@@ -127,23 +130,102 @@ public class KindManagement extends Activity {
 			if(selectedName.equals("TOP"))
 				Toast.makeText(this, "该类别不能删除", Toast.LENGTH_SHORT).show();
 			else{
-				boolean flag = kindCPer.hasChildrenKind(selectedId);
-				if(flag)
-					Toast.makeText(this, "该类别不能删除", Toast.LENGTH_SHORT).show();
-				else{
-					int count = getContentResolver().delete(AllTables.GoodsKind.CONTENT_URI, " _id = " + selectedId, null);
-					if(count>0){
-						Toast.makeText(this, "成功删除类别:" + selectedName, Toast.LENGTH_SHORT).show();
-						this.onResume();
-					}
-					else
-						Toast.makeText(this, "删除类别:"+selectedName+"失败", Toast.LENGTH_SHORT).show();
-				}
-
+				Intent deleteGoodsKindIntent = new Intent(KindManagement.this, KindManagementExtention.class);
+				deleteGoodsKindIntent.putExtra("REQUESTCODE", DELETEFLAG);
+				deleteGoodsKindIntent.putExtra("selectedId", selectedId);
+				
+				this.startActivityForResult(deleteGoodsKindIntent, DELETEFLAG);
 			}
 		}
 	}
 	
+	private void moreInfo(int selectedId) {// 点击某一类别，显示更加详细的信息
+		
+
+		if(selectedId == -1){
+			kindInfoTView.setText("");
+			//如果是TOP类别，不显示任何东西
+		}
+	
+		else {// 选择了某一商品类别
+			
+			Intent moreInfoIntent = new Intent(KindManagement.this, KindManagementExtention.class);
+			
+			moreInfoIntent.putExtra("REQUESTCODE", INFOFLAG);
+			moreInfoIntent.putExtra("selectedId", selectedId);
+			
+			this.startActivityForResult(moreInfoIntent, INFOFLAG);
+			
+		}
+		
+	}
+
+	private void edit(){
+		if(selectedName.equals("TOP")){
+			return;//TOP不可编辑
+		}
+		if(selectedName.equals("")){
+			Toast.makeText(this, "请先选择某一类别", Toast.LENGTH_SHORT).show();
+		}
+		else{		 
+		
+			Intent editIntent = new Intent(this,KindManagementExtention.class);
+			editIntent.putExtra("selectedId", selectedId);
+		
+			editIntent.putExtra("REQUESTCODE", EDITFLAG);
+			this.startActivityForResult(editIntent, EDITFLAG);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(resultCode == RESULT_OK){//如果成功返回
+			if(requestCode == DELETEFLAG){//如果是删除请求
+				boolean hasChildren = data.getBooleanExtra("hasChildren", false);
+				if(hasChildren){
+					Toast.makeText(this, "该类别不允许删除", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					boolean deleteFlag = data.getBooleanExtra("deleteFlag", true);
+					if(deleteFlag){
+						Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
+						lookup();
+					}
+				}
+			}
+			else if(requestCode == INFOFLAG){//如果是查看详细信息的请求
+				kindInfoTView.setText(data.getStringExtra("moreInfo"));
+			}
+			else if(requestCode == EDITFLAG){
+				boolean hasUpdated = data.getBooleanExtra("hasUpdated", false);
+				if(hasUpdated){
+					String updateInfo = data.getStringExtra("updateInfo");
+					Toast.makeText(this, updateInfo, Toast.LENGTH_SHORT).show();
+					lookup();
+					kindInfoTView.setText("");
+				}
+			}
+			else if(requestCode == ADDFLAG){
+				String addInfo = data.getStringExtra("addInfo");
+				if(addInfo.startsWith("成功")){
+					Toast.makeText(this, addInfo, Toast.LENGTH_SHORT).show();
+					lookup();
+				}
+				else{
+					Toast.makeText(this, addInfo, Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+//			else if(requestCode == ZOOMFLAG){
+//				allDescendantId = data.getIntegerArrayListExtra("allDescendantIdList");
+//				
+//			}
+		}
+	}
+	
+
 	private void lookup() {
 		
 		final LinearLayout l = (LinearLayout) this
@@ -174,7 +256,8 @@ public class KindManagement extends Activity {
 				selectedId = -1;
 				selectedName = ((TextView) v).getText().toString();
 			
-				kindInfoTView.setText("\n\n\n"+moreInfo(selectedId));
+				kindInfoTView.setText("");
+			
 			}
 
 		});
@@ -209,7 +292,7 @@ public class KindManagement extends Activity {
 		l.addView(top);
 		TextView t;
 
-		c = this.managedQuery(AllTables.GoodsKind.CONTENT_URI, null, null, null, null);
+		c = this.managedQuery(GoodsKindCPer.CONTENT_URI, null, null, null, null);
 		c.moveToFirst();
 
 		for (int i = 0; i < c.getCount(); i++) {
@@ -319,8 +402,7 @@ public class KindManagement extends Activity {
 					}
 
 					selectedName = ((TextView) v).getText().toString();
-					kindInfoTView.setText("\n\n\n"+moreInfo(selectedId));
-
+					moreInfo(selectedId);
 				}
 			});
 		
@@ -328,8 +410,13 @@ public class KindManagement extends Activity {
 
 				public boolean onLongClick(View v) {
 				
-					List<Integer> allDescendantId = kindCPer.getAllDescendantByAncestorId(v.getId());
-					
+//					Intent zoomIntent = new Intent(KindManagement.this, KindManagementExtention.class);
+//					zoomIntent.putExtra("REQUESTCODE", ZOOMFLAG);
+//					zoomIntent.putExtra("ancestorId", v.getId());
+//					
+//					KindManagement.this.startActivityForResult(zoomIntent, ZOOMFLAG);
+					ArrayList<Integer> allDescendantId = null;//KindManagement.this.getAllDescendantByAncestorId(v.getId(), c);
+					Log.d("lyq", "kkkkkkkkkk" + allDescendantId.size());
 					int tempClickCount = clickCount.get(v.getId());
 					
 					if(tempClickCount%2 == 0){
@@ -362,60 +449,38 @@ public class KindManagement extends Activity {
 		}
 	}
 
-	private String moreInfo(int selectedId) {// 点击某一类别，显示更加详细的信息
-		
+//	public List<Integer> getChildrenByParentId(int parentId, Cursor c){
+////		Cursor c = getContentResolver().query(GoodsKindCPer.CONTENT_URI, null, " parent = ? ", new String[]{parentId+""}, null);
+//		if(c.getCount()>0){
+//			List<Integer> temp = new ArrayList<Integer>();
+//			c.moveToFirst();
+//			for(int i=0;i<c.getCount();i++){
+//				temp.add(c.getInt(0));
+//				c.moveToNext();
+//			}
+//			return temp;
+//		}
+//		return new ArrayList<Integer>();
+//		
+//	}
+//	public ArrayList<Integer> getAllDescendantByAncestorId(int ancestorId, Cursor c){
+//		ArrayList<Integer> t = new ArrayList<Integer>();
+//		List<Integer> temp = new ArrayList<Integer>();
+//		temp = getChildrenByParentId(ancestorId , c);
+//		
+//		for(int i=0;i<temp.size();i++){
+//			t.add(temp.get(i));
+//		}
+//		for(int i=0;i<t.size();i++){
+//			Integer tempId = t.get(i);
+//			temp =  getChildrenByParentId(tempId, c);
+//			
+//			for(int j=0;j<temp.size();j++){
+//				t.add(temp.get(j));
+//			}
+//		}
+//		
+//		return t;
+//	}
 
-		if(selectedId == -1){
-			return "";//如果是TOP类别，不显示任何东西
-		}
-	
-		else {// 选择了某一商品类别
-			
-			return kindCPer.getGoodsKindInfoByGoodsKindId(selectedId);
-		}
-		
-	}
-
-	private void edit(){
-		if(selectedName.equals("TOP")){
-			return;//TOP不可编辑
-		}
-		if(selectedName.equals("")){
-			Toast.makeText(this, "请先选择某一类别", Toast.LENGTH_SHORT).show();
-		}
-		else{
-			int eId = selectedId;//要编辑类别的ID，不可改变
-			String eName = "";//要编辑类别的名字
-			String eComment = "";//要编辑的备注
-			String pName = "";//要编辑类别的父类别名字
-			eName = selectedName;
-			
-			c.moveToFirst();
-			
-			for(int i=0;i<c.getCount();i++){
-				if(c.getInt(0) == selectedId){
-					eComment = c.getString(4);//获取要更改的备注
-					eName = c.getString(1);
-					break;
-				}
-				c.moveToNext();
-			}
-			if(eName.contains(">")){
-				String temp = eName;
-				pName = temp.substring(0, temp.lastIndexOf(">")-1);
-				eName = temp.substring(temp.lastIndexOf(">")+1);
-			}
-			else{
-				pName = "TOP";
-				
-			}
-
-			Intent intent = new Intent(this,EditGoodsKind.class);
-			intent.putExtra("eId", eId);
-			intent.putExtra("eName", eName);
-			intent.putExtra("eComment", eComment);
-			intent.putExtra("pName", pName);
-			this.startActivity(intent);
-		}
-	}
 }
