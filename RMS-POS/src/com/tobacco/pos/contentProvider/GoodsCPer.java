@@ -21,13 +21,14 @@ public class GoodsCPer extends BaseContentProvider {
 			.parse("content://com.tobacco.pos.contentProvider.GoodsCPer");
 	private static final String TABLE_NAME = DatabaseHelper.GOODS;
 
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		this.tableName = TABLE_NAME;
-		return super
-				.query(uri, projection, selection, selectionArgs, sortOrder);
-	}
 
+    public boolean onCreate() {
+	 
+		ctx = getContext();
+		dbHelper = new DatabaseHelper(getContext());
+		this.tableName = GoodsCPer.TABLE_NAME;
+		return true;
+	}
 	public String getGoodsNameByGoodsId(int goodsId) {
 
 		Cursor c = this.query(CONTENT_URI, null, " _id = ? ",

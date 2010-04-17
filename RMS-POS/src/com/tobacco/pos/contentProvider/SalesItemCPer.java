@@ -22,11 +22,13 @@ public class SalesItemCPer extends BaseContentProvider {
 	public static final Uri CONTENT_URI = Uri
 			.parse("content://com.tobacco.pos.contentProvider.SalesItemCPer");
 
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		this.tableName = TABLE_NAME;
-		return super
-				.query(uri, projection, selection, selectionArgs, sortOrder);
+
+	public boolean onCreate() {
+		 
+		ctx = getContext();
+		dbHelper = new DatabaseHelper(getContext());
+		this.tableName = SalesItemCPer.TABLE_NAME;
+		return true;
 	}
 
 	public ArrayList<ArrayList<String>> getSalesItemBySalesBillId(

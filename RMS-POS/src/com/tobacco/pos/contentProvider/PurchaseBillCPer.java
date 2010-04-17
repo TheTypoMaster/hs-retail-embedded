@@ -10,13 +10,13 @@ public class PurchaseBillCPer extends BaseContentProvider {
 	public static final Uri CONTENT_URI = Uri
 			.parse("content://com.tobacco.pos.contentProvider.PurchaseBillCPer");
 
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		this.tableName = TABLE_NAME;
-		return super
-				.query(uri, projection, selection, selectionArgs, sortOrder);
+	public boolean onCreate() {
+		 
+		ctx = getContext();
+		dbHelper = new DatabaseHelper(getContext());
+		this.tableName = PurchaseBillCPer.TABLE_NAME;
+		return true;
 	}
-
 	public String getMaxPBillNum() {
 		Cursor c = this.query(CONTENT_URI, null, null, null, " time ");
 		if (c.getCount() > 0) {
