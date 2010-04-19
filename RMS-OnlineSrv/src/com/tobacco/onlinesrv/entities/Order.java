@@ -7,6 +7,7 @@ public class Order {
 	public static final Uri CONTENT_URI = Uri.parse("content://"
 			+ OrderProvider.CONTENT_URI + "/order");
 	public static final String KEY_ID = "id";
+	public static final String KEY_ORDER_ID = "orderid";
 	public static final String KEY_BRANDCODE = "brandcode";
 	public static final String KEY_BRANDCOUNT = "brandcount";
 	public static final String KEY_DATE = "date";

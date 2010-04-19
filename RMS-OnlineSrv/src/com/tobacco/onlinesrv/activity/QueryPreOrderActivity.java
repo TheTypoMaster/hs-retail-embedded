@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -30,20 +31,80 @@ import com.tobacco.onlinesrv.entities.PreOrder;
 
 public class QueryPreOrderActivity extends Activity {
 	private String queryMonth[] = { "最近一个月", "最近两个月", "最近三个月" };
-	private String queryText[]={"预订单号","商品名称","规格"};
+	private String queryType[] = { "预订单号", "商品名称", "规格" };
+	private String from[] = new String[] { "id", "brandcode", "brandcount","amount", "date" };
+	private Spinner sp1;
+	private Spinner sp2;
+	private ListView listView;
+	private EditText queryEdt; 
+	private HashMap<Integer,String> queryMap = new HashMap<Integer,String>();
+	private final static Uri preorder = PreOrder.CONTENT_URI;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		initMap();
 		setContentView(R.layout.query);
-		String[] from = new String[] { "id", "brandcode", "brandcount",
-				"amount", "date" };
-		int[] to = new int[] { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
-				R.id.item5 };
+		setSpinner();
+		setListView();
+		setListAdapter(getFillMaps(null));
+		queryEdt = (EditText) this.findViewById(R.id.queryText);
+		Button okBtn = (Button) this.findViewById(R.id.okButton);
+		okBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int queryType = sp2.getSelectedItemPosition();
+				String selection = queryMap.get(queryType)+"=\""+queryEdt.getText().toString()+"\"";
+				setListAdapter(getFillMaps(selection));
+			}
+		});
+		Button backBtn = (Button) this.findViewById(R.id.queryButton05);
+		backBtn.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+	}
+	private void initMap()
+	{
+		queryMap.put(0, PreOrder.KEY_PREORDER_ID);
+		queryMap.put(1, PreOrder.KEY_BRANDCODE);
+		queryMap.put(2, PreOrder.KEY_FORMAT);
+	}
+	private void setListView()
+	{
+	
+		listView = (ListView) this.findViewById(R.id.ListView01);
+		listView.setTextFilterEnabled(true);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(QueryPreOrderActivity.this,
+						EditPreOrderActivity.class);
+				startActivity(intent);
+			}
+		});
+	}
+	private void setListAdapter(List<HashMap<String, String>> fillMaps)
+	{
+		int[] to = new int[] { R.id.item1, R.id.item2, R.id.item3, R.id.item4,R.id.item5 };
+		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,R.layout.grid_item, from, to);
+		listView.setAdapter(adapter);
+	}
+	private void setSpinner()
+	{
+		sp1 = (Spinner) this.findViewById(R.id.Spinner01);
+		sp1.setAdapter((new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, queryMonth)));
+		sp2 = (Spinner) this.findViewById(R.id.Spinner02);
+		sp2.setAdapter((new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, queryType)));
+	}
+	
+	private List<HashMap<String, String>> getFillMaps(String selection){
 		List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
-		Uri preorder = PreOrder.CONTENT_URI;
-
-		Cursor cursor = this.managedQuery(preorder, null, null, null, null);
-
+		Cursor cursor = this.managedQuery(preorder, null, selection, null, null);
 		if (cursor.getCount() == 0)
 			openfailDialog();
 		else {
@@ -59,38 +120,7 @@ public class QueryPreOrderActivity extends Activity {
 				fillMaps.add(map);
 			} while (cursor.moveToNext());
 		}
-
-		ListView listView = (ListView) this.findViewById(R.id.ListView01);
-
-		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
-				R.layout.grid_item, from, to);
-		listView.setAdapter(adapter);
-		listView.setTextFilterEnabled(true);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(QueryPreOrderActivity.this,
-						EditPreOrderActivity.class);
-				startActivity(intent);
-			}
-		});
-		Spinner sp1 = (Spinner) this.findViewById(R.id.Spinner01);
-		sp1.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, queryMonth)));
-		Spinner sp2 = (Spinner) this.findViewById(R.id.Spinner02);
-		sp2.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, queryText)));
-		Button backBtn = (Button) this.findViewById(R.id.queryButton05);
-		backBtn.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});
+		return fillMaps;
 	}
 
 	private void openfailDialog() {
