@@ -29,8 +29,8 @@ import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.PreOrder;
 
 public class QueryPreOrderActivity extends Activity {
-	private String query[] = { "最近一个月", "最近两个月", "最近三个月" };
-
+	private String queryMonth[] = { "最近一个月", "最近两个月", "最近三个月" };
+	private String queryText[]={"预订单号","商品名称","规格"};
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -77,10 +77,12 @@ public class QueryPreOrderActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-		Spinner sp = (Spinner) this.findViewById(R.id.Spinner01);
-		sp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, query)));
-
+		Spinner sp1 = (Spinner) this.findViewById(R.id.Spinner01);
+		sp1.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, queryMonth)));
+		Spinner sp2 = (Spinner) this.findViewById(R.id.Spinner02);
+		sp2.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, queryText)));
 		Button backBtn = (Button) this.findViewById(R.id.queryButton05);
 		backBtn.setOnClickListener(new OnClickListener() {
 
