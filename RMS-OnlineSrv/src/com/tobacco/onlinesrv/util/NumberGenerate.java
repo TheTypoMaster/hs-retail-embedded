@@ -2,13 +2,12 @@ package com.tobacco.onlinesrv.util;
 
 public class NumberGenerate {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int i  =10000;
-		
+	public static String preOrderIdGeneration(int id) {
+		return "HSP-" + id;
+	}
+
+	public static String orderIdGeneration(int id) {
+		return "HS-" + id;
 	}
 
 }

@@ -26,14 +26,14 @@ public class PreOrderProvider extends ContentProvider {
 
 	private static final String DATABASE_CREATE = "create table if not exists "
 			+ DATABASE_TABLE_NAME + "(" + PreOrder.KEY_ID
-			+ " integer primary key autoincrement, " + PreOrder.KEY_BRANDCODE
-			+ " varchar(20), " + PreOrder.KEY_BRANDCOUNT + " integer, "
-			+ PreOrder.KEY_PREDATE + " date, " + PreOrder.KEY_USERNAME
-			+ " varchar(20), " + PreOrder.KEY_VIPID + " integer, "
-			+ PreOrder.KEY_FORMAT + " varchar(20), " + PreOrder.KEY_AMOUNT
-			+ " float, " + PreOrder.KEY_AGENTCYID + " integer, "
-			+ PreOrder.KEY_DESCRIPTION + " text, " + PreOrder.KEY_STATUS
-			+ " char(1))";
+			+ " integer primary key autoincrement, " + PreOrder.KEY_PREORDER_ID
+			+ " varchar(20), " + PreOrder.KEY_BRANDCODE + " varchar(20), "
+			+ PreOrder.KEY_BRANDCOUNT + " integer, " + PreOrder.KEY_PREDATE
+			+ " date, " + PreOrder.KEY_USERNAME + " varchar(20), "
+			+ PreOrder.KEY_VIPID + " integer, " + PreOrder.KEY_FORMAT
+			+ " varchar(20), " + PreOrder.KEY_AMOUNT + " float, "
+			+ PreOrder.KEY_AGENTCYID + " integer, " + PreOrder.KEY_DESCRIPTION
+			+ " text, " + PreOrder.KEY_STATUS + " char(1))";
 	private DatabaseHelper preOrderHelper = null;
 
 	@Override
@@ -125,6 +125,15 @@ public class PreOrderProvider extends ContentProvider {
 //			Log.i(TAG, "Init Data inserted...");
 			// TODO Auto-generated method stub
 
+		}
+		private void initData(SQLiteDatabase db)
+		{
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('HSP-1','中华',10,'2010-3-10','包','450','1','中华好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('HSP-1','中华',10,'2010-3-10','包','450','1','好烟','0')");
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {

@@ -32,19 +32,19 @@ import com.tobacco.onlinesrv.entities.PreOrder;
 public class QueryPreOrderActivity extends Activity {
 	private String queryMonth[] = { "最近一个月", "最近两个月", "最近三个月" };
 	private String queryType[] = { "预订单号", "商品名称", "规格" };
-	private String from[] = new String[] { "id", "brandcode", "brandcount","amount", "date" };
+	private String from[] = new String[] { PreOrder.KEY_ID, PreOrder.KEY_BRANDCODE, PreOrder.KEY_BRANDCOUNT,PreOrder.KEY_AMOUNT, PreOrder.KEY_PREDATE };
 	private Spinner sp1;
 	private Spinner sp2;
 	private ListView listView;
 	private EditText queryEdt; 
 	private HashMap<Integer,String> queryMap = new HashMap<Integer,String>();
-	private final static Uri preorder = PreOrder.CONTENT_URI;
+	private Uri preorder = PreOrder.CONTENT_URI;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		initMap();
 		setContentView(R.layout.query);
+		initMap();
 		setSpinner();
 		setListView();
 		setListAdapter(getFillMaps(null));
@@ -112,11 +112,11 @@ public class QueryPreOrderActivity extends Activity {
 			cursor.moveToFirst();
 			do {
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("id", cursor.getString(0));
-				map.put("brandcode", cursor.getString(1));
-				map.put("brandcount", cursor.getString(2));
-				map.put("amount", cursor.getString(7));
-				map.put("date", cursor.getString(3));
+				map.put(PreOrder.KEY_ID, cursor.getString(0));
+				map.put(PreOrder.KEY_BRANDCODE, cursor.getString(1));
+				map.put(PreOrder.KEY_BRANDCOUNT, cursor.getString(2));
+				map.put(PreOrder.KEY_AMOUNT, cursor.getString(7));
+				map.put(PreOrder.KEY_PREDATE, cursor.getString(3));
 				fillMaps.add(map);
 			} while (cursor.moveToNext());
 		}
