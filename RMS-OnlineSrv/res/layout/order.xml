@@ -5,9 +5,9 @@
 	<LinearLayout android:id="@+id/LinearLayout01"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品名称:" android:id="@+id/TextView01"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText01"
+		<TextView android:text="商品名称:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/brandCodeText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -16,9 +16,9 @@
 	<LinearLayout android:id="@+id/LinearLayout02"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品数量:" android:id="@+id/TextView02"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText02"
+		<TextView android:text="商品数量:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/brandCountText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -27,9 +27,9 @@
 	<LinearLayout android:id="@+id/LinearLayout03"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品规格:" android:id="@+id/TextView03"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText03"
+		<TextView android:text="商品规格:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/formatText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -38,9 +38,9 @@
 	<LinearLayout android:id="@+id/LinearLayout04"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="订单日期:" android:id="@+id/TextView04"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText04"
+		<TextView android:text="订单日期:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/dateText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -49,32 +49,33 @@
 	<LinearLayout android:id="@+id/LinearLayout05"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品金额:" android:id="@+id/TextView05"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText05"
+		<TextView android:text="商品金额:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/amountText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
 			android:autoText="true" android:maxLines="1"></EditText>
 	</LinearLayout>
-	<LinearLayout android:id="@+id/LinearLayout06"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
+	<!--
+		<LinearLayout android:id="@+id/LinearLayout06"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="horizontal">
 		<TextView android:text="单位:" android:id="@+id/TextView06"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText06"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-			android:scrollHorizontally="true" android:gravity="fill_horizontal"
-			android:autoText="true" android:maxLines="1"></EditText>
-	
-</LinearLayout>
+		android:layout_width="80px"
+		android:layout_height="wrap_content"></TextView> <EditText
+		android:id="@+id/OrderEditText06" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_marginLeft="20dip"
+		android:layout_marginRight="20dip" android:scrollHorizontally="true"
+		android:gravity="fill_horizontal" android:autoText="true"
+		android:maxLines="1"></EditText> </LinearLayout>
+	-->
 	<LinearLayout android:id="@+id/LinearLayout07"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="商品折扣:" android:id="@+id/TextView07"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText07"
+		<TextView android:text="商品折扣:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/vipText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -83,9 +84,9 @@
 	<LinearLayout android:id="@+id/LinearLayout08"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="备注:" android:id="@+id/TextView08"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
-		<EditText android:id="@+id/OrderEditText08"
+		<TextView android:text="备注:" android:layout_width="80px"
+			android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/descText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 			android:scrollHorizontally="true" android:gravity="fill_horizontal"
@@ -94,14 +95,16 @@
 	<LinearLayout android:id="@+id/LinearLayout09"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<TextView android:text="订单类型:" android:id="@+id/TextView09"
-			android:layout_width="80px" android:layout_height="wrap_content"></TextView>
+		<TextView android:text="订单类型:" android:layout_width="80px"
+			android:layout_height="wrap_content" android:layout_marginTop="10dip"></TextView>
 		<RadioGroup android:id="@+id/RadioGroup01"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
-			<RadioButton android:text="预订单" android:id="@+id/RadioButton01"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+			android:orientation="horizontal">
+			<RadioButton android:text="预订单" android:id="@+id/preOrderRadio"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:checked="true"></RadioButton>
-			<RadioButton android:text="订单" android:id="@+id/RadioButton02"
+			<RadioButton android:text="订单" android:id="@+id/orderRadio"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
 		</RadioGroup>
 	</LinearLayout>
@@ -115,5 +118,4 @@
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_marginLeft="30px"></Button>
 	</LinearLayout>
-
 </LinearLayout>

@@ -27,14 +27,14 @@ public class OrderProvider extends ContentProvider {
 
 	private static final String DATABASE_CREATE = "create table if not exists "
 			+ DATABASE_TABLE_NAME + "(" + Order.KEY_ID
-			+ " integer primary key autoincrement, " + Order.KEY_BRANDCODE
-			+ " varchar(20), " + Order.KEY_BRANDCOUNT + " integer, "
-			+ Order.KEY_DATE + " date, " + Order.KEY_USERNAME
-			+ " varchar(20), " + Order.KEY_VIPID + " integer, "
-			+ Order.KEY_FORMAT + " varchar(20), " + Order.KEY_AMOUNT
-			+ " float, " + Order.KEY_AGENTCYID + " integer, "
-			+ Order.KEY_DESCRIPTION + " text, " + Order.KEY_STATUS
-			+ " char(1))";
+			+ " integer primary key autoincrement, " + Order.KEY_ORDER_ID
+			+ " varchar(20), " + Order.KEY_BRANDCODE + " varchar(20), "
+			+ Order.KEY_BRANDCOUNT + " integer, " + Order.KEY_DATE + " date, "
+			+ Order.KEY_USERNAME + " varchar(20), " + Order.KEY_VIPID
+			+ " integer, " + Order.KEY_FORMAT + " varchar(20), "
+			+ Order.KEY_AMOUNT + " float, " + Order.KEY_AGENTCYID
+			+ " integer, " + Order.KEY_DESCRIPTION + " text, "
+			+ Order.KEY_STATUS + " char(1))";
 	private DatabaseHelper orderHelper = null;
 
 	@Override
@@ -113,14 +113,14 @@ public class OrderProvider extends ContentProvider {
 		private void createtable(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE);
 			Log.i(TAG, "Table created...");
-//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-//					+ " (id, brandcode,brandcount)"
-//					+ " VALUES ('1','abc','12')");
-//
-//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-//					+ " (id, brandcode,brandcount)"
-//					+ " VALUES ('2','def','1234')");
-//			Log.i(TAG, "Init Data inserted...");
+			// db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+			// + " (id, brandcode,brandcount)"
+			// + " VALUES ('1','abc','12')");
+			//
+			// db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+			// + " (id, brandcode,brandcount)"
+			// + " VALUES ('2','def','1234')");
+			// Log.i(TAG, "Init Data inserted...");
 			// TODO Auto-generated method stub
 
 		}
