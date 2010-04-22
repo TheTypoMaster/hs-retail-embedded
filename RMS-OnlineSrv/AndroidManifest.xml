@@ -10,15 +10,11 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activity.AddPreOrderActivity"
-			android:label="@string/app_name"></activity>
-		<activity android:name=".activity.QueryPreOrderActivity"
-			android:label="@string/app_name"></activity>
 		<activity android:name=".activity.AddOrderActivity"
 			android:label="@string/app_name"></activity>
 		<activity android:name=".activity.QueryOrderActivity"
 			android:label="@string/app_name"></activity>
-		<activity android:name=".activity.EditPreOrderActivity"
+		<activity android:name=".activity.EditOrderActivity"
 			android:theme="@android:style/Theme.Dialog" android:label="@string/app_name"></activity>
 		<provider android:name="com.tobacco.onlinesrv.provider.PreOrderProvider"
 			android:authorities="com.tobacco.onlinesrv.provider.preOrderProvider">

@@ -134,7 +134,7 @@ public class PreOrderProvider extends ContentProvider {
 					+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','中华好烟','0')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
 					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
-					+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','好烟','0')");
+					+ " VALUES ('P-2','中华',10,'2010-3-10','包','450','1','好烟','0')");
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {

@@ -11,6 +11,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class OptionActivity extends Activity {
+	private Button addOrderBtn;
+	private Button queryOrderBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,29 +20,7 @@ public class OptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		Button addPreBtn = (Button) this.findViewById(R.id.Button01);
-		addPreBtn.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(OptionActivity.this, AddPreOrderActivity.class);
-				startActivity(intent);
-			}
-		});
-		Button queryPreBtn = (Button) this.findViewById(R.id.Button02);
-		queryPreBtn.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(OptionActivity.this,
-						QueryPreOrderActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		Button addOrderBtn = (Button) this.findViewById(R.id.Button03);
+		addOrderBtn = (Button) this.findViewById(R.id.addOrderBtn);
 		addOrderBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -50,17 +30,19 @@ public class OptionActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-
-		Button queryOrderBtn = (Button) this.findViewById(R.id.Button04);
+		queryOrderBtn = (Button) this.findViewById(R.id.queryOrderBtn);
 		queryOrderBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent();
-				intent.setClass(OptionActivity.this, QueryOrderActivity.class);
+				intent.setClass(OptionActivity.this,
+						QueryOrderActivity.class);
 				startActivity(intent);
 			}
 		});
+
+		
 	}
 
 }

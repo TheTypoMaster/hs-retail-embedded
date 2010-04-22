@@ -111,6 +111,7 @@ public class OrderProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
+//			db.execSQL("drop table orderinfo");
 			db.execSQL(DATABASE_CREATE);
 			Log.i(TAG, "Table created...");
 			// db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
