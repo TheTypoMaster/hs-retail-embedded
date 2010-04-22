@@ -7,9 +7,11 @@ import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.PreOrder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,14 +85,12 @@ public class AddOrderActivity extends Activity {
 		dateEdt.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				showDialog(0);
 			}
 		});
 
 		okBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Uri uri = null;
 				if (pRadio.isChecked())
 					uri = AddOrder(preorderUri, PreOrder.KEY_PREORDER_ID,
@@ -108,14 +108,13 @@ public class AddOrderActivity extends Activity {
 							Order.KEY_STATUS);
 
 				if (uri != null) {
-					Log.i("add orderinfo", "success");
-					finish();
-				}
+					openSuccessDialog();
+				} else
+					openFailDialog();
 
 			}
 		});
 		cancelBtn.setOnClickListener(new OnClickListener() {
-
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				finish();
@@ -157,4 +156,30 @@ public class AddOrderActivity extends Activity {
 			dateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
 		}
 	};
+
+	private void openSuccessDialog() {
+		// TODO Auto-generated method stub
+		new AlertDialog.Builder(AddOrderActivity.this).setTitle("").setMessage(
+				"添加成功").setPositiveButton("确定",
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						finish();
+					}
+				}).show();
+	}
+
+	private void openFailDialog() {
+		// TODO Auto-generated method stub
+		new AlertDialog.Builder(AddOrderActivity.this).setTitle("").setMessage(
+				"添加失败").setPositiveButton("返回",
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						finish();
+					}
+				}).show();
+	}
 }
