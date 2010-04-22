@@ -160,11 +160,11 @@ public class QueryOrderActivity extends Activity {
 			cursor.moveToFirst();
 			do {
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("id", cursor.getString(FieldSupport.ID_NUM));
-				map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_NUM));
-				map.put("brandCount", cursor.getString(FieldSupport.BRANDCOUNT_NUM));
-				map.put("amount", cursor.getString(FieldSupport.AMOUNT_NUM));
-				map.put("date", cursor.getString(FieldSupport.DATE_NUM));
+				map.put("id", cursor.getString(FieldSupport.ID_COLUMN));
+				map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_COLUMN));
+				map.put("brandCount", cursor.getString(FieldSupport.BRANDCOUNT_COLUMN));
+				map.put("amount", cursor.getString(FieldSupport.AMOUNT_COLUMN));
+				map.put("date", cursor.getString(FieldSupport.DATE_COLUMN));
 				fillMaps.add(map);
 			} while (cursor.moveToNext());
 		}
