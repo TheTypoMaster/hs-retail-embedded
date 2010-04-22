@@ -25,10 +25,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.PreOrder;
+import com.tobacco.onlinesrv.util.FieldSupport;
 
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
@@ -43,19 +45,39 @@ public class QueryOrderActivity extends Activity {
 	private Button backBtn;
 	private HashMap<Integer, String> queryPreOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, String> queryOrderMap = new HashMap<Integer, String>();
-	private Uri preorder = PreOrder.CONTENT_URI;
-	private Uri order = Order.CONTENT_URI;
+	private HashMap<Integer, Uri> uriMap = new HashMap<Integer, Uri>();
+	private Uri currentOrder;
+
+	public Uri getCurrentOrder() {
+		return currentOrder;
+	}
+
+	public void setCurrentOrder(Uri currentOrder) {
+		this.currentOrder = currentOrder;
+	}
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.query);
-		initPreOrderMap();
-		initOrderMap();
+		initMaps();
 		initView();
 		setListView();
-		setListAdapter(getFillMaps(preorder, null));
 
+		sp1.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				// TODO Auto-generated method stub
+				setCurrentOrder(uriMap.get(position));
+				setListAdapter(getFillMaps(getCurrentOrder(), null));
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		okBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int orderType = sp1.getSelectedItemPosition();
@@ -64,13 +86,11 @@ public class QueryOrderActivity extends Activity {
 				if (orderType == 0) {
 					selection = queryPreOrderMap.get(queryType) + "=\""
 							+ queryEdt.getText().toString() + "\"";
-					setListAdapter(getFillMaps(preorder, selection));
 				} else {
 					selection = queryOrderMap.get(queryType) + "=\""
 							+ queryEdt.getText().toString() + "\"";
-					setListAdapter(getFillMaps(order, selection));
 				}
-
+				setListAdapter(getFillMaps(getCurrentOrder(), selection));
 			}
 		});
 		backBtn.setOnClickListener(new OnClickListener() {
@@ -82,16 +102,17 @@ public class QueryOrderActivity extends Activity {
 		});
 	}
 
-	private void initPreOrderMap() {
+	private void initMaps() {
 		queryPreOrderMap.put(0, PreOrder.KEY_PREORDER_ID);
 		queryPreOrderMap.put(1, PreOrder.KEY_BRANDCODE);
 		queryPreOrderMap.put(2, PreOrder.KEY_FORMAT);
-	}
 
-	private void initOrderMap() {
 		queryOrderMap.put(0, Order.KEY_ORDER_ID);
 		queryOrderMap.put(1, Order.KEY_BRANDCODE);
 		queryOrderMap.put(2, Order.KEY_FORMAT);
+
+		uriMap.put(0, PreOrder.CONTENT_URI);
+		uriMap.put(1, Order.CONTENT_URI);
 	}
 
 	private void setListView() {
@@ -139,11 +160,11 @@ public class QueryOrderActivity extends Activity {
 			cursor.moveToFirst();
 			do {
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("id", cursor.getString(0));
-				map.put("brandCode", cursor.getString(2));
-				map.put("brandCount", cursor.getString(3));
-				map.put("amount", cursor.getString(8));
-				map.put("date", cursor.getString(4));
+				map.put("id", cursor.getString(FieldSupport.ID_NUM));
+				map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_NUM));
+				map.put("brandCount", cursor.getString(FieldSupport.BRANDCOUNT_NUM));
+				map.put("amount", cursor.getString(FieldSupport.AMOUNT_NUM));
+				map.put("date", cursor.getString(FieldSupport.DATE_NUM));
 				fillMaps.add(map);
 			} while (cursor.moveToNext());
 		}
