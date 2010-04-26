@@ -110,8 +110,9 @@ public class PreOrderProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-//			db.execSQL("drop table preorderinfo");
+			db.execSQL("drop table preorderinfo");
 			db.execSQL(DATABASE_CREATE);
+			initData(db);
 			Log.i(TAG, "Table created...");
 //			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
 //					+ " (brandcode,brandcount)"
@@ -134,7 +135,31 @@ public class PreOrderProvider extends ContentProvider {
 					+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','中华好烟','0')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
 					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
-					+ " VALUES ('P-2','中华',10,'2010-3-10','包','450','1','好烟','0')");
+					+ " VALUES ('P-2','小熊猫',10,'2010-3-11','包','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-3','中华',10,'2010-3-12','条','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-4','大熊猫',10,'2010-4-10','条','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-5','玉溪',10,'2010-5-10','包','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-6','红双喜',10,'2010-6-10','条','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-7','七匹狼',10,'2010-6-11','包','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-8','石狮',10,'2010-5-10','条','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-9','石狮',10,'2010-6-10','包','450','1','好烟','0')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
+					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status)"
+					+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0')");
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {
