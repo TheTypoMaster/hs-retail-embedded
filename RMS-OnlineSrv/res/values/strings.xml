@@ -2,4 +2,19 @@
 <resources>
     <string name="hello">Hello World!</string>
     <string name="app_name">零售管理系统</string>
+    <string name="brandCode_name">商品名称:</string>
+    <string name="brandCount_name">商品数量:</string>
+    <string name="format_name">商品规格:</string>
+    <string name="amount_name">商品金额:</string>
+    <string name="unit_name">单位:</string>
+    <string name="vip_name">商品折扣:</string>
+    <string name="date_name">订单日期:</string>
+    <string name="orderType_name">订单类型:</string>
+    <string name="preOrder_name">预订单</string>
+    <string name="order_name">订单</string>
+    <string name="desc_name">备注:</string>
+    <string name="okBtn_name">提交</string>
+    <string name="cancelBtn_name">取消</string>
+    
+    <dimen name="labelWidth">80px</dimen>
 </resources>
