@@ -64,17 +64,17 @@
 				android:orientation="horizontal">
 				<TableRow android:id="@+id/actionsTableRow"
 					android:layout_width="wrap_content" android:layout_height="wrap_content">
-					<Button android:text="首页" android:id="@+id/homePage" 
+					<Button android:text="@string/homePage_name" android:id="@+id/homePage" 
 						android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-					<Button android:text="上页" android:id="@+id/lastPage"
+					<Button android:text="@string/lastPage_name" android:id="@+id/lastPage"
 						android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-					<Button android:text="下页" android:id="@+id/nextPage"
+					<Button android:text="@string/nextPage_name" android:id="@+id/nextPage"
 						android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-					<Button android:text="尾页" android:id="@+id/bottomPage"
+					<Button android:text="@string/bottomPage_name" android:id="@+id/bottomPage"
 						android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-					<Button android:text="返回" android:id="@+id/backBtn"
+					<Button android:text="@string/back_name" android:id="@+id/backBtn"
 						android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-					<TextView android:text="当前页" android:textSize="14dip"
+					<TextView android:text="@string/curPage_name" android:textSize="14dip"
 						android:layout_width="wrap_content" android:layout_height="fill_parent"></TextView>
 					<TextView android:id="@+id/currentPage" android:textSize="14dip"
 						android:layout_width="wrap_content" android:layout_height="fill_parent"></TextView>

@@ -56,10 +56,11 @@ public class QueryOrderActivity extends Activity {
 	private HashMap<Integer, String> queryPreOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, String> queryOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, Uri> uriMap = new HashMap<Integer, Uri>();
-	private List<HashMap<String, String>> dataMaps;
+	private List<HashMap<String, String>> dataMaps = null;
 	private Uri currentOrder;
 	private int pageNum = 1;
 	private int pageCount = 3;
+	private Boolean isEmpty = false;
 
 	public Uri getCurrentOrder() {
 		return currentOrder;
@@ -82,9 +83,12 @@ public class QueryOrderActivity extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
+				pageNum = 1;
 				setCurrentOrder(uriMap.get(position));
 				fillDataMaps(getCurrentOrder(), null);
 				setListAdapter(getFillMaps());
+				lastBtn.setEnabled(false);
+				homeBtn.setEnabled(false);
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -208,8 +212,9 @@ public class QueryOrderActivity extends Activity {
 			public void onItemClick(AdapterView<?> va, View v, int position,
 					long id) {
 				TextView idText = (TextView) v.findViewById(R.id.item1);
-				HashMap<String, String> map = dataMaps.get(Integer.parseInt(idText.getText().toString())-1);
-	
+				HashMap<String, String> map = dataMaps.get(Integer
+						.parseInt(idText.getText().toString()) - 1);
+
 				Intent intent = new Intent();
 				intent.setClass(QueryOrderActivity.this,
 						EditOrderActivity.class);
@@ -224,7 +229,6 @@ public class QueryOrderActivity extends Activity {
 				intent.putExtra("desc", map.get("desc"));
 				intent.putExtra("status", map.get("status"));
 				startActivity(intent);
-				Toast.makeText(QueryOrderActivity.this, ""+idText.getText().toString(), Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -235,7 +239,16 @@ public class QueryOrderActivity extends Activity {
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
-		currentPageTxt.setText(pageNum + "/" + getAllPages());
+		if(!isEmpty){
+			currentPageTxt.setText(pageNum + "/" + getAllPages());
+		}
+		else{
+			currentPageTxt.setText(0 + "/" + getAllPages());
+			nextBtn.setEnabled(false);
+			bottomBtn.setEnabled(false);
+			lastBtn.setEnabled(false);
+			homeBtn.setEnabled(false);
+		}
 	}
 
 	private void initView() {
@@ -248,9 +261,7 @@ public class QueryOrderActivity extends Activity {
 		queryEdt = (EditText) this.findViewById(R.id.queryText);
 		okBtn = (Button) this.findViewById(R.id.okButton);
 		homeBtn = (Button) this.findViewById(R.id.homePage);
-		homeBtn.setEnabled(false);
 		lastBtn = (Button) this.findViewById(R.id.lastPage);
-		lastBtn.setEnabled(false);
 		nextBtn = (Button) this.findViewById(R.id.nextPage);
 		backBtn = (Button) this.findViewById(R.id.backBtn);
 		bottomBtn = (Button) this.findViewById(R.id.bottomPage);
@@ -261,9 +272,16 @@ public class QueryOrderActivity extends Activity {
 	private void fillDataMaps(Uri uri, String selection) {
 		dataMaps = new ArrayList<HashMap<String, String>>();
 		Cursor cursor = this.managedQuery(uri, null, selection, null, null);
-		if (cursor.getCount() == 0)
-			openfailDialog();
-		else {
+		if (cursor.getCount() == 0) {
+			isEmpty = true;
+			Toast.makeText(QueryOrderActivity.this, "对不起，没有相关数据",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			isEmpty = false;
+			nextBtn.setEnabled(true);
+			bottomBtn.setEnabled(true);
+			lastBtn.setEnabled(true);
+			homeBtn.setEnabled(true);
 			Log.i("The size of cursor", cursor.getCount() + "");
 			cursor.moveToFirst();
 			do {
@@ -276,14 +294,18 @@ public class QueryOrderActivity extends Activity {
 
 	private List<HashMap<String, String>> getFillMaps() {
 		List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
-		for (int i = pageNum * pageCount - pageCount; i < pageCount * pageNum; i++) {
-			if (i < dataMaps.size()) {
-				HashMap<String, String> map = dataMaps.get(i);
-				if (map != null)
-					fillMaps.add(map);
+		if (dataMaps != null) {
+			for (int i = pageNum * pageCount - pageCount; i < pageCount
+					* pageNum; i++) {
+				if (i < dataMaps.size()) {
+					HashMap<String, String> map = dataMaps.get(i);
+					if (map != null)
+						fillMaps.add(map);
+				}
 			}
+			return fillMaps;
 		}
-		return fillMaps;
+		return null;
 	}
 
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
@@ -299,19 +321,4 @@ public class QueryOrderActivity extends Activity {
 		map.put("desc", cursor.getString(FieldSupport.DESC_COLUMN));
 		map.put("status", cursor.getString(FieldSupport.STATUS_COLUMN));
 	}
-
-	private void openfailDialog() {
-		// TODO Auto-generated method stub
-		new AlertDialog.Builder(QueryOrderActivity.this).setTitle("")
-				.setMessage("没有相关数据").setPositiveButton("确定",
-						new DialogInterface.OnClickListener() {
-
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// TODO Auto-generated method stub
-								finish();
-							}
-						}).show();
-	}
-
 }

@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World!</string>
-    <string name="app_name">零售管理系统</string>
-    <string name="brandCode_name">商品名称:</string>
-    <string name="brandCount_name">商品数量:</string>
-    <string name="format_name">商品规格:</string>
-    <string name="amount_name">商品金额:</string>
-    <string name="unit_name">单位:</string>
-    <string name="vip_name">商品折扣:</string>
-    <string name="date_name">订单日期:</string>
-    <string name="orderType_name">订单类型:</string>
-    <string name="preOrder_name">预订单</string>
-    <string name="order_name">订单</string>
-    <string name="status_name">订单状态</string>
-    <string name="desc_name">备注:</string>
-    <string name="okBtn_name">提交</string>
-    <string name="cancelBtn_name">取消</string>
-    
-    <dimen name="labelWidth">80px</dimen>
+	<string name="hello">Hello World!</string>
+	<string name="app_name">零售管理系统</string>
+	<string name="brandCode_name">商品名称:</string>
+	<string name="brandCount_name">商品数量:</string>
+	<string name="format_name">商品规格:</string>
+	<string name="amount_name">商品金额:</string>
+	<string name="unit_name">单位:</string>
+	<string name="vip_name">商品折扣:</string>
+	<string name="date_name">订单日期:</string>
+	<string name="orderType_name">订单类型:</string>
+	<string name="preOrder_name">预订单</string>
+	<string name="order_name">订单</string>
+	<string name="status_name">订单状态</string>
+	<string name="desc_name">备注:</string>
+	<string name="okBtn_name">提交</string>
+	<string name="cancelBtn_name">取消</string>
+	<string name="homePage_name">首页</string>
+	<string name="lastPage_name">上页</string>
+	<string name="nextPage_name">下页</string>
+	<string name="bottomPage_name">尾页</string>
+	<string name="back_name">返回</string>
+	<string name="search_name">搜索</string>
+	<string name="curPage_name">当前页</string>
+	
+	<dimen name="labelWidth">80px</dimen>
+
 </resources>
