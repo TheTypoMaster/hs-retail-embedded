@@ -13,5 +13,13 @@ public class FieldSupport {
 	public static final int AGENCY_COLUMN = 9;
 	public static final int DESC_COLUMN = 10;
 	public static final int STATUS_COLUMN = 11;
+	
+	
+	public static final int OK_BTN_ID = 1;
+	public static final int HOMEPAGE_BTN_ID = 2;
+	public static final int LASTPAGE_BTN_ID = 3;
+	public static final int NEXTPAGE_BTN_ID = 4;
+	public static final int BOTTOMEPAGE_BTN_ID = 5;
+	public static final int BACK_BTN_ID = 6;
 
 }

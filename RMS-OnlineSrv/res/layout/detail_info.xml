@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="300px"
+	android:layout_height="fill_parent">
+	<ScrollView android:id="@+id/LinearRight"
+		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:orientation="vertical">
+		<TableLayout android:id="@+id/brandCodeTableLayout"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:orientation="vertical" android:stretchColumns="1">
+			<TableRow android:id="@+id/typeTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/orderType_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"
+					android:layout_marginTop="10dip"></TextView>
+				<TextView android:id="@+id/orderIdView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+			<TableRow android:id="@+id/brandCodeTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/brandCode_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/brandCodeView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+			<TableRow android:id="@+id/brandCountTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/brandCount_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/brandCountView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/formatTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/format_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/formatView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/amountTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/amount_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/amountView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/unitTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/unit_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/unitView" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/vipTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/vip_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/vipView" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/dateTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/date_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/dateView" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"></TextView>
+			</TableRow>
+			<TableRow android:id="@+id/statusTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/status_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/statusView" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"></TextView>
+			</TableRow>
+
+			<TableRow android:id="@+id/descTableRow"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:text="@string/desc_name"
+					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+				<TextView android:id="@+id/descView"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
+</LinearLayout>
