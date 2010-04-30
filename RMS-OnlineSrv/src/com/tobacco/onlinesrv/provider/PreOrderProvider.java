@@ -38,19 +38,18 @@ public class PreOrderProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		preOrderHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = preOrderHelper.getWritableDatabase();
+		return db.delete(DATABASE_TABLE_NAME, selection, selectionArgs);
 	}
 
 	@Override
 	public String getType(Uri uri) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		// TODO Auto-generated method stub
 		Log.i(TAG, "step into insert");
 		SQLiteDatabase sqlDB = preOrderHelper.getWritableDatabase();
 		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
@@ -59,8 +58,6 @@ public class PreOrderProvider extends ContentProvider {
 			Uri rowUri = ContentUris.appendId(PreOrder.CONTENT_URI.buildUpon(),
 					rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
-			// Cursor c = query(PreOrder.CONTENT_URI, null, null, null, null);
-			// Log.i("After insert size", c.getCount()+"");
 			return rowUri;
 		}
 		throw new SQLException("Failed to insert row into " + uri);
@@ -68,7 +65,6 @@ public class PreOrderProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		// TODO Auto-generated method stub
 		Log.i(TAG, "step into onCreate");
 		preOrderHelper = new DatabaseHelper(getContext());
 		return true;
@@ -77,7 +73,6 @@ public class PreOrderProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-		// TODO Auto-generated method stub
 		preOrderHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase db = preOrderHelper.getWritableDatabase();
@@ -91,8 +86,9 @@ public class PreOrderProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		preOrderHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = preOrderHelper.getWritableDatabase();
+		return db.update(DATABASE_TABLE_NAME, values, selection, selectionArgs);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -106,59 +102,46 @@ public class PreOrderProvider extends ContentProvider {
 			exist(DATABASE_NAME);
 			db = openDatabase(DATABASE_NAME);
 			createtable(db);
-			// TODO Auto-generated constructor stub
 		}
 
 		private void createtable(SQLiteDatabase db) {
-			db.execSQL("drop table preorderinfo");
+//			db.execSQL("drop table preorderinfo");
 			db.execSQL(DATABASE_CREATE);
-			initData(db);
+//			initData(db);
 			Log.i(TAG, "Table created...");
-//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-//					+ " (brandcode,brandcount)"
-//					+ " VALUES ('abc','12')");
-//
-//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-//					+ " (brandcode,brandcount)"
-//					+ " VALUES ('def','1234')");
-//			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-//					+ " (brandcode,brandcount)"
-//					+ " VALUES ('sdsad','3434')");
-//			Log.i(TAG, "Init Data inserted...");
-			// TODO Auto-generated method stub
 
 		}
 		private void initData(SQLiteDatabase db)
 		{
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','中华好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-2','小熊猫',10,'2010-3-11','包','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-3','中华',10,'2010-3-12','条','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-4','大熊猫',10,'2010-4-10','条','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-5','玉溪',10,'2010-5-10','包','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-6','红双喜',10,'2010-6-10','条','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-7','七匹狼',10,'2010-6-11','包','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-8','石狮',10,'2010-5-10','条','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-9','石狮',10,'2010-6-10','包','450','1','好烟','0','1')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (preorderid,brandcode,brandcount,predate,format,amount,agencyid,description,status,vipid)"
+					+ " (preorderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 					+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1')");
 		}
 
@@ -168,7 +151,6 @@ public class PreOrderProvider extends ContentProvider {
 		}
 
 		private boolean exist(String databaseName) {
-			// TODO Auto-generated method stub
 			Log.i(TAG, "called fun : exist()");
 			boolean flag = false;
 			try {
@@ -185,13 +167,10 @@ public class PreOrderProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
 			
 		}
 	}

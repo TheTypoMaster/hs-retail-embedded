@@ -18,9 +18,32 @@
 						android:layout_width="wrap_content" android:layout_height="wrap_content">
 						<TextView android:text="@string/brandCode_name"
 							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
-						<EditText android:id="@+id/brandCodeText"
+						<Spinner android:id="@+id/brandNameSp"
 							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:layout_marginRight="20dip" android:maxLines="1"></EditText>
+							android:layout_marginRight="20dip"></Spinner>
+					</TableRow>
+					<TableRow android:id="@+id/formatTableRow"
+						android:layout_width="wrap_content" android:layout_height="wrap_content">
+						<TextView android:text="@string/format_name"
+							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"
+							android:layout_marginTop="10dip"></TextView>
+						<RadioGroup android:id="@+id/formatRadioGroup"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:orientation="horizontal">
+							<RadioButton android:text="@string/packet_name"
+								android:id="@+id/packetRadio" android:layout_width="wrap_content"
+								android:layout_height="wrap_content" android:checked="true"></RadioButton>
+							<RadioButton android:text="@string/item_name"
+								android:layout_marginLeft="20dip" android:id="@+id/itemRadio"
+								android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
+						</RadioGroup>
+					</TableRow>
+					<TableRow android:id="@+id/priceTableRow"
+						android:layout_width="wrap_content" android:layout_height="wrap_content">
+						<TextView android:text="@string/price_name"
+							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+						<TextView android:id="@+id/priceText"
+							android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
 					</TableRow>
 					<TableRow android:id="@+id/brandCountTableRow"
 						android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -31,14 +54,7 @@
 							android:layout_marginRight="20dip" android:maxLines="1"></EditText>
 					</TableRow>
 
-					<TableRow android:id="@+id/formatTableRow"
-						android:layout_width="wrap_content" android:layout_height="wrap_content">
-						<TextView android:text="@string/format_name"
-							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
-						<EditText android:id="@+id/formatText"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:layout_marginRight="20dip" android:maxLines="1"></EditText>
-					</TableRow>
+
 
 					<TableRow android:id="@+id/amountTableRow"
 						android:layout_width="wrap_content" android:layout_height="wrap_content">

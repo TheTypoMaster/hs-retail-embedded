@@ -11,7 +11,7 @@ public class PreOrder {
 	public static final String KEY_PREORDER_ID = "preorderid";
 	public static final String KEY_BRANDCODE = "brandcode";
 	public static final String KEY_BRANDCOUNT = "brandcount";
-	public static final String KEY_PREDATE = "predate";
+	public static final String KEY_PREDATE = "date";
 	public static final String KEY_USERNAME = "username";
 	public static final String KEY_VIPID = "vipid";
 	public static final String KEY_FORMAT = "format";
