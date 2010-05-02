@@ -14,10 +14,10 @@
 					android:layout_height="wrap_content"></Spinner>
 				<Spinner android:id="@+id/Spinner02" android:layout_width="130px"
 					android:layout_height="wrap_content"></Spinner>
-				<EditText android:id="@+id/startDateText" android:text="开始时间"
+				<EditText android:id="@+id/startDateText" android:text="@string/startDate_name"
 					android:layout_width="130px" android:editable="false"
 					android:layout_height="wrap_content" android:maxLines="1"></EditText>
-				<EditText android:id="@+id/endDateText" android:text="结束时间"
+				<EditText android:id="@+id/endDateText" android:text="@string/endDate_name"
 					android:layout_width="130px" android:editable="false"
 					android:layout_height="wrap_content" android:maxLines="1"></EditText>
 				<EditText android:id="@+id/queryText" android:layout_width="130px"

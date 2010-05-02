@@ -29,6 +29,8 @@
 	<string name="search_name">搜索</string>
 	<string name="curPage_name">当前页</string>
 	<string name="delOrder_name">删除订单</string>
+	<string name="startDate_name">开始时间</string>
+	<string name="endDate_name">结束时间</string>
 	<dimen name="labelWidth">80px</dimen>
 
 </resources>

@@ -28,7 +28,7 @@ public class TobaccoProvider extends ContentProvider {
 			+ " integer primary key autoincrement, " + Tobacco.KEY_NAME
 			+ " varchar(20), " + Tobacco.KEY_PACKET_PRICE + " float ,"
 			+ Tobacco.KEY_ITEM_PRICE + " float )";
-	private DatabaseHelper TobaccoHelper = null;
+	private DatabaseHelper tobaccoHelper = null;
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -46,7 +46,7 @@ public class TobaccoProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "step into insert");
-		SQLiteDatabase sqlDB = TobaccoHelper.getWritableDatabase();
+		SQLiteDatabase sqlDB = tobaccoHelper.getWritableDatabase();
 		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
 		Log.i("rowId is", rowId + "");
 		if (rowId > 0) {
@@ -64,7 +64,8 @@ public class TobaccoProvider extends ContentProvider {
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "step into onCreate");
-		TobaccoHelper = new DatabaseHelper(getContext());
+		if(tobaccoHelper == null)
+			tobaccoHelper = new DatabaseHelper(getContext());
 		return true;
 	}
 
@@ -72,9 +73,10 @@ public class TobaccoProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortTobacco) {
 		// TODO Auto-generated method stub
-		TobaccoHelper = new DatabaseHelper(getContext());
+		if(tobaccoHelper == null)
+			tobaccoHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase db = TobaccoHelper.getWritableDatabase();
+		SQLiteDatabase db = tobaccoHelper.getWritableDatabase();
 		qb.setTables(DATABASE_TABLE_NAME);
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
 				null, sortTobacco);

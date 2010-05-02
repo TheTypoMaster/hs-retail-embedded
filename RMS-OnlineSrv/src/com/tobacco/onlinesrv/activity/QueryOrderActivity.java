@@ -174,10 +174,12 @@ public class QueryOrderActivity extends Activity {
 					selection = queryOrderMap.get(queryType) + "=\""
 							+ queryEdt.getText().toString() + "\"";
 				}
-				if (!startDateEdt.equals("") && !endDateEdt.equals(""))
-					selection += "and date between "
-							+ startDateEdt.getText().toString() + " and "
-							+ endDateEdt.getText().toString();
+				if (!startDateEdt.equals(R.string.startDate_name)
+						&& !endDateEdt.equals(R.string.endDate_name))
+					selection += " and date between " + "\""
+							+ startDateEdt.getText().toString() + "\""
+							+ " and " + "\"" + endDateEdt.getText().toString()
+							+ "\"";
 				fillDataMaps(getCurrentOrder(), selection);
 				setListAdapter(getFillMaps());
 			}

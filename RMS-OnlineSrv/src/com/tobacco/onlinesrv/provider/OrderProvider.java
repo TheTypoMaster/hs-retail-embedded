@@ -39,7 +39,8 @@ public class OrderProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		orderHelper = new DatabaseHelper(getContext());
+		if (orderHelper == null)
+			orderHelper = new DatabaseHelper(getContext());
 		SQLiteDatabase db = orderHelper.getWritableDatabase();
 		return db.delete(DATABASE_TABLE_NAME, selection, selectionArgs);
 	}
@@ -69,14 +70,16 @@ public class OrderProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		Log.i(TAG, "step into onCreate");
-		orderHelper = new DatabaseHelper(getContext());
+		if (orderHelper == null)
+			orderHelper = new DatabaseHelper(getContext());
 		return true;
 	}
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-		orderHelper = new DatabaseHelper(getContext());
+		if (orderHelper == null)
+			orderHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase db = orderHelper.getWritableDatabase();
 		qb.setTables(DATABASE_TABLE_NAME);
@@ -90,7 +93,8 @@ public class OrderProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		orderHelper = new DatabaseHelper(getContext());
+		if (orderHelper == null)
+			orderHelper = new DatabaseHelper(getContext());
 		SQLiteDatabase db = orderHelper.getWritableDatabase();
 		return db.update(DATABASE_TABLE_NAME, values, selection, selectionArgs);
 	}
@@ -110,47 +114,66 @@ public class OrderProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-//			db.execSQL("drop table orderinfo");
+			// db.execSQL("drop table orderinfo");
 			db.execSQL(DATABASE_CREATE);
-//			initData(db);
+			// initData(db);
 			Log.i(TAG, "Table created...");
 
-
 		}
 
-		private void initData(SQLiteDatabase db)
-		{
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','中华好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-2','小熊猫',10,'2010-3-11','包','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-3','中华',10,'2010-3-12','条','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-4','大熊猫',10,'2010-4-10','条','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-5','玉溪',10,'2010-5-10','包','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-6','红双喜',10,'2010-6-10','条','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-7','七匹狼',10,'2010-6-11','包','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-8','石狮',10,'2010-5-10','条','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-9','石狮',10,'2010-6-10','包','450','1','好烟','0','1')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-					+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
-					+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1')");
+		private void initData(SQLiteDatabase db) {
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-1','中华',10,'2010-3-10','包','450','1','中华好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-2','小熊猫',10,'2010-3-11','包','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-3','中华',10,'2010-3-12','条','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-4','大熊猫',10,'2010-4-10','条','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-5','玉溪',10,'2010-5-10','包','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-6','红双喜',10,'2010-6-10','条','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-7','七匹狼',10,'2010-6-11','包','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-8','石狮',10,'2010-5-10','条','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-9','石狮',10,'2010-6-10','包','450','1','好烟','0','1')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
+							+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1')");
 		}
+
 		private SQLiteDatabase openDatabase(String databaseName) {
 			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
 			return db;
