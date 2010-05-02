@@ -28,6 +28,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.tobacco.onlinesrv.R;
+import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.entities.Tobacco;
@@ -41,7 +42,7 @@ public class AddOrderActivity extends Activity {
 	private EditText countEdt;
 	private EditText dateEdt;
 	private EditText amountEdt;
-	private EditText agencyEdt;
+	private TextView agencyTxt;
 	private EditText vipEdt;
 	private EditText descEdt;
 	private TextView priceTxt;
@@ -57,6 +58,7 @@ public class AddOrderActivity extends Activity {
 	private String packetPrice[] = {};
 	private String itemPrice[] = {};
 	private String formatStr;
+	private String agencyid="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class AddOrderActivity extends Activity {
 		setContentView(R.layout.order);
 		init();
 		fillBrandSpinner();
+		fillAgencyText();
 		setListeners();
 
 	}
@@ -90,7 +93,7 @@ public class AddOrderActivity extends Activity {
 		priceTxt = (TextView) this.findViewById(R.id.priceText);
 		dateEdt = (EditText) this.findViewById(R.id.dateText);
 		amountEdt = (EditText) this.findViewById(R.id.amountText);
-		agencyEdt = (EditText) this.findViewById(R.id.unitText);
+		agencyTxt = (TextView) this.findViewById(R.id.unitText);
 		vipEdt = (EditText) this.findViewById(R.id.vipText);
 		descEdt = (EditText) this.findViewById(R.id.descText);
 		pRadio = (RadioButton) this.findViewById(R.id.preOrderRadio);
@@ -119,6 +122,19 @@ public class AddOrderActivity extends Activity {
 					android.R.layout.simple_spinner_item, brandType)));
 		}
 
+	}
+	private void fillAgencyText()
+	{
+		Cursor cursor = this.managedQuery(Agency.CONTENT_URI, null, null, null, null);
+		if(cursor.getCount()==0)
+			Toast.makeText(AddOrderActivity.this, "您还未设置您所在单位",
+					Toast.LENGTH_SHORT).show();
+		else{
+			cursor.moveToFirst();
+			String agencyName = cursor.getString(1);
+			agencyTxt.setText(agencyName);
+			agencyid = cursor.getString(0);
+		}		
 	}
 
 	private void setListeners() {
@@ -226,7 +242,7 @@ public class AddOrderActivity extends Activity {
 		values.put(date, dateEdt.getText().toString());
 		values.put(format, formatStr);
 		values.put(amount, Float.parseFloat(amountEdt.getText().toString()));
-		values.put(agencyId, "1");
+		values.put(agencyId, agencyid);
 		values.put(userName, "cry");
 		values.put(vipId, Integer.parseInt(vipEdt.getText().toString()));
 		values.put(desc, descEdt.getText().toString());

@@ -1,8 +1,11 @@
 package com.tobacco.onlinesrv.provider;
 
-import com.tobacco.onlinesrv.entities.Tobacco;
+import com.tobacco.onlinesrv.entities.Agency;
+import com.tobacco.onlinesrv.entities.Order;
+import com.tobacco.onlinesrv.entities.PreOrder;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,26 +17,27 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-public class TobaccoProvider extends ContentProvider {
+public class AgencyProvider extends ContentProvider {
 
-	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.tobaccoProvider";
+	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.agencyProvider";
 
-	private static final String TAG = "TobaccoProvider";
+	private static final String TAG = "agencyProvider";
 	private static final String DATABASE_NAME = "RMS_OnlineSrv.db";
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_TABLE_NAME = "tobacco";
+	private static final String DATABASE_TABLE_NAME = "agency";
 
 	private static final String DATABASE_CREATE = "create table if not exists "
-			+ DATABASE_TABLE_NAME + "(" + Tobacco.KEY_ID
-			+ " integer primary key autoincrement, " + Tobacco.KEY_NAME
-			+ " varchar(20), " + Tobacco.KEY_PACKET_PRICE + " float ,"
-			+ Tobacco.KEY_ITEM_PRICE + " float )";
-	private DatabaseHelper tobaccoHelper = null;
+			+ DATABASE_TABLE_NAME + "(" + Agency.KEY_ID
+			+ " integer primary key autoincrement, " + Agency.KEY_NAME
+			+ " varchar(20), " + Agency.KEY_ADDRESS + " varchar(20))";
+	private DatabaseHelper agencyHelper = null;
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (agencyHelper == null)
+			agencyHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = agencyHelper.getWritableDatabase();
+		return db.delete(DATABASE_TABLE_NAME, selection, selectionArgs);
 	}
 
 	@Override
@@ -46,15 +50,13 @@ public class TobaccoProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "step into insert");
-		SQLiteDatabase sqlDB = tobaccoHelper.getWritableDatabase();
+		SQLiteDatabase sqlDB = agencyHelper.getWritableDatabase();
 		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
 		Log.i("rowId is", rowId + "");
 		if (rowId > 0) {
-			Uri rowUri = ContentUris.appendId(Tobacco.CONTENT_URI.buildUpon(),
+			Uri rowUri = ContentUris.appendId(Agency.CONTENT_URI.buildUpon(),
 					rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
-			// Cursor c = query(PreTobacco.CONTENT_URI, null, null, null, null);
-			// Log.i("After insert size", c.getCount()+"");
 			return rowUri;
 		}
 		throw new SQLException("Failed to insert row into " + uri);
@@ -62,24 +64,22 @@ public class TobaccoProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		// TODO Auto-generated method stub
 		Log.i(TAG, "step into onCreate");
-		if(tobaccoHelper == null)
-			tobaccoHelper = new DatabaseHelper(getContext());
+		if (agencyHelper == null)
+			agencyHelper = new DatabaseHelper(getContext());
 		return true;
 	}
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortTobacco) {
-		// TODO Auto-generated method stub
-		if(tobaccoHelper == null)
-			tobaccoHelper = new DatabaseHelper(getContext());
+			String[] selectionArgs, String sortagency) {
+		if (agencyHelper == null)
+			agencyHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase db = tobaccoHelper.getWritableDatabase();
+		SQLiteDatabase db = agencyHelper.getWritableDatabase();
 		qb.setTables(DATABASE_TABLE_NAME);
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-				null, sortTobacco);
+				null, sortagency);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
@@ -88,7 +88,10 @@ public class TobaccoProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		return 0;
+		if (agencyHelper == null)
+			agencyHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = agencyHelper.getWritableDatabase();
+		return db.update(DATABASE_TABLE_NAME, values, selection, selectionArgs);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -106,31 +109,20 @@ public class TobaccoProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-//			db.execSQL("drop table tobacco");
+			// db.execSQL("drop table agencyinfo");
 			db.execSQL(DATABASE_CREATE);
-			Log.i(TAG, "Table created...");
 //			initData(db);
-			// db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-			// + " (id, brandcode,brandcount)"
-			// + " VALUES ('2','def','1234')");
-			// Log.i(TAG, "Init Data inserted...");
-			// TODO Auto-generated method stub
+			Log.i(TAG, "Table created...");
 
 		}
-		private void initData(SQLiteDatabase db)
-		{
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('中华','45','500')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('小熊猫','20','220')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('红双喜','5','40')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('七匹狼','7','80')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('玉溪','25','320')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('石狮','8','90')");
+
+		private void initData(SQLiteDatabase db) {
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,address)"
+							+ " VALUES ('海晟便利店','福建省厦门市思明区')");
+			
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {

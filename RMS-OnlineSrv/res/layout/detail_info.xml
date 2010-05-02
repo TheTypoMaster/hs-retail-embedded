@@ -10,7 +10,7 @@
 			android:orientation="vertical" android:stretchColumns="1">
 			<TableRow android:id="@+id/typeTableRow"
 				android:layout_width="wrap_content" android:layout_height="wrap_content">
-				<TextView android:text="@string/orderType_name"
+				<TextView android:text="@string/orderNumber_name"
 					android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
 				<TextView android:id="@+id/orderIdView"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>

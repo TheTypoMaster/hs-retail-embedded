@@ -45,9 +45,9 @@ import com.tobacco.onlinesrv.util.FieldSupport;
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
-	private String from[] = new String[] { "id", "orderId", "brandCode",
-			"brandCount", "date", "vip", "format", "amount", "agency", "desc",
-			"status" };
+	private String from[] = new String[] { "count", "id", "orderId",
+			"brandCode", "brandCount", "date", "vip", "format", "amount",
+			"agency", "desc", "status" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -75,6 +75,8 @@ public class QueryOrderActivity extends Activity {
 	private int mDay;
 	private Boolean isStartEmpty = false;
 	private Boolean isEndEmpty = false;
+	private int listCount;
+	private int listPosition;
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -174,8 +176,8 @@ public class QueryOrderActivity extends Activity {
 					selection = queryOrderMap.get(queryType) + "=\""
 							+ queryEdt.getText().toString() + "\"";
 				}
-				if (!startDateEdt.equals(R.string.startDate_name)
-						&& !endDateEdt.equals(R.string.endDate_name))
+				if (!startDateEdt.getText().toString().equals("开始时间")
+						&& !endDateEdt.getText().toString().equals("结束时间"))
 					selection += " and date between " + "\""
 							+ startDateEdt.getText().toString() + "\""
 							+ " and " + "\"" + endDateEdt.getText().toString()
@@ -247,6 +249,13 @@ public class QueryOrderActivity extends Activity {
 				finish();
 			}
 		});
+		listView.setOnItemClickListener(new OnItemClickListener(){
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				listPosition = arg2 ;
+			}});
 
 	}
 
@@ -272,16 +281,17 @@ public class QueryOrderActivity extends Activity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
-		int listPosition = listView.getSelectedItemPosition();
+		int tempPosition = listView.getSelectedItemPosition();
+		if(tempPosition>=0)
+			listPosition =  tempPosition;
 		TextView idText = (TextView) listView.getChildAt(listPosition)
 				.findViewById(R.id.item1);
 		String idStr = idText.getText().toString();
+		int location = (pageNum - 1) * pageCount + listPosition;
 		switch (item.getOrder()) {
 		case 0:
 
-			HashMap<String, String> map = dataMaps
-					.get(Integer.parseInt(idStr) - 1);
-
+			HashMap<String, String> map = dataMaps.get(location);
 			Intent intent = new Intent();
 			intent.setClass(QueryOrderActivity.this, EditOrderActivity.class);
 			intent.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
@@ -344,7 +354,14 @@ public class QueryOrderActivity extends Activity {
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
 		if (!isEmpty) {
-			currentPageTxt.setText(pageNum + "/" + getAllPages());
+			int allPages = getAllPages();
+			if (allPages == 1) {
+				homeBtn.setEnabled(false);
+				lastBtn.setEnabled(false);
+				nextBtn.setEnabled(false);
+				bottomBtn.setEnabled(false);
+			}
+			currentPageTxt.setText(pageNum + "/" + allPages);
 		} else {
 			currentPageTxt.setText(0 + "/" + getAllPages());
 			nextBtn.setEnabled(false);
@@ -373,6 +390,7 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void fillDataMaps(Uri uri, String selection) {
+		listCount = 1;
 		dataMaps = new ArrayList<HashMap<String, String>>();
 		Cursor cursor = this.managedQuery(uri, null, selection, null, null);
 		if (cursor.getCount() == 0) {
@@ -391,6 +409,7 @@ public class QueryOrderActivity extends Activity {
 				HashMap<String, String> firstMap = new HashMap<String, String>();
 				putOrderMap(cursor, firstMap);
 				dataMaps.add(firstMap);
+				listCount++;
 			} while (cursor.moveToNext());
 		}
 	}
@@ -427,6 +446,7 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
+		map.put("count", listCount + "");
 		map.put("id", cursor.getString(FieldSupport.ID_COLUMN));
 		map.put("orderId", cursor.getString(FieldSupport.ORDER_ID_COLUMN));
 		map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_COLUMN));

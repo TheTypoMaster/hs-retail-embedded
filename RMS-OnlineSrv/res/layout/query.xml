@@ -22,7 +22,7 @@
 					android:layout_height="wrap_content" android:maxLines="1"></EditText>
 				<EditText android:id="@+id/queryText" android:layout_width="130px"
 					android:layout_height="wrap_content" android:maxLines="1"></EditText>
-				<Button android:text="搜索" android:id="@+id/okButton"
+				<Button android:text="@string/search_name" android:id="@+id/okButton"
 					android:layout_width="50px" android:layout_height="wrap_content"
 					android:layout_marginLeft="10dip"></Button>
 			</LinearLayout>

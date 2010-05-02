@@ -28,6 +28,9 @@
 		<provider android:name="com.tobacco.onlinesrv.provider.TobaccoProvider"
 			android:authorities="com.tobacco.onlinesrv.provider.tobaccoProvider">
 		</provider>
+		<provider android:name="com.tobacco.onlinesrv.provider.AgencyProvider"
+			android:authorities="com.tobacco.onlinesrv.provider.agencyProvider">
+		</provider>
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
 </manifest>

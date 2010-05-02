@@ -1,6 +1,7 @@
 package com.tobacco.onlinesrv.activity;
 
 import com.tobacco.onlinesrv.R;
+import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.entities.Tobacco;
@@ -34,7 +35,7 @@ public class EditOrderActivity extends Activity {
 	private EditText countEdt;
 	private EditText dateEdt;
 	private EditText amountEdt;
-	private EditText agencyEdt;
+	private TextView agencyTxt;
 	private EditText vipEdt;
 	private EditText descEdt;
 	private TextView priceTxt;
@@ -52,7 +53,7 @@ public class EditOrderActivity extends Activity {
 	private String packetPrice[] = {};
 	private String itemPrice[] = {};
 	private String formatStr;
-
+	private String agencyid="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class EditOrderActivity extends Activity {
 		init();
 		fillBrandSpinner();
 		setTextFileds(getIntent());
+		fillAgencyText();
 		setListeners();
 
 	}
@@ -157,12 +159,15 @@ public class EditOrderActivity extends Activity {
 		orderType = Integer.parseInt(intent.getExtras().get("orderType")
 				.toString());
 		id = intent.getExtras().get("id").toString();
+		Toast.makeText(EditOrderActivity.this, intent.getExtras().get(
+		"brandCode").toString(),
+				Toast.LENGTH_LONG).show();
 		brandNameSp.setSelection(getBrandNamePosition(intent.getExtras().get(
 				"brandCode").toString()));
 		countEdt.setText(intent.getExtras().get("brandCount").toString());
 		setFormatAndPriceValue(intent);
 		amountEdt.setText(intent.getExtras().get("amount").toString());
-		agencyEdt.setText(intent.getExtras().get("agency").toString());
+		agencyTxt.setText(intent.getExtras().get("agency").toString());
 		vipEdt.setText(intent.getExtras().get("vip").toString());
 		dateEdt.setText(intent.getExtras().get("date").toString());
 		descEdt.setText(intent.getExtras().get("desc").toString());
@@ -190,9 +195,11 @@ public class EditOrderActivity extends Activity {
 	}
 
 	private int getBrandNamePosition(String brandName) {
-		for (int i = 0; i < brandType.length; i++)
-			if (brandType[i].equals(brandName))
+		for (int i = 0; i < brandType.length; i++){
+			if (brandType[i].equals(brandName)){
 				return i;
+			}
+		}
 		return -1;
 	}
 
@@ -204,7 +211,7 @@ public class EditOrderActivity extends Activity {
 		itemRadio = (RadioButton) this.findViewById(R.id.itemRadio);
 		priceTxt = (TextView) this.findViewById(R.id.priceText);
 		amountEdt = (EditText) this.findViewById(R.id.amountText);
-		agencyEdt = (EditText) this.findViewById(R.id.unitText);
+		agencyTxt = (TextView) this.findViewById(R.id.unitText);
 		vipEdt = (EditText) this.findViewById(R.id.vipText);
 		descEdt = (EditText) this.findViewById(R.id.descText);
 		pRadio = (RadioButton) this.findViewById(R.id.preOrderRadio);
@@ -233,6 +240,18 @@ public class EditOrderActivity extends Activity {
 					android.R.layout.simple_spinner_item, brandType)));
 		}
 	}
+	private void fillAgencyText()
+	{
+		Cursor cursor = this.managedQuery(Agency.CONTENT_URI, null, null, null, null);
+		if(cursor.getCount()==0)
+			Toast.makeText(EditOrderActivity.this, "您还未设置您所在单位",
+					Toast.LENGTH_SHORT).show();
+		else{
+			cursor.moveToFirst();
+			String agencyName = cursor.getString(1);
+			agencyTxt.setText(agencyName);
+		}		
+	}
 
 	private int updateOrder(Uri uriType, String brandCode, String brandCount,
 			String date, String format, String amount, String agencyId,
@@ -243,7 +262,6 @@ public class EditOrderActivity extends Activity {
 		values.put(date, dateEdt.getText().toString());
 		values.put(format, formatStr);
 		values.put(amount, Float.parseFloat(amountEdt.getText().toString()));
-		values.put(agencyId, agencyEdt.getText().toString());
 		values.put(vipId, Integer.parseInt(vipEdt.getText().toString()));
 		values.put(desc, descEdt.getText().toString());
 		int number = getContentResolver().update(uriType, values, "id = " + id,

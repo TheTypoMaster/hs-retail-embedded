@@ -31,6 +31,7 @@
 	<string name="delOrder_name">删除订单</string>
 	<string name="startDate_name">开始时间</string>
 	<string name="endDate_name">结束时间</string>
+	<string name="orderNumber_name">订单单号:</string>
 	<dimen name="labelWidth">80px</dimen>
 
 </resources>
