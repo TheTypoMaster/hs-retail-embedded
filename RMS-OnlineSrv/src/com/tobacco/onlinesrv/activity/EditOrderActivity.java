@@ -1,5 +1,7 @@
 package com.tobacco.onlinesrv.activity;
 
+import java.util.Calendar;
+
 import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
@@ -8,6 +10,8 @@ import com.tobacco.onlinesrv.entities.Tobacco;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -31,6 +36,9 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class EditOrderActivity extends Activity {
+	private int mYear;
+	private int mMonth;
+	private int mDay;
 	private Spinner brandNameSp;
 	private EditText countEdt;
 	private EditText dateEdt;
@@ -65,7 +73,32 @@ public class EditOrderActivity extends Activity {
 		setListeners();
 
 	}
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 0:
+			mYear = Calendar.getInstance().get(Calendar.YEAR);
+			mMonth = Calendar.getInstance().get(Calendar.MONTH);
+			mDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+					mDay);
+		}
 
+		return null;
+	}	
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			mYear = year;
+			mMonth = monthOfYear;
+			mDay = dayOfMonth;
+			setDateFiled();
+		}
+
+		private void setDateFiled() {
+			dateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
+		}
+	};
 	private void setListeners() {
 		brandNameSp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -151,6 +184,12 @@ public class EditOrderActivity extends Activity {
 
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		dateEdt.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				showDialog(0);
 			}
 		});
 	}

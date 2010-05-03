@@ -45,9 +45,9 @@ import com.tobacco.onlinesrv.util.FieldSupport;
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
-	private String from[] = new String[] { "count", "id", "orderId",
-			"brandCode", "brandCount", "date", "vip", "format", "amount",
-			"agency", "desc", "status" };
+	private String from[] = new String[] { "count",  
+			"brandCode","brandCount",  "amount","format", "status", "date", "vip", "orderId",
+			"agency", "desc" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -348,8 +348,8 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
-		int[] to = new int[] { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
-				R.id.item5 };
+		int[] to = new int[] { R.id.item1, R.id.nameItem, R.id.countItem,R.id.amountItem, R.id.formatItem,R.id.statusItem,
+				R.id.dateItem};
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);

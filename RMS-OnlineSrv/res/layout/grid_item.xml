@@ -4,17 +4,23 @@
 	android:layout_height="fill_parent" android:orientation="horizontal"
 	android:layout_gravity="center_vertical">
 	<TextView android:id="@+id/item1" android:layout_height="fill_parent"
-		android:layout_width="wrap_content" android:width="30dip"></TextView>
-	<TextView android:id="@+id/item2" android:layout_height="fill_parent"
-		android:text="名称" android:textSize="14dip" android:width="100dip"
-		android:height="20dip" android:layout_width="wrap_content"></TextView>
-	<TextView android:id="@+id/item3" android:text="数量"
-		android:textSize="14dip" android:width="50dip" android:layout_width="wrap_content"
-		android:height="20dip" android:layout_height="fill_parent"></TextView>
-	<TextView android:id="@+id/item4" android:layout_height="fill_parent"
-		android:height="20dip" android:text="金额" android:width="50dip"
-		android:textSize="14dip" android:layout_width="wrap_content"></TextView>
-	<TextView android:id="@+id/item5" android:layout_height="fill_parent"
-		android:height="20dip" android:text="日期" android:width="100dip"
-		android:textSize="14dip" android:layout_width="wrap_content"></TextView>
+		android:layout_width="wrap_content" android:width="20dip"></TextView>
+	<TextView android:id="@+id/nameItem" android:layout_height="wrap_content"
+						android:text="名称" android:textSize="14dip" android:width="50dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/countItem" android:text="数量"
+						android:textSize="14dip" android:width="40dip"
+						android:layout_width="wrap_content" android:layout_height="fill_parent"></TextView>
+					<TextView android:id="@+id/amountItem" android:layout_height="wrap_content"
+						android:text="金额" android:width="50dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/formatItem" android:layout_height="wrap_content"
+						android:text="规格" android:width="50dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
+						<TextView android:id="@+id/statusItem" android:layout_height="wrap_content"
+						android:text="状态" android:width="50dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/dateItem" android:layout_height="wrap_content"
+						android:text="日期" android:width="100dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
 </LinearLayout>

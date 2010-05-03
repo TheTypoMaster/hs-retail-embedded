@@ -1,11 +1,14 @@
 package com.tobacco.onlinesrv.activity;
 
 import com.tobacco.onlinesrv.R;
+import com.tobacco.onlinesrv.entities.Agency;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailActivity extends Activity {
 
@@ -36,7 +39,7 @@ public class DetailActivity extends Activity {
 		amountTxt = (TextView) this.findViewById(R.id.amountView);
 		amountTxt.setText(intent.getExtras().get("amount").toString());
 		unitTxt = (TextView) this.findViewById(R.id.unitView);
-		unitTxt.setText(intent.getExtras().get("agency").toString());
+		fillAgencyText(intent.getExtras().get("agency").toString());
 		vipTxt =(TextView)  this.findViewById(R.id.vipView);
 		vipTxt.setText(intent.getExtras().get("vip").toString());
 		dateTxt =(TextView)  this.findViewById(R.id.dateView);
@@ -47,6 +50,18 @@ public class DetailActivity extends Activity {
 		String status = intent.getExtras().get("status").toString();
 		if(Integer.parseInt(status)==0)
 			statusTxt.setText("未审核");
+	}
+	private void fillAgencyText(String agencyId)
+	{
+		Cursor cursor = this.managedQuery(Agency.CONTENT_URI, null, "id = "+agencyId, null, null);
+		if(cursor.getCount()==0)
+			Toast.makeText(DetailActivity.this, "找不到您所在单位",
+					Toast.LENGTH_SHORT).show();
+		else{
+			cursor.moveToFirst();
+			String agencyName = cursor.getString(1);
+			unitTxt.setText(agencyName);
+		}		
 	}
 
 }

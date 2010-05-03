@@ -124,6 +124,8 @@ public class TobaccoProvider extends ContentProvider {
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
 					+ " VALUES ('小熊猫','20','220')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
+					+ " VALUES ('大熊猫','30','350')");
+			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
 					+ " VALUES ('红双喜','5','40')");
 			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
 					+ " VALUES ('七匹狼','7','80')");
