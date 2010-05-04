@@ -59,7 +59,7 @@
 					<TextView android:id="@+id/dateItem"
 						android:layout_height="wrap_content" android:text="@string/date2_name"
 						android:width="100dip" android:textSize="14dip"
-						android:layout_marginLeft="30px" android:layout_width="wrap_content"></TextView>
+						android:layout_marginLeft="10px" android:layout_width="wrap_content"></TextView>
 				</TableRow>
 			</TableLayout>
 			<FrameLayout android:id="@+id/FrameLayout01"
