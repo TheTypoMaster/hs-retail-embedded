@@ -449,7 +449,8 @@ public class QueryOrderActivity extends Activity {
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
 		map.put("count", listCount + "");
 		map.put("id", cursor.getString(FieldSupport.ID_COLUMN));
-		map.put("orderId", cursor.getString(FieldSupport.ORDER_ID_COLUMN));
+		String orderId = cursor.getString(FieldSupport.ORDER_ID_COLUMN);
+		map.put("orderId", orderId);
 		map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_COLUMN));
 		map.put("brandCount", cursor.getString(FieldSupport.BRANDCOUNT_COLUMN));
 		map.put("date", cursor.getString(FieldSupport.DATE_COLUMN));
@@ -460,10 +461,16 @@ public class QueryOrderActivity extends Activity {
 		map.put("desc", cursor.getString(FieldSupport.DESC_COLUMN));
 		String statusId = cursor.getString(FieldSupport.STATUS_COLUMN);
 		map.put("status", statusId);
-		if(Integer.parseInt(statusId)==0)
-			map.put("statusName", "未审核");
-		else
-			map.put("statusName", "已审核");
+		if(orderId.contains("P")){
+			if(Integer.parseInt(statusId)==0)
+				map.put("statusName", "未审核");
+			else
+				map.put("statusName", "已审核");
+		}else
+			if(Integer.parseInt(statusId)==0)
+				map.put("statusName", "未提交");
+			else
+				map.put("statusName", "已提交");
 		
 	}
 }

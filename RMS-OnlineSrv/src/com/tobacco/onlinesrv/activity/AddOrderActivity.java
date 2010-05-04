@@ -185,7 +185,7 @@ public class AddOrderActivity extends Activity {
 
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus)
-					if (isInteger(countEdt.getText().toString()))
+					if (!countEdt.getText().toString().equals("")&&isInteger(countEdt.getText().toString()))
 						setAmountText();
 					else
 						Toast.makeText(AddOrderActivity.this, "输入不合法，请重新输入",

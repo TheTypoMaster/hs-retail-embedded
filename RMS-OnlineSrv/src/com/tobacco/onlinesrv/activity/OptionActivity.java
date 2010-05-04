@@ -1,16 +1,14 @@
 package com.tobacco.onlinesrv.activity;
 
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.onlinesrv.R;
-import android.app.Activity;
-import android.content.ContentProvider;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class OptionActivity extends Activity {
+public class OptionActivity extends RMSBaseView{
 	private Button addOrderBtn;
 	private Button queryOrderBtn;
 
