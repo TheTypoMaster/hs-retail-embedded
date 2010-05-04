@@ -268,7 +268,7 @@ public class AddOrderActivity extends Activity {
 		Uri uri = getContentResolver().insert(uriType, values);
 		try {
 			putToJson(uriType);
-			getJsonDataAndUpdate(obj);
+//			getJsonDataAndUpdate(obj);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -336,15 +336,20 @@ public class AddOrderActivity extends Activity {
 		object = obj;
 		ContentValues values = new ContentValues();
 		Uri uriType = preorderUri; 
+		String orderId = "";
 		for(String str :fieldString)
 		{
 			if(str.equals(FieldSupport.KEY_ORDER_ID))
 			{
-				if(obj.getString(str).contains("O"))
+				orderId = obj.getString(str);
+				if(orderId.contains("O"))
 					uriType=orderUri;
 			}
 			System.out.println(obj.getString(str));
 			values.put(str, obj.getString(str));		
 		}		
+		int number = getContentResolver().update(uriType, values, "orderid = \""+orderId+"\"", null);
+		if(number!=0)
+			System.out.println("update success"+number);
 	}
 }
