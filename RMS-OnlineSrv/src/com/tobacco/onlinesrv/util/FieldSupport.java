@@ -21,5 +21,18 @@ public class FieldSupport {
 	public static final int NEXTPAGE_BTN_ID = 4;
 	public static final int BOTTOMEPAGE_BTN_ID = 5;
 	public static final int BACK_BTN_ID = 6;
+	
+	public static final String KEY_ID = "id";
+	public static final String KEY_ORDER_ID = "orderid";
+	public static final String KEY_BRANDCODE = "brandcode";
+	public static final String KEY_BRANDCOUNT = "brandcount";
+	public static final String KEY_DATE = "date";
+	public static final String KEY_USERNAME = "username";
+	public static final String KEY_VIPID = "vipid";
+	public static final String KEY_FORMAT = "format";
+	public static final String KEY_AMOUNT = "amount";
+	public static final String KEY_AGENTCYID = "agencyid";
+	public static final String KEY_DESCRIPTION = "description";
+	public static final String KEY_STATUS = "status";
 
 }

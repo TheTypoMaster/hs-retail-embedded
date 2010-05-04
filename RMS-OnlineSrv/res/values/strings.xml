@@ -2,8 +2,9 @@
 <resources>
 	<string name="hello">Hello World!</string>
 	<string name="app_name">零售管理系统</string>
-	<string name="detailInfo_name">详细信息</string>
-	<string name="editOrder_name">编辑订单</string>
+	<string name="addOrder_name">增加订单</string>
+	<string name="queryOrder_name">订单管理</string>
+	<!-- orderUI -->
 	<string name="brandCode_name">商品名称:</string>
 	<string name="brandCount_name">商品数量:</string>
 	<string name="format_name">商品规格:</string>
@@ -17,8 +18,12 @@
 	<string name="orderType_name">订单类型:</string>
 	<string name="preOrder_name">预订单</string>
 	<string name="order_name">订单</string>
-	<string name="status_name">订单状态</string>
 	<string name="desc_name">备注:</string>
+	
+	<!-- queryUI -->
+	<string name="detailInfo_name">详细信息</string>
+	<string name="editOrder_name">编辑订单</string>
+	<string name="status_name">订单状态</string>
 	<string name="okBtn_name">提交</string>
 	<string name="cancelBtn_name">取消</string>
 	<string name="homePage_name">首页</string>
@@ -32,6 +37,13 @@
 	<string name="startDate_name">开始时间</string>
 	<string name="endDate_name">结束时间</string>
 	<string name="orderNumber_name">订单单号:</string>
+	<string name="brandCode2_name">名称</string>
+	<string name="brandCount2_name">数量</string>
+	<string name="format2_name">规格</string>
+	<string name="status2_name">状态</string>
+	<string name="date2_name">日期</string>
+	<string name="amount2_name">金额</string>
+	<!-- dimen -->
 	<dimen name="labelWidth">80px</dimen>
 
 </resources>

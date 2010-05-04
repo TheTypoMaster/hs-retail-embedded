@@ -46,7 +46,7 @@ public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
 	private String from[] = new String[] { "count",  
-			"brandCode","brandCount",  "amount","format", "status", "date", "vip", "orderId",
+			"brandCode","brandCount",  "amount","format", "statusName", "date", "vip", "orderId",
 			"agency", "desc" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
@@ -288,8 +288,8 @@ public class QueryOrderActivity extends Activity {
 				.findViewById(R.id.item1);
 		String idStr = idText.getText().toString();
 		int location = (pageNum - 1) * pageCount + listPosition;
-		switch (item.getOrder()) {
-		case 0:
+		switch (item.getItemId()) {
+		case R.id.menuEdit:
 
 			HashMap<String, String> map = dataMaps.get(location);
 			Intent intent = new Intent();
@@ -298,7 +298,7 @@ public class QueryOrderActivity extends Activity {
 					+ "");
 			putIntentData(intent, map);
 			break;
-		case 1:
+		case R.id.menuDel:
 			int number = getContentResolver().delete(getCurrentOrder(),
 					"id = " + idStr, null);
 			if (number != 0) {
@@ -442,6 +442,7 @@ public class QueryOrderActivity extends Activity {
 		intent.putExtra("agency", map.get("agency"));
 		intent.putExtra("desc", map.get("desc"));
 		intent.putExtra("status", map.get("status"));
+		intent.putExtra("statusName", map.get("statusName"));
 		startActivity(intent);
 	}
 
@@ -457,6 +458,12 @@ public class QueryOrderActivity extends Activity {
 		map.put("amount", cursor.getString(FieldSupport.AMOUNT_COLUMN));
 		map.put("agency", cursor.getString(FieldSupport.AGENCY_COLUMN));
 		map.put("desc", cursor.getString(FieldSupport.DESC_COLUMN));
-		map.put("status", cursor.getString(FieldSupport.STATUS_COLUMN));
+		String statusId = cursor.getString(FieldSupport.STATUS_COLUMN);
+		map.put("status", statusId);
+		if(Integer.parseInt(statusId)==0)
+			map.put("statusName", "未审核");
+		else
+			map.put("statusName", "已审核");
+		
 	}
 }

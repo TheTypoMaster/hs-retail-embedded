@@ -47,9 +47,7 @@ public class DetailActivity extends Activity {
 		descTxt = (TextView) this.findViewById(R.id.descView);
 		descTxt.setText(intent.getExtras().get("desc").toString());
 		statusTxt =(TextView)  this.findViewById(R.id.statusView);
-		String status = intent.getExtras().get("status").toString();
-		if(Integer.parseInt(status)==0)
-			statusTxt.setText("未审核");
+		statusTxt.setText(intent.getExtras().get("statusName").toString());
 	}
 	private void fillAgencyText(String agencyId)
 	{

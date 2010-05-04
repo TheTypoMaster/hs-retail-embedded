@@ -1,6 +1,11 @@
 package com.tobacco.onlinesrv.activity;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,6 +37,7 @@ import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.entities.Tobacco;
+import com.tobacco.onlinesrv.util.FieldSupport;
 import com.tobacco.onlinesrv.util.NumberGenerate;
 
 public class AddOrderActivity extends Activity {
@@ -58,7 +64,14 @@ public class AddOrderActivity extends Activity {
 	private String packetPrice[] = {};
 	private String itemPrice[] = {};
 	private String formatStr;
-	private String agencyid="";
+	private String agencyid = "";
+	private JSONObject obj;
+	private String[] fieldString = { FieldSupport.KEY_ORDER_ID,
+			FieldSupport.KEY_BRANDCODE, FieldSupport.KEY_BRANDCOUNT,
+			FieldSupport.KEY_DATE, FieldSupport.KEY_USERNAME,
+			FieldSupport.KEY_VIPID, FieldSupport.KEY_FORMAT,
+			FieldSupport.KEY_AMOUNT, FieldSupport.KEY_AGENTCYID,
+			FieldSupport.KEY_DESCRIPTION, FieldSupport.KEY_STATUS };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,18 +136,19 @@ public class AddOrderActivity extends Activity {
 		}
 
 	}
-	private void fillAgencyText()
-	{
-		Cursor cursor = this.managedQuery(Agency.CONTENT_URI, null, null, null, null);
-		if(cursor.getCount()==0)
+
+	private void fillAgencyText() {
+		Cursor cursor = this.managedQuery(Agency.CONTENT_URI, null, null, null,
+				null);
+		if (cursor.getCount() == 0)
 			Toast.makeText(AddOrderActivity.this, "您还未设置您所在单位",
 					Toast.LENGTH_SHORT).show();
-		else{
+		else {
 			cursor.moveToFirst();
 			String agencyName = cursor.getString(1);
 			agencyTxt.setText(agencyName);
 			agencyid = cursor.getString(0);
-		}		
+		}
 	}
 
 	private void setListeners() {
@@ -171,7 +185,11 @@ public class AddOrderActivity extends Activity {
 
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus)
-					setAmountText();
+					if (isInteger(countEdt.getText().toString()))
+						setAmountText();
+					else
+						Toast.makeText(AddOrderActivity.this, "输入不合法，请重新输入",
+								Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -248,6 +266,13 @@ public class AddOrderActivity extends Activity {
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
 		Uri uri = getContentResolver().insert(uriType, values);
+		try {
+			putToJson(uriType);
+			getJsonDataAndUpdate(obj);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return uri;
 	}
 
@@ -279,5 +304,47 @@ public class AddOrderActivity extends Activity {
 						finish();
 					}
 				}).show();
+	}
+
+	private boolean isInteger(String number) {
+		Pattern pattern = Pattern.compile("^-?\\d+$");
+		Matcher match = pattern.matcher(number);
+		return match.matches();
+	}
+
+	private void putToJson(Uri uriType) throws JSONException {
+		obj = new JSONObject();
+		if (uriType == preorderUri)
+			obj.put(fieldString[0], NumberGenerate
+					.preOrderIdGeneration(getAllCount(uriType)));
+		else
+			obj.put(fieldString[0], NumberGenerate
+					.orderIdGeneration(getAllCount(uriType)));
+		obj.put(fieldString[1], brandType[brandNameSp.getSelectedItemPosition()]);
+		obj.put(fieldString[2], Integer.parseInt(countEdt.getText().toString()));
+		obj.put(fieldString[3], dateEdt.getText().toString());
+		obj.put(fieldString[4], formatStr);
+		obj.put(fieldString[5], Float.parseFloat(amountEdt.getText().toString()));
+		obj.put(fieldString[6], agencyid);
+		obj.put(fieldString[7], "cry");
+		obj.put(fieldString[8], Integer.parseInt(vipEdt.getText().toString()));
+		obj.put(fieldString[9], descEdt.getText().toString());
+		obj.put(fieldString[10], "0");
+	}
+
+	private void getJsonDataAndUpdate(JSONObject object) throws JSONException {
+		object = obj;
+		ContentValues values = new ContentValues();
+		Uri uriType = preorderUri; 
+		for(String str :fieldString)
+		{
+			if(str.equals(FieldSupport.KEY_ORDER_ID))
+			{
+				if(obj.getString(str).contains("O"))
+					uriType=orderUri;
+			}
+			System.out.println(obj.getString(str));
+			values.put(str, obj.getString(str));		
+		}		
 	}
 }

@@ -43,7 +43,8 @@
 						<TextView android:text="@string/price_name"
 							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
 						<TextView android:id="@+id/priceText"
-							android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
+							android:layout_width="fill_parent" android:layout_height="wrap_content"
+							android:gravity="center_horizontal"></TextView>
 					</TableRow>
 					<TableRow android:id="@+id/brandCountTableRow"
 						android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -53,8 +54,14 @@
 							android:layout_width="fill_parent" android:layout_height="wrap_content"
 							android:layout_marginRight="20dip" android:maxLines="1"></EditText>
 					</TableRow>
-
-
+					<TableRow android:id="@+id/vipTableRow"
+						android:layout_width="wrap_content" android:layout_height="wrap_content">
+						<TextView android:text="@string/vip_name"
+							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
+						<EditText android:id="@+id/vipText" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:layout_marginRight="20dip"
+							android:maxLines="1"></EditText>
+					</TableRow>
 
 					<TableRow android:id="@+id/amountTableRow"
 						android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -70,17 +77,11 @@
 						<TextView android:text="@string/unit_name"
 							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
 						<TextView android:id="@+id/unitText"
-							android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
+							android:layout_width="fill_parent" android:layout_height="wrap_content"
+							android:gravity="center_horizontal"></TextView>
 					</TableRow>
 
-					<TableRow android:id="@+id/vipTableRow"
-						android:layout_width="wrap_content" android:layout_height="wrap_content">
-						<TextView android:text="@string/vip_name"
-							android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"></TextView>
-						<EditText android:id="@+id/vipText" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:layout_marginRight="20dip"
-							android:maxLines="1"></EditText>
-					</TableRow>
+
 				</TableLayout>
 			</LinearLayout>
 		</ScrollView>
