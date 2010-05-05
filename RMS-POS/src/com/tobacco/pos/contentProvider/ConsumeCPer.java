@@ -18,9 +18,9 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tobacco.pos.Module.AllTables;
-import com.tobacco.pos.Module.ConsumeFull;
-import com.tobacco.pos.Module.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables;
+import com.tobacco.pos.entity.ConsumeFull;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.util.DateTool;
 
 public class ConsumeCPer extends ContentProvider{

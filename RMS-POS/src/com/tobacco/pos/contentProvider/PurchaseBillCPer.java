@@ -5,7 +5,7 @@ import static android.provider.BaseColumns._ID;
 import java.text.SimpleDateFormat;
 import java.util.Date;
  
-import com.tobacco.pos.Module.AllTables;
+import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

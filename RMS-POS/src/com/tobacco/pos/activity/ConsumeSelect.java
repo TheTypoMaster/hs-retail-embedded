@@ -32,10 +32,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.ConsumeFull;
-import com.tobacco.pos.Module.ConsumeModel;
-import com.tobacco.pos.Module.AllTables.Consume;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.ConsumeFull;
+import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.pos.entity.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
 import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.util.DateTool;

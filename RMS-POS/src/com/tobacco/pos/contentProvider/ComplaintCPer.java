@@ -4,8 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.tobacco.pos.Module.ComplaintFull;
-import com.tobacco.pos.Module.AllTables.Complaint;
+import com.tobacco.pos.entity.ComplaintFull;
+import com.tobacco.pos.entity.AllTables.Complaint;
 import com.tobacco.pos.util.DateTool;
 import android.content.ContentProvider;
 import android.content.ContentUris;

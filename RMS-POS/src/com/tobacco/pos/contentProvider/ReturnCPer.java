@@ -18,10 +18,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tobacco.pos.Module.ConsumeFull;
-import com.tobacco.pos.Module.ReturnFull;
-import com.tobacco.pos.Module.AllTables.Consume;
-import com.tobacco.pos.Module.AllTables.Return;
+import com.tobacco.pos.entity.ConsumeFull;
+import com.tobacco.pos.entity.ReturnFull;
+import com.tobacco.pos.entity.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.DateTool;
 
 public class ReturnCPer extends ContentProvider{

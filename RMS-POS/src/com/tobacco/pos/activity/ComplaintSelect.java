@@ -24,10 +24,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.ComplaintFull;
-import com.tobacco.pos.Module.ComplaintModel;
-import com.tobacco.pos.Module.AllTables.Complaint;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.ComplaintFull;
+import com.tobacco.pos.entity.ComplaintModel;
+import com.tobacco.pos.entity.AllTables.Complaint;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.util.DateTool;

@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.UserInfo;
-import com.tobacco.pos.Module.AllTables.VIPInfo;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.UserInfo;
+import com.tobacco.pos.entity.AllTables.VIPInfo;
 
 public class InputCheck{
   

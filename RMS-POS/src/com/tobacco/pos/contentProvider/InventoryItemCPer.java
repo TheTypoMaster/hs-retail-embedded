@@ -16,8 +16,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tobacco.pos.Module.InventoryItemFull;
-import com.tobacco.pos.Module.AllTables.InventoryItem;
+import com.tobacco.pos.entity.InventoryItemFull;
+import com.tobacco.pos.entity.AllTables.InventoryItem;
 
 public class InventoryItemCPer extends ContentProvider{
 	

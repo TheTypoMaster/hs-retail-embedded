@@ -1,9 +1,9 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import com.tobacco.pos.Module.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.util.DateTool;
 
 import android.content.ContentValues;

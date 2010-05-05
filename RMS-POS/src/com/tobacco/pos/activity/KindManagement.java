@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.tobacco.pos.Module.AllTables;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
+import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.util.ProcessStr;
 import com.tobacco.pos.util.TreeBranchNode;
 import com.tobacco.pos.util.TreeLeafNode;

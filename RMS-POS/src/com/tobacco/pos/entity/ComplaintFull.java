@@ -1,15 +1,15 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.tobacco.pos.Module.AllTables;
-import com.tobacco.pos.Module.AllTables.Complaint;
-import com.tobacco.pos.Module.AllTables.Goods;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.Unit;
-import com.tobacco.pos.Module.AllTables.UserInfo;
-import com.tobacco.pos.Module.AllTables.VIPInfo;
+import com.tobacco.pos.entity.AllTables;
+import com.tobacco.pos.entity.AllTables.Complaint;
+import com.tobacco.pos.entity.AllTables.Goods;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Unit;
+import com.tobacco.pos.entity.AllTables.UserInfo;
+import com.tobacco.pos.entity.AllTables.VIPInfo;
 
 public class ComplaintFull implements BaseColumns{
 	

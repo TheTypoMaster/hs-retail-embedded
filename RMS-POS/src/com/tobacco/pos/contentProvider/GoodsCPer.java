@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.tobacco.pos.Module.AllTables;
+import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

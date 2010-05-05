@@ -18,8 +18,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tobacco.pos.Module.InventoryBillFull;
-import com.tobacco.pos.Module.AllTables.InventoryBill;
+import com.tobacco.pos.entity.InventoryBillFull;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
 import com.tobacco.pos.util.DateTool;
 
 public class InventoryBillCPer extends ContentProvider{

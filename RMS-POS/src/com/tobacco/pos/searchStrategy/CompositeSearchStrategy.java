@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.tobacco.pos.Module.BaseModel;
+import com.tobacco.pos.entity.BaseModel;
 
 public class CompositeSearchStrategy extends ISearchStrategy {
 

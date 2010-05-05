@@ -1,10 +1,10 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.tobacco.pos.Module.AllTables.InventoryBill;
-import com.tobacco.pos.Module.AllTables.UserInfo;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
+import com.tobacco.pos.entity.AllTables.UserInfo;
 
 public class InventoryBillFull implements BaseColumns{
 	

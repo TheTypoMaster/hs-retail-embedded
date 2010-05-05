@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
  
-import com.tobacco.pos.Module.AllTables;
+import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

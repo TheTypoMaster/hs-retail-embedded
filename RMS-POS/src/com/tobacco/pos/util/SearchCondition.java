@@ -3,7 +3,7 @@ package com.tobacco.pos.util;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.tobacco.pos.Module.ConsumeFull;
+import com.tobacco.pos.entity.ConsumeFull;
 import com.tobacco.pos.searchStrategy.SearchState;
 
 import android.app.AlertDialog;

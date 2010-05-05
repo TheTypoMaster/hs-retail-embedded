@@ -9,9 +9,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.tobacco.pos.Module.InventoryBillFull;
-import com.tobacco.pos.Module.InventoryBillModel;
-import com.tobacco.pos.Module.AllTables.InventoryBill;
+import com.tobacco.pos.entity.InventoryBillFull;
+import com.tobacco.pos.entity.InventoryBillModel;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
 import com.tobacco.pos.searchStrategy.ISearchStrategy;
 import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.searchStrategy.SearchStrategyFactory;

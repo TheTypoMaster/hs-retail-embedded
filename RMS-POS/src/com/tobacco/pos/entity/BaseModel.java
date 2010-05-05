@@ -1,4 +1,4 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import java.util.Date;
 

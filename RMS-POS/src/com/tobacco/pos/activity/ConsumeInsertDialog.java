@@ -150,8 +150,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.AllTables.Consume;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 

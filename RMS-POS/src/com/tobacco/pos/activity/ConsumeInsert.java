@@ -24,9 +24,9 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.ConsumeModel;
-import com.tobacco.pos.Module.AllTables.Consume;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.pos.entity.AllTables.Consume;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
 
 public class ConsumeInsert extends Activity{

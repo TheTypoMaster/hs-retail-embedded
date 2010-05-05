@@ -13,7 +13,7 @@ import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.ComplaintModel;
+import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;

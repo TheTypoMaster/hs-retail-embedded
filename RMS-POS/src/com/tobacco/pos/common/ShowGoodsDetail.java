@@ -10,16 +10,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.AllTables.Goods;
-import com.tobacco.pos.Module.AllTables.GoodsKind;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.Manufacturer;
-import com.tobacco.pos.Module.AllTables.Unit;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.ManufacturerCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
+import com.tobacco.pos.entity.AllTables.Goods;
+import com.tobacco.pos.entity.AllTables.GoodsKind;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Manufacturer;
+import com.tobacco.pos.entity.AllTables.Unit;
 
 public class ShowGoodsDetail extends Activity{
 

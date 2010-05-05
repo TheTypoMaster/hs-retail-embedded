@@ -26,9 +26,9 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.ReturnModel;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.Return;
+import com.tobacco.pos.entity.ReturnModel;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.handler.ReturnHandler;
 import com.tobacco.pos.util.InputCheck;
 

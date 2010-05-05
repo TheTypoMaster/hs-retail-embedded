@@ -1,8 +1,8 @@
 package com.tobacco.pos.activity;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.AllTables;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
+import com.tobacco.pos.entity.AllTables;
 
 import android.app.Activity; 
 import android.content.ContentValues; 

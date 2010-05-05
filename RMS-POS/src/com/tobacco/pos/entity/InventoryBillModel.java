@@ -1,11 +1,11 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import android.content.ContentValues;
 
-import com.tobacco.pos.Module.AllTables.InventoryBill;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
 import com.tobacco.pos.util.DateTool;
 
 public class InventoryBillModel extends BaseModel {

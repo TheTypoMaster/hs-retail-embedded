@@ -17,9 +17,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.InventoryItemModel;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.InventoryItem;
+import com.tobacco.pos.entity.InventoryItemModel;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.InventoryItem;
 import com.tobacco.pos.handler.InventoryItemHandler;
 
 public class ShowInventoryItem extends Activity{

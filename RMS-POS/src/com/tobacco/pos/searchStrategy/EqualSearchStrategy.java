@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
-import com.tobacco.pos.Module.BaseModel;
+import com.tobacco.pos.entity.BaseModel;
 
 public class EqualSearchStrategy extends ISearchStrategy {
 

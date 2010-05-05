@@ -13,9 +13,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.AllTables.Goods;
-import com.tobacco.pos.Module.AllTables.GoodsKind;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Goods;
+import com.tobacco.pos.entity.AllTables.GoodsKind;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.util.tree.CheckTreeView;
 import com.tobacco.pos.util.tree.TreeNode;
 

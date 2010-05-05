@@ -21,10 +21,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.InventoryBillFull;
-import com.tobacco.pos.Module.InventoryBillModel;
-import com.tobacco.pos.Module.AllTables.InventoryBill;
-import com.tobacco.pos.Module.AllTables.InventoryItem;
+import com.tobacco.pos.entity.InventoryBillFull;
+import com.tobacco.pos.entity.InventoryBillModel;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
+import com.tobacco.pos.entity.AllTables.InventoryItem;
 import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.util.DateTool;

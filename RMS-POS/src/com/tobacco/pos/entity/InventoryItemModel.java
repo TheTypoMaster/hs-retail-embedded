@@ -1,8 +1,8 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import android.content.ContentValues;
 
-import com.tobacco.pos.Module.AllTables.InventoryItem;
+import com.tobacco.pos.entity.AllTables.InventoryItem;
 
 public class InventoryItemModel extends BaseModel {
 

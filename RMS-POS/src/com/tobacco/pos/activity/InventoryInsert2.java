@@ -25,9 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tobacco.R;
-import com.tobacco.pos.Module.InventoryBillModel;
-import com.tobacco.pos.Module.InventoryItemModel;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.InventoryBillModel;
+import com.tobacco.pos.entity.InventoryItemModel;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.handler.InventoryItemHandler;
 

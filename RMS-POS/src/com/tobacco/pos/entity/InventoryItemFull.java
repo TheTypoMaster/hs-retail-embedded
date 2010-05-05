@@ -1,13 +1,13 @@
-package com.tobacco.pos.Module;
+package com.tobacco.pos.entity;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.tobacco.pos.Module.AllTables.Goods;
-import com.tobacco.pos.Module.AllTables.GoodsPrice;
-import com.tobacco.pos.Module.AllTables.InventoryBill;
-import com.tobacco.pos.Module.AllTables.InventoryItem;
-import com.tobacco.pos.Module.AllTables.Unit;
+import com.tobacco.pos.entity.AllTables.Goods;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.InventoryBill;
+import com.tobacco.pos.entity.AllTables.InventoryItem;
+import com.tobacco.pos.entity.AllTables.Unit;
 
 public class InventoryItemFull implements BaseColumns{
 	
