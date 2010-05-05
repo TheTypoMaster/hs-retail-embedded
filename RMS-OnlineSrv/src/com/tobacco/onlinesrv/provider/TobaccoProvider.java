@@ -27,7 +27,9 @@ public class TobaccoProvider extends ContentProvider {
 			+ DATABASE_TABLE_NAME + "(" + Tobacco.KEY_ID
 			+ " integer primary key autoincrement, " + Tobacco.KEY_NAME
 			+ " varchar(20), " + Tobacco.KEY_PACKET_PRICE + " float ,"
-			+ Tobacco.KEY_ITEM_PRICE + " float )";
+			+ Tobacco.KEY_PACKET_PRICE_SALE + " float ,"
+			+ Tobacco.KEY_ITEM_PRICE + " float ," + Tobacco.KEY_ITEM_PRICE_SALE
+			+ " float," + Tobacco.KEY_MANUFACTORY + " varchar(20)" + ")";
 	private DatabaseHelper tobaccoHelper = null;
 
 	@Override
@@ -64,7 +66,7 @@ public class TobaccoProvider extends ContentProvider {
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "step into onCreate");
-		if(tobaccoHelper == null)
+		if (tobaccoHelper == null)
 			tobaccoHelper = new DatabaseHelper(getContext());
 		return true;
 	}
@@ -73,7 +75,7 @@ public class TobaccoProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortTobacco) {
 		// TODO Auto-generated method stub
-		if(tobaccoHelper == null)
+		if (tobaccoHelper == null)
 			tobaccoHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase db = tobaccoHelper.getWritableDatabase();
@@ -106,33 +108,59 @@ public class TobaccoProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-//			db.execSQL("drop table tobacco");
+//			 db.execSQL("drop table tobacco");
 			db.execSQL(DATABASE_CREATE);
 			Log.i(TAG, "Table created...");
-//			initData(db);
-			// db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME
-			// + " (id, brandcode,brandcount)"
-			// + " VALUES ('2','def','1234')");
-			// Log.i(TAG, "Init Data inserted...");
-			// TODO Auto-generated method stub
+			if (getAllCount(db) == 0)
+				initData(db);
 
 		}
-		private void initData(SQLiteDatabase db)
-		{
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('中华','45','500')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('小熊猫','20','220')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('大熊猫','30','350')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('红双喜','5','40')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('七匹狼','7','80')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('玉溪','25','320')");
-			db.execSQL("INSERT INTO " + DATABASE_TABLE_NAME + " (name,packetprice,itemprice)"
-					+ " VALUES ('石狮','8','90')");
+
+		private void initData(SQLiteDatabase db) {
+			Log.i(TAG, "initData...");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('中华','45','500','50','600','上海卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('小熊猫','20','220','25','300','上海卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('大熊猫','30','350','35','420','上海卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('红双喜','5','40','10','120','贵州卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('七匹狼','7','80','10','110','厦门卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('玉溪','25','320','30','360','云南卷烟厂')");
+			db
+					.execSQL("INSERT INTO "
+							+ DATABASE_TABLE_NAME
+							+ " (name,packetprice,itemprice,packetsaleprice,itemsaleprice,manufactory)"
+							+ " VALUES ('石狮','8','90','10','120','厦门卷烟厂')");
+		}
+
+		private int getAllCount(SQLiteDatabase db) {
+			Cursor cursor = db.query(DATABASE_TABLE_NAME, null, null, null,
+					null, null, null);
+			int count = cursor.getCount();
+			cursor.close();
+			return count;
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {

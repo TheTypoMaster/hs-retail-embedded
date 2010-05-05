@@ -45,8 +45,8 @@ import com.tobacco.onlinesrv.util.FieldSupport;
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
-	private String from[] = new String[] { "count",  
-			"brandCode","brandCount",  "amount","format", "statusName", "date", "vip", "orderId",
+	private String from[] = new String[] { "count", "orderId", "brandCode",
+			"brandCount", "amount", "format", "statusName", "date", "vip",
 			"agency", "desc" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
@@ -249,13 +249,14 @@ public class QueryOrderActivity extends Activity {
 				finish();
 			}
 		});
-		listView.setOnItemClickListener(new OnItemClickListener(){
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-				listPosition = arg2 ;
-			}});
+				listPosition = arg2;
+			}
+		});
 
 	}
 
@@ -275,6 +276,8 @@ public class QueryOrderActivity extends Activity {
 		// TODO Auto-generated method stub
 		MenuInflater inflater = this.getMenuInflater();
 		inflater.inflate(R.menu.option_menu, menu);
+		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_add);
+		menu.findItem(R.id.menuDel).setIcon(android.R.drawable.ic_menu_delete);
 		return true;
 	}
 
@@ -282,8 +285,8 @@ public class QueryOrderActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
 		int tempPosition = listView.getSelectedItemPosition();
-		if(tempPosition>=0)
-			listPosition =  tempPosition;
+		if (tempPosition >= 0)
+			listPosition = tempPosition;
 		TextView idText = (TextView) listView.getChildAt(listPosition)
 				.findViewById(R.id.item1);
 		String idStr = idText.getText().toString();
@@ -293,7 +296,7 @@ public class QueryOrderActivity extends Activity {
 
 			HashMap<String, String> map = dataMaps.get(location);
 			Intent intent = new Intent();
-			intent.setClass(QueryOrderActivity.this, EditOrderActivity.class);
+			intent.setAction("android.intent.action.EditOrder");
 			intent.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
 					+ "");
 			putIntentData(intent, map);
@@ -339,7 +342,7 @@ public class QueryOrderActivity extends Activity {
 						.parseInt(idText.getText().toString()) - 1);
 
 				Intent intent = new Intent();
-				intent.setClass(QueryOrderActivity.this, DetailActivity.class);
+				intent.setAction("android.intent.action.OrderDetail");
 				putIntentData(intent, map);
 				return true;
 			}
@@ -348,8 +351,9 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
-		int[] to = new int[] { R.id.item1, R.id.nameItem, R.id.countItem,R.id.amountItem, R.id.formatItem,R.id.statusItem,
-				R.id.dateItem};
+		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.nameItem,
+				R.id.countItem, R.id.amountItem, R.id.formatItem,
+				R.id.statusItem, R.id.dateItem };
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
@@ -461,16 +465,15 @@ public class QueryOrderActivity extends Activity {
 		map.put("desc", cursor.getString(FieldSupport.DESC_COLUMN));
 		String statusId = cursor.getString(FieldSupport.STATUS_COLUMN);
 		map.put("status", statusId);
-		if(orderId.contains("P")){
-			if(Integer.parseInt(statusId)==0)
+		if (orderId.contains("P")) {
+			if (Integer.parseInt(statusId) == 0)
 				map.put("statusName", "未审核");
 			else
 				map.put("statusName", "已审核");
-		}else
-			if(Integer.parseInt(statusId)==0)
-				map.put("statusName", "未提交");
-			else
-				map.put("statusName", "已提交");
-		
+		} else if (Integer.parseInt(statusId) == 0)
+			map.put("statusName", "未提交");
+		else
+			map.put("statusName", "已提交");
+
 	}
 }

@@ -3,5 +3,5 @@
 	<item android:id="@+id/menuEdit" android:title="@string/editOrder_name"
 		android:orderInCategory="0"></item>
 	<item android:id="@+id/menuDel" android:title="@string/delOrder_name"
-		android:orderInCategory="1"></item>
+		android:orderInCategory="1" ></item>
 </menu>

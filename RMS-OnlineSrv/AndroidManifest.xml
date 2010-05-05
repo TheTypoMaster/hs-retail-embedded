@@ -11,14 +11,41 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".activity.TobaccoActivity"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.Tobacco" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".activity.AddOrderActivity"
-			android:label="@string/app_name"></activity>
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.AddOrder" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".activity.QueryOrderActivity"
-			android:label="@string/app_name"></activity>
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.QueryOrder" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".activity.DetailActivity"
-			android:theme="@android:style/Theme.Dialog" android:label="@string/detailInfo_name"></activity>
+			android:theme="@android:style/Theme.Dialog" android:label="@string/detailInfo_name">
+			<intent-filter>
+				<action android:name="android.intent.action.OrderDetail" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".activity.EditOrderActivity"
-			android:theme="@android:style/Theme.Dialog" android:label="@string/editOrder_name"></activity>
+			android:theme="@android:style/Theme.Dialog" android:label="@string/editOrder_name">
+			<intent-filter>
+				<action android:name="android.intent.action.EditOrder" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<provider android:name="com.tobacco.onlinesrv.provider.PreOrderProvider"
 			android:authorities="com.tobacco.onlinesrv.provider.preOrderProvider">
 		</provider>

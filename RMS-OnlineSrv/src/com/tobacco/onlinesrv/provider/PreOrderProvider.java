@@ -111,12 +111,14 @@ public class PreOrderProvider extends ContentProvider {
 		private void createtable(SQLiteDatabase db) {
 //			 db.execSQL("drop table preorderinfo");
 			db.execSQL(DATABASE_CREATE);
-//			 initData(db);
+			if(getAllCount(db)==0)
+				initData(db);
 			Log.i(TAG, "Table created...");
 
 		}
 
 		private void initData(SQLiteDatabase db) {
+			Log.i(TAG, "initData...");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
@@ -168,7 +170,13 @@ public class PreOrderProvider extends ContentProvider {
 							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 							+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1')");
 		}
-
+		private int getAllCount(SQLiteDatabase db)
+		{
+			Cursor cursor = db.query(DATABASE_TABLE_NAME, null, null, null, null, null, null);
+			int count = cursor.getCount();
+			cursor.close();
+			return count;
+		}
 		private SQLiteDatabase openDatabase(String databaseName) {
 			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
 			return db;

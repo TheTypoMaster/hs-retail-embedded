@@ -21,7 +21,7 @@ public class AgencyProvider extends ContentProvider {
 
 	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.agencyProvider";
 
-	private static final String TAG = "agencyProvider";
+	private static final String TAG = "AgencyProvider";
 	private static final String DATABASE_NAME = "RMS_OnlineSrv.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_TABLE_NAME = "agency";
@@ -109,20 +109,29 @@ public class AgencyProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-			// db.execSQL("drop table agencyinfo");
+//			 db.execSQL("drop table agency");
 			db.execSQL(DATABASE_CREATE);
-//			initData(db);
+			if(getAllCount(db)==0)
+				initData(db);
 			Log.i(TAG, "Table created...");
 
 		}
 
 		private void initData(SQLiteDatabase db) {
+			Log.i(TAG, "initData...");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
 							+ " (name,address)"
 							+ " VALUES ('海晟便利店','福建省厦门市思明区')");
-			
+		}
+		
+		private int getAllCount(SQLiteDatabase db)
+		{
+			Cursor cursor = db.query(DATABASE_TABLE_NAME, null, null, null, null, null, null);
+			int count = cursor.getCount();
+			cursor.close();
+			return count;
 		}
 
 		private SQLiteDatabase openDatabase(String databaseName) {
