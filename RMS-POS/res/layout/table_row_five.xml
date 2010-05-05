@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="10sp"> 	
+	<TextView
+	    android:id="@+id/text_five1"
+		android:layout_weight="1"
+		android:layout_marginLeft="20sp"
+		style="@style/TextViewContentStyle"/>
+	<TextView
+		android:id="@+id/text_five2"
+		android:layout_weight="1"
+		style="@style/TextViewContentStyle"/>
+	<TextView
+		android:id="@+id/text_five3"
+		android:layout_weight="1"
+		style="@style/TextViewContentStyle"/>
+	<TextView
+		android:id="@+id/text_five4"
+		android:layout_weight="1"
+		style="@style/TextViewContentStyle"/>
+	<TextView
+		android:id="@+id/text_five5"
+		android:layout_weight="1"
+		style="@style/TextViewContentStyle"/>
+</TableRow>
