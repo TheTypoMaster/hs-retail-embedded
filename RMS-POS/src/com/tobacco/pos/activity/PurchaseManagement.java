@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import com.tobacco.R;
 
+import com.tobacco.pos.Module.SinglePrice;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
@@ -15,7 +16,6 @@ import com.tobacco.pos.contentProvider.ManufacturerCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
-import com.tobacco.pos.entity.SinglePrice;
 
 import android.app.Activity;
 import android.app.AlertDialog;

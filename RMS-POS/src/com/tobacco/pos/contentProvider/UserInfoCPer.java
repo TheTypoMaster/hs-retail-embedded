@@ -2,7 +2,7 @@ package com.tobacco.pos.contentProvider;
 
 import static android.provider.BaseColumns._ID;
  
-import com.tobacco.pos.entity.AllTables;
+import com.tobacco.pos.Module.AllTables;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

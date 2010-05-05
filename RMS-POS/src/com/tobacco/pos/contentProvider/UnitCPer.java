@@ -5,7 +5,7 @@ import static android.provider.BaseColumns._ID;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tobacco.pos.entity.AllTables;
+import com.tobacco.pos.Module.AllTables;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

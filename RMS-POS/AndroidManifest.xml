@@ -37,7 +37,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-          <activity android:name=".pos.activity.ConsumeSelect" android:label="Consume_Select" >
+          <activity android:name=".pos.activity.ConsumeSelect2" android:label="Consume_Select" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ConsumeSelect" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -75,16 +75,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-		  <activity android:name=".pos.activity.InventoryInsert" android:label="库存盘点" >
+		  <activity android:name=".pos.activity.InventoryInsert2" android:label="库存盘点" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.InventoryInsert" />
-                <category android:name="android.intent.category.DEFAULT" />
-              </intent-filter>
-		  </activity>
-		  <activity android:name=".pos.activity.AddInventoryGoods" android:label="增加盘点物品" 
-		  		android:theme="@android:style/Theme.Dialog">
-			  <intent-filter>
-                <action android:name="com.tobacco.pos.activity.AddInventoryGoods" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
@@ -100,7 +93,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-          <activity android:name=".pos.common.ShowGoodsDetail" 
+		  <activity android:name=".pos.activity.SelectInventoryGoods" android:label="选择商品" 
+		  		android:theme="@android:style/Theme.Dialog">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.activity.SelectInventoryGoods" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
+		  <!-- Common activity -->
+		  <activity android:name=".pos.common.ShowGoodsDetail" 
           		android:theme="@android:style/Theme.Dialog">
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ShowGoodsDetail" />
@@ -111,12 +112,6 @@
           		android:theme="@android:style/Theme.Dialog">
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ShowCountGoodsDetail" />
-                <category android:name="android.intent.category.DEFAULT" />
-              </intent-filter>
-		  </activity>
-          <activity android:name=".pos.common.SelectTimeRange" android:label="SelectTimeRange" >
-			  <intent-filter>
-                <action android:name="com.tobacco.pos.activity.SelectTimeRange" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>

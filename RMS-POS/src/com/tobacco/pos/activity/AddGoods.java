@@ -3,10 +3,10 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 
 import com.tobacco.R;
+import com.tobacco.pos.Module.SinglePrice;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.ManufacturerCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
-import com.tobacco.pos.entity.SinglePrice;
 
 import android.app.Activity;
 import android.content.Intent;
