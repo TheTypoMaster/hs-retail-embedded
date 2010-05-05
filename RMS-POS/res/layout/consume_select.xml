@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:id="@+id/consumeSelectLinearLayout" >
+  <LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="选择时间"
+			android:id="@+id/consumeSelectTimeButton" android:textSize="12sp" />
+		<!-- 
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="开始时间"
+			android:id="@+id/consumeSelectStartTimeButton" android:textSize="12sp" />
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="到" />
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="结束时间"
+			android:id="@+id/consumeSelectEndTimeButton" android:textSize="12sp" />
+		 -->
+		
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="  条件" />
+		<Spinner android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/consumeSelectConditionSpinner" />
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="  查询内容" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:id="@+id/consumeSelectContentText"
+			android:singleLine="true" />
+	</LinearLayout>
+	
+  <ScrollView android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TableLayout android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/consumeSelectTable"
+					android:shrinkColumns="3">
+					<TableRow android:layout_width="wrap_content"
+						android:layout_height="wrap_content">
+						<!-- <TextView
+          android:text="编号"
+		  android:paddingLeft="30dip"
+		  android:layout_marginLeft="20dip"
+		  style="@style/listItemStyle" /> -->
+    	
+        <TextView
+          android:text="商品"
+		  android:layout_marginRight="65dip"
+		  style="@style/TextViewWrapListLargeStyle" />
+        <TextView
+          android:text="单位"
+		  android:layout_marginRight="25dip"
+		  style="@style/TextViewWrapListLargeStyle" />     
+		<TextView
+          android:text="时间"
+		  android:layout_marginRight="95dip"
+		  style="@style/TextViewWrapListLargeStyle" />
+		<TextView
+          android:text="说明"
+		  style="@style/TextViewWrapListLargeStyle" 
+		  android:layout_marginRight="45dip"/>	
+		<TextView
+          android:text="操作者"	  
+		  style="@style/TextViewWrapListLargeStyle" />			
+					</TableRow>
+				</TableLayout>
+			</ScrollView>
+</LinearLayout>
