@@ -16,6 +16,7 @@ import com.tobacco.R;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsKind;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.entity.AllTables.Unit;
 import com.tobacco.pos.util.tree.CheckTreeView;
 import com.tobacco.pos.util.tree.TreeNode;
 
@@ -70,7 +71,7 @@ public class SelectInventoryGoods extends Activity {
 				
 		}
 		
-		Cursor goodsPricec = managedQuery(GoodsPrice.CONTENT_URI, new String[]{GoodsPrice._ID,GoodsPrice.goodsId}, null, null, null);
+		Cursor goodsPricec = managedQuery(GoodsPrice.CONTENT_URI, new String[]{GoodsPrice._ID,GoodsPrice.goodsId,GoodsPrice.unitId}, null, null, null);
 		if(goodsPricec.getCount()>0){
 			goodsPricec.moveToFirst();
 			for(int i = 0; i<goodsPricec.getCount(); i++){
@@ -81,6 +82,16 @@ public class SelectInventoryGoods extends Activity {
 				if(exitsGoodsPrice==null||!exitsGoodsPrice.contains(Integer.valueOf(goodsPriceId))){
 					int gdIdIndex = goodsPricec.getColumnIndex(GoodsPrice.goodsId);
 					String goodsId = goodsPricec.getString(gdIdIndex);
+					int unitIdIndex = goodsPricec.getColumnIndex(GoodsPrice.unitId);
+					String unitId = goodsPricec.getString(unitIdIndex);
+					
+					Cursor unitc = managedQuery(Unit.CONTENT_URI, new String[]{Unit.name}, Unit._ID+" = ? ", new String[]{unitId}, null);
+					String unitName = "";
+					if(unitc.getCount()>0){
+						unitc.moveToFirst();
+						int unitNameIndex = unitc.getColumnIndex(Unit.name);
+						unitName = unitc.getString(unitNameIndex);
+					}
 					
 					Cursor goodsc = managedQuery(Goods.CONTENT_URI, new String[]{Goods.goodsName,Goods.kindId}, Goods._ID+" = ? ", new String[]{goodsId}, null);
 					if(goodsc.getCount()>0){
@@ -90,7 +101,7 @@ public class SelectInventoryGoods extends Activity {
 						int kindIdIndex = goodsc.getColumnIndex(Goods.kindId);
 						int kindId = goodsc.getInt(kindIdIndex);
 						
-						TreeNode goodsNode = new TreeNode(goodsName,goodsPriceId,"goods");
+						TreeNode goodsNode = new TreeNode(goodsName+" "+unitName,goodsPriceId,"goods");
 						
 						for(TreeNode kind : treeNodes){
 							if(kind.getId()==kindId){

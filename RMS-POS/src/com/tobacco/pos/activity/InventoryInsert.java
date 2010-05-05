@@ -29,6 +29,7 @@ import com.tobacco.R;
 import com.tobacco.pos.entity.InventoryBillModel;
 import com.tobacco.pos.entity.InventoryItemModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
+import com.tobacco.pos.handler.ConsumeHandler;
 import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.handler.InventoryItemHandler;
 import com.tobacco.pos.util.RegexCheck;
@@ -297,18 +298,6 @@ public class InventoryInsert extends Activity{
 
 	protected void saveInventory(final boolean finished){
 		if(checkExistsRows()){
-//			String message = null;
-//			switch(billHandler.getState()){
-//			case InventoryBillHandler.STATE_NORMAL:
-//				message = "确定要结束盘点吗？";
-//				break;
-//			case InventoryBillHandler.STATE_CONTINUE:
-//				message = "确定要结束盘点吗？";
-//				break;
-//			case InventoryBillHandler.STATE_PAUSE:
-//				message = "确定要暂停盘点吗？结束盘点前无法入货或销售";
-//				break;
-//			}
 			new AlertDialog.Builder(this).setMessage("确定要结束盘点吗？")
 			.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 	                    public void onClick(DialogInterface dialog, int whichButton) {
@@ -335,6 +324,12 @@ public class InventoryInsert extends Activity{
 	            			for(InventoryItemModel model : modelLists)
 		            			model.setIbillId(billId);       			       			
 	            			itemHandler.insert(modelLists);
+	            			
+	            			if(billHandler.getState()==InventoryBillHandler.STATE_NORMAL){
+	            				ConsumeHandler consumeHandler = new ConsumeHandler(InventoryInsert.this);
+	            				consumeHandler.insertByInventory(modelLists);
+	            			}
+	            			
 	            			modelLists.clear();
 	            			mapping.clear();
 	                    }
@@ -347,5 +342,4 @@ public class InventoryInsert extends Activity{
 		}
 		
 	}
-
 }

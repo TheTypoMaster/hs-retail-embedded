@@ -137,11 +137,12 @@ public class ConsumeInsert extends Activity{
 		if(requestCode == GET_CON)
 		{
 			if(resultCode == RESULT_OK){
+				String type = data.getExtras().getString(Consume.FLAG);
 				String barcode = data.getExtras().getString(GoodsPrice.barcode);
 				int count = Integer.valueOf(data.getExtras().getString(Consume.NUMBER));
 				String comment = data.getExtras().getString(Consume.COMMENT);
 				
-				ConsumeModel goods = handler.fillVacancy(barcode, count, comment);
+				ConsumeModel goods = handler.fillVacancy(barcode, count, type, comment);
 				
 				addConsumeGoods(goods);
 				state = UNSAVE_STATE;
@@ -167,15 +168,17 @@ public class ConsumeInsert extends Activity{
 	protected void showConsumeGoods(ConsumeModel goods){
 		
 		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
-		final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_five,null);  
+		final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_six,null);  
 		
-		TextView name = (TextView)row.findViewById(R.id.text_five1);		
-		TextView unit = (TextView)row.findViewById(R.id.text_five2);
-		final TextView number = (TextView)row.findViewById(R.id.text_five3);
-		TextView price = (TextView)row.findViewById(R.id.text_five4);
-		TextView total = (TextView)row.findViewById(R.id.text_five5);
+		TextView name = (TextView)row.findViewById(R.id.text_six1);	
+		TextView type = (TextView)row.findViewById(R.id.text_six2);	
+		TextView unit = (TextView)row.findViewById(R.id.text_six3);
+		final TextView number = (TextView)row.findViewById(R.id.text_six4);
+		TextView price = (TextView)row.findViewById(R.id.text_six5);
+		TextView total = (TextView)row.findViewById(R.id.text_six6);
 
 		name.setText(goods.getGoodsName());
+		type.setText(goods.getType());
 		unit.setText(goods.getUnitName());
 		number.setText(""+goods.getNumber());
 		price.setText(""+goods.getInPrice());
@@ -258,11 +261,11 @@ public class ConsumeInsert extends Activity{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			String barcode = intent.getStringExtra("BARCODE");
+//			String barcode = intent.getStringExtra("BARCODE");
 //			new AlertDialog.Builder(ConsumeInsert.this).setMessage("barcode:"+barcode).show();		
-			ConsumeModel goods = handler.fillVacancy(barcode, 1, "");		
-			addConsumeGoods(goods);
-			state = UNSAVE_STATE;
+			Intent i = new Intent("com.tobacco.pos.activity.ConsumeInsertDialog");
+			i.putExtra(GoodsPrice.barcode, intent.getStringExtra("BARCODE"));
+			startActivityForResult(i, GET_CON);
 		}
 		
 	}

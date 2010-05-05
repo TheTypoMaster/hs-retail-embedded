@@ -36,6 +36,11 @@ public class ReturnInsertDialog extends Activity{
 		Button cancelButton = (Button)findViewById(R.id.returnInsertButtonCancel);
 		okButton.setOnClickListener(onClickListener);
 		cancelButton.setOnClickListener(onClickListener);
+		
+		Intent intent = getIntent();
+		String barcode = intent.getStringExtra(GoodsPrice.barcode);
+		if(barcode!=null)
+			goodsBarcode.setText(barcode);
 	}
 	
 	protected OnClickListener onClickListener = new OnClickListener(){

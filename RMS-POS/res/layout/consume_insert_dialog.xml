@@ -9,7 +9,26 @@
 		android:layout_height="wrap_content">
 		<TableLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
-
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="类    型:"
+					android:paddingTop="10sp"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<RadioGroup
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal"
+			        android:checkedButton="@+id/moreRadioConsume"
+			        android:id="@+id/radioGroupConsume">
+			        <RadioButton
+			            android:text="溢"
+			            android:id="@+id/moreRadioConsume" />
+			        <RadioButton
+			            android:text="耗"
+			            android:id="@+id/lessRadioConsume" />
+		    	</RadioGroup>
+			</TableRow>
+			
 			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="条形码:"
 					style="@style/DialogTextViewStyle">

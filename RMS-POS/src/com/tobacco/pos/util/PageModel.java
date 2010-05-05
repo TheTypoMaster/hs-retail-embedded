@@ -30,9 +30,9 @@ public class PageModel extends LinearLayout {
 		// TODO Auto-generated constructor stub
 		this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 		setOrientation(HORIZONTAL);
-		first = new TextView(context);
+		first = new TextView(context, null, R.style.TextViewfillWrapLargeStyle);
 		first.setText("首页");
-		first.setPadding(100, 20, 0, 0);
+		first.setPadding(250, 20, 0, 0);
 		
 		pre = new ImageView(context);
 		pre.setImageResource(R.drawable.pre);
@@ -44,13 +44,13 @@ public class PageModel extends LinearLayout {
 		next.setImageResource(R.drawable.nex);
 		next.setPadding(20, 20, 0, 0);
 		
-		last = new TextView(context);
+		last = new TextView(context, null, R.style.TextViewfillWrapLargeStyle);
 		last.setText("末页");
 		last.setPadding(20, 20, 0, 0);
 		
-		showPageNumber = new TextView(context);
+		showPageNumber = new TextView(context, null, R.style.TextViewfillWrapLargeStyle);
 		showPageNumber.setText("第1页");
-		showPageNumber.setPadding(20, 20, 100, 0);
+		showPageNumber.setPadding(20, 20, 250, 0);
 		
 		addView(first, new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 		addView(pre, new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));

@@ -55,6 +55,8 @@ public class InventoryItemHandler {
 			insert(item);
 	}
 	
+	
+	
 	public boolean delete(int inventoryItemId){
 		ctx.getContentResolver().delete(InventoryItem.CONTENT_URI, InventoryItem._ID+" = ? ", new String[]{""+inventoryItemId});
 		return true;

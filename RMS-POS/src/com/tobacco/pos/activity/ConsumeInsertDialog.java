@@ -142,11 +142,13 @@ package com.tobacco.pos.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.tobacco.R;
@@ -162,6 +164,7 @@ public class ConsumeInsertDialog extends Activity{
 	EditText commentText ;
 	Button cancelButton ;
     Button confirmButton ;
+    RadioGroup radioGroup;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,9 +178,15 @@ public class ConsumeInsertDialog extends Activity{
 		commentText = (EditText)findViewById(R.id.commentTextConsume);
         cancelButton = (Button)findViewById(R.id.consume_insert_cancel);
         confirmButton = (Button)findViewById(R.id.consume_insert_confirm);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupConsume);
         
         cancelButton.setOnClickListener(buttonListener);
-        confirmButton.setOnClickListener(buttonListener);
+        confirmButton.setOnClickListener(buttonListener);       
+
+		Intent intent = getIntent();
+		String barcode = intent.getStringExtra(GoodsPrice.barcode);
+		if(barcode!=null)
+			barcodeText.setText(barcode);
         
 	}
 	
@@ -194,6 +203,9 @@ public class ConsumeInsertDialog extends Activity{
 			case R.id.consume_insert_confirm:
 				if(check()){
 					Intent intent = new Intent();
+//					Log.i("radio", ((RadioButton)findViewById(radioGroup.getCheckedRadioButtonId())).getText().toString());
+					String type = ((RadioButton)findViewById(radioGroup.getCheckedRadioButtonId())).getText().toString();
+					intent.putExtra(Consume.FLAG, type);
 					intent.putExtra(GoodsPrice.barcode, barcodeText.getText().toString());
 					intent.putExtra(Consume.NUMBER, numberText.getText().toString());
 					intent.putExtra(Consume.COMMENT, commentText.getText().toString());

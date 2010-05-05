@@ -31,6 +31,10 @@
 		          android:text="商品"
 				  android:layout_weight="1"
 				  style="@style/TextViewTitleStyle"/>
+				<TextView
+		          android:text="类型"
+		          android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
 		        <TextView
 		          android:text="单位"
 				  android:layout_weight="1"

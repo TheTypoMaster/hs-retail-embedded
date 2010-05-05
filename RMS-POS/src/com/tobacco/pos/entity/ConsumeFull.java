@@ -60,9 +60,14 @@ public class ConsumeFull implements BaseColumns {
 	 */
 	public static final String NUMBER = "Consume."+Consume.NUMBER;
 	/**
+	 * The type for Consume
+	 * <p>TypE: TEXT</>
+	 */
+	public static final String FLAG = "Consume."+Consume.FLAG;
+	/**
 	 * The default sort order for this table
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,UNIT_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER};
+	public static final String[] PROJECTION = new String[]{GOODS_NAME,UNIT_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER,FLAG};
 }

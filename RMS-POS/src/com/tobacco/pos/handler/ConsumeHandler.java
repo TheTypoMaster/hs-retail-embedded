@@ -13,6 +13,7 @@ import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.entity.ConsumeFull;
 import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.pos.entity.InventoryItemModel;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
@@ -52,6 +53,17 @@ public class ConsumeHandler {
 	public Uri insert(ConsumeModel goods){
 		Uri uri = ctx.getContentResolver().insert(Consume.CONTENT_URI, goods.genContentValues());
 		return uri;
+	}
+	
+	public Uri insertByInventory(ArrayList<InventoryItemModel> items){
+		for(InventoryItemModel item: items){
+			int number = (item.getRealNum()>item.getExpectNum())?item.getRealNum()-item.getExpectNum():item.getExpectNum()-item.getRealNum();
+			String type = (item.getRealNum()>item.getExpectNum())?"溢":"耗";
+			String comment = (item.getRealNum()>item.getExpectNum())?" 盘盈":"盘亏";
+			ConsumeModel model = new ConsumeModel(number, item.getGoodsPriceId(), comment, type);
+			insert(model);
+		}
+		return null;
 	}
 	
 	public boolean delete(int consumeId){
@@ -109,6 +121,8 @@ public class ConsumeHandler {
 		Date createDate = DateTool.formatStringToDate(time);
 		int commentIndex = cursor.getColumnIndex(Consume.COMMENT);
 		String comment = cursor.getString(commentIndex);
+		int typeIndex = cursor.getColumnIndex(Consume.FLAG);
+		String type = (cursor.getInt(typeIndex)==1)?"溢":"耗";
 		
 		int numberIndex = cursor.getColumnIndex(Consume.NUMBER);
 		int number = cursor.getInt(numberIndex);		
@@ -118,7 +132,7 @@ public class ConsumeHandler {
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 		
-		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, createDate);
+		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, createDate, type);
 		return goods;
 	}
 	
@@ -146,7 +160,7 @@ public class ConsumeHandler {
 	 * @param comment
 	 * @return the consumeEntity filled.
 	 */
-	public ConsumeModel fillVacancy(String barcode, int count,String comment){
+	public ConsumeModel fillVacancy(String barcode, int count, String type, String comment){
 		
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		GoodsCPer goodsCPer = new GoodsCPer();
@@ -159,7 +173,7 @@ public class ConsumeHandler {
 		String unitName = unitCPer.getAttributeById(Unit.name, unitId);
 		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
 		
-		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, inPrice,comment);
+		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, inPrice,comment,type);
 		return consume;
 	}
 	

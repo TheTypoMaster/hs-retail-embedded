@@ -144,10 +144,10 @@ public class InventoryBillSelect extends Activity{
 		int recordCount = handler.search(instance);
 		LinearLayout layout = (LinearLayout)findViewById(R.id.inventoryBillSelectLinearLayout);
 		if(pageModel == null){
-			pageModel = new PageModel(this,5,recordCount);
+			pageModel = new PageModel(this,6,recordCount);
 			layout.addView(pageModel);
 		}else
-			pageModel.init(5, recordCount);
+			pageModel.init(6, recordCount);
 		
 		billList = handler.getPage((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount(), pageModel.getRowsCount());
 		showInventoryBill();

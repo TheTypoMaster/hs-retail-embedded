@@ -80,17 +80,19 @@ public class ConsumeSelect extends Activity{
 		for(final ConsumeModel goods : goodsList){
 			
 			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
-			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_six,null);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_seven,null);  
 			
-			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_six1);
-			TextView goodsNameText = (TextView)row.findViewById(R.id.text_six2);		
-			TextView unitNameText = (TextView)row.findViewById(R.id.text_six3);
-			TextView inPriceText = (TextView)row.findViewById(R.id.text_six4);
-			TextView timeText = (TextView)row.findViewById(R.id.text_six5);
-			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
+			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_seven1);
+			TextView goodsNameText = (TextView)row.findViewById(R.id.text_seven2);	
+			TextView typeText = (TextView)row.findViewById(R.id.text_seven3);	
+			TextView unitNameText = (TextView)row.findViewById(R.id.text_seven4);
+			TextView inPriceText = (TextView)row.findViewById(R.id.text_seven5);
+			TextView timeText = (TextView)row.findViewById(R.id.text_seven6);
+			TextView operatorText = (TextView)row.findViewById(R.id.text_seven7);
 
 			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
 			goodsNameText.setText(goods.getGoodsName());
+			typeText.setText(goods.getType());
 			unitNameText.setText(goods.getUnitName());					
 			inPriceText.setText(""+goods.getInPrice());
 			String time = DateTool.formatDateToString(goods.getCreateDate());	
@@ -171,10 +173,10 @@ public class ConsumeSelect extends Activity{
 		int recordCount = handler.search(instance);
 		LinearLayout layout = (LinearLayout)findViewById(R.id.consumeSelectLinearLayout);
 		if(pageModel == null){
-			pageModel = new PageModel(this,5,recordCount);
+			pageModel = new PageModel(this,6,recordCount);
 			layout.addView(pageModel);
 		}else
-			pageModel.init(5, recordCount);
+			pageModel.init(6, recordCount);
 		
 		goodsList = handler.getPage((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount(), pageModel.getRowsCount());
 		showConsumeGoods();

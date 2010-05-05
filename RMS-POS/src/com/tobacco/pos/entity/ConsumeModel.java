@@ -40,23 +40,36 @@ public class ConsumeModel extends BaseModel{
 	 */
 	private double inPrice;
 	
+	/**
+	 * the type of the consume
+	 */
+	private String type;
+	
 	public ConsumeModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	public ConsumeModel(int number, int goodsPriceId, String comment, String type) {
+		super(comment);
+		this.number = number;
+		this.goodsPriceId = goodsPriceId;
+		this.type = type;
+	}
+	
 	public ConsumeModel(int number, String goodsName,
-			String unitName, int goodsPriceId, double inPrice,String comment) {
+			String unitName, int goodsPriceId, double inPrice,String comment, String type) {
 		super(comment);
 		this.number = number;
 		this.goodsName = goodsName;
 		this.unitName = unitName;
 		this.goodsPriceId = goodsPriceId;
 		this.inPrice = inPrice;
+		this.type = type;
 	}
 
 	public ConsumeModel(String operator, int number, String goodsName,
-			String unitName, int goodsPriceId, double inPrice,String comment,Date createDate) {
+			String unitName, int goodsPriceId, double inPrice,String comment,Date createDate, String type) {
 		super(createDate,comment);
 		this.operator = operator;
 		this.number = number;
@@ -64,6 +77,7 @@ public class ConsumeModel extends BaseModel{
 		this.unitName = unitName;
 		this.goodsPriceId = goodsPriceId;
 		this.inPrice = inPrice;
+		this.type = type;
 	}
 
 	public String getOperator() {
@@ -114,6 +128,14 @@ public class ConsumeModel extends BaseModel{
 		this.inPrice = inPrice;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public ContentValues genContentValues(){
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
@@ -123,7 +145,7 @@ public class ConsumeModel extends BaseModel{
 		values.put(Consume.GOODS,goodsPriceId);
 		values.put(Consume.CREATED_DATE,now);
 //		values.put(Consume.OPERATOR,);
-//		values.put(Consume.FLAG,);
+		values.put(Consume.FLAG,(type.equals("溢")?1:0));
 		values.put(Consume.COMMENT,comment);
 		return values;
 	}

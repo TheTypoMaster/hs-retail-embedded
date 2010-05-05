@@ -283,11 +283,11 @@ public class ReturnInsert extends Activity{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			String barcode = intent.getStringExtra("BARCODE");
+//			String barcode = intent.getStringExtra("BARCODE");
 //			new AlertDialog.Builder(ReturnInsert.this).setMessage("barcode:"+barcode).show();
-			ReturnModel goods = handler.fillVacancy(barcode, 1, "");		
-			addReturnGoods(goods);
-			state = UNSAVE_STATE;
+			Intent i = new Intent("com.tobacco.pos.activity.ReturnInsertDialog");
+			i.putExtra(GoodsPrice.barcode, intent.getStringExtra("BARCODE"));
+			startActivityForResult(i, GET_CON);
 		}
 		
 	}

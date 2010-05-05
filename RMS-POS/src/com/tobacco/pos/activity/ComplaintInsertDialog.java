@@ -18,6 +18,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.tobacco.R;
 import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
@@ -36,6 +37,7 @@ public class ComplaintInsertDialog extends Activity{
 		super.onCreate(savedInstanceState);
 		this.setTitle("增加投诉");
 		this.setContentView(R.layout.complaint_insert);
+		
 		vipNum = (EditText)findViewById(R.id.complaintInsertEditTextVIP);
 		goodsBarcode = (EditText)findViewById(R.id.complaintInsertEditTextBarcode);
 		content = (EditText)findViewById(R.id.complaintInsertEditTextContent);
