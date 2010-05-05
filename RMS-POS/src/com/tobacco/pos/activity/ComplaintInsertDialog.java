@@ -1,6 +1,9 @@
 package com.tobacco.pos.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.tobacco.R;
 import com.tobacco.pos.entity.ComplaintModel;
+import com.tobacco.pos.entity.ConsumeModel;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
@@ -50,6 +54,10 @@ public class ComplaintInsertDialog extends Activity{
 		cancelButton.setOnClickListener(onClickListener);
 		
 		handler = new ComplaintHandler(this);
+		
+//		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+//		this.registerReceiver(new ScanReceiver(), filter);
+//		this.startService(new Intent(this,ScanInputService.class));
 	}
 	
 	protected OnClickListener onClickListener = new OnClickListener(){
@@ -104,5 +112,17 @@ public class ComplaintInsertDialog extends Activity{
 		}
 
 		return true;
+	}
+	
+	public class ScanReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String barcode = intent.getStringExtra("BARCODE");
+//			new AlertDialog.Builder(ConsumeInsert.this).setMessage("barcode:"+barcode).show();		
+			goodsBarcode.setText(barcode);
+		}
+		
 	}
 }

@@ -27,11 +27,13 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
+import com.tobacco.pos.entity.ConsumeModel;
 import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.handler.ReturnHandler;
 import com.tobacco.pos.util.InputCheck;
+import com.tobacco.pos.util.RegexCheck;
 
 public class ReturnInsert extends Activity{
 
@@ -41,6 +43,8 @@ public class ReturnInsert extends Activity{
 	private static final int MENU_CONFIRM = Menu.FIRST+1;
 	private static final int MENU_CANCEL = Menu.FIRST+2;
 	private static final int MENU_REMOVE = Menu.FIRST+3;
+	private static final int MENU_MOFIFY_NUM = Menu.FIRST+4;
+	
 	private static final int GET_CON = 0;
 	private static final int SAVE_STATE = 1;
 	private static final int UNSAVE_STATE = 0;
@@ -58,7 +62,11 @@ public class ReturnInsert extends Activity{
 		Intent intent = getIntent();
 		if(intent.getData()==null)
 			intent.setData(Return.CONTENT_URI);
-		this.setContentView(R.layout.return_insert);       
+		this.setContentView(R.layout.return_insert);    
+		
+//		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+//		this.registerReceiver(new ScanReceiver(), filter);
+//		this.startService(new Intent(this,ScanInputService.class));
 	}
 
 	@Override
@@ -189,7 +197,7 @@ public class ReturnInsert extends Activity{
 		
 		TextView nameText = (TextView)row.findViewById(R.id.text_five1);		
 		TextView unitText = (TextView)row.findViewById(R.id.text_five2);
-		TextView numberText = (TextView)row.findViewById(R.id.text_five3);
+		final TextView numberText = (TextView)row.findViewById(R.id.text_five3);
 		TextView priceText = (TextView)row.findViewById(R.id.text_five4);
 		TextView contentText = (TextView)row.findViewById(R.id.text_five5);
 
@@ -209,6 +217,7 @@ public class ReturnInsert extends Activity{
 				menuInfo = new AdapterContextMenuInfo(row, 0, 0);
 				menu.setHeaderTitle("菜单项");
 				menu.add(0, MENU_REMOVE, 0, "删除该记录");
+				menu.add(0, MENU_MOFIFY_NUM, 1, "修改数量");
 				menu.findItem(MENU_REMOVE).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 
 					public boolean onMenuItemClick(MenuItem item) {
@@ -223,6 +232,36 @@ public class ReturnInsert extends Activity{
 						return false;
 					}
 					
+				});
+				menu.findItem(MENU_MOFIFY_NUM).setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+					public boolean onMenuItemClick(MenuItem item) {
+						// TODO Auto-generated method stub										
+						final EditText numberText = new EditText(ReturnInsert.this);
+						numberText.setWidth(100);
+						numberText.setSingleLine(true);
+						
+						new AlertDialog.Builder(ReturnInsert.this).setTitle("修改数量").setView(numberText)
+						.setPositiveButton("确定", new OnClickListener(){
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								if(!RegexCheck.checkInteger(numberText.getText().toString())){
+									Toast.makeText(ReturnInsert.this, "数量输入无效", Toast.LENGTH_SHORT).show();
+								}else{
+									ReturnModel model = (ReturnModel)mapping.get(row);
+									model.setNumber(Integer.valueOf(numberText.getText().toString()).intValue());
+									numberText.setText(numberText.getText().toString());
+								}				
+							}			
+						}).setNegativeButton("取消", new OnClickListener(){
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+							}			
+						}).show();
+						return true;
+					}				
 				});
 			}
 			
@@ -244,8 +283,11 @@ public class ReturnInsert extends Activity{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			int barcode = intent.getIntExtra("BARCODE", 0);
-			new AlertDialog.Builder(ReturnInsert.this).setMessage("barcode:"+barcode).show();
+			String barcode = intent.getStringExtra("BARCODE");
+//			new AlertDialog.Builder(ReturnInsert.this).setMessage("barcode:"+barcode).show();
+			ReturnModel goods = handler.fillVacancy(barcode, 1, "");		
+			addReturnGoods(goods);
+			state = UNSAVE_STATE;
 		}
 		
 	}

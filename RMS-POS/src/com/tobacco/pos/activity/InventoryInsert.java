@@ -31,6 +31,7 @@ import com.tobacco.pos.entity.InventoryItemModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.handler.InventoryItemHandler;
+import com.tobacco.pos.util.RegexCheck;
 
 public class InventoryInsert extends Activity{
 	
@@ -233,14 +234,19 @@ public class InventoryInsert extends Activity{
 
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if(realNumText.getText().toString().matches("[0-9]+"))
+//				if(realNumText.getText().toString().matches("[0-9]+"))
+				if(RegexCheck.checkInteger(realNumText.getText().toString()))
 				{
 					int realNum = Integer.valueOf(realNumText.getText().toString());
 					int expectNum = Integer.valueOf(expectNumText.getText().toString());
 					int count = realNum-expectNum;
 					double result = count*Double.valueOf(inPriceText.getText().toString());			
 					itemResultText.setText(""+result);
-				}			
+				}else if(realNumText.getText().toString().equals("")){
+					
+				}else{
+					Toast.makeText(InventoryInsert.this, "输入无效", Toast.LENGTH_SHORT).show();
+				}
 			}
 
 			public void beforeTextChanged(CharSequence s, int start, int count,

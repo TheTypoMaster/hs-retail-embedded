@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,9 +28,12 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
 import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
+import com.tobacco.pos.util.InputCheck;
+import com.tobacco.pos.util.RegexCheck;
 
 public class ConsumeInsert extends Activity{
 	
@@ -38,6 +43,7 @@ public class ConsumeInsert extends Activity{
 	private static final int MENU_CONFIRM = Menu.FIRST+1;
 	private static final int MENU_CANCEL = Menu.FIRST+2;
 	private static final int MENU_REMOVE = Menu.FIRST+3;
+	private static final int MENU_MOFIFY_NUM = Menu.FIRST+4;
 	
 	private static final int SAVE_STATE = 1;
 	private static final int UNSAVE_STATE = 0;
@@ -165,7 +171,7 @@ public class ConsumeInsert extends Activity{
 		
 		TextView name = (TextView)row.findViewById(R.id.text_five1);		
 		TextView unit = (TextView)row.findViewById(R.id.text_five2);
-		TextView number = (TextView)row.findViewById(R.id.text_five3);
+		final TextView number = (TextView)row.findViewById(R.id.text_five3);
 		TextView price = (TextView)row.findViewById(R.id.text_five4);
 		TextView total = (TextView)row.findViewById(R.id.text_five5);
 
@@ -186,6 +192,7 @@ public class ConsumeInsert extends Activity{
 				menuInfo = new AdapterContextMenuInfo(row, 0, 0);
 				menu.setHeaderTitle("菜单项");
 				menu.add(0, MENU_REMOVE, 0, "删除该记录");
+				menu.add(0, MENU_MOFIFY_NUM, 1, "修改数量");			
 				menu.findItem(MENU_REMOVE).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 
 					public boolean onMenuItemClick(MenuItem item) {
@@ -198,8 +205,37 @@ public class ConsumeInsert extends Activity{
 							return true;
 						}
 						return false;
-					}
-					
+					}				
+				});
+				menu.findItem(MENU_MOFIFY_NUM).setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+					public boolean onMenuItemClick(MenuItem item) {
+						// TODO Auto-generated method stub										
+						final EditText numberText = new EditText(ConsumeInsert.this);
+						numberText.setWidth(100);
+						numberText.setSingleLine(true);
+						
+						new AlertDialog.Builder(ConsumeInsert.this).setTitle("修改数量").setView(numberText)
+						.setPositiveButton("确定", new OnClickListener(){
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								if(!RegexCheck.checkInteger(numberText.getText().toString())){
+									Toast.makeText(ConsumeInsert.this, "数量输入无效", Toast.LENGTH_SHORT).show();
+								}else{
+									ConsumeModel model = (ConsumeModel)mapping.get(row);
+									model.setNumber(Integer.valueOf(numberText.getText().toString()).intValue());
+									number.setText(numberText.getText().toString());
+								}				
+							}			
+						}).setNegativeButton("取消", new OnClickListener(){
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+							}			
+						}).show();
+						return true;
+					}				
 				});
 			}
 			

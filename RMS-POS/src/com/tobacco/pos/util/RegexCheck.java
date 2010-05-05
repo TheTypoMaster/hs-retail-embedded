@@ -7,7 +7,7 @@ public class RegexCheck{
   }
   
   public static boolean checkInteger(String value){
-    return value.matches("[1-9][0-9]{0,10}");
+    return value.matches("[1-9][0-9]{0,9}");
   }
   
   public static boolean checkVIPNum(String value){
