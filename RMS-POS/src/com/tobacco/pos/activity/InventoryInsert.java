@@ -31,7 +31,7 @@ import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.handler.InventoryItemHandler;
 
-public class InventoryInsert2 extends Activity{
+public class InventoryInsert extends Activity{
 	
 	private String TAG = "InventoryInsert";
 	
@@ -210,12 +210,12 @@ public class InventoryInsert2 extends Activity{
 
 	protected void addTableRow(final InventoryItemModel model){
 		
-		TextView goodsNameText = new TextView(InventoryInsert2.this,null,R.style.TextViewfillWrapSmallStyle);		
-		TextView unitNameText = new TextView(InventoryInsert2.this,null,R.style.TextViewfillWrapSmallStyle);
-		final TextView inPriceText = new TextView(InventoryInsert2.this,null,R.style.TextViewfillWrapSmallStyle);
-		final TextView expectNumText = new TextView(InventoryInsert2.this,null,R.style.TextViewfillWrapSmallStyle);
-		final EditText realNumText = new EditText(InventoryInsert2.this);
-		final TextView itemResultText = new TextView(InventoryInsert2.this,null,R.style.TextViewfillWrapSmallStyle);
+		TextView goodsNameText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);		
+		TextView unitNameText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
+		final TextView inPriceText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
+		final TextView expectNumText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
+		final EditText realNumText = new EditText(InventoryInsert.this);
+		final TextView itemResultText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
 		
 		goodsNameText.setText(model.getGoodsName());
 		unitNameText.setText(model.getUnitName());
@@ -252,7 +252,7 @@ public class InventoryInsert2 extends Activity{
 			
 		});
 		final TableLayout table = (TableLayout)findViewById(R.id.inventoryInsertTable);	
-		final TableRow row = new TableRow(InventoryInsert2.this);
+		final TableRow row = new TableRow(InventoryInsert.this);
 		mapping.put(row, model);
 		row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 

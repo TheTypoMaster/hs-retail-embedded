@@ -5,39 +5,11 @@
   android:layout_height="wrap_content"
   android:orientation="vertical"
   android:id="@+id/consumeSelectLinearLayout" >
-  <LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-
-		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="选择时间"
-			android:id="@+id/consumeSelectTimeButton" android:textSize="12sp" />
-		<!-- 
-		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="开始时间"
-			android:id="@+id/consumeSelectStartTimeButton" android:textSize="12sp" />
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="到" />
-		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="结束时间"
-			android:id="@+id/consumeSelectEndTimeButton" android:textSize="12sp" />
-		 -->
-		
-
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="  条件" />
-		<Spinner android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/consumeSelectConditionSpinner" />
-
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="  查询内容" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" 
-			android:id="@+id/consumeSelectContentText"
-			android:singleLine="true" />
-	</LinearLayout>
-	
+  <view xmlns:android="http://schemas.android.com/apk/res/android"
+    class="com.tobacco.pos.util.SearchCondition"
+    android:id = "@+id/consumeSelectSearch"
+    android:layout_width="fill_parent"
+	android:layout_height="wrap_content"/>
   <ScrollView android:orientation="vertical"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content">

@@ -37,7 +37,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-          <activity android:name=".pos.activity.ConsumeSelect2" android:label="Consume_Select" >
+          <activity android:name=".pos.activity.ConsumeSelect" android:label="Consume_Select" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ConsumeSelect" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -75,7 +75,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-		  <activity android:name=".pos.activity.InventoryInsert2" android:label="库存盘点" >
+		  <activity android:name=".pos.activity.InventoryInsert" android:label="库存盘点" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.InventoryInsert" />
                 <category android:name="android.intent.category.DEFAULT" />

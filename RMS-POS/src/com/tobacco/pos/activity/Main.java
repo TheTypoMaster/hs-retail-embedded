@@ -13,12 +13,15 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.Loginer;
+import com.tobacco.pos.handler.InventoryBillHandler;
 
 public class Main extends Activity {
 
 	private String[] saleFunctions = {"收银管理","溢耗管理","投诉管理","退货管理"};
 	private String[] adminFunctions = {"类别管理","进货管理","报表功能","库存管理"};
 	private Loginer loginer = null;
+	private int state;
+	private InventoryBillHandler inventoryHandler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +35,17 @@ public class Main extends Activity {
 		
 		saleList.setOnItemClickListener(listener);
 		adminList.setOnItemClickListener(listener);
+		
+		inventoryHandler = new InventoryBillHandler(this); 
 	}
 	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		state = inventoryHandler.checkState();
+		super.onResume();
+	}
+
 	public OnItemClickListener listener = new OnItemClickListener(){
 		
 		@Override
@@ -47,40 +59,51 @@ public class Main extends Activity {
 			if(listView.getId()==R.id.listSaleMan){
 				switch(position){
 				case 0:
-					loginer = new Loginer(Main.this);
-					userName = loginer.verifyIsSBOnline(loginer.getReadableDatabase());
-					if(userName == null)
-					{
-						intent = new Intent(Main.this, Login.class);
-						intent.putExtra("purpose", "PaymentManagement");
-						startActivity(intent);
-					}
-					else
-					{
-						intent = new Intent(Main.this, PaymentManagement.class);
-						intent.putExtra("userName", userName);
-						startActivity(intent);
+					if(state == InventoryBillHandler.STATE_PAUSE){
+						new AlertDialog.Builder(Main.this)
+						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
+					}else{
+						loginer = new Loginer(Main.this);
+						userName = loginer.verifyIsSBOnline(loginer.getReadableDatabase());
+						if(userName == null)
+						{
+							intent = new Intent(Main.this, Login.class);
+							intent.putExtra("purpose", "PaymentManagement");
+							startActivity(intent);
+						}
+						else
+						{
+							intent = new Intent(Main.this, PaymentManagement.class);
+							intent.putExtra("userName", userName);
+							startActivity(intent);
+						}
 					}
 					break;
 				case 1:
-					new AlertDialog.Builder(Main.this)
-					.setTitle("选择功能")
-					.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
-	
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							Intent intent = null;
-							if(which == 0){
-								intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
-							}else{
-								intent = new Intent("com.tobacco.pos.activity.ConsumeSelect");
+					if(state == InventoryBillHandler.STATE_PAUSE){
+						new AlertDialog.Builder(Main.this)
+						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
+					}else{
+						new AlertDialog.Builder(Main.this)
+						.setTitle("选择功能")
+						.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
+		
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								Intent intent = null;
+								if(which == 0){
+									intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
+								}else{
+									intent = new Intent("com.tobacco.pos.activity.ConsumeSelect");
+								}
+								
+								startActivity(intent);
 							}
 							
-							startActivity(intent);
-						}
-						
-					}).create().show();
+						}).create().show();
+					}		
+					
 					break;
 				case 2:
 					new AlertDialog.Builder(Main.this)
@@ -103,46 +126,61 @@ public class Main extends Activity {
 					}).create().show();
 					break;
 				case 3:
-					new AlertDialog.Builder(Main.this)
-					.setTitle("选择功能")
-					.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
-	
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							Intent intent = null;
-							if(which == 0){
-								intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
-							}else{
-								intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
+					if(state == InventoryBillHandler.STATE_PAUSE){
+						new AlertDialog.Builder(Main.this)
+						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
+					}else{
+						new AlertDialog.Builder(Main.this)
+						.setTitle("选择功能")
+						.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
+		
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								Intent intent = null;
+								if(which == 0){
+									intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
+								}else{
+									intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
+								}
+								
+								startActivity(intent);
 							}
 							
-							startActivity(intent);
-						}
-						
-					}).create().show();
+						}).create().show();
+					}		
 					break;
 				}
 			}else if(listView.getId()==R.id.listAdmin){
 				switch(position){
 				case 0:
-					intent = new Intent(Main.this, KindManagement.class);
-					startActivity(intent);
+					if(state == InventoryBillHandler.STATE_PAUSE){
+						new AlertDialog.Builder(Main.this)
+						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
+					}else{
+						intent = new Intent(Main.this, KindManagement.class);
+						startActivity(intent);
+					}	
 					break;
 				case 1:
-					loginer = new Loginer(Main.this);
-					userName = loginer.verify(loginer.getReadableDatabase());
-					if (userName != null) {
-						intent = new Intent(Main.this,
-								PurchaseManagement.class);
-						intent.putExtra("userName", userName);
-						startActivity(intent);
-					} else {
-						intent = new Intent(Main.this, Login.class);
-						intent.putExtra("purpose", "PurchaseManagement");
-				
-						startActivity(intent);
-					}
+					if(state == InventoryBillHandler.STATE_PAUSE){
+						new AlertDialog.Builder(Main.this)
+						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
+					}else{
+						loginer = new Loginer(Main.this);
+						userName = loginer.verify(loginer.getReadableDatabase());
+						if (userName != null) {
+							intent = new Intent(Main.this,
+									PurchaseManagement.class);
+							intent.putExtra("userName", userName);
+							startActivity(intent);
+						} else {
+							intent = new Intent(Main.this, Login.class);
+							intent.putExtra("purpose", "PurchaseManagement");
+					
+							startActivity(intent);
+						}
+					}			
 					break;
 				case 2:
 					AlertDialog.Builder selectReportKindTip = new AlertDialog.Builder(Main.this);
@@ -181,127 +219,6 @@ public class Main extends Activity {
 					break;
 				}
 			}
-//			switch(position){	
-//			case 0:
-//				loginer = new Loginer(Main.this);
-//				userName = loginer.verifyIsSBOnline(loginer.getReadableDatabase());
-//				if(userName == null)
-//				{
-//					intent = new Intent(Main2.this, Login.class);
-//					intent.putExtra("purpose", "PaymentManagement");
-//					startActivity(intent);
-//				}
-//				else
-//				{
-//					intent = new Intent(Main2.this, PaymentManagement.class);
-//					intent.putExtra("userName", userName);
-//					startActivity(intent);
-//				}
-//				break;
-//			case 1:
-//				intent = new Intent(Main2.this, KindManagement.class);
-//				startActivity(intent);
-//				break;
-//			case 2:
-//				loginer = new Loginer(Main2.this);
-//				userName = loginer.verify(loginer.getReadableDatabase());
-//				if (userName != null) {
-//					intent = new Intent(Main2.this,
-//							PurchaseManagement.class);
-//					intent.putExtra("userName", userName);
-//					startActivity(intent);
-//				} else {
-//					intent = new Intent(Main2.this, Login.class);
-//					intent.putExtra("purpose", "PurchaseManagement");
-//			
-//					startActivity(intent);
-//				}
-//				break;
-//			case 3:
-//				intent = new Intent(Main2.this, ReportManagement.class);
-//				startActivity(intent);
-//				break;
-//			case 4:
-//				new AlertDialog.Builder(Main2.this)
-//				.setTitle("选择功能")
-//				.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						// TODO Auto-generated method stub
-//						Intent intent = null;
-//						if(which == 0){
-//							intent = new Intent("com.tobacco.pos.activity.CosumeInsert");
-//						}else{
-//							intent = new Intent("com.tobacco.pos.activity.ConsumeSelect");
-//						}
-//						
-//						startActivity(intent);
-//					}
-//					
-//				}).create().show();
-//				break;
-//			case 5:
-//				new AlertDialog.Builder(Main2.this)
-//				.setTitle("选择功能")
-//				.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						// TODO Auto-generated method stub
-//						Intent intent = null;
-//						if(which == 0){
-//							intent = new Intent("com.tobacco.pos.activity.ComplaintInsertDialog");
-//						}else{
-//							intent = new Intent("com.tobacco.pos.activity.ComplaintSelect");
-//						}
-//						
-//						startActivity(intent);
-//					}
-//					
-//				}).create().show();
-//				break;
-//			case 6:
-//				new AlertDialog.Builder(Main2.this)
-//				.setTitle("选择功能")
-//				.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						// TODO Auto-generated method stub
-//						Intent intent = null;
-//						if(which == 0){
-//							intent = new Intent("com.tobacco.pos.activity.ReturnInsert");
-//						}else{
-//							intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
-//						}
-//						
-//						startActivity(intent);
-//					}
-//					
-//				}).create().show();
-//				break;
-//			case 7:
-//				new AlertDialog.Builder(Main2.this)
-//				.setTitle("选择功能")
-//				.setItems(R.array.select_inventory_function_items, new DialogInterface.OnClickListener(){
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						// TODO Auto-generated method stub
-//						Intent intent = null;
-//						if(which == 0){
-//							intent = new Intent("com.tobacco.pos.activity.InventoryInsert");
-//						}else{
-//							intent = new Intent("com.tobacco.pos.activity.InventoryBillSelect");
-//						}
-//						
-//						startActivity(intent);
-//					}
-//					
-//				}).create().show();
-//				break;
-//			}
 		}
 		
 	};
