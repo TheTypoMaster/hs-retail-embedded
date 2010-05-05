@@ -126,7 +126,7 @@ public class AddOrderActivity extends Activity {
 			do {
 				tempStr += "," + cursor.getString(1);
 				tempStr2 += "," + cursor.getString(2);
-				tempStr3 += "," + cursor.getString(3);
+				tempStr3 += "," + cursor.getString(4);
 			} while (cursor.moveToNext());
 			brandType = tempStr.substring(1, tempStr.length()).split(",");
 			packetPrice = tempStr2.substring(1, tempStr2.length()).split(",");
@@ -249,12 +249,15 @@ public class AddOrderActivity extends Activity {
 			String agencyId, String userName, String vipId, String desc,
 			String status) {
 		ContentValues values = new ContentValues();
-		if (uriType == preorderUri)
+		if (uriType == preorderUri){
 			values.put(orderId, NumberGenerate
 					.preOrderIdGeneration(getAllCount(uriType) + 1));
-		else
+		}
+		else{
 			values.put(orderId, NumberGenerate
 					.orderIdGeneration(getAllCount(uriType) + 1));
+			values.put(Order.KEY_RECIEVE, "0");
+		}
 		values.put(brandCode, brandType[brandNameSp.getSelectedItemPosition()]);
 		values.put(brandCount, Integer.parseInt(countEdt.getText().toString()));
 		values.put(date, dateEdt.getText().toString());

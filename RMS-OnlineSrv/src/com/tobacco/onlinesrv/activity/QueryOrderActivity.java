@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,8 +47,8 @@ public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
 	private String from[] = new String[] { "count", "orderId", "brandCode",
-			"brandCount", "amount", "format", "statusName", "date", "vip",
-			"agency", "desc" };
+			"brandCount", "amount", "format",  "vip","statusName", "date","agency","recieveName",
+			 "desc" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -61,6 +62,7 @@ public class QueryOrderActivity extends Activity {
 	private Button nextBtn;
 	private Button bottomBtn;
 	private TextView currentPageTxt;
+	private TextView actionTxt;
 	private String selection = "";
 	private HashMap<Integer, String> queryPreOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, String> queryOrderMap = new HashMap<Integer, String>();
@@ -138,6 +140,10 @@ public class QueryOrderActivity extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
+				if(position==0)
+					actionTxt.setVisibility(View.INVISIBLE);
+				else
+					actionTxt.setVisibility(View.VISIBLE);
 				pageNum = 1;
 				setCurrentOrder(uriMap.get(position));
 				fillDataMaps(getCurrentOrder(), null);
@@ -276,8 +282,9 @@ public class QueryOrderActivity extends Activity {
 		// TODO Auto-generated method stub
 		MenuInflater inflater = this.getMenuInflater();
 		inflater.inflate(R.menu.option_menu, menu);
-		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_add);
+		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
 		menu.findItem(R.id.menuDel).setIcon(android.R.drawable.ic_menu_delete);
+		menu.findItem(R.id.menuRecieve).setIcon(android.R.drawable.ic_menu_agenda);
 		return true;
 	}
 
@@ -293,13 +300,14 @@ public class QueryOrderActivity extends Activity {
 		int location = (pageNum - 1) * pageCount + listPosition;
 		switch (item.getItemId()) {
 		case R.id.menuEdit:
-
 			HashMap<String, String> map = dataMaps.get(location);
 			Intent intent = new Intent();
 			intent.setAction("android.intent.action.EditOrder");
 			intent.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
 					+ "");
 			putIntentData(intent, map);
+			break;
+		case R.id.menuRecieve:
 			break;
 		case R.id.menuDel:
 			int number = getContentResolver().delete(getCurrentOrder(),
@@ -352,8 +360,8 @@ public class QueryOrderActivity extends Activity {
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
 		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.nameItem,
-				R.id.countItem, R.id.amountItem, R.id.formatItem,
-				R.id.statusItem, R.id.dateItem };
+				R.id.countItem, R.id.amountItem, R.id.formatItem,R.id.vipItem,
+				R.id.statusItem, R.id.dateItem,R.id.agencyItem,R.id.actionItem};
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
@@ -391,6 +399,7 @@ public class QueryOrderActivity extends Activity {
 		bottomBtn = (Button) this.findViewById(R.id.bottomPage);
 		currentPageTxt = (TextView) this.findViewById(R.id.currentPage);
 		listView = (ListView) this.findViewById(R.id.ListView01);
+		actionTxt = (TextView) this.findViewById(R.id.actionItem);
 	}
 
 	private void fillDataMaps(Uri uri, String selection) {
@@ -412,6 +421,17 @@ public class QueryOrderActivity extends Activity {
 			do {
 				HashMap<String, String> firstMap = new HashMap<String, String>();
 				putOrderMap(cursor, firstMap);
+				if(uri==Order.CONTENT_URI)
+				{
+					String recieve = cursor.getString(FieldSupport.RECIEVE_COLUMN);
+					firstMap.put("recieve",recieve);
+					if(recieve.equals("0"))
+					{
+						firstMap.put("recieveName","否");
+					}else
+						firstMap.put("recieveName","是");
+				}
+					
 				dataMaps.add(firstMap);
 				listCount++;
 			} while (cursor.moveToNext());

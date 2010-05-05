@@ -270,7 +270,7 @@ public class EditOrderActivity extends Activity {
 			do {
 				tempStr += "," + cursor.getString(1);
 				tempStr2 += "," + cursor.getString(2);
-				tempStr3 += "," + cursor.getString(3);
+				tempStr3 += "," + cursor.getString(4);
 			} while (cursor.moveToNext());
 			brandType = tempStr.substring(1, tempStr.length()).split(",");
 			packetPrice = tempStr2.substring(1, tempStr2.length()).split(",");

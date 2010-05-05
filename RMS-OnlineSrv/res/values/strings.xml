@@ -23,7 +23,6 @@
 	
 	<!-- queryOrderUI -->
 	<string name="detailInfo_name">详细信息</string>
-	<string name="editOrder_name">编辑订单</string>
 	<string name="status_name">订单状态</string>
 	<string name="okBtn_name">提交</string>
 	<string name="cancelBtn_name">取消</string>
@@ -34,7 +33,7 @@
 	<string name="back_name">返回</string>
 	<string name="search_name">搜索</string>
 	<string name="curPage_name">当前页:</string>
-	<string name="delOrder_name">删除订单</string>
+
 	<string name="startDate_name">开始时间</string>
 	<string name="endDate_name">结束时间</string>
 	<string name="orderNumber_name">订单单号:</string>
@@ -42,10 +41,17 @@
 	<string name="brandCode2_name">名称</string>
 	<string name="brandCount2_name">数量</string>
 	<string name="format2_name">规格</string>
+	<string name="vip2_name">折扣</string>
+	<string name="agency2_name">单位</string>
 	<string name="status2_name">状态</string>
 	<string name="date2_name">日期</string>
 	<string name="amount2_name">金额</string>
-	<string name="action_name">操作</string>
+	<string name="action_name">是否到货</string>
+	<!-- menuUI -->
+	
+	<string name="editOrder_name">编辑订单</string>
+	<string name="delOrder_name">删除订单</string>
+	<string name="recieveOrder_name">确认收货</string>
 	<!-- queryTobaccoUI -->
 	<string name="orderPrice1_name">进货价/包</string>
 	<string name="orderPrice2_name">进货价/条</string>

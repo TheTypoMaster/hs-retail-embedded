@@ -13,6 +13,7 @@ public class OptionActivity extends Activity{
 	private Button tobaccoBtn;
 	private Button addOrderBtn;
 	private Button queryOrderBtn;
+	private Button returnBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,14 @@ public class OptionActivity extends Activity{
 			}
 		});
 
+		returnBtn = (Button) this.findViewById(R.id.returnBtn);
+		returnBtn.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		
 	}
 
