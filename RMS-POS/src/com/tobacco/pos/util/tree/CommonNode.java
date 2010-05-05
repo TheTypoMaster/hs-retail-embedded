@@ -43,7 +43,7 @@ public class CommonNode extends LinearLayout {
 		}else{
 			TextView blank = new TextView(context);
 			blank.setText("  ");
-			addView(blank, new LayoutParams(30,LayoutParams.WRAP_CONTENT));
+			addView(blank, new LayoutParams(29,LayoutParams.WRAP_CONTENT));
 		}
 		
 		textView = new TextView(context, null, R.style.TextViewfillWrapLargeStyle);

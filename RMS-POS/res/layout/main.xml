@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+    
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" android:id="@+id/mainlayout">
+    android:orientation="horizontal" android:id="@+id/mainlayout"
+    android:paddingTop="60sp">
 		
-        <ListView 
+		<!-- 
+		<ListView 
                 android:id="@+id/listSaleMan" 
                 android:layout_height="wrap_content" 
                 android:layout_width="240px">
@@ -14,4 +17,25 @@
                 android:layout_height="wrap_content" 
                 android:layout_width="240px">
         </ListView>
+		 -->
+		<TextView 
+			android:layout_height="fill_parent" 
+            android:layout_width="fill_parent"
+            android:layout_weight="1"/>
+        <ListView 
+            android:id="@+id/listSaleMan" 
+            android:layout_height="fill_parent" 
+            android:layout_width="wrap_content"
+            android:layout_weight="1">
+        </ListView>
+        <ListView 
+            android:id="@+id/listAdmin" 
+            android:layout_height="fill_parent" 
+            android:layout_width="wrap_content"
+            android:layout_weight="1">
+        </ListView>
+        <TextView 
+			android:layout_height="fill_parent" 
+            android:layout_width="fill_parent"
+            android:layout_weight="1"/>
 </LinearLayout>

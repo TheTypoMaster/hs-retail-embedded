@@ -1,131 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<LinearLayout android:layout_gravity="center"
-		android:orientation="vertical" android:layout_width="wrap_content"
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<TableLayout android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
- 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:paddingTop="180sp">
+		<TableLayout 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="10sp"> 
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="类别:"
-					style="@style/DialogTextViewfillWrapMediumStyle">
+					style="@style/DialogTextViewStyle">
 				</TextView>
-				<!-- 
-				<TextView android:text="类别:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content">
-				</TextView>
-				<TextView android:id="@+id/goodsKindShowGoodsDetail"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true">
-				</TextView>
-				 -->
 				<EditText android:id="@+id/goodsKindShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 			</TableRow>
-			
-			<!-- 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView android:text="代码:"
-					style="@style/DialogTextViewfillWrapMediumStyle">
-				</TextView>
-
-				<TextView android:id="@+id/goodsCodeShowCountGoodsDetail"
-					android:width="200sp"
-					style="@style/DialogTextViewfillWrapMediumStyle">
-				</TextView>
-
-			</TableRow>
-			 -->		
-			
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="厂家:"
-					style="@style/DialogTextViewfillWrapMediumStyle">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 
 				<EditText android:id="@+id/manuNameShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView
-					style="@style/DialogTextViewfillWrapMediumStyle"
+					style="@style/DialogTextViewStyle"
 					android:text="名称:">
 				</TextView>
 
 				<EditText android:id="@+id/goodsNameShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 			</TableRow>
 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView style="@style/DialogTextViewfillWrapMediumStyle" android:text="单位:">
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView style="@style/DialogTextViewStyle" android:text="单位:">
 				</TextView>
 
 				<EditText android:id="@+id/unitNameShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 			</TableRow>
 			
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView style="@style/DialogTextViewfillWrapMediumStyle" android:text="进价:">
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView style="@style/DialogTextViewStyle" android:text="进价:">
 				</TextView>
 
 				<EditText android:id="@+id/goodsPriceShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 			</TableRow>
 			
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView 
-					style="@style/DialogTextViewfillWrapMediumStyle" android:text="数量:">
+					style="@style/DialogTextViewStyle" android:text="数量:">
 				</TextView>
 
 				<EditText android:id="@+id/goodsCountShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">>
 				</EditText>
 			</TableRow>
 			
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView style="@style/DialogTextViewfillWrapMediumStyle" android:text="总额:">
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView style="@style/DialogTextViewStyle" android:text="总额:">
 				</TextView>
 
 				<EditText android:id="@+id/totalPriceShowCountGoodsDetail"
-					style="@style/DialogTextViewfillWrapMediumStyle"
-					android:width="250sp"
-					android:enabled="false">
+					style="@style/DialogEnableEditTextStyle">
 				</EditText>
 			</TableRow>
 			
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView style="@style/DialogTextViewfillWrapMediumStyle"
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView style="@style/DialogTextViewStyle"
 					 android:text="  ">
 				</TextView>
 				<Button android:text="确定" android:id="@+id/okButtonShowCountGoodsDetail"

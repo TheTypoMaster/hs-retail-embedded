@@ -3,12 +3,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,8 +38,9 @@ import com.tobacco.pos.util.SearchCondition;
 public class ReturnSelect extends Activity{
 	private static final String TAG = "ReturnSelect";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;
-	private static final int MENU_SHOW_ALL = Menu.FIRST+1;
-	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+2;
+	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;
+	private static final int MENU_SHOW_ALL = Menu.FIRST+2;
+	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+3;
 	
 	private ReturnHandler handler = new ReturnHandler(this);
 	ArrayList<ReturnModel> goodsList = new ArrayList<ReturnModel>();
@@ -64,7 +67,7 @@ public class ReturnSelect extends Activity{
     	
     	search = (SearchCondition)findViewById(R.id.returnSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
-//		showReturnGoods();
+
 	}
 	
 	protected void showReturnGoods(){	
@@ -73,28 +76,28 @@ public class ReturnSelect extends Activity{
 		table.removeViews(1, table.getChildCount()-1);
 		Log.i(TAG, "table.removeViews");
 		
+		int i = 0;
 		for(final ReturnModel goods : goodsList){
 			
-			TextView goodsNameText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-//			TextView unitNameText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);		
-			TextView vipNameText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView timeText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView contentText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView operatorText = new TextView(ReturnSelect.this,null,R.style.TextViewfillWrapSmallStyle);
+			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_six,null);  
+			
+			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_six1);
+			TextView goodsNameText = (TextView)row.findViewById(R.id.text_six2);
+			TextView vipNameText = (TextView)row.findViewById(R.id.text_six3);
+			TextView timeText = (TextView)row.findViewById(R.id.text_six4);
+			TextView contentText = (TextView)row.findViewById(R.id.text_six5);
+			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
 
-			setMarquee(contentText);
-		
+			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
 			goodsNameText.setText(goods.getGoodsName());
-//			unitNameText.setText(unitName);
 			vipNameText.setText(goods.getCustomer());
 			String time = DateTool.formatDateToString(goods.getCreateDate());
 			timeText.setText(time.substring(0, time.length()-3));
 			contentText.setText(goods.getContent());
-			operatorText.setText(goods.getOperator());
-						
+			operatorText.setText(goods.getOperator());				
 								
 			table = (TableLayout)findViewById(R.id.returnSelectTable);		
-			TableRow row = new TableRow(ReturnSelect.this);
 			row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
 				public void onCreateContextMenu(ContextMenu menu, View v,
@@ -103,6 +106,7 @@ public class ReturnSelect extends Activity{
 					//onCreateContextMenu(menu, v, menuInfo);
 					menu.setHeaderTitle("商品可选菜单");
 					menu.add(0, MENU_SHOW_GOODS_DETAIL, 0, "商品详细");
+					menu.add(0, MENU_SHOW_COMMENT, 1, "退货原因");
 					menu.findItem(MENU_SHOW_GOODS_DETAIL).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 
 						public boolean onMenuItemClick(MenuItem item) {
@@ -115,17 +119,21 @@ public class ReturnSelect extends Activity{
 						}
 						
 					});
+					
+					menu.findItem(MENU_SHOW_COMMENT).setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+						public boolean onMenuItemClick(MenuItem item) {
+							// TODO Auto-generated method stub
+							new AlertDialog.Builder(ReturnSelect.this)
+							.setTitle("退货原因")
+							.setMessage(goods.getContent()).show();
+							return true;
+						}
+						
+					});
 				}	
 				
 			});
-	
-			row.addView(goodsNameText, 0);
-//			row.addView(unitNameText, 1);
-			row.addView(vipNameText, 1);
-			row.addView(timeText, 2);
-			row.addView(contentText,3);
-			row.addView(operatorText, 4);
-			
 			table.addView(row);
 		}
 	}
@@ -177,28 +185,7 @@ public class ReturnSelect extends Activity{
 		handler = null;
 		goodsList.clear();
 	}
-	
-	protected void setMarquee(TextView view){
-		view.setEllipsize(TruncateAt.MARQUEE);
-		view.setMarqueeRepeatLimit(-1);
-		view.setSingleLine(true);
-		view.setFocusable(true);
-		view.setOnFocusChangeListener(lisener);
-//		view.setGravity(Gravity.CENTER);
-	}
-	
-	
-	private OnFocusChangeListener lisener = new OnFocusChangeListener(){
-		public void onFocusChange(View v, boolean hasFocus) {
-			// TODO Auto-generated method stub
-			if(hasFocus == true){
-				v.setBackgroundColor(Color.RED);
-			}else{
-				v.setBackgroundColor(Color.BLACK);
-			}
-		}
-	};
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub

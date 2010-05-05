@@ -97,6 +97,7 @@ public class ConsumeHandler {
 	 * @return return the ConsumeEntity obeject.
 	 */
 	private ConsumeModel genConsumeEntity(Cursor cursor){
+		
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
 		String goodsName = cursor.getString(goodsNameIndex);
 		int unitNameIndex = cursor.getColumnIndex(Unit.name);
@@ -114,7 +115,10 @@ public class ConsumeHandler {
 		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
 		
-		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, 0, comment, createDate);
+		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
+		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
+		
+		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, createDate);
 		return goods;
 	}
 	

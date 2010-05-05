@@ -63,7 +63,7 @@ public class ReturnModel extends BaseModel {
 	}
 
 	public ReturnModel(String operator, String customer, int goodsPriceId,
-			String goodsName, Date createDate, String content, int number) {
+			String goodsName, Date createDate, String content, int number,double inPrice) {
 		super();
 		this.operator = operator;
 		this.customer = customer;
@@ -72,6 +72,7 @@ public class ReturnModel extends BaseModel {
 		this.createDate = createDate;
 		this.content = content;
 		this.number = number;
+		this.inPrice = inPrice;
 	}
 
 	public int getId() {

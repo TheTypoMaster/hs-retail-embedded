@@ -167,7 +167,6 @@ public class ConsumeInsertDialog extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.consume_insert_dialog);
         this.setTitle("输入溢耗商品：");
         

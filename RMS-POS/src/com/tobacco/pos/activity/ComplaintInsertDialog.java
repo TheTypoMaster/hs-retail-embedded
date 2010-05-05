@@ -79,21 +79,6 @@ public class ComplaintInsertDialog extends Activity{
 					vipNum.getText().toString(), content.getText().toString());
 			
 			handler.insert(goods);
-			
-//			ContentValues values = new ContentValues();
-//			GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
-//			VIPInfoCPer vipInfoCPer = new VIPInfoCPer();
-//			String vipId = vipInfoCPer.getAttributeByAttribute(VIPInfo._ID, VIPInfo.VIPNum, vipNum.getText().toString());
-////			int goodsPriceId = goodsPriceCPer.getGoodsPriceIdByBarcode(goodsBarcode.getText().toString());
-//			String goodsPriceId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice._ID, GoodsPrice.barcode, goodsBarcode.getText().toString());
-//			
-//			if(check.isChecked()){
-//				values.put(Complaint.VIP_ID, vipId);
-//			}
-//			
-//			values.put(Complaint.GOODS_ID, goodsPriceId);
-//			values.put(Complaint.CONTENT, content.getText().toString());
-//			this.getContentResolver().insert(Complaint.CONTENT_URI, values);
 			return true;
 		}
 		return false;

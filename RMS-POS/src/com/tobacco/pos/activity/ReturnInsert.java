@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -154,12 +155,10 @@ public class ReturnInsert extends Activity{
 		if(requestCode == GET_CON)
 		{
 			if(resultCode == RESULT_OK){
-//				String vipNum = data.getExtras().getString(Return.VIP_ID);
 				String barcode = data.getExtras().getString(GoodsPrice.barcode);
 				int count = Integer.valueOf(data.getExtras().getString(Return.NUMBER));
 				String content = data.getExtras().getString(Return.CONTENT);
 	
-//				ReturnModel goods = handler.fillVacancy(vipNum,barcode,count,content);		
 				ReturnModel goods = handler.fillVacancy(barcode,count,content);
 				addReturnGoods(goods);
 				
@@ -185,19 +184,22 @@ public class ReturnInsert extends Activity{
 	
 	protected void showReturnGoods(ReturnModel goods){
 
-		TextView nameText = new TextView(ReturnInsert.this,null,R.style.TextViewfillWrapSmallStyle);		
-		TextView unitText = new TextView(ReturnInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView numberText = new TextView(ReturnInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView priceText = new TextView(ReturnInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView contentText = new TextView(ReturnInsert.this,null,R.style.TextViewfillWrapSmallStyle);
+		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+		final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_five,null);  
 		
+		TextView nameText = (TextView)row.findViewById(R.id.text_five1);		
+		TextView unitText = (TextView)row.findViewById(R.id.text_five2);
+		TextView numberText = (TextView)row.findViewById(R.id.text_five3);
+		TextView priceText = (TextView)row.findViewById(R.id.text_five4);
+		TextView contentText = (TextView)row.findViewById(R.id.text_five5);
+
 		nameText.setText(goods.getGoodsName());
 		unitText.setText(goods.getUnit());
 		numberText.setText(""+goods.getNumber());
 		priceText.setText(""+goods.getInPrice());
 		contentText.setText(goods.getContent());
 		final TableLayout table = (TableLayout)findViewById(R.id.returnInsertTable);		
-		final TableRow row = new TableRow(ReturnInsert.this);
+
 		mapping.put(row, goods);
 		row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
@@ -225,14 +227,7 @@ public class ReturnInsert extends Activity{
 			}
 			
 		});
-		
-		row.addView(nameText, 0);
-		row.addView(unitText, 1);
-		row.addView(numberText, 2);
-		row.addView(priceText, 3);
-		row.addView(contentText, 4);
-		table.addView(row);
-		
+		table.addView(row);		
 		returnGoods.add(goods);
 	}
 	

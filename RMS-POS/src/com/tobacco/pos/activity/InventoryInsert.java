@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -210,13 +211,16 @@ public class InventoryInsert extends Activity{
 
 	protected void addTableRow(final InventoryItemModel model){
 		
-		TextView goodsNameText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);		
-		TextView unitNameText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		final TextView inPriceText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		final TextView expectNumText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		final EditText realNumText = new EditText(InventoryInsert.this);
-		final TextView itemResultText = new TextView(InventoryInsert.this,null,R.style.TextViewfillWrapSmallStyle);
+		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+		final TableRow row = (TableRow)inflater.inflate(R.layout.inventory_item,null);  
 		
+		TextView goodsNameText = (TextView)row.findViewById(R.id.inventoryItem1);		
+		TextView unitNameText = (TextView)row.findViewById(R.id.inventoryItem2);
+		final TextView inPriceText = (TextView)row.findViewById(R.id.inventoryItem3);
+		final TextView expectNumText = (TextView)row.findViewById(R.id.inventoryItem4);
+		final EditText realNumText = (EditText)row.findViewById(R.id.inventoryItem5);
+		final TextView itemResultText = (TextView)row.findViewById(R.id.inventoryItem6);
+
 		goodsNameText.setText(model.getGoodsName());
 		unitNameText.setText(model.getUnitName());
 		inPriceText.setText(""+model.getGoodsInPrice());
@@ -252,7 +256,7 @@ public class InventoryInsert extends Activity{
 			
 		});
 		final TableLayout table = (TableLayout)findViewById(R.id.inventoryInsertTable);	
-		final TableRow row = new TableRow(InventoryInsert.this);
+
 		mapping.put(row, model);
 		row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
@@ -280,17 +284,9 @@ public class InventoryInsert extends Activity{
 			}
 			
 		});
-		
-		row.addView(goodsNameText, 0);
-		row.addView(unitNameText, 1);
-		row.addView(inPriceText, 2);
-		row.addView(expectNumText, 3);
-		row.addView(realNumText, 4);
-		row.addView(itemResultText, 5);
-		table.addView(row);
-		
-		modelLists.add(model);
-		
+
+		table.addView(row);	
+		modelLists.add(model);		
 	}
 
 	protected void saveInventory(final boolean finished){

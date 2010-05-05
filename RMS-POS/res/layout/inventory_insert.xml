@@ -1,62 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
+  android:layout_width="fill_parent"
   android:layout_height="wrap_content">
   	<ScrollView android:orientation="vertical"
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<TableLayout  android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TableLayout android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:id="@+id/inventoryInsertTable">
-				<TableRow android:layout_width="wrap_content"
-					android:layout_height="wrap_content">
-	        		<TextView
-				      android:text="商品"
-				      android:layout_marginRight="70dip"
-					  style="@style/listItemTextViewStyle" />
-				    <TextView
-				      android:text="单位"
-				      android:layout_marginRight="30dip"
-					  style="@style/listItemTextViewStyle" />
-				    <TextView
-				      android:text="单价"
-				      android:layout_marginRight="30dip"
-					  style="@style/listItemTextViewStyle" />
-					<TextView
-				      android:text="库存"
-				      android:layout_marginRight="30dip"
-					  style="@style/listItemTextViewStyle" />
-					<TextView
-				      android:text="盘点"
-				      android:layout_marginRight="30dip"
-					  style="@style/listItemTextViewStyle" />
-					<TextView
-				      android:text="盈亏"
-				      android:layout_marginRight="30dip"
-					  style="@style/listItemTextViewStyle" />				
-				</TableRow>
-			</TableLayout>
-			
-			<!-- 
+		<TableLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/inventoryInsertTable">
 			<TableRow android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
-				<LinearLayout>
-					<TextView android:text="总额"
-						style="@style/listItemTextViewStyle" 
-						android:layout_marginLeft="300dip">
-					</TextView>
-					<TextView android:id = "@+id/totalInventoryInsert"
-						android:text="0"
-						style="@style/listItemTextViewStyle" 
-						android:layout_marginLeft="30dip">
-					</TextView>
-				</LinearLayout>
+	       		<TextView
+			      android:text="商品"
+			      android:layout_weight="1"
+			      android:layout_marginLeft="20sp"
+				  style="@style/TextViewTitleStyle"/>
+			    <TextView
+			      android:text="单位"
+			      android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+			    <TextView
+			      android:text="单价"
+			      android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+				<TextView
+			      android:text="库存"
+			      android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+				<TextView
+			      android:text="盘点"
+			      android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+				<TextView
+			      android:text="盈亏"
+			      android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>				
 			</TableRow>
-			 -->
-			
 		</TableLayout>
 	</ScrollView>
 </LinearLayout>
+

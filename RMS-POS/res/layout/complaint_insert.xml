@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<LinearLayout android:layout_gravity="center"
-		android:orientation="vertical" android:layout_width="wrap_content"
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<TableLayout android:layout_width="wrap_content"
+		<TableLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginTop="100sp">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="VIP :"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/complaintInsertEditTextVIP"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:enabled="false"
 					android:hint="若是会员，不可为空">
 				</EditText>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="       " 
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<CheckBox 
 					android:id="@+id/complaintInsertCheckBox"
@@ -41,56 +30,42 @@
 					android:checked="false">
 				</CheckBox>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="投诉商品:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/complaintInsertEditTextBarcode"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:hint="不可为空">
 				</EditText>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView
 					android:text="投诉理由:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" 				
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/complaintInsertEditTextContent"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" 
-					android:width="250sp"
-					android:lines="5"
+					style="@style/DialogEditTextMultiLinesStyle"
 					android:hint="不超过２５５个字符">
 				</EditText>
 			</TableRow>
 		</TableLayout>
 		
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<Button android:text="确定" android:id="@+id/complaintInsertButtonConfirm"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="80dip">
+		<TableRow style="@style/DialogTableRowStyle">
+			<TextView
+				style="@style/DialogEmptyTextViewStyle"
+				android:layout_weight="1">
+			</TextView>
+			<Button android:id="@+id/complaintInsertButtonConfirm"
+				android:text="确定" 
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
-			<Button android:text="取消" android:id="@+id/complaintInsertButtonCancel"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="60sp">
+			<Button android:id="@+id/complaintInsertButtonCancel"
+				android:text="取消" 
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
 		</TableRow>
 	</LinearLayout>
 </ScrollView>
-
-

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -57,44 +58,28 @@ public class InventoryBillSelect extends Activity{
 		HashMap<Integer,String> mappingSel = new HashMap<Integer,String>();
 		String[] conditionStr = new String[]{"单号"};
 		mappingType.put(0, SearchState.BILLNUM);
-//    	mappingType.put(1, SearchState.OPERATOR);
     	mappingSel.put(0, InventoryBillFull.IBILL_NUM);
-//    	mappingSel.put(1, ComplaintFull.OPER_NAME);	
     	search = (SearchCondition)findViewById(R.id.inventoryBillSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
-		
-//		showInventoryBill();
+
 	}
 	
 	protected void showInventoryBill(){
-//		final Cursor cursor = this.managedQuery(InventoryBillFull.CONTENT_URI, InventoryBillFull.PROJECTION, null, null, null);
-//		cursor.moveToFirst();
-//		for(int i = 0;i<cursor.getCount();i++){
-//			int inventoryIdIndex = cursor.getColumnIndex(InventoryBillFull._ID);
-//			final String inventoryBillId = cursor.getString(inventoryIdIndex);
-//			int inventoryNumIndex = cursor.getColumnIndex(InventoryBillFull.IBILL_NUM);
-//			String inventoryNum = cursor.getString(inventoryNumIndex);
-//			int inventoryFlagIndex = cursor.getColumnIndex(InventoryBillFull.FINISHED);
-//			String inventoryFlag = (cursor.getString(inventoryFlagIndex).equals("1"))?"是":"否";
-//			int inventoryResultIndex = cursor.getColumnIndex(InventoryBillFull.RESULT);
-//			String inventoryResult = cursor.getString(inventoryResultIndex);
-//			int inventoryTimeIndex = cursor.getColumnIndex(InventoryBillFull.TIME);
-//			String inventoryTime = cursor.getString(inventoryTimeIndex);
-//			int operatorIndex = cursor.getColumnIndex(InventoryBillFull.OPER_NAME);
-//			String inventoryOperator = cursor.getString(operatorIndex);
 		TableLayout table = (TableLayout)findViewById(R.id.inventoryBillSelectTable);
 		table.removeViews(1, table.getChildCount()-1);
 		Log.i(TAG, "table.removeViews");
 		
 		for(final InventoryBillModel bill : billList){
-			TextView inventoryNumText = new TextView(InventoryBillSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView inventoryFlagText = new TextView(InventoryBillSelect.this,null,R.style.TextViewfillWrapSmallStyle);		
-			TextView inventoryResultText = new TextView(InventoryBillSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView inventoryTimeText = new TextView(InventoryBillSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView inventoryOperatorText = new TextView(InventoryBillSelect.this,null,R.style.TextViewfillWrapSmallStyle);
+			
+			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_five,null);  
+			
+			TextView inventoryNumText = (TextView)row.findViewById(R.id.text_five1);		
+			TextView inventoryFlagText = (TextView)row.findViewById(R.id.text_five2);
+			TextView inventoryResultText = (TextView)row.findViewById(R.id.text_five3);
+			TextView inventoryTimeText = (TextView)row.findViewById(R.id.text_five4);
+			TextView inventoryOperatorText = (TextView)row.findViewById(R.id.text_five5);
 
-//			setMarquee(contentText);
-		
 			inventoryNumText.setText(""+bill.getiBillNum());
 			inventoryFlagText.setText(bill.isFinished()?"是":"否");
 			inventoryResultText.setText(""+bill.getResult());
@@ -103,7 +88,7 @@ public class InventoryBillSelect extends Activity{
 			inventoryOperatorText.setText(bill.getOperName());			
 								
 			table = (TableLayout)findViewById(R.id.inventoryBillSelectTable);		
-			final TableRow row = new TableRow(InventoryBillSelect.this);
+
 			row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
 				public void onCreateContextMenu(ContextMenu menu, View v,
@@ -126,16 +111,7 @@ public class InventoryBillSelect extends Activity{
 				}	
 				
 			});
-		
-			row.addView(inventoryNumText, 0);
-			row.addView(inventoryFlagText, 1);
-			row.addView(inventoryResultText, 2);
-			row.addView(inventoryTimeText,3);
-			row.addView(inventoryOperatorText, 4);
-			
 			table.addView(row);
-//			cache.add(row);
-//			cursor.moveToNext();
 		}
 	}
 
@@ -185,31 +161,7 @@ public class InventoryBillSelect extends Activity{
 		handler = null;
 		billList.clear();
 	}
-	
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		// TODO Auto-generated method stub
-//		Log.e(TAG, "onActivityResult()");
-//		switch(requestCode){
-//		case GET_TIME:
-//			if(resultCode == RESULT_OK){		
-//				Date startDate = DateTool.formatStringToDate(data.getExtras().getString("startDate"));		
-//				Date endDate = DateTool.formatStringToDate(data.getExtras().getString("endDate"));
-//				TableLayout table = (TableLayout)findViewById(R.id.inventoryBillSelectTable);
-//				table.removeViews(1, table.getChildCount()-1);
-//				for(TableRow row : cache){
-//					TextView time = (TextView)row.getChildAt(row.getChildCount()-2);
-//					String test = time.getText().toString();
-//					Date date = DateTool.formatStringToDate(test+".00");
-//					if(date.after(startDate)&&date.before(endDate)){
-//						table.addView(row);
-//					}
-//				}
-//			} 
-//			
-//			break;
-//		}
-//	}
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub

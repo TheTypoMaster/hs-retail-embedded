@@ -146,9 +146,10 @@ public class ComplaintHandler {
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		VIPInfoCPer vipInfoCPer = new VIPInfoCPer();
 		
-		int customerId = 0;
-		if(!vipNum.equals(""))
-			customerId = Integer.valueOf(vipInfoCPer.getAttributeByAttribute(VIPInfo._ID, VIPInfo.VIPNum, vipNum)).intValue();
+		if(vipNum.equals("")){
+			vipNum = "common";
+		}	
+		int	customerId = Integer.valueOf(vipInfoCPer.getAttributeByAttribute(VIPInfo._ID, VIPInfo.VIPNum, vipNum)).intValue();
 		int goodsPriceId = Integer.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice._ID, GoodsPrice.barcode, barcode)).intValue();	
 		ComplaintModel goods = new ComplaintModel(customerId, goodsPriceId, content);
 		

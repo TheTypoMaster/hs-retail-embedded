@@ -17,8 +17,6 @@ import com.tobacco.pos.util.RegexCheck;
 
 public class ReturnInsertDialog extends Activity{
 
-//	EditText vipNum ;
-//	CheckBox check ;
 	EditText goodsBarcode ;
 	EditText goodsNumber;
 	EditText content ;
@@ -29,19 +27,11 @@ public class ReturnInsertDialog extends Activity{
 		super.onCreate(savedInstanceState);
 		this.setTitle("增加退货");
 		this.setContentView(R.layout.return_insert_dialog);
-//		vipNum = (EditText)findViewById(R.id.returnInsertEditTextVIP);
+
 		goodsBarcode = (EditText)findViewById(R.id.returnInsertEditTextBarcode);
 		goodsNumber = (EditText)findViewById(R.id.returnInsertEditTextNumber);
 		content = (EditText)findViewById(R.id.returnInsertEditTextContent);
-//		check = (CheckBox)findViewById(R.id.returnInsertCheckBox);
-//		check.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-//
-//			public void onCheckedChanged(CompoundButton buttonView,
-//					boolean isChecked) {
-//				// TODO Auto-generated method stub
-//				vipNum.setEnabled(isChecked);
-//			}			
-//		});
+
 		Button okButton = (Button)findViewById(R.id.returnInsertButtonConfirm);
 		Button cancelButton = (Button)findViewById(R.id.returnInsertButtonCancel);
 		okButton.setOnClickListener(onClickListener);
@@ -60,7 +50,6 @@ public class ReturnInsertDialog extends Activity{
 			case R.id.returnInsertButtonConfirm:
 				if(check()){
 					Intent intent = new Intent();
-//					intent.putExtra(Return.VIP_ID, vipNum.getText().toString());
 					intent.putExtra(GoodsPrice.barcode, goodsBarcode.getText().toString());
 					intent.putExtra(Return.NUMBER, goodsNumber.getText().toString());
 					intent.putExtra(Return.CONTENT, content.getText().toString());
@@ -80,12 +69,6 @@ public class ReturnInsertDialog extends Activity{
 			Toast.makeText(this, "数量输入无效", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		
-//		String vipValue = InputCheck.checkVIP(this,vipNum.getText().toString());
-//		if(check.isChecked()&&vipValue!=null){
-//			Toast.makeText(this, vipValue, Toast.LENGTH_SHORT).show();
-//			return false;
-//		}
 		
 		String barcodeValue = InputCheck.checkBarcode(this,goodsBarcode.getText().toString());
 		if(barcodeValue!=null){

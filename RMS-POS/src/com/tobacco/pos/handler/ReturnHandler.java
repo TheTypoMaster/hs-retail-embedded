@@ -101,7 +101,7 @@ public class ReturnHandler {
 		
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
 		String goodsName = cursor.getString(goodsNameIndex);
-//		int unitNameIndex = cursor.getColumnIndex(ReturnFull.UNIT_NAME);
+//		int unitNameIndex = cursor.getColumnIndex(Unit.name);
 //		String unitName = cursor.getString(unitNameIndex);
 		int vipNameIndex = cursor.getColumnIndex(VIPInfo.VIPName);
 		String customer = cursor.getString(vipNameIndex);
@@ -122,7 +122,10 @@ public class ReturnHandler {
 		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
 		
-		ReturnModel goods = new ReturnModel(operator, customer, goodsPriceId, goodsName, createDate, content, number);
+		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
+		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
+		
+		ReturnModel goods = new ReturnModel(operator, customer, goodsPriceId, goodsName, createDate, content, number,inPrice);
 		return goods;
 	}
 	

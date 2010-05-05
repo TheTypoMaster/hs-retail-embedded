@@ -1,78 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<LinearLayout android:layout_gravity="center"
-		android:orientation="vertical" android:layout_width="wrap_content"
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<TableLayout android:layout_width="wrap_content"
+		<TableLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginTop="50dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="条形码:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/barcodeTextConsume"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:hint="不可为空">
 				</EditText>
 			</TableRow>
 
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="数    量:" 
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/numberTextConsume"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:hint="可为空，默认为１">
 				</EditText>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView
 					android:text="说    明:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" 				
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/commentTextConsume"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" 
-					android:width="250sp"
-					android:lines="5"
+					style="@style/DialogEditTextMultiLinesStyle"
 					android:hint="不超过２５５个字符">
 				</EditText>
 			</TableRow>
 		</TableLayout>
 		
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<Button android:text="确定" android:id="@+id/consume_insert_confirm"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="60dip">
+		<TableRow style="@style/DialogTableRowStyle">
+			<TextView
+				style="@style/DialogEmptyTextViewStyle"
+				android:layout_weight="1">
+			</TextView>
+			<Button android:text="确定" 
+				android:id="@+id/consume_insert_confirm"
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
-			<Button android:text="取消" android:id="@+id/consume_insert_cancel"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="60sp">
+			<Button android:text="取消" 
+				android:id="@+id/consume_insert_cancel"
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
 		</TableRow>
 	</LinearLayout>

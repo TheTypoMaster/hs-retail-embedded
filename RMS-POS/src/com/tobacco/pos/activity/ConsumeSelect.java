@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -38,8 +37,9 @@ public class ConsumeSelect extends Activity{
 
 	private static final String TAG = "ConsumeSelect";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;
-	private static final int MENU_SHOW_ALL = Menu.FIRST+1;
-	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+2;
+	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;
+	private static final int MENU_SHOW_ALL = Menu.FIRST+2;
+	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+3;
 //	private static final int MENU_TIME_PICKER = Menu.FIRST+1;
 //	private static final int GET_TIME=1;
 	
@@ -56,91 +56,58 @@ public class ConsumeSelect extends Activity{
 			intent.setData(Consume.CONTENT_URI);
 		this.setContentView(R.layout.consume_select);	
 
-		
-//		pageModel = new PageModel(this);
-		
-//		final SearchState instance = SearchState.getInstance();
-//		final Spinner conditionSpinner = (Spinner)this.findViewById(R.id.consumeSelectConditionSpinner);
-//		final EditText contentText = (EditText)this.findViewById(R.id.consumeSelectContentText);
 		HashMap<Integer,Integer> mappingType = new HashMap<Integer,Integer>();
 		HashMap<Integer,String> mappingSel = new HashMap<Integer,String>();
-		
-//		Button timeButton = (Button)findViewById(R.id.consumeSelectTimeButton);
-//		timeButton.setOnClickListener(cliskListener);
-		
+
 		//"商品种类", 
     	String[] conditionStr = new String[]{"商品名称", "操作人"};
-//    	ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, conditionStr);
-//    	conditionSpinner.setAdapter(conditionAdapter);
     	String timeTable = ConsumeFull.CREATE_DATE;
-//    	mappingType.put(0, instance.KIND);
     	mappingType.put(0, SearchState.NAME);
     	mappingType.put(1, SearchState.OPERATOR);
-//    	mappingSel.put(0, "test");
     	mappingSel.put(0, ConsumeFull.GOODS_NAME);
     	mappingSel.put(1, ConsumeFull.OPER_NAME);
     	
     	search = (SearchCondition)findViewById(R.id.consumeSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
-//    	search = new SearchCondition(this, conditionStr, mappingType, mappingSel);
-//    	contentText.setOnKeyListener(new OnKeyListener(){
-//
-//    		@Override
-//    		public boolean onKey(View v, int keyCode, KeyEvent event) {
-//    			// TODO Auto-generated method stub
-//    			String content = ((EditText)v).getText().toString();
-//    			if(content!=null && content.length()>0 && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
-//    		
-//    				int position = conditionSpinner.getSelectedItemPosition();
-//    				Log.i("TestStrategy", "select"+position);
-//    				Log.i("TestStrategy", "type:"+mappingType.get(position));
-//    				Log.i("TestStrategy", "selection:"+mappingSel.get(position));
-//    				instance.setSelectionFactor(mappingType.get(position), new String[]{mappingSel.get(position)}, new String[]{content});
-//    				return true;
-//    			}
-//    			return false;
-//    		}
-//    		
-//    	});
-    	
 	}
 	
 	protected void showConsumeGoods(){	
 
 		TableLayout table = (TableLayout)findViewById(R.id.consumeSelectTable);
 		table.removeViews(1, table.getChildCount()-1);
-//		EditText contentText = (EditText)this.findViewById(R.id.consumeSelectContentText);
-//		Button timeButton = (Button)findViewById(R.id.consumeSelectTimeButton);
-//		timeButton.setText("选择时间");
-//		contentText.setText("");
 		Log.i("ConsumeSelect", "table.removeViews");
+		int i = 0;
 		for(final ConsumeModel goods : goodsList){
 			
-			TextView goodsNameText = new TextView(ConsumeSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView unitNameText = new TextView(ConsumeSelect.this,null,R.style.TextViewfillWrapSmallStyle);		
-			TextView timeText = new TextView(ConsumeSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView commentText = new TextView(ConsumeSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView operatorText = new TextView(ConsumeSelect.this,null,R.style.TextViewfillWrapSmallStyle);
+			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_six,null);  
+			
+			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_six1);
+			TextView goodsNameText = (TextView)row.findViewById(R.id.text_six2);		
+			TextView unitNameText = (TextView)row.findViewById(R.id.text_six3);
+			TextView inPriceText = (TextView)row.findViewById(R.id.text_six4);
+			TextView timeText = (TextView)row.findViewById(R.id.text_six5);
+			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
 
-			setMarquee(commentText);
-		
+			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
 			goodsNameText.setText(goods.getGoodsName());
-			unitNameText.setText(goods.getUnitName());
-			String time = DateTool.formatDateToString(goods.getCreateDate());
+			unitNameText.setText(goods.getUnitName());					
+			inPriceText.setText(""+goods.getInPrice());
+			String time = DateTool.formatDateToString(goods.getCreateDate());	
 			timeText.setText(time.substring(0, time.length()-3));
-			commentText.setText(goods.getComment());
 			operatorText.setText(goods.getOperator());					
 								
-			table = (TableLayout)findViewById(R.id.consumeSelectTable);		
-			TableRow row = new TableRow(ConsumeSelect.this);
+			table = (TableLayout)findViewById(R.id.consumeSelectTable);	
+
 			row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
 				public void onCreateContextMenu(ContextMenu menu, View v,
 						ContextMenuInfo menuInfo) {
 					// TODO Auto-generated method stub
-					//onCreateContextMenu(menu, v, menuInfo);
 					menu.setHeaderTitle("商品可选菜单");
 					menu.add(0, MENU_SHOW_GOODS_DETAIL, 0, "商品详细");
+					menu.add(0, MENU_SHOW_COMMENT, 1, "溢耗原因");
+					
 					menu.findItem(MENU_SHOW_GOODS_DETAIL).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 
 						public boolean onMenuItemClick(MenuItem item) {
@@ -153,16 +120,21 @@ public class ConsumeSelect extends Activity{
 						}
 						
 					});
+					
+					menu.findItem(MENU_SHOW_COMMENT).setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+						public boolean onMenuItemClick(MenuItem item) {
+							// TODO Auto-generated method stub
+							new AlertDialog.Builder(ConsumeSelect.this)
+							.setTitle("溢耗原因")
+							.setMessage(goods.getComment()).show();
+							return true;
+						}
+						
+					});
 				}	
 				
 			});
-	
-			row.addView(goodsNameText, 0);
-			row.addView(unitNameText, 1);
-			row.addView(timeText, 2);
-			row.addView(commentText,3);
-			row.addView(operatorText, 4);
-			
 			table.addView(row);
 		}
 	}
@@ -195,7 +167,6 @@ public class ConsumeSelect extends Activity{
 				return false;
 			break;
 		}
-//		goodsList = handler.search(instance);
 		search.reset();
 		int recordCount = handler.search(instance);
 		LinearLayout layout = (LinearLayout)findViewById(R.id.consumeSelectLinearLayout);
@@ -218,61 +189,6 @@ public class ConsumeSelect extends Activity{
 		goodsList.clear();
 	}
 
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		// TODO Auto-generated method stub
-//		Log.e("ConsumeInsert", "onActivityResult()");
-//		switch(requestCode){
-//		case GET_TIME:
-//			if(resultCode == RESULT_OK){	
-//				Date startDate = DateTool.formatStringToDate(data.getExtras().getString("startDate"));		
-//				Date endDate = DateTool.formatStringToDate(data.getExtras().getString("endDate"));
-//				
-//				Button timeButton = (Button)findViewById(R.id.consumeSelectTimeButton);
-//				String start = DateTool.formatDateToString(startDate);
-//				String end = DateTool.formatDateToString(endDate);
-//				timeButton.setText(start.subSequence(0, start.length()-9)+"到"+end.subSequence(0, end.length()-9));
-//				
-//				endDate.setDate(endDate.getDate()+1);
-//				SearchState instance = SearchState.getInstance();
-//				Log.i("TestStrategy", "type:"+instance.TIME);
-//				Log.i("TestStrategy", "selection1:start");
-//				Log.i("TestStrategy", "selection2:end");
-//				instance.setSelectionFactor(instance.TIME, new String[]{ConsumeFull.CREATE_DATE,ConsumeFull.CREATE_DATE}, new String[]{start,end});
-//			}
-//			break;
-//		}
-//	}
-
-	protected void setMarquee(TextView view){
-		view.setEllipsize(TruncateAt.MARQUEE);
-		view.setMarqueeRepeatLimit(-1);
-		view.setSingleLine(true);
-		view.setFocusable(true);
-		view.setOnFocusChangeListener(lisener);
-//		view.setGravity(Gravity.CENTER);
-	}
-	
-//	private OnClickListener cliskListener = new OnClickListener(){
-//		@Override
-//		public void onClick(View v) {
-//			// TODO Auto-generated method stub
-//			Intent intent = new Intent("com.tobacco.pos.activity.SelectTimeRange");
-//			startActivityForResult(intent, GET_TIME);
-//		}
-//	};
-	
-	private OnFocusChangeListener lisener = new OnFocusChangeListener(){
-		public void onFocusChange(View v, boolean hasFocus) {
-			// TODO Auto-generated method stub
-			if(hasFocus == true){
-				v.setBackgroundColor(Color.RED);
-			}else{
-				v.setBackgroundColor(Color.BLACK);
-			}
-		}
-	};
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
@@ -284,11 +200,6 @@ public class ConsumeSelect extends Activity{
 		}
 		else 
 			return false;
-//		Log.i("SearchCondition", "ConsumeSelect2.onTouchEvent()");
-//		goodsList = handler.getPage((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount(), pageModel.getRowsCount());
-//		showConsumeGoods();
-//		return super.onTouchEvent(event);
 	}
-	
 	
 }

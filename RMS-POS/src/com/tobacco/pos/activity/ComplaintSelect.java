@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -37,8 +39,9 @@ import com.tobacco.pos.util.SearchCondition;
 public class ComplaintSelect extends Activity{
 	private static final String TAG = "ComplaintSelect";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;
-	private static final int MENU_SHOW_ALL = Menu.FIRST+1;
-	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+2;
+	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;
+	private static final int MENU_SHOW_ALL = Menu.FIRST+2;
+	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+3;
 	
 	private ComplaintHandler handler = new ComplaintHandler(this);
 	ArrayList<ComplaintModel> goodsList = new ArrayList<ComplaintModel>();
@@ -64,42 +67,41 @@ public class ComplaintSelect extends Activity{
     	
     	search = (SearchCondition)findViewById(R.id.complaintSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
-		
-//		showConsumeGoods();
+
 	}
 	
 	protected void showComplaintGoods(){	
 		TableLayout table = (TableLayout)findViewById(R.id.complaintSelectTable);
 		table.removeViews(1, table.getChildCount()-1);
 		Log.i(TAG, "table.removeViews");
-		
+		int i = 0;
 		for(final ComplaintModel goods : goodsList){
 
-			TextView goodsName = new TextView(ComplaintSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView customerName = new TextView(ComplaintSelect.this,null,R.style.TextViewfillWrapSmallStyle);		
-			TextView timeText = new TextView(ComplaintSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView operator = new TextView(ComplaintSelect.this,null,R.style.TextViewfillWrapSmallStyle);
-			TextView contentText = new TextView(ComplaintSelect.this,null,R.style.TextViewfillWrapSmallStyle);
+			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_five,null);  
+			
+			TextView goodsIndex = (TextView)row.findViewById(R.id.text_five1);		
+			TextView goodsName = (TextView)row.findViewById(R.id.text_five2);
+			TextView customerName = (TextView)row.findViewById(R.id.text_five3);
+			TextView timeText = (TextView)row.findViewById(R.id.text_five4);
+			TextView operator = (TextView)row.findViewById(R.id.text_five5);
 
-			setMarquee(contentText);
-		
+			goodsIndex.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));	
 			goodsName.setText(goods.getGoodsName());
 			customerName.setText(goods.getCustomer());
 			String time = DateTool.formatDateToString(goods.getCreateDate());
 			timeText.setText(time.substring(0, time.length()-3));
 			operator.setText(goods.getOperator());
-			contentText.setText(goods.getContent());			
-								
+													
 			table = (TableLayout)findViewById(R.id.complaintSelectTable);		
-			TableRow row = new TableRow(ComplaintSelect.this);
 			row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
 				public void onCreateContextMenu(ContextMenu menu, View v,
 						ContextMenuInfo menuInfo) {
 					// TODO Auto-generated method stub
-					//onCreateContextMenu(menu, v, menuInfo);
 					menu.setHeaderTitle("商品可选菜单");
 					menu.add(0, MENU_SHOW_GOODS_DETAIL, 0, "商品详细");
+					menu.add(0, MENU_SHOW_COMMENT, 1, "投诉原因");
 					menu.findItem(MENU_SHOW_GOODS_DETAIL).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 
 						public boolean onMenuItemClick(MenuItem item) {
@@ -111,16 +113,20 @@ public class ComplaintSelect extends Activity{
 						}
 						
 					});
+					menu.findItem(MENU_SHOW_COMMENT).setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+						public boolean onMenuItemClick(MenuItem item) {
+							// TODO Auto-generated method stub
+							new AlertDialog.Builder(ComplaintSelect.this)
+							.setTitle("投诉原因")
+							.setMessage(goods.getContent()).show();
+							return true;
+						}
+						
+					});
 				}	
 				
 			});
-		
-			row.addView(goodsName, 0);
-			row.addView(customerName, 1);
-			row.addView(timeText, 2);
-			row.addView(contentText,3);
-			row.addView(operator, 4);
-			
 			table.addView(row);
 		}
 	}
@@ -173,27 +179,6 @@ public class ComplaintSelect extends Activity{
 		handler = null;
 		goodsList.clear();
 	}
-	
-	protected void setMarquee(TextView view){
-		view.setEllipsize(TruncateAt.MARQUEE);
-		view.setMarqueeRepeatLimit(-1);
-		view.setSingleLine(true);
-		view.setFocusable(true);
-		view.setOnFocusChangeListener(lisener);
-//		view.setGravity(Gravity.CENTER);
-	}
-	
-	
-	private OnFocusChangeListener lisener = new OnFocusChangeListener(){
-		public void onFocusChange(View v, boolean hasFocus) {
-			// TODO Auto-generated method stub
-			if(hasFocus == true){
-				v.setBackgroundColor(Color.RED);
-			}else{
-				v.setBackgroundColor(Color.BLACK);
-			}
-		}
-	};
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {

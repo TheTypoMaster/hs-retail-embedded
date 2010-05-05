@@ -1,113 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<LinearLayout android:layout_gravity="center"
-		android:orientation="vertical" android:layout_width="wrap_content"
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<TableLayout android:layout_width="wrap_content"
+		<TableLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
-			<!-- 
-			<TextView android:text="VIP :"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
-				</TextView>
-				<EditText android:id="@+id/returnInsertEditTextVIP"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
-					android:enabled="false"
-					android:hint="若为会员，不为空">
-				</EditText>
-			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
-				<TextView android:text="       " 
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
-				</TextView>
-				<CheckBox 
-					android:id="@+id/returnInsertCheckBox"
-					android:text="是否为VIP用户"
-					android:checked="false">
-				</CheckBox>
-			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
-			 -->
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginTop="50sp">
-				
-				
-				
+			
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="退货商品:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/returnInsertEditTextBarcode"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:hint="不能为空">
 				</EditText>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView android:text="退货数量:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
 				<EditText android:id="@+id/returnInsertEditTextNumber"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:width="250sp"
-					android:singleLine="true"
+					style="@style/DialogEditTextStyle"
 					android:hint="默认为１">
 				</EditText>
 			</TableRow>
-			<TableRow android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip">
+			<TableRow style="@style/DialogTableRowStyle">
 				<TextView
 					android:text="退货理由:"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" 				
-					android:layout_marginRight="10dip">
+					style="@style/DialogTextViewStyle">
 				</TextView>
-				<EditText android:id="@+id/returnInsertEditTextContent"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" 
-					android:width="250sp"
-					android:lines="5"
+				<EditText 
+					android:id="@+id/returnInsertEditTextContent"
+					style="@style/DialogEditTextMultiLinesStyle"
 					android:hint="不超过２５５个字符">
 				</EditText>
 			</TableRow>
 		</TableLayout>
 		
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<Button android:text="确定" android:id="@+id/returnInsertButtonConfirm"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="80dip">
+		<TableRow style="@style/DialogTableRowStyle">
+			<TextView
+				style="@style/DialogEmptyTextViewStyle"
+				android:layout_weight="1">
+			</TextView>
+			<Button android:id="@+id/returnInsertButtonConfirm"
+				android:text="确定" 
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
-			<Button android:text="取消" android:id="@+id/returnInsertButtonCancel"
-				android:layout_width="80dip"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="60sp">
+			<Button android:id="@+id/returnInsertButtonCancel"
+				android:text="取消" 
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
 			</Button>
 		</TableRow>
 	</LinearLayout>

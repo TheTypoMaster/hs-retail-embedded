@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-  <ScrollView android:orientation="vertical"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TableLayout android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:id="@+id/returnInsertTable">
-					<TableRow android:layout_width="wrap_content"
-						android:layout_height="wrap_content">
-						<!-- <TextView
-          android:text="编号"
-		  android:paddingLeft="30dip"
-		  android:layout_marginLeft="20dip"
-		  style="@style/listItemStyle" /> -->
-    	
-        <TextView
-          android:text="商品"
-		  android:layout_marginRight="75dip"
-		  style="@style/listItemTextViewStyle" />
-        <TextView
-          android:text="单位"
-		  android:layout_marginRight="25dip"
-		  style="@style/listItemTextViewStyle" />     
-		<TextView
-          android:text="数量"
-		  android:layout_marginRight="25dip"
-		  style="@style/listItemTextViewStyle" />
-		<TextView
-          android:text="进价"
-		  style="@style/listItemTextViewStyle" 
-		  android:layout_marginRight="35dip"/>	
-		<TextView
-          android:text="退货理由"	  
-		  style="@style/listItemTextViewStyle" />			
-					</TableRow>
-				</TableLayout>
-			</ScrollView>
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<ScrollView android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/returnInsertTable">
+			<TableRow android:layout_width="fill_parent"
+				android:layout_height="wrap_content"> 	
+		        <TextView
+		          android:text="商品名称"
+		          android:layout_weight="1"
+		          android:layout_marginLeft="20sp"
+				  style="@style/TextViewTitleStyle"/>
+		        <TextView
+		          android:text="单位"
+		          android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+		        <TextView
+		          android:text="数量"
+		          android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+				<TextView
+		          android:text="进价"
+		          android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+				<TextView
+		          android:text="退货理由"
+		          android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
 </LinearLayout>

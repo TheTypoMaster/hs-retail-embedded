@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -107,14 +108,6 @@ public class ConsumeInsert extends Activity{
 			}
 			return true;
 		case MENU_CONFIRM:
-//			for(ConsumeModel goods : consumeGoods)
-//				handler.insert(goods);
-//			
-//			Toast.makeText(ConsumeInsert.this, "保存成功", Toast.LENGTH_SHORT).show();
-//			state = SAVE_STATE;
-//			TableLayout table = (TableLayout)findViewById(R.id.consumeInsertTable);
-//			table.removeViews(1, table.getChildCount()-1);
-//			onResume();
 			save();
 			return true;
 		}
@@ -145,7 +138,6 @@ public class ConsumeInsert extends Activity{
 				ConsumeModel goods = handler.fillVacancy(barcode, count, comment);
 				
 				addConsumeGoods(goods);
-//				showConsumeGoods(barcode,count,comment);
 				state = UNSAVE_STATE;
 			}
 		}
@@ -167,15 +159,16 @@ public class ConsumeInsert extends Activity{
 	}
 	
 	protected void showConsumeGoods(ConsumeModel goods){
+		
+		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
+		final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_five,null);  
+		
+		TextView name = (TextView)row.findViewById(R.id.text_five1);		
+		TextView unit = (TextView)row.findViewById(R.id.text_five2);
+		TextView number = (TextView)row.findViewById(R.id.text_five3);
+		TextView price = (TextView)row.findViewById(R.id.text_five4);
+		TextView total = (TextView)row.findViewById(R.id.text_five5);
 
-//		ConsumeModel goods = handler.fillVacancy(barcode, count, comment);
-		
-		TextView name = new TextView(ConsumeInsert.this,null,R.style.TextViewfillWrapSmallStyle);		
-		TextView unit = new TextView(ConsumeInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView number = new TextView(ConsumeInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView price = new TextView(ConsumeInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		TextView total = new TextView(ConsumeInsert.this,null,R.style.TextViewfillWrapSmallStyle);
-		
 		name.setText(goods.getGoodsName());
 		unit.setText(goods.getUnitName());
 		number.setText(""+goods.getNumber());
@@ -183,7 +176,7 @@ public class ConsumeInsert extends Activity{
 		total.setText(new String().valueOf(goods.getInPrice()*goods.getNumber()));
 		
 		final TableLayout table = (TableLayout)findViewById(R.id.consumeInsertTable);
-		final TableRow row = new TableRow(ConsumeInsert.this);
+//		final TableRow row = new TableRow(ConsumeInsert.this);
 		mapping.put(row, goods);
 		row.setOnCreateContextMenuListener(new OnCreateContextMenuListener(){
 
@@ -211,14 +204,8 @@ public class ConsumeInsert extends Activity{
 			}
 			
 		});
-		
-		row.addView(name, 0);
-		row.addView(unit, 1);
-		row.addView(number, 2);
-		row.addView(price, 3);
-		row.addView(total, 4);
-		table.addView(row);
-		
+
+		table.addView(row);		
 		consumeGoods.add(goods);
 	}
 
