@@ -38,13 +38,13 @@ public class ScanInputService extends Service {
 		public void run() {
 
 			while (true) {
-				Log.e("lqz", "thread sleep.");
-				try {
-					Thread.sleep(sleepTime);
-				} catch (InterruptedException e) {
-
-					e.printStackTrace();
-				}
+//				Log.e("lqz", "thread sleep.");
+//				try {
+//					Thread.sleep(sleepTime);
+//				} catch (InterruptedException e) {
+//
+//					e.printStackTrace();
+//				}
 
 				String tex = brh.getBarcode();
 				if (tex != null) {// 如果有接收到扫描枪的数据

@@ -3,6 +3,7 @@ package com.tobacco.pos.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.handler.ComplaintHandler;
+import com.tobacco.pos.service.ScanInputService;
 import com.tobacco.pos.util.InputCheck;
 
 public class ComplaintInsertDialog extends RMSBaseView{
@@ -53,9 +55,9 @@ public class ComplaintInsertDialog extends RMSBaseView{
 		
 		handler = new ComplaintHandler(this);
 		
-//		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
-//		this.registerReceiver(new ScanReceiver(), filter);
-//		this.startService(new Intent(this,ScanInputService.class));
+		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+		this.registerReceiver(new ScanReceiver(), filter);
+		this.startService(new Intent(this,ScanInputService.class));
 	}
 	
 	protected OnClickListener onClickListener = new OnClickListener(){

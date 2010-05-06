@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -31,6 +32,7 @@ import com.tobacco.pos.entity.ConsumeModel;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
+import com.tobacco.pos.service.ScanInputService;
 import com.tobacco.pos.util.RegexCheck;
 
 public class ConsumeInsert extends RMSBaseView{
@@ -62,9 +64,9 @@ public class ConsumeInsert extends RMSBaseView{
 			intent.setData(Consume.CONTENT_URI);
 		this.setContentView(R.layout.consume_insert);
 		
-//		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
-//		this.registerReceiver(new ScanReceiver(), filter);
-//		this.startService(new Intent(this,ScanInputService.class));
+		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+		this.registerReceiver(new ScanReceiver(), filter);
+		this.startService(new Intent(this,ScanInputService.class));
 	}
 
 	@Override

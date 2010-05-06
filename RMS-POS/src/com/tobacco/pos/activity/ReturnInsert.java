@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -31,6 +32,7 @@ import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.handler.ReturnHandler;
+import com.tobacco.pos.service.ScanInputService;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
@@ -63,9 +65,9 @@ public class ReturnInsert extends RMSBaseView{
 			intent.setData(Return.CONTENT_URI);
 		this.setContentView(R.layout.return_insert);    
 		
-//		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
-//		this.registerReceiver(new ScanReceiver(), filter);
-//		this.startService(new Intent(this,ScanInputService.class));
+		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+		this.registerReceiver(new ScanReceiver(), filter);
+		this.startService(new Intent(this,ScanInputService.class));
 	}
 
 	@Override
