@@ -12,12 +12,17 @@ import com.tobacco.pos.contentProvider.SalesItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.contentProvider.UserInfoCPer;
 import com.tobacco.pos.contentProvider.VIPInfoCPer;
+import com.tobacco.pos.service.ScanInputService;
+import com.tobacco.pos.util.InputCheck;
 import com.tobacco.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -59,10 +64,16 @@ public class PaymentManagement extends Activity {
 	
 	private List<String> barcodeList = new ArrayList<String>();
 	
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.paymentmanagement);
+		
+		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+		this.registerReceiver(new ScanReceiver(), filter);
+		this.startService(new Intent(this,ScanInputService.class));
 		
 		gPriceCPer = new GoodsPriceCPer();
 		gCPer = new GoodsCPer();
@@ -90,6 +101,14 @@ public class PaymentManagement extends Activity {
 					String countStr = sGoodsNumEText.getText().toString();
 					
 					if(barcode.length()>0){//如果有输入条形码
+						String cBCodeResult = InputCheck.checkBarcode(PaymentManagement.this, barcode);
+						if(cBCodeResult!=null)//如果不查找相应的商品
+						{
+							Toast.makeText(PaymentManagement.this, cBCodeResult, Toast.LENGTH_SHORT).show();
+							barcodeEText.setText("");
+						}
+						else
+						{
 						if(countStr == null || countStr.equals(""))
 							;
 						else{//如果有输入数量
@@ -477,7 +496,7 @@ public class PaymentManagement extends Activity {
 								Toast.makeText(PaymentManagement.this, "不正确的数量格式", Toast.LENGTH_SHORT).show();
 								sGoodsNumEText.setText("");
 								
-						
+							}
 							}
 						}
 					}
@@ -510,6 +529,18 @@ public class PaymentManagement extends Activity {
 			Intent intent = new Intent(PaymentManagement.this, Main.class);
 			PaymentManagement.this.startActivity(intent);
 		}
+	}
+	
+	public class ScanReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+ 
+			String barcode = intent.getStringExtra("BARCODE");
+			//new AlertDialog.Builder(PaymentManagement.this).setMessage("barcode:"+barcode).show();		
+			barcodeEText.setText("" + barcode);
+		}
+		
 	}
 
 }
