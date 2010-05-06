@@ -9,8 +9,7 @@ import com.tobacco.R;
 
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
-import com.tobacco.pos.contentProvider.GoodsPriceCPer;
-import com.tobacco.pos.contentProvider.Loginer;
+import com.tobacco.pos.contentProvider.GoodsPriceCPer; 
 import com.tobacco.pos.contentProvider.ManufacturerCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
@@ -45,7 +44,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class PurchaseManagement extends Activity {
-	private Loginer loginer = null;
+ 
 	private GoodsCPer gCPer = null;
 	private PurchaseBillCPer pBillCPer = null;
 	private PurchaseItemCPer pItemCPer = null;
@@ -79,7 +78,7 @@ public class PurchaseManagement extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.purchasemanagement);
 	
-		loginer = new Loginer(PurchaseManagement.this);
+	 
 		gCPer = new GoodsCPer();
 		pBillCPer = new PurchaseBillCPer();
 		pItemCPer = new PurchaseItemCPer();
@@ -349,11 +348,7 @@ public class PurchaseManagement extends Activity {
 	protected void onStop() {
 		super.onPause();
 
-		if(loginer.logout(userName, loginer.getWritableDatabase())){
-			Intent intent = new Intent(PurchaseManagement.this, Main.class);
-			PurchaseManagement.this.startActivity(intent);		
-		
-		}
+		 
 	}
 
 

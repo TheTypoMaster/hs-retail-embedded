@@ -1,6 +1,5 @@
 package com.tobacco.pos.activity;
-
-import android.app.Activity;
+ 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,14 +11,14 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.tobacco.R;
-import com.tobacco.pos.contentProvider.Loginer;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.handler.InventoryBillHandler;
 
-public class Main extends Activity {
+public class Main extends RMSBaseView {
 
 	private String[] saleFunctions = {"收银管理","溢耗管理","投诉管理","退货管理"};
 	private String[] adminFunctions = {"类别管理","进货管理","报表功能","库存管理"};
-	private Loginer loginer = null;
+	 
 	private int state;
 	private InventoryBillHandler inventoryHandler;
 	
@@ -48,7 +47,7 @@ public class Main extends Activity {
 
 	public OnItemClickListener listener = new OnItemClickListener(){
 		
-		@Override
+		 
 		public void onItemClick(AdapterView<?> list, View view, int position,
 				long id) {
 			// TODO Auto-generated method stub
@@ -62,21 +61,13 @@ public class Main extends Activity {
 					if(state == InventoryBillHandler.STATE_PAUSE){
 						new AlertDialog.Builder(Main.this)
 						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
-					}else{
-						loginer = new Loginer(Main.this);
-						userName = loginer.verifyIsSBOnline(loginer.getReadableDatabase());
-						if(userName == null)
-						{
-							intent = new Intent(Main.this, Login.class);
-							intent.putExtra("purpose", "PaymentManagement");
-							startActivity(intent);
-						}
-						else
-						{
-							intent = new Intent(Main.this, PaymentManagement.class);
-							intent.putExtra("userName", userName);
-							startActivity(intent);
-						}
+					}else{// 开始付款管理
+						String screenName = Main.this.currentUserBO.getScreenName();
+						intent = new Intent(Main.this, PaymentManagement.class);
+						intent.putExtra("userName", screenName);
+				
+						startActivity(intent);
+
 					}
 					break;
 				case 1:
@@ -88,7 +79,7 @@ public class Main extends Activity {
 						.setTitle("选择功能")
 						.setItems(R.array.select_consume_function_items, new DialogInterface.OnClickListener(){
 		
-							@Override
+						 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								Intent intent = null;
@@ -110,7 +101,7 @@ public class Main extends Activity {
 					.setTitle("选择功能")
 					.setItems(R.array.select_complaint_function_items, new DialogInterface.OnClickListener(){
 	
-						@Override
+					 
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
 							Intent intent = null;
@@ -134,7 +125,7 @@ public class Main extends Activity {
 						.setTitle("选择功能")
 						.setItems(R.array.select_return_function_items, new DialogInterface.OnClickListener(){
 		
-							@Override
+						 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								Intent intent = null;
@@ -166,20 +157,13 @@ public class Main extends Activity {
 					if(state == InventoryBillHandler.STATE_PAUSE){
 						new AlertDialog.Builder(Main.this)
 						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
-					}else{
-						loginer = new Loginer(Main.this);
-						userName = loginer.verify(loginer.getReadableDatabase());
-						if (userName != null) {
-							intent = new Intent(Main.this,
-									PurchaseManagement.class);
-							intent.putExtra("userName", userName);
-							startActivity(intent);
-						} else {
-							intent = new Intent(Main.this, Login.class);
-							intent.putExtra("purpose", "PurchaseManagement");
-					
-							startActivity(intent);
-						}
+					}else{//开始进货管理
+						String screenName = Main.this.currentUserBO.getScreenName();
+						intent = new Intent(Main.this, PurchaseManagement.class);
+						intent.putExtra("userName", screenName);
+				
+						startActivity(intent);
+						
 					}			
 					break;
 				case 2:
@@ -202,7 +186,7 @@ public class Main extends Activity {
 					.setTitle("选择功能")
 					.setItems(R.array.select_inventory_function_items, new DialogInterface.OnClickListener(){
 
-						@Override
+					 
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
 							Intent intent = null;

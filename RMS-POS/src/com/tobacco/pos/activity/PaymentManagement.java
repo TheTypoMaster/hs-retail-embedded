@@ -3,10 +3,10 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
-import com.tobacco.pos.contentProvider.GoodsPriceCPer;
-import com.tobacco.pos.contentProvider.Loginer;
+import com.tobacco.pos.contentProvider.GoodsPriceCPer; 
 import com.tobacco.pos.contentProvider.SalesBillCPer;
 import com.tobacco.pos.contentProvider.SalesItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
@@ -16,7 +16,6 @@ import com.tobacco.pos.service.ScanInputService;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.R;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,9 +35,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PaymentManagement extends Activity {
+public class PaymentManagement extends RMSBaseView {
 	
-	private Loginer loginer = null;
+	 
 	private GoodsPriceCPer gPriceCPer = null;
 	private GoodsCPer gCPer = null;
 	private UnitCPer unitCPer = null;
@@ -523,12 +522,7 @@ public class PaymentManagement extends Activity {
 	protected void onPause() {
 		super.onPause();
 
-		loginer = new Loginer(PaymentManagement.this);
-		if (loginer.logout(userName, loginer.getWritableDatabase()))
-		{
-			Intent intent = new Intent(PaymentManagement.this, Main.class);
-			PaymentManagement.this.startActivity(intent);
-		}
+		
 	}
 	
 	public class ScanReceiver extends BroadcastReceiver{
