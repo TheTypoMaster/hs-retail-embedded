@@ -158,7 +158,7 @@ public class ConsumeInsert extends RMSBaseView{
 			{
 				exits = true;
 				preGoods.setNumber(preGoods.getNumber()+goods.getNumber());
-				((TextView)row.getChildAt(2)).setText(""+preGoods.getNumber());
+				((TextView)row.getChildAt(3)).setText(""+preGoods.getNumber());
 			}
 		}
 		if(!exits)

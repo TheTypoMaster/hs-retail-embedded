@@ -4,12 +4,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.DateTool;
 
 public class ReturnModel extends BaseModel {
 
+	private static String TAG = "ReturnModel";
+	
 	private int id;
 	
 	private String operator;
@@ -161,5 +166,46 @@ public class ReturnModel extends BaseModel {
 		values.put(Return.OPERATOR,operator);
 		values.put(Return.VIP_ID,customerId);
 		return values;
+	}
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "writeToParcel()");
+		dest.writeString(content);
+		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeInt(goodsPriceId);
+		dest.writeInt(number);
+		dest.writeString(operator);
+		dest.writeInt(customerId);
+	}
+	
+	public static final Parcelable.Creator<ReturnModel> CREATOR = new Parcelable.Creator<ReturnModel>() {
+		
+		public ReturnModel createFromParcel(Parcel in) {
+			Log.i(TAG, "createFromParcel()");
+			return new ReturnModel(in);
+		}
+
+		public ReturnModel[] newArray(int size) {
+			return new ReturnModel[size];
+		}
+	};
+	
+	private ReturnModel(Parcel in) {
+		Log.i(TAG, "ReturnModel()");
+		
+		content = in.readString();
+		createDate = DateTool.formatStringToDate(in.readString());
+		goodsPriceId = in.readInt();
+		number = in.readInt();
+		operator = in.readString();
+		customerId = in.readInt();
 	}
 }

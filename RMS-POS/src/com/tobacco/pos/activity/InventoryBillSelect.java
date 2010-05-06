@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +21,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.entity.InventoryBillFull;
 import com.tobacco.pos.entity.InventoryBillModel;
 import com.tobacco.pos.entity.AllTables.InventoryBill;
@@ -32,7 +33,7 @@ import com.tobacco.pos.util.DateTool;
 import com.tobacco.pos.util.PageModel;
 import com.tobacco.pos.util.SearchCondition;
 
-public class InventoryBillSelect extends Activity{
+public class InventoryBillSelect extends RMSBaseView{
 
 	private static final String TAG = "InventoryBillSelect";
 	private static final int MENU_SHOW_BILL_DETAIL = Menu.FIRST;
@@ -52,6 +53,13 @@ public class InventoryBillSelect extends Activity{
 		Intent intent = getIntent();
 		if(intent.getData()==null)
 			intent.setData(InventoryBill.CONTENT_URI);
+		
+		setActivityPrivList(new int[] { BCodeConst.USER_PRIV_ADMIN,
+				BCodeConst.USER_PRIV_OPERATOR, 0 });
+		if (!checkActivityPriv()) {
+			openPrivViolationDialog();
+
+		}
 		
 		String timeTable = InventoryBillFull.CREATE_DATE;
 		HashMap<Integer,Integer> mappingType = new HashMap<Integer,Integer>();

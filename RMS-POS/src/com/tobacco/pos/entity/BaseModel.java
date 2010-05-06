@@ -1,9 +1,14 @@
 package com.tobacco.pos.entity;
 
 import java.util.Date;
+import com.tobacco.pos.util.DateTool;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
-public class BaseModel {
+public class BaseModel implements Parcelable{
 
+	protected static String TAG = "BaseModule";
 	/**
 	 * the create time of this object.
 	 */
@@ -45,6 +50,39 @@ public class BaseModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "writeToParcel()");
+		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(comment);
+	}
 	
+	public static final Parcelable.Creator<BaseModel> CREATOR = new Parcelable.Creator<BaseModel>() {
+		
+		public BaseModel createFromParcel(Parcel in) {
+			Log.i(TAG, "createFromParcel()");
+			return new BaseModel(in);
+		}
+
+		public BaseModel[] newArray(int size) {
+			return new BaseModel[size];
+		}
+	};
+	
+	private BaseModel(Parcel in) {
+		
+		Log.i(TAG, "BaseModel()");
+		createDate = DateTool.formatStringToDate(in.readString());
+		comment = in.readString();
+
+	}
 	
 }

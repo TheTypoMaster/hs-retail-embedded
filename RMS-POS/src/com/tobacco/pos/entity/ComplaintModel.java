@@ -4,12 +4,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
 import com.tobacco.pos.entity.AllTables.Complaint;
 import com.tobacco.pos.util.DateTool;
 
 public class ComplaintModel extends BaseModel {
 
+	private static String TAG = "ComplaintModel";
+	
 	private int id;
 	
 	private String operator;
@@ -125,6 +130,46 @@ public class ComplaintModel extends BaseModel {
 		values.put(Complaint.OPERATOR,operator);
 		values.put(Complaint.VIP_ID,customerId);
 		return values;
+	}
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "writeToParcel()");
+		dest.writeString(content);
+		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeInt(goodsPriceId);
+		dest.writeString(operator);
+		dest.writeInt(customerId);
+	}
+	
+	public static final Parcelable.Creator<ComplaintModel> CREATOR = new Parcelable.Creator<ComplaintModel>() {
+		
+		public ComplaintModel createFromParcel(Parcel in) {
+			Log.i(TAG, "createFromParcel()");
+			return new ComplaintModel(in);
+		}
+
+		public ComplaintModel[] newArray(int size) {
+			return new ComplaintModel[size];
+		}
+	};
+	
+	private ComplaintModel(Parcel in) {
+		Log.i(TAG, "ComplaintModel()");
+		
+		content = in.readString();
+		createDate = DateTool.formatStringToDate(in.readString());
+		goodsPriceId = in.readInt();	
+		operator = in.readString();
+		customerId = in.readInt();
+		
 	}
 	
 }

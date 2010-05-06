@@ -7,9 +7,13 @@ import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.util.DateTool;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
 public class ConsumeModel extends BaseModel{
 	
+	private static String TAG = "ConsumeModel";
 	/**
 	 * the operator's name who deal with this consume goods.
 	 */
@@ -150,6 +154,45 @@ public class ConsumeModel extends BaseModel{
 		return values;
 	}
 	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "writeToParcel()");
+		dest.writeInt(number);
+		dest.writeInt(goodsPriceId);
+		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(operator);
+		dest.writeInt((type.equals("溢")?1:0));
+		dest.writeString(comment);
+	}
 	
+	public static final Parcelable.Creator<ConsumeModel> CREATOR = new Parcelable.Creator<ConsumeModel>() {
+		
+		public ConsumeModel createFromParcel(Parcel in) {
+			Log.i(TAG, "createFromParcel()");
+			return new ConsumeModel(in);
+		}
+
+		public ConsumeModel[] newArray(int size) {
+			return new ConsumeModel[size];
+		}
+	};
+	
+	private ConsumeModel(Parcel in) {
+		Log.i(TAG, "ConsumeModel()");
+		
+		number = in.readInt();
+		goodsPriceId = in.readInt();
+		createDate = DateTool.formatStringToDate(in.readString());
+		operator = in.readString();
+		type = (in.readInt()==1)?"溢":"耗";
+		comment = in.readString();
+	}
 
 }
