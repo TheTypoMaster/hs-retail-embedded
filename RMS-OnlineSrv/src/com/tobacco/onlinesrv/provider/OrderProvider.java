@@ -128,7 +128,7 @@ public class OrderProvider extends ContentProvider {
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
 							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
-							+ " VALUES ('O-1','中华',10,'2010-3-10','包','450','1','中华好烟','0','1','0')");
+							+ " VALUES ('O-1','中华',10,'2010-3-10','包','450','1','中华好烟','1','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
@@ -138,7 +138,7 @@ public class OrderProvider extends ContentProvider {
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
 							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
-							+ " VALUES ('O-3','中华',10,'2010-3-12','条','450','1','好烟','0','1','0')");
+							+ " VALUES ('O-3','中华',10,'2010-3-12','条','450','1','好烟','1','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME

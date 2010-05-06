@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,8 +48,8 @@ public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号", "商品名称", "规格" };
 	private String from[] = new String[] { "count", "orderId", "brandCode",
-			"brandCount", "amount", "format",  "vip","statusName", "date","agency","recieveName",
-			 "desc" };
+			"brandCount", "amount", "format", "vip", "statusName", "date",
+			"agency", "recieveName", "desc" };
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -64,7 +65,6 @@ public class QueryOrderActivity extends Activity {
 	private TextView currentPageTxt;
 	private TextView actionTxt;
 	private String selection = "";
-	private HashMap<Integer, String> queryPreOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, String> queryOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, Uri> uriMap = new HashMap<Integer, Uri>();
 	private List<HashMap<String, String>> dataMaps = null;
@@ -80,49 +80,6 @@ public class QueryOrderActivity extends Activity {
 	private int listCount;
 	private int listPosition;
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case 0:
-			mYear = Calendar.getInstance().get(Calendar.YEAR);
-			mMonth = Calendar.getInstance().get(Calendar.MONTH);
-			mDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-					mDay);
-		}
-
-		return null;
-	}
-
-	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-		public void onDateSet(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			setDateFiled();
-		}
-
-		private void setDateFiled() {
-			if (isStartEmpty) {
-				startDateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
-				isStartEmpty = false;
-			}
-			if (isEndEmpty) {
-				endDateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
-				isEndEmpty = false;
-			}
-		}
-	};
-
-	public Uri getCurrentOrder() {
-		return currentOrder;
-	}
-
-	public void setCurrentOrder(Uri currentOrder) {
-		this.currentOrder = currentOrder;
-	}
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -131,6 +88,55 @@ public class QueryOrderActivity extends Activity {
 		initView();
 		setListView();
 		setListeners();
+	}
+
+	private void initMaps() {
+		queryOrderMap.put(0, Order.KEY_ORDER_ID);
+		queryOrderMap.put(1, Order.KEY_BRANDCODE);
+		queryOrderMap.put(2, Order.KEY_FORMAT);
+
+		uriMap.put(0, PreOrder.CONTENT_URI);
+		uriMap.put(1, Order.CONTENT_URI);
+	}
+
+	private void initView() {
+		orderTypeSp = (Spinner) this.findViewById(R.id.Spinner01);
+		orderTypeSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, orderType)));
+		queryTypeSp = (Spinner) this.findViewById(R.id.Spinner02);
+		queryTypeSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, queryType)));
+		queryEdt = (EditText) this.findViewById(R.id.queryText);
+		startDateEdt = (EditText) this.findViewById(R.id.startDateText);
+		endDateEdt = (EditText) this.findViewById(R.id.endDateText);
+		okBtn = (Button) this.findViewById(R.id.okButton);
+		homeBtn = (Button) this.findViewById(R.id.homePage);
+		lastBtn = (Button) this.findViewById(R.id.lastPage);
+		nextBtn = (Button) this.findViewById(R.id.nextPage);
+		backBtn = (Button) this.findViewById(R.id.backBtn);
+		bottomBtn = (Button) this.findViewById(R.id.bottomPage);
+		currentPageTxt = (TextView) this.findViewById(R.id.currentPage);
+		listView = (ListView) this.findViewById(R.id.ListView01);
+		actionTxt = (TextView) this.findViewById(R.id.actionItem);
+	}
+
+	private void setListView() {
+		listView.setTextFilterEnabled(true);
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> va, View v,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				TextView idText = (TextView) v.findViewById(R.id.item1);
+				HashMap<String, String> map = dataMaps.get(Integer
+						.parseInt(idText.getText().toString()) - 1);
+
+				Intent intent = new Intent();
+				intent.setAction("android.intent.action.OrderDetail");
+				putIntentData(intent, map);
+				return true;
+			}
+		});
 
 	}
 
@@ -140,7 +146,7 @@ public class QueryOrderActivity extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
-				if(position==0)
+				if (position == 0)
 					actionTxt.setVisibility(View.INVISIBLE);
 				else
 					actionTxt.setVisibility(View.VISIBLE);
@@ -173,15 +179,9 @@ public class QueryOrderActivity extends Activity {
 		});
 		okBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				int orderType = orderTypeSp.getSelectedItemPosition();
 				int queryType = queryTypeSp.getSelectedItemPosition();
-				if (orderType == 0) {
-					selection = queryPreOrderMap.get(queryType) + "=\""
-							+ queryEdt.getText().toString() + "\"";
-				} else {
-					selection = queryOrderMap.get(queryType) + "=\""
-							+ queryEdt.getText().toString() + "\"";
-				}
+				selection = queryOrderMap.get(queryType) + "=\""
+						+ queryEdt.getText().toString() + "\"";
 				if (!startDateEdt.getText().toString().equals("开始时间")
 						&& !endDateEdt.getText().toString().equals("结束时间"))
 					selection += " and date between " + "\""
@@ -284,7 +284,8 @@ public class QueryOrderActivity extends Activity {
 		inflater.inflate(R.menu.option_menu, menu);
 		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
 		menu.findItem(R.id.menuDel).setIcon(android.R.drawable.ic_menu_delete);
-		menu.findItem(R.id.menuRecieve).setIcon(android.R.drawable.ic_menu_agenda);
+		menu.findItem(R.id.menuRecieve).setIcon(
+				android.R.drawable.ic_menu_agenda);
 		return true;
 	}
 
@@ -300,68 +301,28 @@ public class QueryOrderActivity extends Activity {
 		int location = (pageNum - 1) * pageCount + listPosition;
 		switch (item.getItemId()) {
 		case R.id.menuEdit:
-			HashMap<String, String> map = dataMaps.get(location);
-			Intent intent = new Intent();
-			intent.setAction("android.intent.action.EditOrder");
-			intent.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
-					+ "");
-			putIntentData(intent, map);
+			actionForEditMenuItem(location);
 			break;
 		case R.id.menuRecieve:
+			TextView recieveText = (TextView) listView.getChildAt(listPosition)
+					.findViewById(R.id.actionItem);
+			TextView statusText = (TextView) listView.getChildAt(listPosition)
+					.findViewById(R.id.statusItem);
+			actionForRecieveMenuItem(recieveText.getText().toString(), idStr,
+					statusText.getText().toString());
 			break;
 		case R.id.menuDel:
-			int number = getContentResolver().delete(getCurrentOrder(),
-					"id = " + idStr, null);
-			if (number != 0) {
-				Toast.makeText(QueryOrderActivity.this, "删除成功",
-						Toast.LENGTH_SHORT).show();
-				fillDataMaps(getCurrentOrder(), null);
-				setListAdapter(getFillMaps());
-			} else
-				Toast.makeText(QueryOrderActivity.this, "删除失败",
-						Toast.LENGTH_SHORT).show();
+			actionForDelMenuItem(idStr);
 			break;
 		}
 		return true;
 	}
 
-	private void initMaps() {
-		queryPreOrderMap.put(0, PreOrder.KEY_PREORDER_ID);
-		queryPreOrderMap.put(1, PreOrder.KEY_BRANDCODE);
-		queryPreOrderMap.put(2, PreOrder.KEY_FORMAT);
-
-		queryOrderMap.put(0, Order.KEY_ORDER_ID);
-		queryOrderMap.put(1, Order.KEY_BRANDCODE);
-		queryOrderMap.put(2, Order.KEY_FORMAT);
-
-		uriMap.put(0, PreOrder.CONTENT_URI);
-		uriMap.put(1, Order.CONTENT_URI);
-	}
-
-	private void setListView() {
-		listView.setTextFilterEnabled(true);
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			public boolean onItemLongClick(AdapterView<?> va, View v,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				TextView idText = (TextView) v.findViewById(R.id.item1);
-				HashMap<String, String> map = dataMaps.get(Integer
-						.parseInt(idText.getText().toString()) - 1);
-
-				Intent intent = new Intent();
-				intent.setAction("android.intent.action.OrderDetail");
-				putIntentData(intent, map);
-				return true;
-			}
-		});
-
-	}
-
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
 		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.nameItem,
-				R.id.countItem, R.id.amountItem, R.id.formatItem,R.id.vipItem,
-				R.id.statusItem, R.id.dateItem,R.id.agencyItem,R.id.actionItem};
+				R.id.countItem, R.id.amountItem, R.id.formatItem, R.id.vipItem,
+				R.id.statusItem, R.id.dateItem, R.id.agencyItem,
+				R.id.actionItem };
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
@@ -379,27 +340,6 @@ public class QueryOrderActivity extends Activity {
 			nextBtn.setEnabled(false);
 			bottomBtn.setEnabled(false);
 		}
-	}
-
-	private void initView() {
-		orderTypeSp = (Spinner) this.findViewById(R.id.Spinner01);
-		orderTypeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, orderType)));
-		queryTypeSp = (Spinner) this.findViewById(R.id.Spinner02);
-		queryTypeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, queryType)));
-		queryEdt = (EditText) this.findViewById(R.id.queryText);
-		startDateEdt = (EditText) this.findViewById(R.id.startDateText);
-		endDateEdt = (EditText) this.findViewById(R.id.endDateText);
-		okBtn = (Button) this.findViewById(R.id.okButton);
-		homeBtn = (Button) this.findViewById(R.id.homePage);
-		lastBtn = (Button) this.findViewById(R.id.lastPage);
-		nextBtn = (Button) this.findViewById(R.id.nextPage);
-		backBtn = (Button) this.findViewById(R.id.backBtn);
-		bottomBtn = (Button) this.findViewById(R.id.bottomPage);
-		currentPageTxt = (TextView) this.findViewById(R.id.currentPage);
-		listView = (ListView) this.findViewById(R.id.ListView01);
-		actionTxt = (TextView) this.findViewById(R.id.actionItem);
 	}
 
 	private void fillDataMaps(Uri uri, String selection) {
@@ -421,17 +361,16 @@ public class QueryOrderActivity extends Activity {
 			do {
 				HashMap<String, String> firstMap = new HashMap<String, String>();
 				putOrderMap(cursor, firstMap);
-				if(uri==Order.CONTENT_URI)
-				{
-					String recieve = cursor.getString(FieldSupport.RECIEVE_COLUMN);
-					firstMap.put("recieve",recieve);
-					if(recieve.equals("0"))
-					{
-						firstMap.put("recieveName","否");
-					}else
-						firstMap.put("recieveName","是");
+				if (uri == Order.CONTENT_URI) {
+					String recieve = cursor
+							.getString(FieldSupport.RECIEVE_COLUMN);
+					firstMap.put("recieve", recieve);
+					if (recieve.equals("0")) {
+						firstMap.put("recieveName", "否");
+					} else
+						firstMap.put("recieveName", "是");
 				}
-					
+
 				dataMaps.add(firstMap);
 				listCount++;
 			} while (cursor.moveToNext());
@@ -495,5 +434,97 @@ public class QueryOrderActivity extends Activity {
 		else
 			map.put("statusName", "已提交");
 
+	}
+
+	private void actionForEditMenuItem(int location) {
+		HashMap<String, String> map = dataMaps.get(location);
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.EditOrder");
+		intent
+				.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
+						+ "");
+		putIntentData(intent, map);
+	}
+
+	private void actionForRecieveMenuItem(String recieveStr, String idStr,
+			String statusStr) {
+		if (getCurrentOrder() == Order.CONTENT_URI) {
+			if (statusStr.equals("已提交")) {
+				if (recieveStr.equals("否")) {
+					ContentValues values = new ContentValues();
+					values.put(Order.KEY_RECIEVE, "1");
+					int num = getContentResolver().update(Order.CONTENT_URI,
+							values, "id = " + idStr, null);
+					if (num != 0) {
+						Toast.makeText(QueryOrderActivity.this, "该订单确认收货",
+								Toast.LENGTH_SHORT).show();
+						fillDataMaps(getCurrentOrder(), null);
+						setListAdapter(getFillMaps());
+					}
+				} else
+					Toast.makeText(QueryOrderActivity.this, "该订单已经收货",
+							Toast.LENGTH_SHORT).show();
+			} else
+				Toast.makeText(QueryOrderActivity.this, "该订单还未提交",
+						Toast.LENGTH_SHORT).show();
+		} else
+			Toast.makeText(QueryOrderActivity.this, "此功能不支持预订单",
+					Toast.LENGTH_SHORT).show();
+	}
+
+	private void actionForDelMenuItem(String idStr) {
+		int number = getContentResolver().delete(getCurrentOrder(),
+				"id = " + idStr, null);
+		if (number != 0) {
+			Toast.makeText(QueryOrderActivity.this, "删除成功", Toast.LENGTH_SHORT)
+					.show();
+			fillDataMaps(getCurrentOrder(), null);
+			setListAdapter(getFillMaps());
+		} else
+			Toast.makeText(QueryOrderActivity.this, "删除失败", Toast.LENGTH_SHORT)
+					.show();
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 0:
+			mYear = Calendar.getInstance().get(Calendar.YEAR);
+			mMonth = Calendar.getInstance().get(Calendar.MONTH);
+			mDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+					mDay);
+		}
+
+		return null;
+	}
+
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			mYear = year;
+			mMonth = monthOfYear;
+			mDay = dayOfMonth;
+			setDateFiled();
+		}
+
+		private void setDateFiled() {
+			if (isStartEmpty) {
+				startDateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
+				isStartEmpty = false;
+			}
+			if (isEndEmpty) {
+				endDateEdt.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
+				isEndEmpty = false;
+			}
+		}
+	};
+
+	public Uri getCurrentOrder() {
+		return currentOrder;
+	}
+
+	public void setCurrentOrder(Uri currentOrder) {
+		this.currentOrder = currentOrder;
 	}
 }
