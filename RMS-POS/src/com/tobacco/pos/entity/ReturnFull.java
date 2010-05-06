@@ -19,21 +19,21 @@ public class ReturnFull implements BaseColumns{
 	 * The content:// style URL for this table
 	 */
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/returns_full");
-	public static final String TABLES = "Return,UserInfo,VIPInfo,Goods,GoodsPrice";
+	public static final String TABLES = "Return,VIPInfo,Goods,GoodsPrice";//UserInfo,
 	
 	public static final String append1 = "Return."+Return.GOODS_ID+" = GoodsPrice." + GoodsPrice._ID;
 	public static final String append2 = "GoodsPrice."+GoodsPrice.goodsId+" =Goods."+Goods._ID;
 //	public static final String append3 = "GoodsPrice."+GoodsPrice.unitId+" =Unit."+Unit._ID;
 	public static final String append4 = "Return."+Return.VIP_ID+" =VIPInfo."+VIPInfo._ID;
-	public static final String append5 = "Return."+Return.OPER_ID+" =UserInfo."+UserInfo._ID;
+//	public static final String append5 = "Return."+Return.OPER_ID+" =UserInfo."+UserInfo._ID;
 	
-	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append4+" AND "+append5;
+	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append4;//+" AND "+append5
 
 	/**
 	 * The id of the operator
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String OPER_NAME = "UserInfo."+UserInfo.userName;
+	public static final String OPER_NAME = "Return."+Return.OPERATOR;
 	/**
 	 * The id of the VIP customer
 	 * <p>TypE: INTEGER</>

@@ -144,7 +144,7 @@ public class ConsumeModel extends BaseModel{
 		values.put(Consume.NUMBER,number);
 		values.put(Consume.GOODS,goodsPriceId);
 		values.put(Consume.CREATED_DATE,now);
-//		values.put(Consume.OPERATOR,);
+		values.put(Consume.OPERATOR,operator);
 		values.put(Consume.FLAG,(type.equals("溢")?1:0));
 		values.put(Consume.COMMENT,comment);
 		return values;

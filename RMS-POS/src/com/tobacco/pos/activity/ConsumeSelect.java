@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ConsumeFull;
 import com.tobacco.pos.entity.ConsumeModel;
 import com.tobacco.pos.entity.AllTables.Consume;
@@ -33,15 +33,13 @@ import com.tobacco.pos.util.DateTool;
 import com.tobacco.pos.util.PageModel;
 import com.tobacco.pos.util.SearchCondition;
 
-public class ConsumeSelect extends Activity{
+public class ConsumeSelect extends RMSBaseView{
 
 	private static final String TAG = "ConsumeSelect";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;
 	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;
 	private static final int MENU_SHOW_ALL = Menu.FIRST+2;
 	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+3;
-//	private static final int MENU_TIME_PICKER = Menu.FIRST+1;
-//	private static final int GET_TIME=1;
 	
 	private ConsumeHandler handler = new ConsumeHandler(this);
 	ArrayList<ConsumeModel> goodsList = new ArrayList<ConsumeModel>();

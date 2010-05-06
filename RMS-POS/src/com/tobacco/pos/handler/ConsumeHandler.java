@@ -114,7 +114,7 @@ public class ConsumeHandler {
 		String goodsName = cursor.getString(goodsNameIndex);
 		int unitNameIndex = cursor.getColumnIndex(Unit.name);
 		String unitName = cursor.getString(unitNameIndex);
-		int operNameIndex = cursor.getColumnIndex(UserInfo.userName);
+		int operNameIndex = cursor.getColumnIndex(Consume.OPERATOR);
 		String operName = cursor.getString(operNameIndex);
 		int timeIndex = cursor.getColumnIndex(Consume.CREATED_DATE);
 		String time = cursor.getString(timeIndex);

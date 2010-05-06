@@ -3,12 +3,9 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -19,13 +16,13 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ComplaintFull;
 import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.entity.AllTables.Complaint;
@@ -36,7 +33,7 @@ import com.tobacco.pos.util.DateTool;
 import com.tobacco.pos.util.PageModel;
 import com.tobacco.pos.util.SearchCondition;
 
-public class ComplaintSelect extends Activity{
+public class ComplaintSelect extends RMSBaseView{
 	private static final String TAG = "ComplaintSelect";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;
 	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;

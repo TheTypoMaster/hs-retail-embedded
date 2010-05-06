@@ -10,7 +10,7 @@ import com.tobacco.pos.util.DateTool;
 
 public class InventoryBillModel extends BaseModel {
 
-	private String operName;
+	private String operator;
 	
 	private int iBillId;
 	
@@ -27,16 +27,17 @@ public class InventoryBillModel extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public InventoryBillModel(boolean finished, double result) {
+	public InventoryBillModel(boolean finished, double result,String operator) {
 		super();
 		this.finished = finished;
 		this.result = result;
+		this.operator = operator;
 	}
 
-	public InventoryBillModel(String operName, int iBillId, String iBillNum,
+	public InventoryBillModel(String operator, int iBillId, String iBillNum,
 			boolean finished, double result, Date createDate) {
 		super();
-		this.operName = operName;
+		this.operator = operator;
 		this.iBillId = iBillId;
 		this.iBillNum = iBillNum;
 		this.finished = finished;
@@ -44,12 +45,12 @@ public class InventoryBillModel extends BaseModel {
 		this.createDate = createDate;
 	}
 
-	public String getOperName() {
-		return operName;
+	public String getOperator() {
+		return operator;
 	}
 
-	public void setOperName(String operName) {
-		this.operName = operName;
+	public void setOperator(String operator) {
+		this.operator = operator;
 	}
 
 	public int getiBillId() {
@@ -101,7 +102,7 @@ public class InventoryBillModel extends BaseModel {
 //		values.put(InventoryBill.COMMENT, comment);
 		values.put(InventoryBill.CREATE_DATE, now);
 		values.put(InventoryBill.FINISHED, finished);
-//		values.put(InventoryBill.OPER_ID, value);
+		values.put(InventoryBill.OPERATOR, operator);
 		values.put(InventoryBill.RESULT, result);
 		
 		return values;

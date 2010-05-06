@@ -1,6 +1,5 @@
 package com.tobacco.pos.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +9,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
-public class ReturnInsertDialog extends Activity{
+public class ReturnInsertDialog extends RMSBaseView{
 
 	EditText goodsBarcode ;
 	EditText goodsNumber;

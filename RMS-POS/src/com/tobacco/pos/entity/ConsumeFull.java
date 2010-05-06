@@ -15,20 +15,20 @@ public class ConsumeFull implements BaseColumns {
 	 * The content:// style URL for this table
 	 */
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/consumes_full");
-	public static final String TABLES = "Consume,UserInfo,Unit,Goods,GoodsPrice";
+	public static final String TABLES = "Consume,Unit,Goods,GoodsPrice"; //UserInfo,
 	
 	public static final String append1 = "Consume."+Consume.GOODS+" = GoodsPrice." + GoodsPrice._ID;
 	public static final String append2 = "GoodsPrice."+GoodsPrice.goodsId+" =Goods."+Goods._ID;
 	public static final String append3 = "GoodsPrice."+GoodsPrice.unitId+" =Unit."+Unit._ID;
-	public static final String append4 = "Consume."+Consume.OPERATOR+" =UserInfo."+UserInfo._ID;
+//	public static final String append4 = "Consume."+Consume.OPERATOR+" =UserInfo."+UserInfo._ID;
 	
-	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append3+" AND "+append4;
+	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append3; //+" AND "+append4
 	
 	/**
 	 * The id of the operator
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String OPER_NAME = "UserInfo."+UserInfo.userName;
+	public static final String OPER_NAME = "Consume."+Consume.OPERATOR;
 	/**
 	 * The name of the Unit 
 	 * <p>TypE: TEXT</>

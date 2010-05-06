@@ -129,7 +129,8 @@ public class InventoryBillHandler {
 	public int search(SearchState state){
 		inventoryBillGoods.clear();
 		SearchStrategyFactory factory = SearchStrategyFactory.getInstance();
-		ISearchStrategy strategy = factory.getSearchStrategy(ctx, InventoryBillFull.CONTENT_URI, InventoryBillFull.PROJECTION, state);
+//		ISearchStrategy strategy = factory.getSearchStrategy(ctx, InventoryBillFull.CONTENT_URI, InventoryBillFull.PROJECTION, state);
+		ISearchStrategy strategy = factory.getSearchStrategy(ctx, InventoryBill.CONTENT_URI, InventoryBillFull.PROJECTION, state);
 		Cursor cursor = strategy.searchc();
 		Log.i("TestStrategy", "record count:"+cursor.getCount());
 		if(cursor.getCount()>0){

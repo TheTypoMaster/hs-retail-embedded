@@ -13,40 +13,40 @@ public class InventoryBillFull implements BaseColumns{
 	 * The content:// style URL for this table
 	 */
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/inventoryBills_full");
-	public static final String TABLES = "InventoryBill,UserInfo";
-	public static final String append1 = "InventoryBill."+InventoryBill.OPER_ID+" = UserInfo." + UserInfo._ID;
-	public static final String APPEND_WHERE = append1;
+	public static final String TABLES = "InventoryBill";//,UserInfo
+//	public static final String append1 = "InventoryBill."+InventoryBill.OPERATOR+" = UserInfo." + UserInfo._ID;
+	public static final String APPEND_WHERE = null;
 	
 	/**
 	 * The name of the operator
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String OPER_NAME = "UserInfo."+UserInfo.userName;
+	public static final String OPER_NAME = InventoryBill.OPERATOR; //"InventoryBill."+
 	/**
 	 * The id of the inventory bill.
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String IBILL_ID = "InventoryBill."+InventoryBill._ID;
+	public static final String IBILL_ID = InventoryBill._ID;
 	/**
 	 * The number of the inventory bill.
 	 * <p>TypE: TEXT</>
 	 */
-	public static final String IBILL_NUM = "InventoryBill."+InventoryBill.IBILL_NUM;	
+	public static final String IBILL_NUM = InventoryBill.IBILL_NUM;	
 	/**
 	 * Flag identify whether the inventory bill finished.
 	 * <P>Type: BOOLEAN</P>
 	 */
-	public static final String FINISHED = "InventoryBill."+InventoryBill.FINISHED;	
+	public static final String FINISHED = InventoryBill.FINISHED;	
 	/**
 	 * Inventory result.
 	 * <p>Type: DOUBLE</> 
 	 */
-	public static final String RESULT = "InventoryBill."+InventoryBill.RESULT;
+	public static final String RESULT = InventoryBill.RESULT;
 	/**
 	 * Inventory bill's create time.
 	 * <p>Type: TEXT</>
 	 */
-	public static final String CREATE_DATE = "InventoryBill."+InventoryBill.CREATE_DATE;
+	public static final String CREATE_DATE = InventoryBill.CREATE_DATE;
 
 	/**
 	 * Projection for the selection of InventoryBill.

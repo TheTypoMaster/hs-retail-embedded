@@ -1,11 +1,9 @@
 package com.tobacco.pos.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,14 +14,12 @@ import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ComplaintModel;
-import com.tobacco.pos.entity.ConsumeModel;
-import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.util.InputCheck;
-import com.tobacco.pos.util.RegexCheck;
 
-public class ComplaintInsertDialog extends Activity{
+public class ComplaintInsertDialog extends RMSBaseView{
 
 	EditText vipNum ;
 	CheckBox check ;
@@ -87,7 +83,7 @@ public class ComplaintInsertDialog extends Activity{
 			
 			ComplaintModel goods = handler.fillVacancy(goodsBarcode.getText().toString(), 
 					vipNum.getText().toString(), content.getText().toString());
-			
+			goods.setOperator(currentUserBO.getUserName());
 			handler.insert(goods);
 			return true;
 		}

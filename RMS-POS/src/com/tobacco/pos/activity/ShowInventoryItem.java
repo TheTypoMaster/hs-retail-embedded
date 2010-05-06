@@ -2,7 +2,6 @@ package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -18,12 +17,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.InventoryItemModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.InventoryItem;
 import com.tobacco.pos.handler.InventoryItemHandler;
 
-public class ShowInventoryItem extends Activity{
+public class ShowInventoryItem extends RMSBaseView{
 	
 	private static final String TAG = "ShowInventoryItem";
 	private static final int MENU_SHOW_GOODS_DETAIL = Menu.FIRST;

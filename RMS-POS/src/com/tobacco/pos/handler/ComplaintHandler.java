@@ -104,7 +104,7 @@ public class ComplaintHandler {
 		int vipNameIndex = cursor.getColumnIndex(VIPInfo.VIPName);
 		String customer = cursor.getString(vipNameIndex);
 		
-		int operNameIndex = cursor.getColumnIndex(UserInfo.userName);
+		int operNameIndex = cursor.getColumnIndex(Complaint.OPERATOR);
 		String operator = cursor.getString(operNameIndex);
 		
 		int timeIndex = cursor.getColumnIndex(Complaint.CREATE_DATE);

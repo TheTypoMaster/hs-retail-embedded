@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +26,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
-import com.tobacco.pos.entity.ConsumeModel;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
@@ -35,7 +34,7 @@ import com.tobacco.pos.handler.ReturnHandler;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
-public class ReturnInsert extends Activity{
+public class ReturnInsert extends RMSBaseView{
 
 	private static final String TAG = "ReturnInsert";
 	
@@ -147,9 +146,11 @@ public class ReturnInsert extends Activity{
 	}
 	
 	private void save(){
-		for(ReturnModel goods : returnGoods)
+		for(ReturnModel goods : returnGoods){
+			goods.setOperator(currentUserBO.getUserName());
 			handler.insert(goods);
-	
+		}
+			
 		Toast.makeText(ReturnInsert.this, "保存成功", Toast.LENGTH_SHORT).show();
 		state = SAVE_STATE;
 		TableLayout table = (TableLayout)findViewById(R.id.returnInsertTable);

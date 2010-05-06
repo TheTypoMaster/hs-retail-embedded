@@ -64,7 +64,7 @@ public class InventoryBillCPer extends ContentProvider{
 			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
 					+InventoryBill._ID+" INTEGER PRIMARY KEY,"
 					+InventoryBill.IBILL_NUM+" TEXT,"
-					+InventoryBill.OPER_ID+" INTEGER,"
+					+InventoryBill.OPERATOR+" TEXT,"
 					+InventoryBill.CREATE_DATE+" TEXT,"		
 					+InventoryBill.FINISHED+ " BOOLEAN,"
 					+InventoryBill.RESULT+ " DOUBLE,"
@@ -124,8 +124,8 @@ public class InventoryBillCPer extends ContentProvider{
 		if(values.containsKey(InventoryBill.IBILL_NUM)==false){
 			values.put(InventoryBill.IBILL_NUM, "");
 		}
-		if(values.containsKey(InventoryBill.OPER_ID)==false){
-			values.put(InventoryBill.OPER_ID, 1);
+		if(values.containsKey(InventoryBill.OPERATOR)==false){
+			values.put(InventoryBill.OPERATOR, "");
 		}
 		if(values.containsKey(InventoryBill.CREATE_DATE)==false){
 			values.put(InventoryBill.CREATE_DATE, now);
@@ -256,7 +256,7 @@ public class InventoryBillCPer extends ContentProvider{
 		
 		inventoryBillProjectionMap = new HashMap<String,String>();
 		inventoryBillProjectionMap.put(InventoryBill._ID, InventoryBill._ID);
-		inventoryBillProjectionMap.put(InventoryBill.OPER_ID, InventoryBill.OPER_ID);
+		inventoryBillProjectionMap.put(InventoryBill.OPERATOR, InventoryBill.OPERATOR);
 		inventoryBillProjectionMap.put(InventoryBill.CREATE_DATE, InventoryBill.CREATE_DATE);
 		inventoryBillProjectionMap.put(InventoryBill.FINISHED, InventoryBill.FINISHED);
 		inventoryBillProjectionMap.put(InventoryBill.RESULT, InventoryBill.RESULT);

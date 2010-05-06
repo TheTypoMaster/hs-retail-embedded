@@ -139,10 +139,8 @@
 
 package com.tobacco.pos.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -152,12 +150,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
-public class ConsumeInsertDialog extends Activity{
+public class ConsumeInsertDialog extends RMSBaseView{
 
 	EditText barcodeText ;
 	EditText numberText ;

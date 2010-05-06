@@ -189,8 +189,8 @@ public class AllTables {
 	    public static final String NUMBER = "number";
 
 	   /**
-	    * The number of the operater
-	    * <P>Type: INTEGER</P>
+	    * The name of the operater
+	    * <P>Type: TEXT</P>
 	    */
 	    public static final String OPERATOR = "operator";
 	    
@@ -235,10 +235,10 @@ public class AllTables {
 		 */
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.complaint";
 		/**
-		 * The id of the operator
-		 * <p>TypE: INTEGER</>
+		 * The name of the operater
+		 * <P>Type: TEXT</P>
 		 */
-		public static final String OPER_ID = "operId";
+		public static final String OPERATOR = "operator";
 		/**
 		 * The time complaint create;
 		 * <p>TypE: TEXT</>
@@ -287,10 +287,10 @@ public static class Return implements BaseColumns{
 		 */
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.return";
 		/**
-		 * The id of the operator
-		 * <p>TypE: INTEGER</>
+		 * The name of the operater
+		 * <P>Type: TEXT</P>
 		 */
-		public static final String OPER_ID = "operId";
+		public static final String OPERATOR = "operator";
 		/**
 		 * The time complaint create;
 		 * <p>TypE: TEXT</>
@@ -349,10 +349,10 @@ public static class Return implements BaseColumns{
 		 */
 		public static final String IBILL_NUM = "IBillNum";
 		/**
-		 * The id of the operator
-		 * <p>TypE: INTEGER</>
+		 * The name of the operater
+		 * <P>Type: TEXT</P>
 		 */
-		public static final String OPER_ID = "operId";
+		public static final String OPERATOR = "operator";
 		/**
 		 * The time inventory create;
 		 * <p>TypE: TEXT</>

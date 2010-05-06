@@ -65,7 +65,7 @@ public class ReturnCPer extends ContentProvider{
 			Log.i("lqz", "start to create table return");
 			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
 					+Return._ID+" INTEGER PRIMARY KEY,"
-					+Return.OPER_ID+" INTEGER,"
+					+Return.OPERATOR+" TEXT,"
 					+Return.CREATE_DATE+" TEXT,"
 					+Return.VIP_ID+" INTEGER,"
 					+Return.GOODS_ID+ " INTEGER,"
@@ -124,8 +124,8 @@ public class ReturnCPer extends ContentProvider{
 		
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
-		if(values.containsKey(Return.OPER_ID)==false){
-			values.put(Return.OPER_ID, 2);
+		if(values.containsKey(Return.OPERATOR)==false){
+			values.put(Return.OPERATOR, "");
 		}
 		if(values.containsKey(Return.VIP_ID)==false){
 			values.put(Return.VIP_ID, 1);
@@ -262,7 +262,7 @@ public class ReturnCPer extends ContentProvider{
 		
 		returnProjectionMap = new HashMap<String,String>();
 		returnProjectionMap.put(Return._ID, Return._ID);
-		returnProjectionMap.put(Return.OPER_ID, Return.OPER_ID);
+		returnProjectionMap.put(Return.OPERATOR, Return.OPERATOR);
 		returnProjectionMap.put(Return.CREATE_DATE, Return.CREATE_DATE);
 		returnProjectionMap.put(Return.VIP_ID, Return.VIP_ID);
 		returnProjectionMap.put(Return.GOODS_ID, Return.GOODS_ID);

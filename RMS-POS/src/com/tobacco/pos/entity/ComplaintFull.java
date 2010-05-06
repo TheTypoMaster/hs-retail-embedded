@@ -18,14 +18,14 @@ public class ComplaintFull implements BaseColumns{
 	 * The content:// style URL for this table
 	 */
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/complaints_full");
-	public static final String TABLES = "Complaint,UserInfo,VIPInfo,Goods,GoodsPrice";
+	public static final String TABLES = "Complaint,VIPInfo,Goods,GoodsPrice";//UserInfo,
 	
 	public static final String append1 = "Complaint."+Complaint.GOODS_ID+" = GoodsPrice." + GoodsPrice._ID;
 	public static final String append2 = "GoodsPrice."+GoodsPrice.goodsId+" =Goods."+Goods._ID;
 	public static final String append4 = "Complaint."+Complaint.VIP_ID+" =VIPInfo."+VIPInfo._ID;
-	public static final String append5 = "Complaint."+Complaint.OPER_ID+" =UserInfo."+UserInfo._ID;
+//	public static final String append5 = "Complaint."+Complaint.OPER_ID+" =UserInfo."+UserInfo._ID;
 	
-	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append4+" AND "+append5;
+	public static final String APPEND_WHERE = append1+" AND "+append2+" AND "+append4;//+" AND "+append5
 
 //	/**
 //	 * The id of the operator
@@ -36,7 +36,7 @@ public class ComplaintFull implements BaseColumns{
 	 * The id of the operator
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String OPER_NAME = "UserInfo."+UserInfo.userName;
+	public static final String OPER_NAME = "Complaint."+Complaint.OPERATOR;
 //	
 //	/**
 //	 * The id of the VIP customer

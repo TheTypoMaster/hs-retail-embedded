@@ -106,7 +106,7 @@ public class ReturnHandler {
 		int vipNameIndex = cursor.getColumnIndex(VIPInfo.VIPName);
 		String customer = cursor.getString(vipNameIndex);
 		
-		int operNameIndex = cursor.getColumnIndex(UserInfo.userName);
+		int operNameIndex = cursor.getColumnIndex(Return.OPERATOR);
 		String operator = cursor.getString(operNameIndex);
 		
 		int timeIndex = cursor.getColumnIndex(Return.CREATE_DATE);

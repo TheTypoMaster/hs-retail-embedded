@@ -1,5 +1,5 @@
 package com.tobacco.pos.activity;
- 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,10 +12,20 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.pos.contentProvider.Loginer;
 import com.tobacco.pos.handler.InventoryBillHandler;
 
 public class Main extends RMSBaseView {
 
+	private int REQUEST_PAYMENT = 0;
+	private int REQUEST_CONSUME = 1;
+	private int REQUEST_COMPLAINT = 2;
+	private int REQUEST_RETURN = 3;
+	private int REQUEST_KIND = 4;
+	private int REQUEST_PURCHASE = 5;
+	private int REQUEST_REPORT = 6;
+	private int REQUEST_INVENTORY = 7;
+	
 	private String[] saleFunctions = {"收银管理","溢耗管理","投诉管理","退货管理"};
 	private String[] adminFunctions = {"类别管理","进货管理","报表功能","库存管理"};
 	 
@@ -87,7 +97,7 @@ public class Main extends RMSBaseView {
 									intent = new Intent("com.tobacco.pos.activity.ConsumeSelect");
 								}
 								
-								startActivity(intent);
+								startActivityForResult(intent,REQUEST_CONSUME);
 							}
 							
 						}).create().show();
@@ -109,7 +119,7 @@ public class Main extends RMSBaseView {
 								intent = new Intent("com.tobacco.pos.activity.ComplaintSelect");
 							}
 							
-							startActivity(intent);
+							startActivityForResult(intent,REQUEST_COMPLAINT);
 						}
 						
 					}).create().show();
@@ -133,7 +143,7 @@ public class Main extends RMSBaseView {
 									intent = new Intent("com.tobacco.pos.activity.ReturnSelect");
 								}
 								
-								startActivity(intent);
+								startActivityForResult(intent,REQUEST_RETURN);
 							}
 							
 						}).create().show();
@@ -198,7 +208,7 @@ public class Main extends RMSBaseView {
 								intent = new Intent("com.tobacco.pos.activity.InventoryBillSelect");
 							}
 							
-							startActivity(intent);
+							startActivityForResult(intent,REQUEST_INVENTORY);
 						}
 						
 					}).create().show();

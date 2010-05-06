@@ -62,7 +62,7 @@ public class ComplaintCPer extends ContentProvider{
 			Log.i("lqz", "start to create table complaint");
 			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
 					+Complaint._ID+" INTEGER PRIMARY KEY,"
-					+Complaint.OPER_ID+" INTEGER,"
+					+Complaint.OPERATOR+" TEXT,"
 					+Complaint.CREATE_DATE+" TEXT,"
 					+Complaint.VIP_ID+" INTEGER,"
 					+Complaint.GOODS_ID+ " INTEGER,"
@@ -120,8 +120,8 @@ public class ComplaintCPer extends ContentProvider{
 		
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
-		if(values.containsKey(Complaint.OPER_ID)==false){
-			values.put(Complaint.OPER_ID, 2);
+		if(values.containsKey(Complaint.OPERATOR)==false){
+			values.put(Complaint.OPERATOR, "");
 		}
 		if(values.containsKey(Complaint.VIP_ID)==false){
 			values.put(Complaint.VIP_ID, 1);
@@ -255,7 +255,7 @@ public class ComplaintCPer extends ContentProvider{
 		
 		complaintProjectionMap = new HashMap<String,String>();
 		complaintProjectionMap.put(Complaint._ID, Complaint._ID);
-		complaintProjectionMap.put(Complaint.OPER_ID, Complaint.OPER_ID);
+		complaintProjectionMap.put(Complaint.OPERATOR, Complaint.OPERATOR);
 		complaintProjectionMap.put(Complaint.CREATE_DATE, Complaint.CREATE_DATE);
 		complaintProjectionMap.put(Complaint.VIP_ID, Complaint.VIP_ID);
 		complaintProjectionMap.put(Complaint.GOODS_ID, Complaint.GOODS_ID);

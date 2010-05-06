@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,15 +26,14 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ConsumeModel;
-import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
-import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
-public class ConsumeInsert extends Activity{
+public class ConsumeInsert extends RMSBaseView{
 	
 	private static final String TAG = "ConsumeInsert";
 	
@@ -121,8 +119,10 @@ public class ConsumeInsert extends Activity{
 	}
 
 	protected void save(){
-		for(ConsumeModel goods : consumeGoods)
+		for(ConsumeModel goods : consumeGoods){
+			goods.setOperator(currentUserBO.getUserName());
 			handler.insert(goods);
+		}
 		
 		Toast.makeText(ConsumeInsert.this, "保存成功", Toast.LENGTH_SHORT).show();
 		state = SAVE_STATE;
@@ -262,7 +262,7 @@ public class ConsumeInsert extends Activity{
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
 //			String barcode = intent.getStringExtra("BARCODE");
-//			new AlertDialog.Builder(ConsumeInsert.this).setMessage("barcode:"+barcode).show();		
+//			new AlertDialog.Builder(ConsumeInsert.this).setMessage(barcode).show();		
 			Intent i = new Intent("com.tobacco.pos.activity.ConsumeInsertDialog");
 			i.putExtra(GoodsPrice.barcode, intent.getStringExtra("BARCODE"));
 			startActivityForResult(i, GET_CON);

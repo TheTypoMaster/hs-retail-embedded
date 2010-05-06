@@ -12,6 +12,10 @@
             </intent-filter>
         </activity>
         
+        <!-- 
+        	<action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        -->
 
         <!--POS Activity -->
           <activity android:name=".pos.activity.KindManagement"></activity>

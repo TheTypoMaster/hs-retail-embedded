@@ -72,7 +72,7 @@ public class ConsumeCPer extends ContentProvider{
 					+Consume.GOODS+" INTEGER,"
 					+Consume._COUNT+" INTEGER,"
 					+Consume.CREATED_DATE+ " TEXT,"
-					+Consume.OPERATOR+" INTEGER,"
+					+Consume.OPERATOR+" TEXT,"
 					+Consume.FLAG+" BOOLEAN,"				
 					+Consume.COMMENT+" TEXT"
 					+");");
@@ -153,7 +153,7 @@ public class ConsumeCPer extends ContentProvider{
 			values.put(Consume.FLAG, 0);
 		}
 		if(values.containsKey(Consume.OPERATOR)==false){
-			values.put(Consume.OPERATOR, 2);
+			values.put(Consume.OPERATOR, "");
 		}
 		if(values.containsKey(Consume.COMMENT)==false){
 			values.put(Consume.COMMENT, "");

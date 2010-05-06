@@ -122,7 +122,7 @@ public class ComplaintModel extends BaseModel {
 		values.put(Complaint.CONTENT,content);
 		values.put(Complaint.CREATE_DATE,now);
 		values.put(Complaint.GOODS_ID,goodsPriceId);
-//		values.put(Complaint.OPER_ID,);
+		values.put(Complaint.OPERATOR,operator);
 		values.put(Complaint.VIP_ID,customerId);
 		return values;
 	}

@@ -85,7 +85,7 @@ public class InventoryBillSelect extends Activity{
 			inventoryResultText.setText(""+bill.getResult());
 			String time = DateTool.formatDateToString(bill.getCreateDate());
 			inventoryTimeText.setText(time.substring(0, time.length()-3));
-			inventoryOperatorText.setText(bill.getOperName());			
+			inventoryOperatorText.setText(bill.getOperator());			
 								
 			table = (TableLayout)findViewById(R.id.inventoryBillSelectTable);		
 

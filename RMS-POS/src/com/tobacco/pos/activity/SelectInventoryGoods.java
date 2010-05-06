@@ -2,7 +2,6 @@ package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsKind;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
@@ -20,7 +20,7 @@ import com.tobacco.pos.entity.AllTables.Unit;
 import com.tobacco.pos.util.tree.CheckTreeView;
 import com.tobacco.pos.util.tree.TreeNode;
 
-public class SelectInventoryGoods extends Activity {
+public class SelectInventoryGoods extends RMSBaseView {
     /** Called when the activity is first created. */
 	
 	ArrayList<TreeNode> treeNodes;

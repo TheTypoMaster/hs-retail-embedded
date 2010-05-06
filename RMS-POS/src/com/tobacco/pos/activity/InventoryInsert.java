@@ -3,7 +3,6 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.entity.InventoryBillModel;
 import com.tobacco.pos.entity.InventoryItemModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
@@ -34,7 +35,7 @@ import com.tobacco.pos.handler.InventoryBillHandler;
 import com.tobacco.pos.handler.InventoryItemHandler;
 import com.tobacco.pos.util.RegexCheck;
 
-public class InventoryInsert extends Activity{
+public class InventoryInsert extends RMSBaseView{
 	
 	private String TAG = "InventoryInsert";
 	
@@ -63,6 +64,13 @@ public class InventoryInsert extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);		
 		this.setContentView(R.layout.inventory_insert);
+		
+		setActivityPrivList(new int[] { BCodeConst.USER_PRIV_ADMIN,
+				BCodeConst.USER_PRIV_OPERATOR, 0 });
+		if (!checkActivityPriv()) {
+			openPrivViolationDialog();
+
+		}
 		
 		itemHandler = new InventoryItemHandler(this);
 		billHandler = new InventoryBillHandler(this);
@@ -318,7 +326,7 @@ public class InventoryInsert extends Activity{
 	                		}
 	                		table.removeViews(1, table.getChildCount()-1);
 
-	            			InventoryBillModel billModel = new InventoryBillModel(finished, result);
+	            			InventoryBillModel billModel = new InventoryBillModel(finished, result,currentUserBO.getUserName());
 	            			int billId = billHandler.save(billModel);
 	            			
 	            			for(InventoryItemModel model : modelLists)

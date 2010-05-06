@@ -14,8 +14,6 @@ public class ReturnModel extends BaseModel {
 	
 	private String operator;
 	
-//	private String operatorId;
-	
 	private String customer;
 	
 	private int customerId;
@@ -39,18 +37,6 @@ public class ReturnModel extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-//	public ReturnModel(int customerId, String customer, String unit, int goodsPriceId, String goodsName, String content,
-//			int number) {
-//		super();
-//		this.customer = customer;
-//		this.customerId = customerId;
-//		this.unit = unit;
-//		this.goodsPriceId = goodsPriceId;
-//		this.goodsName = goodsName;
-//		this.content = content;
-//		this.number = number;
-//	}
-	
 	public ReturnModel(String unit, int goodsPriceId, double inPrice, String goodsName, String content,
 			int number) {
 		super();
@@ -90,14 +76,6 @@ public class ReturnModel extends BaseModel {
 	public void setOperator(String operator) {
 		this.operator = operator;
 	}
-
-//	public String getOperatorId() {
-//		return operatorId;
-//	}
-//
-//	public void setOperatorId(String operatorId) {
-//		this.operatorId = operatorId;
-//	}
 
 	public String getCustomer() {
 		return customer;
@@ -180,7 +158,7 @@ public class ReturnModel extends BaseModel {
 		values.put(Return.CREATE_DATE,now);
 		values.put(Return.GOODS_ID,goodsPriceId);
 		values.put(Return.NUMBER,number);
-//		values.put(Return.OPER_ID,);
+		values.put(Return.OPERATOR,operator);
 		values.put(Return.VIP_ID,customerId);
 		return values;
 	}
