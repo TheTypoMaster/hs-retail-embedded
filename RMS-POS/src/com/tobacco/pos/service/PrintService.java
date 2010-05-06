@@ -9,6 +9,8 @@ import android.util.Log;
 
 public class PrintService extends Service {
 
+	ReceiptPrinterHelper rph = null;
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		
@@ -19,6 +21,8 @@ public class PrintService extends Service {
 	public void onCreate() {
 		 
 		super.onCreate();
+		
+		 rph = new ReceiptPrinterHelper();
 	
 	}
 
@@ -34,6 +38,7 @@ public class PrintService extends Service {
 		 
 		super.onStart(intent, startId);
 		Log.d("lyq", "print start..............");
+		String storeName = "亨事达";
 		String newSBillNum = intent.getStringExtra("newSBillNum");//销售单号
 		String sTime = intent.getStringExtra("sTime");//销售日期
 		String userName = intent.getStringExtra("userName");//收银员
@@ -56,6 +61,18 @@ public class PrintService extends Service {
 			Log.d("lyq", goodsNameList.get(i) + "-" + countList.get(i) + "-" + outPriceList.get(i) + "-" + tMoneyList.get(i) + "-" + flagList.get(i));
 		}
 		Log.d("lyq", "print end..............");
+		
+		int fd = rph.open();
+		if(fd>0){
+			rph.printHead(fd, storeName, newSBillNum, userName, sTime);
+			for(int i=0;i<goodsNameList.size();i++){
+				rph.printBody(fd, goodsNameList.get(i), outPriceList.get(i), countList.get(i), tMoneyList.get(i)+flagList.get(i));
+				Log.d("lyq", goodsNameList.get(i) + "-" + countList.get(i) + "-" + outPriceList.get(i) + "-" + tMoneyList.get(i) + "-" + flagList.get(i));
+			}
+			rph.printFoot(fd, totalMoney+"", payMoney+"", (payMoney - totalMoney)+"");
+			
+			
+		}
 	}
 	
 
