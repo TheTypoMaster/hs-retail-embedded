@@ -49,9 +49,7 @@ public class Main extends RMSBaseView {
 		
 		 
 		public void onItemClick(AdapterView<?> list, View view, int position,
-				long id) {
-			// TODO Auto-generated method stub
-			String userName;
+				long id) { 
 			Intent intent;
 			ListView listView = (ListView)list;
 			
@@ -149,7 +147,11 @@ public class Main extends RMSBaseView {
 						new AlertDialog.Builder(Main.this)
 						.setMessage("存在未完成的盘点，请先完成或取消该盘点。").show();
 					}else{
+						String screenName = Main.this.currentUserBO.getScreenName();
 						intent = new Intent(Main.this, KindManagement.class);
+						intent.putExtra("userName", screenName);
+						
+						
 						startActivity(intent);
 					}	
 					break;

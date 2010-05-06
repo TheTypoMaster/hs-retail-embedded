@@ -53,6 +53,9 @@ public class KindManagement extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.kindmanagement);
 		
+		TextView kindManagementWelcome = (TextView)this.findViewById(R.id.kindManagementWelcome);
+		kindManagementWelcome.setText("你好:"+getIntent().getStringExtra("userName"));
+		
 		kindInfoTView = (TextView)KindManagement.this.findViewById(R.id.kindInfoTView);
 		
 		kindCPer = new GoodsKindCPer();
