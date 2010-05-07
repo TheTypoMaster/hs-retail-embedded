@@ -14,9 +14,7 @@ import com.tobacco.pos.contentProvider.VIPInfoCPer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,7 +41,7 @@ public class ReportManagement extends Activity {
 	private SalesItemCPer sItemCPer = null;
 	private VIPInfoCPer vipInfoCPer = null;
 	
-	private ProgressDialog pDialog = null;
+	 
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +53,7 @@ public class ReportManagement extends Activity {
 	        gCPer = new GoodsCPer();
 	        sItemCPer = new SalesItemCPer();
 	        
-	        pDialog = new ProgressDialog(this);
-	        
+	   
 	        int reportKind = getIntent().getIntExtra("reportKind", 0);
 	        if(reportKind == 0){//选择的类型如果是进货报表
 	        	setContentView(R.layout.purchasereport);
@@ -164,14 +161,15 @@ public class ReportManagement extends Activity {
 	        	ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, conditionStr);
 	        	conditionSpinner.setAdapter(conditionAdapter);
 	        	
-	        	EditText contentEText = (EditText)this.findViewById(R.id.contentEText);
-	        
-	        	contentEText.setOnKeyListener(new OnKeyListener(){
+	        	final EditText contentEText = (EditText)this.findViewById(R.id.contentEText);
+	        	Button pSearchButton = (Button) this.findViewById(R.id.pSearchButton);
+	        	pSearchButton.setText("搜索");
+	        	pSearchButton.setOnClickListener(new OnClickListener(){
 
-					public boolean onKey(View v, int keyCode, KeyEvent event) {
-						String content = ((EditText)v).getText().toString();
+					public void onClick(View v) {
+						String content = contentEText.getText().toString();
 
-						if(content!=null && content.length()>0 && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+						if(content!=null && content.length()>0 ){
 					
 							if(conditionSpinner.getSelectedItemId() == 0){//以进货单号的条件进行查询
 								
@@ -263,12 +261,115 @@ public class ReportManagement extends Activity {
 							((TextView)v).setText("");
 						}
 						
-						return false;
+						 
+					 
 					}
 	        		
 	        	});
-	    	
 	        }
+//	        	contentEText.setOnKeyListener(new OnKeyListener(){
+//
+//					public boolean onKey(View v, int keyCode, KeyEvent event) {
+//						String content = ((EditText)v).getText().toString();
+//
+//						if(content!=null && content.length()>0 && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+//					
+//							if(conditionSpinner.getSelectedItemId() == 0){//以进货单号的条件进行查询
+//								
+//								int searchPBillId = pBillCPer.getPBillIdByTimeAndPBillNum(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
+//													
+//								List<Integer> allPriceId = new ArrayList<Integer>();//根据进货单Id查找该单中所有的priceId
+//								List<Integer> countList = new ArrayList<Integer>();//根据进货单Id查找该单中所有的数量
+//								allPriceId = pItemCPer.getAllPriceIdByPBillId(searchPBillId);
+//								countList = pItemCPer.getAllPCountByPBillId(searchPBillId);
+//								
+//								if(allPriceId == null || allPriceId.size() == 0)
+//								{
+//									purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									for(int i=0;i<allPriceId.size();i++){
+//										TableRow theResultRow = new TableRow(ReportManagement.this);
+//									
+//										TextView pBillNumTView = new TextView(ReportManagement.this);
+//										pBillNumTView.setText("" + content);
+//										theResultRow.addView(pBillNumTView);
+//									
+//										List<String> info = gPriceCPer.getInfoByGPriceId(allPriceId.get(i));
+//										for(int j=0;j<info.size();j++){
+//											if(j==2){
+//												TextView countTView = new TextView(ReportManagement.this);
+//												countTView.setText(countList.get(i)+"");
+//												theResultRow.addView(countTView);
+//											}
+//											
+//											TextView infoTView = new TextView(ReportManagement.this);
+//											infoTView.setText("" + info.get(j));
+//											theResultRow.addView(infoTView);
+//										}
+//									purchaseReportTable.addView(theResultRow);
+//									}
+//								}
+//					
+////								pDialog.dismiss();
+//							}
+//							else if(conditionSpinner.getSelectedItemId() == 1){//以商品名称进行模糊搜索
+//								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+//								ArrayList<ArrayList<String>> pInfo = gCPer.getPInfoByGoodsName(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
+//								if(pInfo == null || pInfo.size() == 0)
+//								{
+//									purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									for(int i=0;i<pInfo.size();i++){
+//										ArrayList<String> temp = pInfo.get(i);
+//										TableRow theResultRow = new TableRow(ReportManagement.this);
+//										for(int j=0;j<temp.size();j++){
+//											TextView tView = new TextView(ReportManagement.this);
+//											tView.setText(temp.get(j));
+//											theResultRow.addView(tView);
+//										}
+//										purchaseReportTable.addView(theResultRow);
+//										
+//									}
+//								}
+////								pDialog.dismiss();
+//							}
+//							else if(conditionSpinner.getSelectedItemId() == 2){//根据商品的种类查找，要支持模糊搜索
+//								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+//								ArrayList<ArrayList<String>> pInfo = gCPer.getPInfoByGoodsKindName(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
+//								
+//								if(pInfo == null || pInfo.size() == 0)
+//								{
+//									purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到进货项。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									for(int i=0;i<pInfo.size();i++){
+//										ArrayList<String> temp = pInfo.get(i);
+//										TableRow theResultRow = new TableRow(ReportManagement.this);
+//										for(int j=0;j<temp.size();j++){
+//											TextView tView = new TextView(ReportManagement.this);
+//											tView.setText(temp.get(j));
+//											theResultRow.addView(tView);
+//										}
+//										purchaseReportTable.addView(theResultRow);
+//									}
+//								}
+//							}
+//			
+//					
+//							((TextView)v).setText("");
+//						}
+//						
+//						return false;
+//					}
+//	        		
+//	        	});
+//	    	
+//	        }
 	        	
 	        else if(reportKind == 1){//选择的是销售报表
 	        	setContentView(R.layout.salesreport);
@@ -283,6 +384,7 @@ public class ReportManagement extends Activity {
 					}
 	        		
 	        	});
+	        	
 	        	salesStartTimeButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
@@ -377,12 +479,13 @@ public class ReportManagement extends Activity {
 	        	salesConditionSpinner.setAdapter(conditionAdapter);
 	        	
 	        	final EditText salesContentTView = (EditText)this.findViewById(R.id.salesContentEText);
-	        	
-	        	salesContentTView.setOnKeyListener(new OnKeyListener(){
+	        	Button sSearchButton = (Button)this.findViewById(R.id.sSearchButton);
+	        	sSearchButton.setText("搜索");
+	        	sSearchButton.setOnClickListener(new OnClickListener(){
 
-					public boolean onKey(View v, int keyCode, KeyEvent event) {
+					public void onClick(View v) {
 						String content = salesContentTView.getText().toString();
-						if(keyCode == 66 && content!=null && content.length()>0){
+						if(content.length()>0){
 							if(salesConditionSpinner.getSelectedItemId() == 0){//根据销售单号查找，准确查找
 								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
 								Map<String,ArrayList<ArrayList<String>>> sItemResultMap = sItemCPer.getSalesInfoBySalesBillNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
@@ -486,10 +589,123 @@ public class ReportManagement extends Activity {
 							}
 							((TextView)v).setText("");
 						}
-						return false;
+					 
+					}
 					}
 	        		
-	        	});
+	        	);
+//	        	salesContentTView.setOnKeyListener(new OnKeyListener(){
+//
+//					public boolean onKey(View v, int keyCode, KeyEvent event) {
+//						String content = salesContentTView.getText().toString();
+//						if(keyCode == 66 && content!=null && content.length()>0){
+//							if(salesConditionSpinner.getSelectedItemId() == 0){//根据销售单号查找，准确查找
+//								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+//								Map<String,ArrayList<ArrayList<String>>> sItemResultMap = sItemCPer.getSalesInfoBySalesBillNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
+//								
+//								if(sItemResultMap.size() == 0)
+//								{
+//									salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									String VIPName = sItemResultMap.keySet().iterator().next();
+//									Toast.makeText(ReportManagement.this, "该单客户为:" + VIPName, Toast.LENGTH_SHORT).show();
+//									ArrayList<ArrayList<String>> sItemResult = sItemResultMap.get(VIPName);
+//									for(int i=0;i<sItemResult.size();i++){
+//										TableRow resultRow = new TableRow(ReportManagement.this);
+//										ArrayList<String> tempList = sItemResult.get(i);
+//										for(int j=0;j<tempList.size();j++){
+//											TextView t = new TextView(ReportManagement.this);
+//											t.setText(tempList.get(j));
+//											resultRow.addView(t);
+//										}
+//										salesReportTable.addView(resultRow);
+//										
+//									}
+//								}
+//								
+//							}
+//						
+//							else if(salesConditionSpinner.getSelectedItemId() == 1){//根据销售商品的名称查询，模糊搜索
+//								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+//								ArrayList<ArrayList<String>> sItemResult= sItemCPer.getSalesInfoByGoodsName(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
+//								
+//								if(sItemResult.size() == 0){
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									for(int i=0;i<sItemResult.size();i++){
+//										TableRow resultRow = new TableRow(ReportManagement.this);
+//										ArrayList<String> tempList = sItemResult.get(i);
+//										for(int j=0;j<tempList.size();j++){
+//											TextView t = new TextView(ReportManagement.this);
+//											t.setText(tempList.get(j));
+//											resultRow.addView(t);
+//										}
+//										salesReportTable.addView(resultRow);
+//										
+//									}
+//								}
+//									
+//							}
+//							else if(salesConditionSpinner.getSelectedItemId() == 2){//根据销售商品的种类查询
+//								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+//								ArrayList<ArrayList<String>> sItemResult= sItemCPer.getSalesInfoByKindName(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
+//								
+//								if(sItemResult.size() == 0){
+//									Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									for(int i=0;i<sItemResult.size();i++){
+//										TableRow resultRow = new TableRow(ReportManagement.this);
+//										ArrayList<String> tempList = sItemResult.get(i);
+//										for(int j=0;j<tempList.size();j++){
+//											TextView t = new TextView(ReportManagement.this);
+//											t.setText(tempList.get(j));
+//											resultRow.addView(t);
+//										}
+//										salesReportTable.addView(resultRow);
+//										
+//									}
+//								}
+//							}
+//							else if(salesConditionSpinner.getSelectedItemId() == 3){//根据客户编号，VIPNum
+//								vipInfoCPer = new VIPInfoCPer();
+//								int VIPId = vipInfoCPer.getVIPIdByVIPNum(((TextView)v).getText().toString());
+//								if(VIPId == -1){
+//									salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);
+//									Toast.makeText(ReportManagement.this, "抱歉，没有该VIP客户", Toast.LENGTH_SHORT).show();
+//								}
+//								else{
+//									salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
+//									ArrayList<ArrayList<ArrayList<String>>> result  = sItemCPer.getSalesInfoByVIPNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), VIPId);
+//									if(result.size() == 0)
+//										Toast.makeText(ReportManagement.this, "根据条件没查找到销售信息。", Toast.LENGTH_SHORT).show();
+//									else{
+//										for(int i=0;i<result.size();i++){
+//											ArrayList<ArrayList<String>> temp = result.get(i);
+//										
+//											for(int j=0;j<temp.size();j++){
+//												ArrayList<String> t = temp.get(j);
+//												TableRow theResultRow = new TableRow(ReportManagement.this);
+//												for(int z=0;z<t.size();z++){
+//													TextView t1 = new TextView(ReportManagement.this);
+//													t1.setText(t.get(z));
+//													theResultRow.addView(t1);
+//												}
+//												salesReportTable.addView(theResultRow);
+//											}
+//										}
+//									}
+//								}
+//							}
+//							((TextView)v).setText("");
+//						}
+//						return false;
+//					}
+//	        		
+//	        	});
 	        	
 	        }
 	        else if(reportKind == 2){
