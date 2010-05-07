@@ -135,10 +135,10 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "卷烟");
+				value.put("name", "日用品");
 				value.put("parent", 0);
 				value.put("level", 1);
-				value.put("comment", "抽烟并不是很帅，身体更重要喔");
+				value.put("comment", "家庭生活必备");
 
 				db.insertOrThrow(TABLE_NAME, null, value);
 
@@ -151,10 +151,10 @@ public class GoodsKindCPer extends ContentProvider {
 				db.insertOrThrow(TABLE_NAME, null, value);
 
 				value.clear();
-				value.put("name", "卷烟->软盒");
+				value.put("name", "日用品->香皂");
 				value.put("parent", 8);
 				value.put("level", 2);
-				value.put("comment", "软盒卷烟");
+				value.put("comment", "哈哈，香喷喷");
 
 				db.insertOrThrow(TABLE_NAME, null, value);
 
