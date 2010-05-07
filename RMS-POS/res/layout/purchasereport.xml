@@ -33,9 +33,11 @@
 
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="  查询内容" />
-		<EditText android:layout_width="fill_parent"
+		<EditText android:layout_width="250sp"
 			android:layout_height="wrap_content" android:id="@+id/contentEText"
 			android:singleLine="true" />
+		<Button  android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/pSearchButton" android:text="搜索"></Button>
 		 
 	</LinearLayout>
 	<ScrollView android:layout_width="wrap_content"
