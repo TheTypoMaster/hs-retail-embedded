@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Inflater;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +16,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,16 +26,13 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.Agency;
@@ -106,7 +101,6 @@ public class AddOrderActivity extends Activity {
 		priceTxt = (TextView) this.findViewById(R.id.priceText);
 		dateEdt = (EditText) this.findViewById(R.id.dateText);
 		amountEdt = (EditText) this.findViewById(R.id.amountText);
-		amountEdt.setEnabled(false);
 		agencyTxt = (TextView) this.findViewById(R.id.unitText);
 		vipEdt = (EditText) this.findViewById(R.id.vipText);
 		descEdt = (EditText) this.findViewById(R.id.descText);
@@ -116,7 +110,6 @@ public class AddOrderActivity extends Activity {
 		addTxt = (TextView) this.findViewById(R.id.addTxt);
 		linearScroll = (LinearLayout) this.findViewById(R.id.LinearForScroll);
 		totalAmountTxt = (EditText) this.findViewById(R.id.totalAmountText);
-		totalAmountTxt.setEnabled(false);
 	}
 
 	private void fillBrandSpinner() {
@@ -179,7 +172,7 @@ public class AddOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				// TODO Auto-generated method stub
+			
 				if (position == 1) {
 					priceTxt.setText(packetPrice[brandNameSp
 							.getSelectedItemPosition()]);
@@ -198,7 +191,7 @@ public class AddOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				// TODO Auto-generated method stub
+			
 				if (position == 0) {
 					dateEdt.setEnabled(true);
 				} else {
@@ -209,7 +202,7 @@ public class AddOrderActivity extends Activity {
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
@@ -291,7 +284,7 @@ public class AddOrderActivity extends Activity {
 		addTxt.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 				final LinearLayout linearContent = (LinearLayout) inflater
 						.inflate(R.layout.order_item, null);
@@ -314,13 +307,12 @@ public class AddOrderActivity extends Activity {
 						.findViewById(R.id.brandCountText);
 				final EditText amountEdt = (EditText) linearContent
 						.findViewById(R.id.amountText);
-				amountEdt.setEnabled(false);
 				brandSpinner
 						.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 							public void onItemSelected(AdapterView<?> arg0,
 									View arg1, int position, long arg3) {
-								// TODO Auto-generated method stub
+								
 								if (formatSpinner.getSelectedItemPosition() == 1) {
 									priceTxt.setText(packetPrice[position]);
 								} else
@@ -331,7 +323,7 @@ public class AddOrderActivity extends Activity {
 							}
 
 							public void onNothingSelected(AdapterView<?> arg0) {
-								// TODO Auto-generated method stub
+								
 
 							}
 						});
@@ -340,7 +332,7 @@ public class AddOrderActivity extends Activity {
 
 							public void onItemSelected(AdapterView<?> arg0,
 									View arg1, int position, long arg3) {
-								// TODO Auto-generated method stub
+								
 								if (position == 1) {
 									priceTxt.setText(packetPrice[brandSpinner
 											.getSelectedItemPosition()]);
@@ -349,19 +341,19 @@ public class AddOrderActivity extends Activity {
 											.getSelectedItemPosition()]);
 								}
 								setAmountTextForNew(amountEdt, countEdt
-										.getText().toString(), priceTxt
+										.getText().toString().trim(), priceTxt
 										.getText().toString());
 							}
 
 							public void onNothingSelected(AdapterView<?> arg0) {
-								// TODO Auto-generated method stub
+								
 
 							}
 						});
 				countEdt.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 					public void onFocusChange(View v, boolean hasFocus) {
-						// TODO Auto-generated method stub
+						
 						String count = countEdt.getText().toString();
 						if (!hasFocus
 								&& !countEdt.getText().toString().equals("")) {
@@ -383,7 +375,7 @@ public class AddOrderActivity extends Activity {
 		if (countEdt.getText() != null
 				&& !countEdt.getText().toString().equals(""))
 			totalAmount = Float.parseFloat(priceTxt.getText().toString())
-					* Float.parseFloat(countEdt.getText().toString());
+					* Float.parseFloat(countEdt.getText().toString().trim());
 		amountEdt.setText(totalAmount + "");
 		setTotalAmount();
 
@@ -391,7 +383,7 @@ public class AddOrderActivity extends Activity {
 
 	private void setAmountTextForNew(EditText amountEdt, String count,
 			String price) {
-	
+
 		if (!count.equals("")) {
 			float tempAmount = Float.parseFloat(count)
 					* Float.parseFloat(price);
@@ -400,13 +392,13 @@ public class AddOrderActivity extends Activity {
 		}
 
 	}
-	private void setTotalAmount()
-	{
+
+	private void setTotalAmount() {
 		totalAmount = 0;
 		for (int i = 1; i < linearScroll.getChildCount(); i++) {
 			String amount = ((EditText) linearScroll.getChildAt(i)
 					.findViewById(R.id.amountText)).getText().toString();
-			if(!amount.equals(""))
+			if (!amount.equals(""))
 				totalAmount += Float.parseFloat(amount);
 		}
 		totalAmountTxt.setText(totalAmount + "");
@@ -533,7 +525,7 @@ public class AddOrderActivity extends Activity {
 			if (dateOfSelectedDay.getTime() - dateOfToday.getTime() >= 0)
 				return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 		return false;

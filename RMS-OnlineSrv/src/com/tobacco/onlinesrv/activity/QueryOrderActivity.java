@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,22 +18,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tobacco.onlinesrv.R;
@@ -97,7 +90,6 @@ public class QueryOrderActivity extends Activity {
 	private int listPosition = 0;
 
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.query);
 		initMaps();
@@ -144,7 +136,6 @@ public class QueryOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				// TODO Auto-generated method stub
 				if (position == 0)
 					actionTxt.setVisibility(View.INVISIBLE);
 				else
@@ -158,7 +149,7 @@ public class QueryOrderActivity extends Activity {
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+		
 
 			}
 		});
@@ -194,7 +185,7 @@ public class QueryOrderActivity extends Activity {
 		homeBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			
 				pageNum = 1;
 				lastBtn.setEnabled(false);
 				homeBtn.setEnabled(false);
@@ -206,7 +197,7 @@ public class QueryOrderActivity extends Activity {
 		lastBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			
 
 				pageNum--;
 				if (pageNum != 1) {
@@ -222,7 +213,7 @@ public class QueryOrderActivity extends Activity {
 		nextBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 
 				pageNum++;
 				if (pageNum != getAllPages()) {
@@ -238,7 +229,7 @@ public class QueryOrderActivity extends Activity {
 		bottomBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				pageNum = getAllPages();
 				nextBtn.setEnabled(false);
 				bottomBtn.setEnabled(false);
@@ -250,7 +241,7 @@ public class QueryOrderActivity extends Activity {
 		backBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				finish();
 			}
 		});
@@ -258,7 +249,7 @@ public class QueryOrderActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
+				
 				listPosition = arg2;
 				setDetailListAdapter();
 			}
@@ -267,13 +258,13 @@ public class QueryOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				// TODO Auto-generated method stub
+				
 				listPosition = arg2;
 				setDetailListAdapter();
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
@@ -293,7 +284,7 @@ public class QueryOrderActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
+		
 		MenuInflater inflater = this.getMenuInflater();
 		inflater.inflate(R.menu.option_menu, menu);
 		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
@@ -305,7 +296,7 @@ public class QueryOrderActivity extends Activity {
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		// TODO Auto-generated method stub
+		
 		int tempPosition = listView.getSelectedItemPosition();
 		if (tempPosition >= 0)
 			listPosition = tempPosition;
@@ -423,13 +414,11 @@ public class QueryOrderActivity extends Activity {
 
 
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
-		int RECIEVE_COLUMN = 12;
 		int ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ID);
 		int ORDER_ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ORDER_ID);
 		int DATE_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DATE);
 		int USERNAME_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_USERNAME);
 		int VIP_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_VIPID);
-		int FORMAT_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_FORMAT);
 		int AMOUNT_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AMOUNT);
 		int AGENCY_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AGENTCYID);
 		int DESC_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DESCRIPTION);

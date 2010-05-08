@@ -1,6 +1,5 @@
 package com.tobacco.onlinesrv.activity;
 
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -34,16 +33,13 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class EditOrderActivity extends Activity {
 	private int mYear;
@@ -62,7 +58,6 @@ public class EditOrderActivity extends Activity {
 	private String format[] = { "条", "包" };
 	private String type[] = { "预订单", "订单" };
 	private List<String> idList = null;
-	private String agencyid = "";
 	private LinearLayout linearScroll;
 	private LinearLayout linearContent;
 	private float totalAmount;
@@ -80,6 +75,7 @@ public class EditOrderActivity extends Activity {
 		setListeners();
 
 	}
+
 	private void initView() {
 		brandNameSp = (Spinner) this.findViewById(R.id.brandNameSp);
 		typeSp = (Spinner) this.findViewById(R.id.typeSp);
@@ -128,19 +124,19 @@ public class EditOrderActivity extends Activity {
 		}
 	}
 
-
 	private void setListeners() {
 
 		okBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				int number = 0;
+				int result = 0;
 				if (typeSp.getSelectedItemPosition() == 0) {
 					number = updateOrder(PreOrder.CONTENT_URI,
 							PreOrder.KEY_PREDATE, PreOrder.KEY_AMOUNT,
 							PreOrder.KEY_AGENTCYID, PreOrder.KEY_VIPID,
 							PreOrder.KEY_DESCRIPTION);
-				} else{
+				} else {
 					number = updateOrder(Order.CONTENT_URI, Order.KEY_DATE,
 							Order.KEY_AMOUNT, Order.KEY_AGENTCYID,
 							Order.KEY_VIPID, Order.KEY_DESCRIPTION);
@@ -160,10 +156,10 @@ public class EditOrderActivity extends Activity {
 					String amount = ((EditText) linearScroll.getChildAt(i)
 							.findViewById(R.id.amountText)).getText()
 							.toString();
-					int result = updateOrderDetail(brand, formatStr, price,
-							count, amount,idList.get(i-2));
+					result = updateOrderDetail(brand, formatStr, price, count,
+							amount, idList.get(i - 2));
 				}
-				if (number != 0)
+				if (number != 0 && result != 0)
 					openSuccessDialog();
 				else
 					Toast.makeText(EditOrderActivity.this, "修改失败，请检查数据",
@@ -229,15 +225,13 @@ public class EditOrderActivity extends Activity {
 			final EditText amountEdt = (EditText) linearContent
 					.findViewById(R.id.amountText);
 			amountEdt.setText(detailMap.get(i).get(OrderDetail.KEY_AMOUNT));
-			amountEdt.setEnabled(false);
 
 			brandSpinner
 					.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 						public void onItemSelected(AdapterView<?> arg0,
 								View arg1, int position, long arg3) {
-							// TODO Auto-generated method stub
-							System.out.println(position + "asdasd");
+
 							if (formatSpinner.getSelectedItemPosition() == 1) {
 								priceTxt.setText(packetPrice[position]);
 							} else
@@ -247,7 +241,6 @@ public class EditOrderActivity extends Activity {
 						}
 
 						public void onNothingSelected(AdapterView<?> arg0) {
-							// TODO Auto-generated method stub
 
 						}
 					});
@@ -256,7 +249,7 @@ public class EditOrderActivity extends Activity {
 
 						public void onItemSelected(AdapterView<?> arg0,
 								View arg1, int position, long arg3) {
-							// TODO Auto-generated method stub
+
 							if (position == 1) {
 								priceTxt.setText(packetPrice[brandSpinner
 										.getSelectedItemPosition()]);
@@ -265,18 +258,18 @@ public class EditOrderActivity extends Activity {
 										.getSelectedItemPosition()]);
 							}
 							setAmountTextForNew(amountEdt, countEdt.getText()
-									.toString(), priceTxt.getText().toString());
+									.toString().trim(), priceTxt.getText()
+									.toString());
 						}
 
 						public void onNothingSelected(AdapterView<?> arg0) {
-							// TODO Auto-generated method stub
 
 						}
 					});
 			countEdt.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 				public void onFocusChange(View v, boolean hasFocus) {
-					// TODO Auto-generated method stub
+
 					String count = countEdt.getText().toString();
 					if (!hasFocus && !countEdt.getText().toString().equals("")) {
 						if (isInteger(count))
@@ -290,14 +283,13 @@ public class EditOrderActivity extends Activity {
 			unitTxt.setText(agencyName);
 		}
 
-
 		totalAmountTxt.setText(map.get(FieldSupport.KEY_AMOUNT));
 		dateEdt.setText(map.get(FieldSupport.KEY_DATE));
 		descEdt.setText(map.get(FieldSupport.KEY_DESCRIPTION));
 	}
 
 	private int updateOrderDetail(String brand, String format, String price,
-			String count, String amount,String id) {
+			String count, String amount, String id) {
 		ContentValues values = new ContentValues();
 		values.put(OrderDetail.KEY_BRANDCODE, brand);
 		values.put(OrderDetail.KEY_FORMAT, format);
@@ -314,18 +306,18 @@ public class EditOrderActivity extends Activity {
 		if (!count.equals("")) {
 			float tempAmount = Float.parseFloat(count)
 					* Float.parseFloat(price);
-			amountEdt.setText(tempAmount + "");	
+			amountEdt.setText(tempAmount + "");
 			setTotalAmount();
 		}
 
 	}
-	private void setTotalAmount()
-	{
+
+	private void setTotalAmount() {
 		totalAmount = 0;
 		for (int i = 2; i < linearScroll.getChildCount(); i++) {
 			String amount = ((EditText) linearScroll.getChildAt(i)
 					.findViewById(R.id.amountText)).getText().toString();
-			if(!amount.equals(""))
+			if (!amount.equals(""))
 				totalAmount += Float.parseFloat(amount);
 		}
 		totalAmountTxt.setText(totalAmount + "");
@@ -355,16 +347,14 @@ public class EditOrderActivity extends Activity {
 		return -1;
 	}
 
-	
-
 	private int updateOrder(Uri uriType, String date, String amount,
 			String agencyId, String vipId, String desc) {
 		ContentValues values = new ContentValues();
 		values.put(date, dateEdt.getText().toString());
 		values.put(amount, totalAmount);
 		values.put(desc, descEdt.getText().toString());
-		int number = getContentResolver().update(uriType, values, "id = " + order_id,
-				null);
+		int number = getContentResolver().update(uriType, values,
+				"id = " + order_id, null);
 		return number;
 	}
 
@@ -379,6 +369,7 @@ public class EditOrderActivity extends Activity {
 							}
 						}).show();
 	}
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
