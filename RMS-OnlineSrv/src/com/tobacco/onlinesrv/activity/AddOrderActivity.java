@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Inflater;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -29,6 +31,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
+import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.entities.Tobacco;
 import com.tobacco.onlinesrv.util.FieldSupport;
@@ -50,6 +54,8 @@ public class AddOrderActivity extends Activity {
 	private int mDay;
 	private String today;
 	private Spinner brandNameSp;
+	private Spinner formatSp;
+	private Spinner typeSp;
 	private EditText countEdt;
 	private EditText dateEdt;
 	private EditText amountEdt;
@@ -57,20 +63,23 @@ public class AddOrderActivity extends Activity {
 	private EditText vipEdt;
 	private EditText descEdt;
 	private TextView priceTxt;
-	private RadioButton pRadio;
-	private RadioButton oRadio;
-	private RadioButton packetRadio;
-	private RadioButton itemRadio;
+	private LinearLayout linearScroll;
+	private EditText totalAmountTxt;
 	private Button okBtn;
 	private Button cancelBtn;
+	private TextView addTxt;
 	private Uri preorderUri = PreOrder.CONTENT_URI;
 	private Uri orderUri = Order.CONTENT_URI;
 	private String brandType[] = {};
 	private String packetPrice[] = {};
 	private String itemPrice[] = {};
 	private String formatStr;
+	private String format[] = { "条", "包" };
+	private String type[] = { "预订单", "订单" };
 	private String agencyid = "";
+	private String agencyName;
 	private JSONObject obj;
+	private float totalAmount = 0;
 	private String[] fieldString = { FieldSupport.KEY_ORDER_ID,
 			FieldSupport.KEY_BRANDCODE, FieldSupport.KEY_BRANDCOUNT,
 			FieldSupport.KEY_DATE, FieldSupport.KEY_USERNAME,
@@ -92,20 +101,22 @@ public class AddOrderActivity extends Activity {
 
 	private void initView() {
 		brandNameSp = (Spinner) this.findViewById(R.id.brandNameSp);
+		formatSp = (Spinner) this.findViewById(R.id.formatSp);
 		countEdt = (EditText) this.findViewById(R.id.brandCountText);
-		countEdt.setHint("请输入数字");
-		packetRadio = (RadioButton) this.findViewById(R.id.packetRadio);
-		itemRadio = (RadioButton) this.findViewById(R.id.itemRadio);
 		priceTxt = (TextView) this.findViewById(R.id.priceText);
 		dateEdt = (EditText) this.findViewById(R.id.dateText);
 		amountEdt = (EditText) this.findViewById(R.id.amountText);
+		amountEdt.setEnabled(false);
 		agencyTxt = (TextView) this.findViewById(R.id.unitText);
 		vipEdt = (EditText) this.findViewById(R.id.vipText);
 		descEdt = (EditText) this.findViewById(R.id.descText);
-		pRadio = (RadioButton) this.findViewById(R.id.preOrderRadio);
-		oRadio = (RadioButton) this.findViewById(R.id.orderRadio);
+		typeSp = (Spinner) this.findViewById(R.id.typeSp);
 		okBtn = (Button) this.findViewById(R.id.orderOkBtn);
 		cancelBtn = (Button) this.findViewById(R.id.orderCancelBtn);
+		addTxt = (TextView) this.findViewById(R.id.addTxt);
+		linearScroll = (LinearLayout) this.findViewById(R.id.LinearForScroll);
+		totalAmountTxt = (EditText) this.findViewById(R.id.totalAmountText);
+		totalAmountTxt.setEnabled(false);
 	}
 
 	private void fillBrandSpinner() {
@@ -128,6 +139,10 @@ public class AddOrderActivity extends Activity {
 					android.R.layout.simple_spinner_item, brandType)));
 		}
 
+		formatSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, format)));
+		typeSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, type)));
 	}
 
 	private void fillAgencyText() {
@@ -138,7 +153,7 @@ public class AddOrderActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 		else {
 			cursor.moveToFirst();
-			String agencyName = cursor.getString(1);
+			agencyName = cursor.getString(1);
 			agencyTxt.setText(agencyName);
 			agencyid = cursor.getString(0);
 		}
@@ -149,9 +164,9 @@ public class AddOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				if (packetRadio.isChecked())
+				if (formatSp.getSelectedItemPosition() == 1) {
 					priceTxt.setText(packetPrice[position]);
-				else
+				} else
 					priceTxt.setText(itemPrice[position]);
 				setAmountText();
 			}
@@ -160,32 +175,42 @@ public class AddOrderActivity extends Activity {
 
 			}
 		});
-		packetRadio.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		formatSp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				// TODO Auto-generated method stub
+				if (position == 1) {
 					priceTxt.setText(packetPrice[brandNameSp
 							.getSelectedItemPosition()]);
-
 				} else {
 					priceTxt.setText(itemPrice[brandNameSp
 							.getSelectedItemPosition()]);
 				}
 				setAmountText();
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
 
 			}
 		});
-		pRadio.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		typeSp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				// TODO Auto-generated method stub
+				if (position == 0) {
 					dateEdt.setEnabled(true);
 				} else {
 					dateEdt.setText(today);
 					dateEdt.setEnabled(false);
 				}
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 		countEdt.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -212,28 +237,45 @@ public class AddOrderActivity extends Activity {
 			public void onClick(View v) {
 				if (validation()) {
 					Uri uri = null;
-					if (packetRadio.isChecked())
-						formatStr = packetRadio.getText().toString();
-					if (itemRadio.isChecked())
-						formatStr = itemRadio.getText().toString();
-					if (pRadio.isChecked())
+					formatStr = format[formatSp.getSelectedItemPosition()];
+					if (typeSp.getSelectedItemPosition() == 0) {
 						uri = AddOrder(preorderUri, PreOrder.KEY_PREORDER_ID,
-								PreOrder.KEY_BRANDCODE,
-								PreOrder.KEY_BRANDCOUNT, PreOrder.KEY_PREDATE,
-								PreOrder.KEY_FORMAT, PreOrder.KEY_AMOUNT,
+								PreOrder.KEY_PREDATE, PreOrder.KEY_AMOUNT,
 								PreOrder.KEY_AGENTCYID, PreOrder.KEY_USERNAME,
 								PreOrder.KEY_VIPID, PreOrder.KEY_DESCRIPTION,
 								PreOrder.KEY_STATUS);
-					if (oRadio.isChecked())
+					} else {
 						uri = AddOrder(orderUri, Order.KEY_ORDER_ID,
-								Order.KEY_BRANDCODE, Order.KEY_BRANDCOUNT,
-								Order.KEY_DATE, Order.KEY_FORMAT,
-								Order.KEY_AMOUNT, Order.KEY_AGENTCYID,
-								Order.KEY_USERNAME, Order.KEY_VIPID,
-								Order.KEY_DESCRIPTION, Order.KEY_STATUS);
-
+								Order.KEY_DATE, Order.KEY_AMOUNT,
+								Order.KEY_AGENTCYID, Order.KEY_USERNAME,
+								Order.KEY_VIPID, Order.KEY_DESCRIPTION,
+								Order.KEY_STATUS);
+					}
 					if (uri != null) {
-						openSuccessDialog();
+						for (int i = 1; i < linearScroll.getChildCount(); i++) {
+							String brand = brandType[((Spinner) linearScroll
+									.getChildAt(i).findViewById(
+											R.id.brandNameSp))
+									.getSelectedItemPosition()];
+							String formatStr = format[((Spinner) linearScroll
+									.getChildAt(i).findViewById(R.id.formatSp))
+									.getSelectedItemPosition()];
+							String price = ((TextView) linearScroll.getChildAt(
+									i).findViewById(R.id.priceText)).getText()
+									.toString();
+							String count = ((EditText) linearScroll.getChildAt(
+									i).findViewById(R.id.brandCountText))
+									.getText().toString();
+							String amount = ((EditText) linearScroll
+									.getChildAt(i)
+									.findViewById(R.id.amountText)).getText()
+									.toString();
+							Uri detailUri = addOrderDetail(brand, formatStr,
+									price, count, amount);
+							if (detailUri != null)
+								openSuccessDialog();
+						}
+
 					} else
 						Toast.makeText(AddOrderActivity.this, "添加失败，请检查数据",
 								Toast.LENGTH_SHORT).show();
@@ -246,21 +288,154 @@ public class AddOrderActivity extends Activity {
 				finish();
 			}
 		});
+		addTxt.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+				final LinearLayout linearContent = (LinearLayout) inflater
+						.inflate(R.layout.order_item, null);
+				linearScroll.addView(linearContent);
+				final Spinner brandSpinner = (Spinner) linearContent
+						.findViewById(R.id.brandNameSp);
+				brandSpinner.setAdapter((new ArrayAdapter<String>(
+						AddOrderActivity.this,
+						android.R.layout.simple_spinner_item, brandType)));
+				final Spinner formatSpinner = (Spinner) linearContent
+						.findViewById(R.id.formatSp);
+				formatSpinner.setAdapter((new ArrayAdapter<String>(
+						AddOrderActivity.this,
+						android.R.layout.simple_spinner_item, format)));
+				final TextView priceTxt = (TextView) linearContent
+						.findViewById(R.id.priceText);
+				priceTxt.setText(itemPrice[brandSpinner
+						.getSelectedItemPosition()]);
+				final EditText countEdt = (EditText) linearContent
+						.findViewById(R.id.brandCountText);
+				final EditText amountEdt = (EditText) linearContent
+						.findViewById(R.id.amountText);
+				amountEdt.setEnabled(false);
+				brandSpinner
+						.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+							public void onItemSelected(AdapterView<?> arg0,
+									View arg1, int position, long arg3) {
+								// TODO Auto-generated method stub
+								if (formatSpinner.getSelectedItemPosition() == 1) {
+									priceTxt.setText(packetPrice[position]);
+								} else
+									priceTxt.setText(itemPrice[position]);
+								setAmountTextForNew(amountEdt, countEdt
+										.getText().toString(), priceTxt
+										.getText().toString());
+							}
+
+							public void onNothingSelected(AdapterView<?> arg0) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				formatSpinner
+						.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+							public void onItemSelected(AdapterView<?> arg0,
+									View arg1, int position, long arg3) {
+								// TODO Auto-generated method stub
+								if (position == 1) {
+									priceTxt.setText(packetPrice[brandSpinner
+											.getSelectedItemPosition()]);
+								} else {
+									priceTxt.setText(itemPrice[brandSpinner
+											.getSelectedItemPosition()]);
+								}
+								setAmountTextForNew(amountEdt, countEdt
+										.getText().toString(), priceTxt
+										.getText().toString());
+							}
+
+							public void onNothingSelected(AdapterView<?> arg0) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				countEdt.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+					public void onFocusChange(View v, boolean hasFocus) {
+						// TODO Auto-generated method stub
+						String count = countEdt.getText().toString();
+						if (!hasFocus
+								&& !countEdt.getText().toString().equals("")) {
+							if (isInteger(count))
+								setAmountTextForNew(amountEdt, count, priceTxt
+										.getText().toString());
+						}
+					}
+				});
+				TextView unitTxt = (TextView) linearContent
+						.findViewById(R.id.unitText);
+				unitTxt.setText(agencyName);
+
+			}
+		});
 	}
 
 	private void setAmountText() {
 		if (countEdt.getText() != null
 				&& !countEdt.getText().toString().equals(""))
-			amountEdt.setText(Float.parseFloat(priceTxt.getText().toString())
-					* Float.parseFloat(countEdt.getText().toString()) + "");
+			totalAmount = Float.parseFloat(priceTxt.getText().toString())
+					* Float.parseFloat(countEdt.getText().toString());
+		amountEdt.setText(totalAmount + "");
+		setTotalAmount();
+
 	}
 
-	private Uri AddOrder(Uri uriType, String orderId, String brandCode,
-			String brandCount, String date, String format, String amount,
-			String agencyId, String userName, String vipId, String desc,
-			String status) {
+	private void setAmountTextForNew(EditText amountEdt, String count,
+			String price) {
+	
+		if (!count.equals("")) {
+			float tempAmount = Float.parseFloat(count)
+					* Float.parseFloat(price);
+			amountEdt.setText(tempAmount + "");
+			setTotalAmount();
+		}
+
+	}
+	private void setTotalAmount()
+	{
+		totalAmount = 0;
+		for (int i = 1; i < linearScroll.getChildCount(); i++) {
+			String amount = ((EditText) linearScroll.getChildAt(i)
+					.findViewById(R.id.amountText)).getText().toString();
+			if(!amount.equals(""))
+				totalAmount += Float.parseFloat(amount);
+		}
+		totalAmountTxt.setText(totalAmount + "");
+	}
+
+	private Uri addOrderDetail(String brand, String format, String price,
+			String count, String amount) {
 		ContentValues values = new ContentValues();
-		if (uriType == preorderUri) {
+		if (typeSp.getSelectedItemPosition() == 0)
+			values.put(OrderDetail.KEY_PREORDER_ID,
+					getAllCount(PreOrder.CONTENT_URI));
+		else
+			values
+					.put(OrderDetail.KEY_ORDER_ID,
+							getAllCount(Order.CONTENT_URI));
+		values.put(OrderDetail.KEY_BRANDCODE, brand);
+		values.put(OrderDetail.KEY_FORMAT, format);
+		values.put(OrderDetail.KEY_PRICE, price);
+		values.put(OrderDetail.KEY_BRANDCOUNT, count);
+		values.put(OrderDetail.KEY_AMOUNT, amount);
+		Uri uri = getContentResolver().insert(OrderDetail.CONTENT_URI, values);
+		return uri;
+	}
+
+	private Uri AddOrder(Uri uriType, String orderId, String date,
+			String amount, String agencyId, String userName, String vipId,
+			String desc, String status) {
+		ContentValues values = new ContentValues();
+		if (uriType == PreOrder.CONTENT_URI) {
 			values.put(orderId, NumberGenerate
 					.preOrderIdGeneration(getAllCount(uriType) + 1));
 		} else {
@@ -268,11 +443,8 @@ public class AddOrderActivity extends Activity {
 					.orderIdGeneration(getAllCount(uriType) + 1));
 			values.put(Order.KEY_RECIEVE, "0");
 		}
-		values.put(brandCode, brandType[brandNameSp.getSelectedItemPosition()]);
-		values.put(brandCount, Integer.parseInt(countEdt.getText().toString()));
 		values.put(date, dateEdt.getText().toString());
-		values.put(format, formatStr);
-		values.put(amount, Float.parseFloat(amountEdt.getText().toString()));
+		values.put(amount, totalAmount);
 		values.put(agencyId, agencyid);
 		values.put(userName, "cry");
 		values.put(vipId, Integer.parseInt(vipEdt.getText().toString()));
@@ -290,7 +462,11 @@ public class AddOrderActivity extends Activity {
 
 	private int getAllCount(Uri uri) {
 		Cursor cursor = this.managedQuery(uri, null, null, null, null);
-		return cursor.getCount();
+		if (cursor.getCount() != 0) {
+			cursor.moveToLast();
+			return Integer.parseInt(cursor.getString(0));
+		} else
+			return 0;
 	}
 
 	@Override
@@ -327,6 +503,7 @@ public class AddOrderActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
 						finish();
 					}
 				}).show();
@@ -370,12 +547,13 @@ public class AddOrderActivity extends Activity {
 			tag += "请在商品折扣中输入数字\n";
 		if (!isValidDate())
 			tag += "日期不能小于今天";
-		Toast.makeText(AddOrderActivity.this, tag, Toast.LENGTH_LONG).show();
 		if (tag.equals(""))
 			return true;
-		else
+		else {
+			Toast.makeText(AddOrderActivity.this, tag, Toast.LENGTH_LONG)
+					.show();
 			return false;
-
+		}
 	}
 
 	private void putToJson(Uri uriType) throws JSONException {

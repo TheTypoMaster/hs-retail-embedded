@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<Spinner android:id="@+id/brandNameSp" android:layout_width="120px"
+		android:layout_height="wrap_content"></Spinner>
+	<Spinner android:id="@+id/formatSp" android:layout_width="@dimen/labelWidth"
+		android:layout_height="wrap_content"></Spinner>
+	<TextView android:id="@+id/priceText" android:layout_width="@dimen/labelWidth"
+		android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
+	<EditText android:id="@+id/brandCountText"
+		android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"
+		android:layout_marginRight="20dip" android:maxLines="1"></EditText>
+	<EditText android:id="@+id/vipText" android:layout_width="@dimen/labelWidth"
+		android:layout_height="wrap_content" android:layout_marginRight="20dip"
+		android:maxLines="1"></EditText>
+	<EditText android:id="@+id/amountText" android:layout_width="@dimen/labelWidth"
+		android:layout_height="wrap_content" android:maxLines="1"
+		android:layout_marginRight="20dip"></EditText>
+	<TextView android:id="@+id/unitText" android:layout_width="@dimen/labelWidth"
+		android:layout_height="wrap_content"></TextView>
+</LinearLayout>

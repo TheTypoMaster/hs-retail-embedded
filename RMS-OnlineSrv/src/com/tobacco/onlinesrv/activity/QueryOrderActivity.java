@@ -41,18 +41,33 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tobacco.onlinesrv.R;
 import com.tobacco.onlinesrv.entities.Order;
+import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.util.FieldSupport;
 
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
-	private String queryType[] = { "单号", "商品名称", "规格" };
-	private String from[] = new String[] { "count", "orderId", "brandCode",
-			"brandCount", "amount", "format", "vip", "statusName", "date",
-			"agency", "recieveName", "desc" };
+	private String queryType[] = { "单号" };
+	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
+			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE,
+			FieldSupport.KEY_VIPID, "statusName",
+			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
+			FieldSupport.KEY_DESCRIPTION, "recieveName" };
+
+	private String fromForOrderDetail[] = new String[] {
+			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
+			OrderDetail.KEY_FORMAT, OrderDetail.KEY_PRICE,
+			OrderDetail.KEY_AMOUNT };
+	private String[] KEY_FIELDS = { OrderDetail.KEY_ID,
+			OrderDetail.KEY_PREORDER_ID, OrderDetail.KEY_ORDER_ID,
+			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
+			OrderDetail.KEY_FORMAT, OrderDetail.KEY_PRICE,
+			OrderDetail.KEY_AMOUNT };
+	
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
+	private ListView detailList;
 	private EditText queryEdt;
 	private EditText startDateEdt;
 	private EditText endDateEdt;
@@ -68,9 +83,10 @@ public class QueryOrderActivity extends Activity {
 	private HashMap<Integer, String> queryOrderMap = new HashMap<Integer, String>();
 	private HashMap<Integer, Uri> uriMap = new HashMap<Integer, Uri>();
 	private List<HashMap<String, String>> dataMaps = null;
+	private List<HashMap<String, String>> dataDetailMaps = null;
 	private Uri currentOrder;
 	private int pageNum = 1;
-	private int pageCount = 3;
+	private int pageCount = 8;
 	private Boolean isEmpty = false;
 	private int mYear;
 	private int mMonth;
@@ -78,7 +94,7 @@ public class QueryOrderActivity extends Activity {
 	private Boolean isStartEmpty = false;
 	private Boolean isEndEmpty = false;
 	private int listCount;
-	private int listPosition;
+	private int listPosition = 0;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -92,9 +108,6 @@ public class QueryOrderActivity extends Activity {
 
 	private void initMaps() {
 		queryOrderMap.put(0, Order.KEY_ORDER_ID);
-		queryOrderMap.put(1, Order.KEY_BRANDCODE);
-		queryOrderMap.put(2, Order.KEY_FORMAT);
-
 		uriMap.put(0, PreOrder.CONTENT_URI);
 		uriMap.put(1, Order.CONTENT_URI);
 	}
@@ -117,27 +130,13 @@ public class QueryOrderActivity extends Activity {
 		bottomBtn = (Button) this.findViewById(R.id.bottomPage);
 		currentPageTxt = (TextView) this.findViewById(R.id.currentPage);
 		listView = (ListView) this.findViewById(R.id.ListView01);
+		detailList = (ListView) this.findViewById(R.id.detailList);
 		actionTxt = (TextView) this.findViewById(R.id.actionItem);
 	}
 
 	private void setListView() {
 		listView.setTextFilterEnabled(true);
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			public boolean onItemLongClick(AdapterView<?> va, View v,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				TextView idText = (TextView) v.findViewById(R.id.item1);
-				HashMap<String, String> map = dataMaps.get(Integer
-						.parseInt(idText.getText().toString()) - 1);
-
-				Intent intent = new Intent();
-				intent.setAction("android.intent.action.OrderDetail");
-				putIntentData(intent, map);
-				return true;
-			}
-		});
-
+		detailList.setTextFilterEnabled(true);
 	}
 
 	private void setListeners() {
@@ -261,6 +260,21 @@ public class QueryOrderActivity extends Activity {
 					long arg3) {
 				// TODO Auto-generated method stub
 				listPosition = arg2;
+				setDetailListAdapter();
+			}
+		});
+		listView.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				listPosition = arg2;
+				setDetailListAdapter();
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 
@@ -319,13 +333,13 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
-		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.nameItem,
-				R.id.countItem, R.id.amountItem, R.id.formatItem, R.id.vipItem,
-				R.id.statusItem, R.id.dateItem, R.id.agencyItem,
-				R.id.actionItem };
+		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.dateItem,
+				R.id.userItem, R.id.vipItem, R.id.statusItem, R.id.agencyItem,
+				R.id.amountItem, R.id.descItem, R.id.actionItem };
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
 		listView.setAdapter(adapter);
+
 		if (!isEmpty) {
 			int allPages = getAllPages();
 			if (allPages == 1) {
@@ -340,6 +354,19 @@ public class QueryOrderActivity extends Activity {
 			nextBtn.setEnabled(false);
 			bottomBtn.setEnabled(false);
 		}
+	}
+
+	private void setDetailListAdapter() {
+		int location = (pageNum - 1) * pageCount + listPosition;
+		HashMap<String, String> map = dataMaps.get(location);
+		fillDataDetailMap(map.get(FieldSupport.KEY_ID).toString(),
+				getCurrentOrder());
+		int[] toForOrderDetail = new int[] { R.id.nameItem, R.id.countItem,
+				R.id.formatItem, R.id.priceItem, R.id.amount2Item };
+		SimpleAdapter adapterForOrderDetail = new SimpleAdapter(
+				QueryOrderActivity.this, dataDetailMaps,
+				R.layout.orderdetal_item, fromForOrderDetail, toForOrderDetail);
+		detailList.setAdapter(adapterForOrderDetail);
 	}
 
 	private void fillDataMaps(Uri uri, String selection) {
@@ -362,8 +389,9 @@ public class QueryOrderActivity extends Activity {
 				HashMap<String, String> firstMap = new HashMap<String, String>();
 				putOrderMap(cursor, firstMap);
 				if (uri == Order.CONTENT_URI) {
-					String recieve = cursor
-							.getString(FieldSupport.RECIEVE_COLUMN);
+					int RECIEVE_COLUMN = cursor
+							.getColumnIndex(FieldSupport.KEY_RECIEVE);
+					String recieve = cursor.getString(RECIEVE_COLUMN);
 					firstMap.put("recieve", recieve);
 					if (recieve.equals("0")) {
 						firstMap.put("recieveName", "否");
@@ -393,42 +421,37 @@ public class QueryOrderActivity extends Activity {
 		return null;
 	}
 
-	private void putIntentData(Intent intent, HashMap<String, String> map) {
-		intent.putExtra("id", map.get("id"));
-		intent.putExtra("orderId", map.get("orderId"));
-		intent.putExtra("brandCode", map.get("brandCode"));
-		intent.putExtra("brandCount", map.get("brandCount"));
-		intent.putExtra("date", map.get("date"));
-		intent.putExtra("vip", map.get("vip"));
-		intent.putExtra("format", map.get("format"));
-		intent.putExtra("amount", map.get("amount"));
-		intent.putExtra("agency", map.get("agency"));
-		intent.putExtra("desc", map.get("desc"));
-		intent.putExtra("status", map.get("status"));
-		intent.putExtra("statusName", map.get("statusName"));
-		startActivity(intent);
-	}
 
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
+		int RECIEVE_COLUMN = 12;
+		int ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ID);
+		int ORDER_ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ORDER_ID);
+		int DATE_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DATE);
+		int USERNAME_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_USERNAME);
+		int VIP_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_VIPID);
+		int FORMAT_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_FORMAT);
+		int AMOUNT_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AMOUNT);
+		int AGENCY_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AGENTCYID);
+		int DESC_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DESCRIPTION);
+		int STATUS_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_STATUS);
 		map.put("count", listCount + "");
-		map.put("id", cursor.getString(FieldSupport.ID_COLUMN));
-		String orderId = cursor.getString(FieldSupport.ORDER_ID_COLUMN);
-		map.put("orderId", orderId);
-		map.put("brandCode", cursor.getString(FieldSupport.BRANDCODE_COLUMN));
-		map.put("brandCount", cursor.getString(FieldSupport.BRANDCOUNT_COLUMN));
-		map.put("date", cursor.getString(FieldSupport.DATE_COLUMN));
-		map.put("vip", cursor.getString(FieldSupport.VIP_COLUMN));
-		map.put("format", cursor.getString(FieldSupport.FORMAT_COLUMN));
-		map.put("amount", cursor.getString(FieldSupport.AMOUNT_COLUMN));
-		map.put("agency", cursor.getString(FieldSupport.AGENCY_COLUMN));
-		map.put("desc", cursor.getString(FieldSupport.DESC_COLUMN));
-		String statusId = cursor.getString(FieldSupport.STATUS_COLUMN);
-		map.put("status", statusId);
+		map.put(FieldSupport.KEY_ID, cursor.getString(ID_COLUMN));
+		String orderId = cursor.getString(ORDER_ID_COLUMN);
+		map.put(FieldSupport.KEY_ORDER_ID, orderId);
+		map.put(FieldSupport.KEY_USERNAME, cursor.getString(USERNAME_COLUMN));
+		map.put(FieldSupport.KEY_VIPID, cursor.getString(VIP_COLUMN));
+		map.put(FieldSupport.KEY_DATE, cursor.getString(DATE_COLUMN));
+		map.put(FieldSupport.KEY_AMOUNT, cursor.getString(AMOUNT_COLUMN));
+		map.put(FieldSupport.KEY_AGENTCYID, cursor.getString(AGENCY_COLUMN));
+		map.put(FieldSupport.KEY_DESCRIPTION, cursor.getString(DESC_COLUMN));
+		String statusId = cursor.getString(STATUS_COLUMN);
+		map.put(FieldSupport.KEY_STATUS, statusId);
 		if (orderId.contains("P")) {
 			if (Integer.parseInt(statusId) == 0)
 				map.put("statusName", "未审核");
 			else
 				map.put("statusName", "已审核");
+
 		} else if (Integer.parseInt(statusId) == 0)
 			map.put("statusName", "未提交");
 		else
@@ -436,14 +459,41 @@ public class QueryOrderActivity extends Activity {
 
 	}
 
+	private void fillDataDetailMap(String orderId, Uri detailUri) {
+		Cursor cursor = null;
+		dataDetailMaps = new ArrayList<HashMap<String, String>>();
+		if (detailUri == PreOrder.CONTENT_URI)
+			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
+					" preorderid = " + Integer.parseInt(orderId), null, null);
+		else
+			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
+					" orderid = " + Integer.parseInt(orderId), null, null);
+		if (cursor.getCount() != 0) {
+			cursor.moveToFirst();
+			do {
+				HashMap<String, String> map = new HashMap<String, String>();
+				for (int i = 0; i < KEY_FIELDS.length; i++) {
+					String value = cursor.getString(cursor
+							.getColumnIndex(KEY_FIELDS[i]));
+
+					map.put(KEY_FIELDS[i], value);
+				}
+
+				dataDetailMaps.add(map);
+			} while (cursor.moveToNext());
+		}
+	}
+
 	private void actionForEditMenuItem(int location) {
 		HashMap<String, String> map = dataMaps.get(location);
 		Intent intent = new Intent();
 		intent.setAction("android.intent.action.EditOrder");
-		intent
-				.putExtra("orderType", orderTypeSp.getSelectedItemPosition()
-						+ "");
-		putIntentData(intent, map);
+		intent.putExtra("dataMap", map);
+		HashMap<Integer,HashMap<String,String>> detailMap = new HashMap<Integer,HashMap<String,String>>();
+		for(int i =0;i<dataDetailMaps.size();i++)
+			detailMap.put(i, dataDetailMaps.get(i));
+ 		intent.putExtra("detailMap", detailMap);
+		startActivity(intent);
 	}
 
 	private void actionForRecieveMenuItem(String recieveStr, String idStr,
@@ -473,13 +523,19 @@ public class QueryOrderActivity extends Activity {
 	}
 
 	private void actionForDelMenuItem(String idStr) {
-		int number = getContentResolver().delete(getCurrentOrder(),
+		String where = "preorderid";
+		if (getCurrentOrder() == Order.CONTENT_URI)
+			where = "orderid";
+		int number1 = getContentResolver().delete(OrderDetail.CONTENT_URI,
+				where + "=" + idStr, null);
+		int number2 = getContentResolver().delete(getCurrentOrder(),
 				"id = " + idStr, null);
-		if (number != 0) {
+		if (number1 != 0 && number2 != 0) {
 			Toast.makeText(QueryOrderActivity.this, "删除成功", Toast.LENGTH_SHORT)
 					.show();
 			fillDataMaps(getCurrentOrder(), null);
 			setListAdapter(getFillMaps());
+			setDetailListAdapter();
 		} else
 			Toast.makeText(QueryOrderActivity.this, "删除失败", Toast.LENGTH_SHORT)
 					.show();

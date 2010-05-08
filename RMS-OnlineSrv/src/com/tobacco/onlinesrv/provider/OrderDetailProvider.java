@@ -1,6 +1,7 @@
 package com.tobacco.onlinesrv.provider;
 
 import com.tobacco.onlinesrv.entities.Order;
+import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
 
 import android.content.ContentProvider;
@@ -16,31 +17,37 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-public class OrderProvider extends ContentProvider {
+public class OrderDetailProvider extends ContentProvider {
 
-	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.orderProvider";
+	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.orderDetailProvider";
 
-	private static final String TAG = "OrderProvider";
+	private static final String TAG = "OrderDetailProvider";
 	private static final String DATABASE_NAME = "RMS_OnlineSrv.db";
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_TABLE_NAME = "orderinfo";
+	private static final String DATABASE_TABLE_NAME = "orderDetail";
 
 	private static final String DATABASE_CREATE = "create table if not exists "
-			+ DATABASE_TABLE_NAME + "(" + Order.KEY_ID
-			+ " integer primary key autoincrement, " + Order.KEY_ORDER_ID
-			+ " varchar(20) , " + Order.KEY_DATE + " date, "
-			+ Order.KEY_USERNAME + " varchar(20), " + Order.KEY_VIPID
-			+ " integer, " + Order.KEY_AMOUNT + " float, "
-			+ Order.KEY_AGENTCYID + " integer, " + Order.KEY_DESCRIPTION
-			+ " text, " + Order.KEY_STATUS + " char(1)," + Order.KEY_RECIEVE
-			+ " char(1))";
-	private DatabaseHelper orderHelper = null;
+			+ DATABASE_TABLE_NAME + "(" + OrderDetail.KEY_ID
+			+ " integer primary key autoincrement, "
+			+ OrderDetail.KEY_PREORDER_ID + " integer, "
+			+ OrderDetail.KEY_ORDER_ID + " integer, "
+			+ OrderDetail.KEY_BRANDCODE + " varchar(20), "
+			+ OrderDetail.KEY_BRANDCOUNT + " integer, "
+			+ OrderDetail.KEY_FORMAT + " varchar(20), "
+			+ OrderDetail.KEY_PRICE + " float, "
+			+ OrderDetail.KEY_AMOUNT + " float, FOREIGN KEY ("
+			+ OrderDetail.KEY_PREORDER_ID + ") REFERENCES preorderinfo("
+			+ PreOrder.KEY_PREORDER_ID + ")," + "FOREIGN KEY ("
+			+ OrderDetail.KEY_ORDER_ID + ") REFERENCES orderinfo("
+			+ Order.KEY_ORDER_ID + "))";
+	private DatabaseHelper orderDetailHelper = null;
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		if (orderHelper == null)
-			orderHelper = new DatabaseHelper(getContext());
-		SQLiteDatabase db = orderHelper.getWritableDatabase();
+		Log.i(TAG, "delete...");
+		if (orderDetailHelper == null)
+			orderDetailHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = orderDetailHelper.getWritableDatabase();
 		return db.delete(DATABASE_TABLE_NAME, selection, selectionArgs);
 	}
 
@@ -54,12 +61,12 @@ public class OrderProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "step into insert");
-		SQLiteDatabase sqlDB = orderHelper.getWritableDatabase();
+		SQLiteDatabase sqlDB = orderDetailHelper.getWritableDatabase();
 		long rowId = sqlDB.insert(DATABASE_TABLE_NAME, "", values);
 		Log.i("rowId is", rowId + "");
 		if (rowId > 0) {
-			Uri rowUri = ContentUris.appendId(Order.CONTENT_URI.buildUpon(),
-					rowId).build();
+			Uri rowUri = ContentUris.appendId(
+					OrderDetail.CONTENT_URI.buildUpon(), rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
 			return rowUri;
 		}
@@ -69,21 +76,21 @@ public class OrderProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		Log.i(TAG, "step into onCreate");
-		if (orderHelper == null)
-			orderHelper = new DatabaseHelper(getContext());
+		if (orderDetailHelper == null)
+			orderDetailHelper = new DatabaseHelper(getContext());
 		return true;
 	}
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		if (orderHelper == null)
-			orderHelper = new DatabaseHelper(getContext());
+			String[] selectionArgs, String sortOrderDetail) {
+		if (orderDetailHelper == null)
+			orderDetailHelper = new DatabaseHelper(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase db = orderHelper.getWritableDatabase();
+		SQLiteDatabase db = orderDetailHelper.getWritableDatabase();
 		qb.setTables(DATABASE_TABLE_NAME);
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-				null, sortOrder);
+				null, sortOrderDetail);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
@@ -92,9 +99,9 @@ public class OrderProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		if (orderHelper == null)
-			orderHelper = new DatabaseHelper(getContext());
-		SQLiteDatabase db = orderHelper.getWritableDatabase();
+		if (orderDetailHelper == null)
+			orderDetailHelper = new DatabaseHelper(getContext());
+		SQLiteDatabase db = orderDetailHelper.getWritableDatabase();
 		return db.update(DATABASE_TABLE_NAME, values, selection, selectionArgs);
 	}
 
@@ -113,10 +120,10 @@ public class OrderProvider extends ContentProvider {
 		}
 
 		private void createtable(SQLiteDatabase db) {
-//			 db.execSQL("drop table orderinfo");
+//			 db.execSQL("drop table orderDetail");
 			db.execSQL(DATABASE_CREATE);
-//			if (getAllCount(db) == 0)
-//				initData(db);
+			// if (getAllCount(db) == 0)
+			// initData(db);
 			Log.i(TAG, "Table created...");
 
 		}
@@ -126,52 +133,52 @@ public class OrderProvider extends ContentProvider {
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-1','中华',10,'2010-3-10','包','450','1','中华好烟','1','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-2','小熊猫',10,'2010-3-11','包','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-3','中华',10,'2010-3-12','条','450','1','好烟','1','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-4','大熊猫',10,'2010-4-10','条','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-5','玉溪',10,'2010-5-10','包','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-6','红双喜',10,'2010-6-10','条','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-7','七匹狼',10,'2010-6-11','包','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-8','石狮',10,'2010-5-10','条','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-9','石狮',10,'2010-6-10','包','450','1','好烟','0','1','0')");
 			db
 					.execSQL("INSERT INTO "
 							+ DATABASE_TABLE_NAME
-							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
+							+ " (OrderDetailid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid,recieve)"
 							+ " VALUES ('O-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1','0')");
 		}
 

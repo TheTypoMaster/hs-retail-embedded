@@ -32,13 +32,6 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activity.DetailActivity"
-			android:theme="@android:style/Theme.Dialog" android:label="@string/detailInfo_name">
-			<intent-filter>
-				<action android:name="android.intent.action.OrderDetail" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
 		<activity android:name=".activity.EditOrderActivity"
 			android:theme="@android:style/Theme.Dialog" android:label="@string/editOrder_name">
 			<intent-filter>
@@ -51,6 +44,9 @@
 		</provider>
 		<provider android:name="com.tobacco.onlinesrv.provider.OrderProvider"
 			android:authorities="com.tobacco.onlinesrv.provider.orderProvider">
+		</provider>
+		<provider android:name="com.tobacco.onlinesrv.provider.OrderDetailProvider"
+			android:authorities="com.tobacco.onlinesrv.provider.orderDetailProvider">
 		</provider>
 		<provider android:name="com.tobacco.onlinesrv.provider.TobaccoProvider"
 			android:authorities="com.tobacco.onlinesrv.provider.tobaccoProvider">

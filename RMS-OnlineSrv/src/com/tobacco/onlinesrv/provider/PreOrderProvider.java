@@ -27,11 +27,9 @@ public class PreOrderProvider extends ContentProvider {
 	private static final String DATABASE_CREATE = "create table if not exists "
 			+ DATABASE_TABLE_NAME + "(" + PreOrder.KEY_ID
 			+ " integer primary key autoincrement, " + PreOrder.KEY_PREORDER_ID
-			+ " varchar(20), " + PreOrder.KEY_BRANDCODE + " varchar(20), "
-			+ PreOrder.KEY_BRANDCOUNT + " integer, " + PreOrder.KEY_PREDATE
-			+ " date, " + PreOrder.KEY_USERNAME + " varchar(20), "
-			+ PreOrder.KEY_VIPID + " integer, " + PreOrder.KEY_FORMAT
-			+ " varchar(20), " + PreOrder.KEY_AMOUNT + " float, "
+			+ " varchar(20), " + PreOrder.KEY_PREDATE + " date, "
+			+ PreOrder.KEY_USERNAME + " varchar(20), " + PreOrder.KEY_VIPID
+			+ " integer, " + PreOrder.KEY_AMOUNT + " float, "
 			+ PreOrder.KEY_AGENTCYID + " integer, " + PreOrder.KEY_DESCRIPTION
 			+ " text, " + PreOrder.KEY_STATUS + " char(1))";
 	private DatabaseHelper preOrderHelper = null;
@@ -111,8 +109,8 @@ public class PreOrderProvider extends ContentProvider {
 		private void createtable(SQLiteDatabase db) {
 //			 db.execSQL("drop table preorderinfo");
 			db.execSQL(DATABASE_CREATE);
-			if(getAllCount(db)==0)
-				initData(db);
+//			if (getAllCount(db) == 0)
+//				initData(db);
 			Log.i(TAG, "Table created...");
 
 		}
@@ -170,13 +168,15 @@ public class PreOrderProvider extends ContentProvider {
 							+ " (orderid,brandcode,brandcount,date,format,amount,agencyid,description,status,vipid)"
 							+ " VALUES ('P-10','七匹狼',10,'2010-6-11','条','450','1','好烟','0','1')");
 		}
-		private int getAllCount(SQLiteDatabase db)
-		{
-			Cursor cursor = db.query(DATABASE_TABLE_NAME, null, null, null, null, null, null);
+
+		private int getAllCount(SQLiteDatabase db) {
+			Cursor cursor = db.query(DATABASE_TABLE_NAME, null, null, null,
+					null, null, null);
 			int count = cursor.getCount();
 			cursor.close();
 			return count;
 		}
+
 		private SQLiteDatabase openDatabase(String databaseName) {
 			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
 			return db;
