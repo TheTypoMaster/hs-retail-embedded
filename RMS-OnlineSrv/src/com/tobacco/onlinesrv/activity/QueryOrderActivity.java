@@ -43,9 +43,9 @@ public class QueryOrderActivity extends Activity {
 	private String queryType[] = { "单号" };
 	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
 			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE,
-			FieldSupport.KEY_VIPID, "statusName",
-			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
-			FieldSupport.KEY_DESCRIPTION, "recieveName" };
+			FieldSupport.KEY_VIPID, "statusName", FieldSupport.KEY_AGENTCYID,
+			FieldSupport.KEY_AMOUNT, FieldSupport.KEY_DESCRIPTION,
+			"recieveName" };
 
 	private String fromForOrderDetail[] = new String[] {
 			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
@@ -56,7 +56,7 @@ public class QueryOrderActivity extends Activity {
 			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
 			OrderDetail.KEY_FORMAT, OrderDetail.KEY_PRICE,
 			OrderDetail.KEY_AMOUNT };
-	
+
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -79,7 +79,7 @@ public class QueryOrderActivity extends Activity {
 	private List<HashMap<String, String>> dataDetailMaps = null;
 	private Uri currentOrder;
 	private int pageNum = 1;
-	private int pageCount = 8;
+	private int pageCount = 3;
 	private Boolean isEmpty = false;
 	private int mYear;
 	private int mMonth;
@@ -144,12 +144,12 @@ public class QueryOrderActivity extends Activity {
 				setCurrentOrder(uriMap.get(position));
 				fillDataMaps(getCurrentOrder(), null);
 				setListAdapter(getFillMaps());
+				setDetailListAdapter();
 				lastBtn.setEnabled(false);
 				homeBtn.setEnabled(false);
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-		
 
 			}
 		});
@@ -185,7 +185,7 @@ public class QueryOrderActivity extends Activity {
 		homeBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-			
+
 				pageNum = 1;
 				lastBtn.setEnabled(false);
 				homeBtn.setEnabled(false);
@@ -197,7 +197,6 @@ public class QueryOrderActivity extends Activity {
 		lastBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-			
 
 				pageNum--;
 				if (pageNum != 1) {
@@ -213,7 +212,6 @@ public class QueryOrderActivity extends Activity {
 		nextBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
 
 				pageNum++;
 				if (pageNum != getAllPages()) {
@@ -229,7 +227,7 @@ public class QueryOrderActivity extends Activity {
 		bottomBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				pageNum = getAllPages();
 				nextBtn.setEnabled(false);
 				bottomBtn.setEnabled(false);
@@ -241,7 +239,7 @@ public class QueryOrderActivity extends Activity {
 		backBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				finish();
 			}
 		});
@@ -249,7 +247,7 @@ public class QueryOrderActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				
+
 				listPosition = arg2;
 				setDetailListAdapter();
 			}
@@ -258,13 +256,12 @@ public class QueryOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				
+
 				listPosition = arg2;
 				setDetailListAdapter();
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
 
 			}
 		});
@@ -284,7 +281,7 @@ public class QueryOrderActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+
 		MenuInflater inflater = this.getMenuInflater();
 		inflater.inflate(R.menu.option_menu, menu);
 		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
@@ -296,13 +293,10 @@ public class QueryOrderActivity extends Activity {
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		
+
 		int tempPosition = listView.getSelectedItemPosition();
 		if (tempPosition >= 0)
 			listPosition = tempPosition;
-		TextView idText = (TextView) listView.getChildAt(listPosition)
-				.findViewById(R.id.item1);
-		String idStr = idText.getText().toString();
 		int location = (pageNum - 1) * pageCount + listPosition;
 		switch (item.getItemId()) {
 		case R.id.menuEdit:
@@ -313,11 +307,11 @@ public class QueryOrderActivity extends Activity {
 					.findViewById(R.id.actionItem);
 			TextView statusText = (TextView) listView.getChildAt(listPosition)
 					.findViewById(R.id.statusItem);
-			actionForRecieveMenuItem(recieveText.getText().toString(), idStr,
-					statusText.getText().toString());
+			actionForRecieveMenuItem(recieveText.getText().toString(),
+					location, statusText.getText().toString());
 			break;
 		case R.id.menuDel:
-			actionForDelMenuItem(idStr);
+			actionForDelMenuItem(location);
 			break;
 		}
 		return true;
@@ -349,15 +343,19 @@ public class QueryOrderActivity extends Activity {
 
 	private void setDetailListAdapter() {
 		int location = (pageNum - 1) * pageCount + listPosition;
-		HashMap<String, String> map = dataMaps.get(location);
-		fillDataDetailMap(map.get(FieldSupport.KEY_ID).toString(),
-				getCurrentOrder());
-		int[] toForOrderDetail = new int[] { R.id.nameItem, R.id.countItem,
-				R.id.formatItem, R.id.priceItem, R.id.amount2Item };
-		SimpleAdapter adapterForOrderDetail = new SimpleAdapter(
-				QueryOrderActivity.this, dataDetailMaps,
-				R.layout.orderdetal_item, fromForOrderDetail, toForOrderDetail);
-		detailList.setAdapter(adapterForOrderDetail);
+		if (dataMaps != null && dataMaps.size() != 0) {
+			HashMap<String, String> map = dataMaps.get(location);
+			fillDataDetailMap(map.get(FieldSupport.KEY_ID).toString(),
+					getCurrentOrder());
+			int[] toForOrderDetail = new int[] { R.id.nameItem, R.id.countItem,
+					R.id.formatItem, R.id.priceItem, R.id.amount2Item };
+			SimpleAdapter adapterForOrderDetail = new SimpleAdapter(
+					QueryOrderActivity.this, dataDetailMaps,
+					R.layout.orderdetal_item, fromForOrderDetail,
+					toForOrderDetail);
+			detailList.setAdapter(adapterForOrderDetail);
+		} else
+			detailList.setAdapter(null);
 	}
 
 	private void fillDataMaps(Uri uri, String selection) {
@@ -411,7 +409,6 @@ public class QueryOrderActivity extends Activity {
 		}
 		return null;
 	}
-
 
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
 		int ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ID);
@@ -478,22 +475,24 @@ public class QueryOrderActivity extends Activity {
 		Intent intent = new Intent();
 		intent.setAction("android.intent.action.EditOrder");
 		intent.putExtra("dataMap", map);
-		HashMap<Integer,HashMap<String,String>> detailMap = new HashMap<Integer,HashMap<String,String>>();
-		for(int i =0;i<dataDetailMaps.size();i++)
+		HashMap<Integer, HashMap<String, String>> detailMap = new HashMap<Integer, HashMap<String, String>>();
+		for (int i = 0; i < dataDetailMaps.size(); i++)
 			detailMap.put(i, dataDetailMaps.get(i));
- 		intent.putExtra("detailMap", detailMap);
+		intent.putExtra("detailMap", detailMap);
 		startActivity(intent);
 	}
 
-	private void actionForRecieveMenuItem(String recieveStr, String idStr,
+	private void actionForRecieveMenuItem(String recieveStr, int location,
 			String statusStr) {
+		HashMap<String, String> map = dataMaps.get(location);
 		if (getCurrentOrder() == Order.CONTENT_URI) {
 			if (statusStr.equals("已提交")) {
 				if (recieveStr.equals("否")) {
 					ContentValues values = new ContentValues();
 					values.put(Order.KEY_RECIEVE, "1");
 					int num = getContentResolver().update(Order.CONTENT_URI,
-							values, "id = " + idStr, null);
+							values, "id = " + map.get(FieldSupport.KEY_ID),
+							null);
 					if (num != 0) {
 						Toast.makeText(QueryOrderActivity.this, "该订单确认收货",
 								Toast.LENGTH_SHORT).show();
@@ -511,14 +510,15 @@ public class QueryOrderActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 	}
 
-	private void actionForDelMenuItem(String idStr) {
+	private void actionForDelMenuItem(int location) {
+		HashMap<String, String> map = dataMaps.get(location);
 		String where = "preorderid";
 		if (getCurrentOrder() == Order.CONTENT_URI)
 			where = "orderid";
 		int number1 = getContentResolver().delete(OrderDetail.CONTENT_URI,
-				where + "=" + idStr, null);
+				where + "=" + map.get(FieldSupport.KEY_ID), null);
 		int number2 = getContentResolver().delete(getCurrentOrder(),
-				"id = " + idStr, null);
+				"id = " + map.get(FieldSupport.KEY_ID), null);
 		if (number1 != 0 && number2 != 0) {
 			Toast.makeText(QueryOrderActivity.this, "删除成功", Toast.LENGTH_SHORT)
 					.show();
