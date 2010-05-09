@@ -36,4 +36,8 @@ public class FieldSupport {
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_STATUS = "status";
 	public static final String KEY_RECIEVE = "recieve";
+	
+	public static String []brandType;
+	public static String []packetPrice;
+	public static String []itemPrice;
 }

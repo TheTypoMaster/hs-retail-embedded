@@ -1,12 +1,16 @@
 package com.tobacco.onlinesrv.activity;
 
 import com.tobacco.R;
+import com.tobacco.onlinesrv.entities.Tobacco;
+import com.tobacco.onlinesrv.util.FieldSupport;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 public class OptionActivity extends Activity{
@@ -60,7 +64,26 @@ public class OptionActivity extends Activity{
 				finish();
 			}
 		});
-		
+		fillBrandInfo();
+	}
+
+	private void fillBrandInfo() {
+		Cursor cursor = this.managedQuery(Tobacco.CONTENT_URI, null, null,
+				null, null);
+		String tempStr = "";
+		String tempStr2 = "";
+		String tempStr3 = "";
+		if (cursor.getCount() != 0) {
+			cursor.moveToFirst();
+			do {
+				tempStr += "," + cursor.getString(1);
+				tempStr2 += "," + cursor.getString(2);
+				tempStr3 += "," + cursor.getString(4);
+			} while (cursor.moveToNext());
+			FieldSupport.brandType = tempStr.substring(1, tempStr.length()).split(",");
+			FieldSupport.packetPrice = tempStr2.substring(1, tempStr2.length()).split(",");
+			FieldSupport.itemPrice = tempStr3.substring(1, tempStr3.length()).split(",");
+		}
 	}
 
 	@Override

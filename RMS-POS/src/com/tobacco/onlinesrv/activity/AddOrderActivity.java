@@ -64,9 +64,6 @@ public class AddOrderActivity extends Activity {
 	private TextView addTxt;
 	private Uri preorderUri = PreOrder.CONTENT_URI;
 	private Uri orderUri = Order.CONTENT_URI;
-	private String brandType[] = {};
-	private String packetPrice[] = {};
-	private String itemPrice[] = {};
 	private String formatStr;
 	private String format[] = { "条", "包" };
 	private String type[] = { "预订单", "订单" };
@@ -111,24 +108,9 @@ public class AddOrderActivity extends Activity {
 	}
 
 	private void fillBrandSpinner() {
-		Cursor cursor = this.managedQuery(Tobacco.CONTENT_URI, null, null,
-				null, null);
-		String tempStr = "";
-		String tempStr2 = "";
-		String tempStr3 = "";
-		if (cursor.getCount() != 0) {
-			cursor.moveToFirst();
-			do {
-				tempStr += "," + cursor.getString(1);
-				tempStr2 += "," + cursor.getString(2);
-				tempStr3 += "," + cursor.getString(4);
-			} while (cursor.moveToNext());
-			brandType = tempStr.substring(1, tempStr.length()).split(",");
-			packetPrice = tempStr2.substring(1, tempStr2.length()).split(",");
-			itemPrice = tempStr3.substring(1, tempStr3.length()).split(",");
-			brandNameSp.setAdapter((new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, brandType)));
-		}
+
+		brandNameSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, FieldSupport.brandType)));
 
 		formatSp.setAdapter((new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, format)));
@@ -156,9 +138,9 @@ public class AddOrderActivity extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				if (formatSp.getSelectedItemPosition() == 1) {
-					priceTxt.setText(packetPrice[position]);
+					priceTxt.setText(FieldSupport.packetPrice[position]);
 				} else
-					priceTxt.setText(itemPrice[position]);
+					priceTxt.setText(FieldSupport.itemPrice[position]);
 				setAmountText();
 			}
 
@@ -172,10 +154,10 @@ public class AddOrderActivity extends Activity {
 					int position, long arg3) {
 
 				if (position == 1) {
-					priceTxt.setText(packetPrice[brandNameSp
+					priceTxt.setText(FieldSupport.packetPrice[brandNameSp
 							.getSelectedItemPosition()]);
 				} else {
-					priceTxt.setText(itemPrice[brandNameSp
+					priceTxt.setText(FieldSupport.itemPrice[brandNameSp
 							.getSelectedItemPosition()]);
 				}
 				setAmountText();
@@ -241,7 +223,7 @@ public class AddOrderActivity extends Activity {
 					}
 					if (uri != null) {
 						for (int i = 1; i < linearScroll.getChildCount(); i++) {
-							String brand = brandType[((Spinner) linearScroll
+							String brand = FieldSupport.brandType[((Spinner) linearScroll
 									.getChildAt(i).findViewById(
 											R.id.brandNameSp))
 									.getSelectedItemPosition()];
@@ -288,7 +270,8 @@ public class AddOrderActivity extends Activity {
 						.findViewById(R.id.brandNameSp);
 				brandSpinner.setAdapter((new ArrayAdapter<String>(
 						AddOrderActivity.this,
-						android.R.layout.simple_spinner_item, brandType)));
+						android.R.layout.simple_spinner_item,
+						FieldSupport.brandType)));
 				final Spinner formatSpinner = (Spinner) linearContent
 						.findViewById(R.id.formatSp);
 				formatSpinner.setAdapter((new ArrayAdapter<String>(
@@ -296,7 +279,7 @@ public class AddOrderActivity extends Activity {
 						android.R.layout.simple_spinner_item, format)));
 				final TextView priceTxt = (TextView) linearContent
 						.findViewById(R.id.priceText);
-				priceTxt.setText(itemPrice[brandSpinner
+				priceTxt.setText(FieldSupport.itemPrice[brandSpinner
 						.getSelectedItemPosition()]);
 				final EditText countEdt = (EditText) linearContent
 						.findViewById(R.id.brandCountText);
@@ -309,9 +292,11 @@ public class AddOrderActivity extends Activity {
 									View arg1, int position, long arg3) {
 
 								if (formatSpinner.getSelectedItemPosition() == 1) {
-									priceTxt.setText(packetPrice[position]);
+									priceTxt
+											.setText(FieldSupport.packetPrice[position]);
 								} else
-									priceTxt.setText(itemPrice[position]);
+									priceTxt
+											.setText(FieldSupport.itemPrice[position]);
 								setAmountTextForNew(amountEdt, countEdt
 										.getText().toString(), priceTxt
 										.getText().toString());
@@ -328,11 +313,13 @@ public class AddOrderActivity extends Activity {
 									View arg1, int position, long arg3) {
 
 								if (position == 1) {
-									priceTxt.setText(packetPrice[brandSpinner
-											.getSelectedItemPosition()]);
+									priceTxt
+											.setText(FieldSupport.packetPrice[brandSpinner
+													.getSelectedItemPosition()]);
 								} else {
-									priceTxt.setText(itemPrice[brandSpinner
-											.getSelectedItemPosition()]);
+									priceTxt
+											.setText(FieldSupport.itemPrice[brandSpinner
+													.getSelectedItemPosition()]);
 								}
 								setAmountTextForNew(amountEdt, countEdt
 										.getText().toString().trim(), priceTxt
@@ -435,12 +422,12 @@ public class AddOrderActivity extends Activity {
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
 		Uri uri = getContentResolver().insert(uriType, values);
-//		try {
-//			putToJson(uriType);
-//			// getJsonDataAndUpdate(obj);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
+		// try {
+		// putToJson(uriType);
+		// // getJsonDataAndUpdate(obj);
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
 		return uri;
 	}
 
@@ -546,8 +533,8 @@ public class AddOrderActivity extends Activity {
 		else
 			obj.put(fieldString[0], NumberGenerate
 					.orderIdGeneration(getAllCount(uriType)));
-		obj.put(fieldString[1],
-				brandType[brandNameSp.getSelectedItemPosition()]);
+		obj.put(fieldString[1], FieldSupport.brandType[brandNameSp
+				.getSelectedItemPosition()]);
 		obj
 				.put(fieldString[2], Integer.parseInt(countEdt.getText()
 						.toString()));

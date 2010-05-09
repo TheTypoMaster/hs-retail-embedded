@@ -52,9 +52,6 @@ public class EditOrderActivity extends Activity {
 	private EditText descEdt;
 	private Button okBtn;
 	private Button cancelBtn;
-	private String brandType[] = {};
-	private String packetPrice[] = {};
-	private String itemPrice[] = {};
 	private String format[] = { "条", "包" };
 	private String type[] = { "预订单", "订单" };
 	private List<String> idList = null;
@@ -90,24 +87,9 @@ public class EditOrderActivity extends Activity {
 	}
 
 	private void fillBrandSpinner() {
-		Cursor cursor = this.managedQuery(Tobacco.CONTENT_URI, null, null,
-				null, null);
-		String tempStr = "";
-		String tempStr2 = "";
-		String tempStr3 = "";
-		if (cursor.getCount() != 0) {
-			cursor.moveToFirst();
-			do {
-				tempStr += "," + cursor.getString(1);
-				tempStr2 += "," + cursor.getString(2);
-				tempStr3 += "," + cursor.getString(4);
-			} while (cursor.moveToNext());
-			brandType = tempStr.substring(1, tempStr.length()).split(",");
-			packetPrice = tempStr2.substring(1, tempStr2.length()).split(",");
-			itemPrice = tempStr3.substring(1, tempStr3.length()).split(",");
-			brandNameSp.setAdapter((new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, brandType)));
-		}
+		brandNameSp.setAdapter((new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, FieldSupport.brandType)));
+
 		typeSp.setAdapter((new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, type)));
 	}
@@ -141,7 +123,7 @@ public class EditOrderActivity extends Activity {
 							Order.KEY_DESCRIPTION);
 				}
 				for (int i = 2; i < linearScroll.getChildCount(); i++) {
-					String brand = brandType[((Spinner) linearScroll
+					String brand = FieldSupport.brandType[((Spinner) linearScroll
 							.getChildAt(i).findViewById(R.id.brandNameSp))
 							.getSelectedItemPosition()];
 					String formatStr = format[((Spinner) linearScroll
@@ -158,12 +140,12 @@ public class EditOrderActivity extends Activity {
 					result = updateOrderDetail(brand, formatStr, price, count,
 							amount, idList.get(i - 2));
 				}
-				if (number != 0 && result != 0){
+				if (number != 0 && result != 0) {
 					openSuccessDialog();
-					Intent resultIntent = new Intent(EditOrderActivity.this,QueryOrderActivity.class);
-					EditOrderActivity.this.setResult(RESULT_OK,resultIntent);
-				}
-				else
+					Intent resultIntent = new Intent(EditOrderActivity.this,
+							QueryOrderActivity.class);
+					EditOrderActivity.this.setResult(RESULT_OK, resultIntent);
+				} else
 					Toast.makeText(EditOrderActivity.this, "修改失败，请检查数据",
 							Toast.LENGTH_SHORT).show();
 				Log.i("update number", number + "");
@@ -208,7 +190,8 @@ public class EditOrderActivity extends Activity {
 					.findViewById(R.id.brandNameSp);
 			brandSpinner.setAdapter((new ArrayAdapter<String>(
 					EditOrderActivity.this,
-					android.R.layout.simple_spinner_item, brandType)));
+					android.R.layout.simple_spinner_item,
+					FieldSupport.brandType)));
 			brandSpinner.setSelection(getBrandNamePosition(detailMap.get(i)
 					.get(OrderDetail.KEY_BRANDCODE)));
 			final Spinner formatSpinner = (Spinner) linearContent
@@ -235,9 +218,11 @@ public class EditOrderActivity extends Activity {
 								View arg1, int position, long arg3) {
 
 							if (formatSpinner.getSelectedItemPosition() == 1) {
-								priceTxt.setText(packetPrice[position]);
+								priceTxt
+										.setText(FieldSupport.packetPrice[position]);
 							} else
-								priceTxt.setText(itemPrice[position]);
+								priceTxt
+										.setText(FieldSupport.itemPrice[position]);
 							setAmountTextForNew(amountEdt, countEdt.getText()
 									.toString(), priceTxt.getText().toString());
 						}
@@ -253,11 +238,13 @@ public class EditOrderActivity extends Activity {
 								View arg1, int position, long arg3) {
 
 							if (position == 1) {
-								priceTxt.setText(packetPrice[brandSpinner
-										.getSelectedItemPosition()]);
+								priceTxt
+										.setText(FieldSupport.packetPrice[brandSpinner
+												.getSelectedItemPosition()]);
 							} else {
-								priceTxt.setText(itemPrice[brandSpinner
-										.getSelectedItemPosition()]);
+								priceTxt
+										.setText(FieldSupport.itemPrice[brandSpinner
+												.getSelectedItemPosition()]);
 							}
 							setAmountTextForNew(amountEdt, countEdt.getText()
 									.toString().trim(), priceTxt.getText()
@@ -332,8 +319,8 @@ public class EditOrderActivity extends Activity {
 	}
 
 	private int getBrandNamePosition(String brandName) {
-		for (int i = 0; i < brandType.length; i++) {
-			if (brandType[i].equals(brandName)) {
+		for (int i = 0; i < FieldSupport.brandType.length; i++) {
+			if (FieldSupport.brandType[i].equals(brandName)) {
 				return i;
 			}
 		}
