@@ -21,7 +21,7 @@ public class OrderProvider extends ContentProvider {
 	public static final String CONTENT_URI = "com.tobacco.onlinesrv.provider.orderProvider";
 
 	private static final String TAG = "OrderProvider";
-	private static final String DATABASE_NAME = "RMS_OnlineSrv.db";
+	private static final String DATABASE_NAME = "AllTables.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_TABLE_NAME = "orderinfo";
 
