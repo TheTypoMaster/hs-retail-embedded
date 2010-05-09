@@ -189,6 +189,14 @@ public class GoodsKindCPer extends ContentProvider {
 				value.put("comment", "民以食为天");
 
 				db.insertOrThrow(TABLE_NAME, null, value);
+				
+				value.clear();
+				value.put("name", "卷烟");
+				value.put("parent", 0);
+				value.put("level", 1);
+				value.put("comment", "吸烟有害健康");
+
+				db.insertOrThrow(TABLE_NAME, null, value);
 
 				return true;
 			}
@@ -395,27 +403,27 @@ public class GoodsKindCPer extends ContentProvider {
 			}
 		}
 		
-		public List<Integer> getCigaretteKindId(){//获取所有的烟类的Id
-			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " name like '%烟%' ", null, null);
-			if(c.getCount()>0){
-				List<Integer> cigaretteKindList = new ArrayList<Integer>();
-				c.moveToFirst();
-				for(int i=0;i<c.getCount();i++){
-					cigaretteKindList.add(c.getInt(0));
-					c.moveToFirst();
-				}
-				for(int i=0;i<cigaretteKindList.size();i++){
-					Cursor c1 = this.query(AllTables.GoodsKind.CONTENT_URI, null, " parent = ? ", new String[]{cigaretteKindList.get(i)+""}, null);
-					if(c1.getCount()>0){
-						c1.moveToFirst();
-						for(int j=0;j<c1.getCount();j++){
-							cigaretteKindList.add(c1.getInt(0));
-							c1.moveToNext();
-						}
-					}
-				}
-				return cigaretteKindList;
-			}
-			return new ArrayList<Integer>();
-		}
+//		public List<Integer> getCigaretteKindId(){//获取所有的烟类的Id
+//			Cursor c = this.query(AllTables.GoodsKind.CONTENT_URI, null, " name like '%烟%' ", null, null);
+//			if(c.getCount()>0){
+//				List<Integer> cigaretteKindList = new ArrayList<Integer>();
+//				c.moveToFirst();
+//				for(int i=0;i<c.getCount();i++){
+//					cigaretteKindList.add(c.getInt(0));
+//					c.moveToFirst();
+//				}
+//				for(int i=0;i<cigaretteKindList.size();i++){
+//					Cursor c1 = this.query(AllTables.GoodsKind.CONTENT_URI, null, " parent = ? ", new String[]{cigaretteKindList.get(i)+""}, null);
+//					if(c1.getCount()>0){
+//						c1.moveToFirst();
+//						for(int j=0;j<c1.getCount();j++){
+//							cigaretteKindList.add(c1.getInt(0));
+//							c1.moveToNext();
+//						}
+//					}
+//				}
+//				return cigaretteKindList;
+//			}
+//			return new ArrayList<Integer>();
+//		}
 }

@@ -83,31 +83,31 @@ public class VIPInfoCPer extends ContentProvider {
 			db.insertOrThrow(TABLE_NAME, null, value);
 			
 			value.clear();
-			value.put("VIPNum", "vip0001");
+			value.put("VIPNum", "0001");
 			value.put("VIPName", "佟湘玉");
 			value.put("VIPDiscount", 0.9);
 			db.insertOrThrow(TABLE_NAME, null, value);
 
 			value.clear();
-			value.put("VIPNum", "vip0002");
+			value.put("VIPNum", "0002");
 			value.put("VIPName", "白展堂");
 			value.put("VIPDiscount", 0.85);
 			db.insertOrThrow(TABLE_NAME, null, value);
 
 			value.clear();
-			value.put("VIPNum", "vip0003");
+			value.put("VIPNum", "0003");
 			value.put("VIPName", "吕轻侯");
 			value.put("VIPDiscount", 0.9);
 			db.insertOrThrow(TABLE_NAME, null, value);
 
 			value.clear();
-			value.put("VIPNum", "vip0004");
+			value.put("VIPNum", "0004");
 			value.put("VIPName", "郭芙蓉");
 			value.put("VIPDiscount", 0.9);
 			db.insertOrThrow(TABLE_NAME, null, value);
 
 			value.clear();
-			value.put("VIPNum", "vip0005");
+			value.put("VIPNum", "0005");
 			value.put("VIPName", "莫小贝");
 			value.put("VIPDiscount", 0.8);
 			db.insertOrThrow(TABLE_NAME, null, value);

@@ -96,7 +96,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "红塔山");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -104,7 +104,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "黄梅");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 10);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -112,7 +112,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "哈德门");
 					value.put("manufacturerId", 2);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -120,7 +120,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "古田");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -128,7 +128,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "七匹狼");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -136,7 +136,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "一品梅");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();
@@ -144,7 +144,7 @@ public class GoodsCPer extends ContentProvider {
 					value.put("goodsName", "黄山");
 					value.put("manufacturerId", 1);
 					value.put("goodsFormat", "");
-					value.put("kindId", 8);
+					value.put("kindId", 15);
 					db.insertOrThrow(TABLE_NAME, null, value);
 					
 					value.clear();

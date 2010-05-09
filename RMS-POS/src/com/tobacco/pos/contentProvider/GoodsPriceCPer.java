@@ -65,7 +65,8 @@ public class GoodsPriceCPer extends ContentProvider {
 						+ "unitId integer references Unit ( "
 						+ _ID + " )," + " barcode varchar(20) unique ,"
 						+ "inPrice double not null,"
-						+ "outPrice double not null )");
+						+ "outPrice double not null,"
+						+ "isCigarette integer not null )");
 				initGoodsPrice(db);
 				}
 			}
@@ -88,97 +89,109 @@ public class GoodsPriceCPer extends ContentProvider {
 				value.clear();
 				value.put("goodsId", 1);
 				value.put("unitId", 1);
-				value.put("barcode", "gb1");
+				value.put("barcode", "0000000000001");
 				value.put("inPrice", 6.0);
 				value.put("outPrice", 7.0);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 2);
 				value.put("unitId", 2);
-				value.put("barcode", "gb2");
+				value.put("barcode", "0000000000002");
 				value.put("inPrice", 50);
 				value.put("outPrice", 60);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 3);
 				value.put("unitId", 2);
-				value.put("barcode", "gb3");
+				value.put("barcode", "0000000000003");
 				value.put("inPrice", 70);
 				value.put("outPrice", 80);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 4);
 				value.put("unitId", 3);
-				value.put("barcode", "gb4");
+				value.put("barcode", "0000000000004");
 				value.put("inPrice", 55);
 				value.put("outPrice", 64);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 5);
 				value.put("unitId", 3);
-				value.put("barcode", "gb5");
+				value.put("barcode", "0000000000005");
 				value.put("inPrice", 90);
 				value.put("outPrice", 100);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 6);
 				value.put("unitId", 3);
-				value.put("barcode", "gb6");
+				value.put("barcode", "0000000000006");
 				value.put("inPrice", 100);
 				value.put("outPrice", 110);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 7);
 				value.put("unitId", 1);
-				value.put("barcode", "gb7");
+				value.put("barcode", "0000000000007");
 				value.put("inPrice", 10);
 				value.put("outPrice", 12);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 7);
 				value.put("unitId", 2);
-				value.put("barcode", "gb8");
+				value.put("barcode", "0000000000008");
 				value.put("inPrice", 100);
 				value.put("outPrice", 120);
+				value.put("isCigarette", 1);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 8);
 				value.put("unitId", 5);
-				value.put("barcode", "gb9");
+				value.put("barcode", "0000000000009");
 				value.put("inPrice", 233);
 				value.put("outPrice", 250);
+				value.put("isCigarette", 0);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 9);
 				value.put("unitId", 1);
-				value.put("barcode", "gb10");
+				value.put("barcode", "00000000000010");
 				value.put("inPrice", 1.4);
 				value.put("outPrice", 2);
+				value.put("isCigarette", 0);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 10);
 				value.put("unitId", 6);
-				value.put("barcode", "gb11");
+				value.put("barcode", "0000000000011");
 				value.put("inPrice", 4);
 				value.put("outPrice", 6);
+				value.put("isCigarette", 0);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				value.clear();
 				value.put("goodsId", 11);
 				value.put("unitId", 7);
-				value.put("barcode", "gb12");
+				value.put("barcode", "0000000000012");
 				value.put("inPrice", 1);
 				value.put("outPrice", 1.5);
+				value.put("isCigarette", 0);
 				db.insertOrThrow(TABLE_NAME, null, value);
 				
 				return true;
@@ -260,6 +273,16 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
 	    		return c.getDouble(5);
+	    	}
+	    	else
+	    		return 0;
+	    }
+	    public int getIsCigaretteByBarcode(String barcode){//根据条形码判断是否是香烟
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " barcode = ? " , new String[]{barcode}, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		return c.getInt(6);	    		
 	    	}
 	    	else
 	    		return 0;
