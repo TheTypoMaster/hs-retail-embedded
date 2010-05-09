@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="类    型:"
+					android:paddingTop="10sp"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<RadioGroup
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal"
+			        android:checkedButton="@+id/moreRadioConsume"
+			        android:id="@+id/radioGroupConsume">
+			        <RadioButton
+			            android:text="溢"
+			            android:id="@+id/moreRadioConsume" />
+			        <RadioButton
+			            android:text="耗"
+			            android:id="@+id/lessRadioConsume" />
+		    	</RadioGroup>
+			</TableRow>
+			
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="条形码:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/barcodeTextConsume"
+					style="@style/DialogEditTextStyle"
+					android:hint="不可为空">
+				</EditText>
+			</TableRow>
+
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="数    量:" 
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/numberTextConsume"
+					style="@style/DialogEditTextStyle"
+					android:hint="可为空，默认为１">
+				</EditText>
+			</TableRow>
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView
+					android:text="说    明:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/commentTextConsume"
+					style="@style/DialogEditTextMultiLinesStyle"
+					android:hint="不超过２５５个字符">
+				</EditText>
+			</TableRow>
+		</TableLayout>
+		
+		<TableRow style="@style/DialogTableRowStyle">
+			<TextView
+				style="@style/DialogEmptyTextViewStyle"
+				android:layout_weight="1">
+			</TextView>
+			<Button android:text="确定" 
+				android:id="@+id/consume_insert_confirm"
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
+			</Button>
+			<Button android:text="取消" 
+				android:id="@+id/consume_insert_cancel"
+				style="@style/DialogButtonStyle"
+				android:layout_weight="1">
+			</Button>
+		</TableRow>
+	</LinearLayout>
+</ScrollView>

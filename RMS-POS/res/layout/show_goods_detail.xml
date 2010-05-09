@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<LinearLayout 
+		android:layout_gravity="center"
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableLayout 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="10sp"> >
+ 
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="类别:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/goodsKindShowGoodsDetail"
+					style="@style/DialogEnableEditTextStyle">
+				</EditText>
+			</TableRow>
+
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="厂家:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/manuNameShowGoodsDetail"
+					style="@style/DialogEnableEditTextStyle">
+				</EditText>
+			</TableRow>
+			
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="名称:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/goodsNameShowGoodsDetail"
+					style="@style/DialogEnableEditTextStyle">
+				</EditText>
+			</TableRow>
+
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="单位:"
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<EditText android:id="@+id/unitNameShowGoodsDetail"
+					style="@style/DialogEnableEditTextStyle">
+				</EditText>
+			</TableRow>
+			
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="进价:"
+					style="@style/DialogTextViewStyle">>
+				</TextView>
+				<EditText android:id="@+id/goodsPriceShowGoodsDetail"
+					style="@style/DialogEnableEditTextStyle">
+				</EditText>
+			</TableRow>
+			
+			<TableRow style="@style/DialogTableRowStyle">
+				<TextView android:text="  "
+					style="@style/DialogTextViewStyle">
+				</TextView>
+				<Button android:text="确定" android:id="@+id/okButtonShowGoodsDetail"
+				android:layout_width="80dip"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_marginLeft="90sp"
+				android:layout_marginRight="30sp">
+				</Button>
+			</TableRow>
+			
+		</TableLayout>
+	</LinearLayout>
+</ScrollView>

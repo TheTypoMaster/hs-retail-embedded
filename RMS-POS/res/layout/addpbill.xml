@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" android:layout_gravity="center">
+	<TableLayout>
+		<TableRow>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="进货单号:">
+			</TextView>
+			<TextView android:id="@+id/pBillNumTView"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:width="250sp">
+			</TextView>
+		</TableRow>
+
+		<TableRow android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="进货时间:">
+			</TextView>
+			<TextView android:id="@+id/pTimeTView"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:width="250sp">
+			</TextView>
+		</TableRow>
+
+
+		<TableRow android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="进货备注:">
+			</TextView>
+			<EditText android:id="@+id/pCommentEText"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:width="250sp"
+				android:lines="3">
+			</EditText>
+		</TableRow>
+	</TableLayout>
+
+	<TableRow>
+		<Button android:text="确定" android:id="@+id/addPBillOk"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="100sp">
+		</Button>
+		<Button android:text="取消" android:id="@+id/addPBillReset"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+		</Button>
+	</TableRow>
+</TableLayout>

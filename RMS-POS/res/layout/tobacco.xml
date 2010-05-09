@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+		<LinearLayout android:id="@+id/LinearRight"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:orientation="vertical">
+			<TableLayout android:id="@+id/actionsTableLayout"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:orientation="horizontal">
+				<TableRow android:id="@+id/actionsTableRow"
+					android:layout_width="wrap_content" android:layout_height="wrap_content">
+					<TextView android:id="@+id/tobaccoitem1" android:layout_height="wrap_content"
+						android:layout_width="wrap_content" android:width="20dip"></TextView>
+					<TextView android:id="@+id/tobaccoNameItem"
+						android:layout_height="wrap_content" android:text="@string/brandCode2_name"
+						android:textSize="14dip" android:width="70dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/orderPrice1Item" android:text="@string/orderPrice1_name"
+						android:textSize="14dip" android:width="70dip"
+						android:layout_width="wrap_content" android:layout_height="fill_parent"></TextView>
+					<TextView android:id="@+id/orderPrice2Item"
+						android:layout_height="wrap_content" android:text="@string/orderPrice2_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/salePrice1Item"
+						android:layout_height="wrap_content" android:text="@string/salePrice1_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_marginLeft="10px" android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/salePrice2Item"
+						android:layout_height="wrap_content" android:text="@string/salePrice2_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>			
+					<TextView android:id="@+id/manufactoryItem"
+						android:layout_height="wrap_content" android:text="@string/manufactory_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>					
+				</TableRow>
+			</TableLayout>
+			<FrameLayout android:id="@+id/FrameLayout02"
+				android:layout_width="wrap_content" android:layout_height="100px"
+				android:layout_weight="1">
+				<ListView android:id="@+id/ListView02"
+					android:layout_width="wrap_content" android:layout_height="fill_parent"
+					android:drawSelectorOnTop="false">
+				</ListView>
+			</FrameLayout>
+			</LinearLayout>
+</RelativeLayout>

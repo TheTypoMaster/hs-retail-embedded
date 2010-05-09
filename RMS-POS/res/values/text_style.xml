@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="TextViewTitleStyle" >
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>     
+        <item name="android:singleLine">true</item>
+    </style>
+    
+    <!-- <item name="android:gravity">center</item> -->
+    
+    <style name="TextViewContentStyle" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>      
+        <item name="android:singleLine">true</item>      
+    </style>
+
+	<style name="DialogTextViewStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:layout_marginLeft">10sp</item>
+    </style>
+    
+    <style name="DialogEditTextStyle" > 	
+        <item name="android:layout_width">250sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginRight">10sp</item>
+    </style>
+
+	<style name="DialogEnableEditTextStyle" > 	
+        <item name="android:layout_width">250sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+	<style name="DialogEditTextMultiLinesStyle" > 	
+        <item name="android:layout_width">250sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:lines">5</item>
+    </style>
+    
+    <style name="DialogTableRowStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:layout_marginLeft">10sp</item>
+    </style>
+    
+    <style name="DialogButtonStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10sp</item>
+    </style>
+
+	<style name="DialogEmptyTextViewStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">"  "</item>
+    </style>
+	
+	<style name="EditTextStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+	<style name="TextViewfillWrapLargeStyle" > 	
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+ </resources>

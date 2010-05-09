@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:id="@+id/inventoryBillSelectLinearLayout" >
+  
+	<view xmlns:android="http://schemas.android.com/apk/res/android"
+	    class="com.tobacco.pos.util.SearchCondition"
+	    android:id = "@+id/inventoryBillSelectSearch"
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10sp"
+		android:layout_marginRight="10sp"/>
+	
+  	<ScrollView android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/inventoryBillSelectTable">
+			<TableRow android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+	       		<TextView
+		          android:text="单号"
+				  android:layout_weight="1"
+				  android:layout_marginLeft="20sp"
+				  style="@style/TextViewTitleStyle"/>
+		        <TextView
+		          android:text="标志"
+				  android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/>    
+				<TextView
+		          android:text="盈亏"
+				  android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"
+				  android:ellipsize="marquee"
+				  android:marqueeRepeatLimit="marquee_forever"/>
+				<TextView
+		          android:text="时间"
+				  android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"
+				  android:ellipsize="marquee"
+				  android:marqueeRepeatLimit="marquee_forever"/>	
+				<TextView
+		          android:text="操作人"	  
+				  android:layout_weight="1"
+				  style="@style/TextViewTitleStyle"/> 				
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
+</LinearLayout>

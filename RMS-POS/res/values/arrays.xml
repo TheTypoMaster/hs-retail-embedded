@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string-array name="select_consume_function_items">
+		<item>增加溢耗</item>
+		<item>查询溢耗</item>
+	</string-array>
+	<string-array name="select_complaint_function_items">
+		<item>增加投诉</item>
+		<item>查询投诉</item>
+	</string-array>
+	<string-array name="select_return_function_items">
+		<item>增加退货</item>
+		<item>查询退货</item>
+	</string-array>
+	<string-array name="select_inventory_function_items">
+		<item>库存盘点</item>
+		<item>盘点查询</item>
+	</string-array>
+	
+	<array name="reportKind">
+		<item>@string/purchaseReport</item>
+		<item>@string/salesReport</item>
+		<item>@string/inventoryReport</item>
+	</array>
+</resources>

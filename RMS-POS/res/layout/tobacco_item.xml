@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/LinearLayout01" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:orientation="horizontal"
+	android:layout_gravity="center_vertical">
+	<TextView android:id="@+id/tobaccoitem1" android:layout_height="wrap_content"
+						android:layout_width="wrap_content" android:width="20dip"></TextView>
+					<TextView android:id="@+id/tobaccoNameItem"
+						android:layout_height="wrap_content" android:text="@string/brandCode2_name"
+						android:textSize="14dip" android:width="70dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/orderPrice1Item" android:text="@string/orderPrice1_name"
+						android:textSize="14dip" android:width="70dip"
+						android:layout_width="wrap_content" android:layout_height="fill_parent"></TextView>
+					<TextView android:id="@+id/orderPrice2Item"
+						android:layout_height="wrap_content" android:text="@string/orderPrice2_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/salePrice1Item"
+						android:layout_height="wrap_content" android:text="@string/salePrice1_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_marginLeft="10px" android:layout_width="wrap_content"></TextView>
+					<TextView android:id="@+id/salePrice2Item"
+						android:layout_height="wrap_content" android:text="@string/salePrice2_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>			
+					<TextView android:id="@+id/manufactoryItem"
+						android:layout_height="wrap_content" android:text="@string/manufactory_name"
+						android:width="70dip" android:textSize="14dip"
+						android:layout_width="wrap_content"></TextView>		
+</LinearLayout>
