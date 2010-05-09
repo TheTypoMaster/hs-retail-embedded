@@ -76,6 +76,7 @@ public class AllTables {
 		
 		public static final String outPrice = "outPrice";
 
+		public static final String isCigarette = "isCigarette";
 	}
 	
 	// 会员表
