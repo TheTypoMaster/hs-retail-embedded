@@ -8,7 +8,7 @@ import android.util.Log;
 public class ScanInputService extends Service {
 
 	BarcodeReaderHelper brh = null;
-
+	
 	@Override
 	public IBinder onBind(Intent arg0) {
 
@@ -64,4 +64,5 @@ public class ScanInputService extends Service {
 		}
 	}
 
+	
 }
