@@ -200,7 +200,7 @@ public class SearchCondition extends LinearLayout {
 	
 	private OnKeyListener keyListener = new OnKeyListener() {
 		
-		@Override
+	 
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			// TODO Auto-generated method stub
 			String content = ((EditText)v).getText().toString();
