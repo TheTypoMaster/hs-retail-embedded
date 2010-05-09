@@ -129,7 +129,7 @@ public class SelectInventoryGoods extends RMSBaseView {
     
     private OnClickListener listener = new OnClickListener() {
 		
-		@Override
+	 
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch(v.getId()){
