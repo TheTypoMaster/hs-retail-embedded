@@ -59,6 +59,8 @@ public class PaymentManagement extends RMSBaseView {
 	
 	private int newSBillId = -1;//新增的销售单Id
 	private double totalMoney = 0;	
+	private double cigaretteMoney = 0;//在一张单中香烟的总价
+	private double otherMoney = 0;//在一张单中其他商品的总价
 	
 	private List<String> barcodeList = new ArrayList<String>();
 	
@@ -213,10 +215,7 @@ public class PaymentManagement extends RMSBaseView {
 															
 															String VIPNum = VIPNumEText.getText().toString();
 															if(VIPNum.length() != 0){
-//																Intent getVIPInfoIntent = new Intent();
-//																getVIPInfoIntent.setAction("com.tobacco.custrel.activity.bm.VipDiscountManager.GET_VIP_DISCOUNT");
-//																getVIPInfoIntent.putExtra("vipNum", VIPNumEText.getText().toString());
-//																PaymentManagement.this.startActivityForResult(getVIPInfoIntent, 0);//此处调用回去VIP信息的方法。
+
 																
 																vipId = vipInfoCPer.getVIPIdByVIPNum(VIPNumEText.getText().toString());
 																vipDiscountRate = 0.8;
@@ -224,7 +223,7 @@ public class PaymentManagement extends RMSBaseView {
 																	Toast.makeText(PaymentManagement.this, "没有该会员", Toast.LENGTH_SHORT).show();
 																else{
 																	gKindCPer = new GoodsKindCPer();
-																	final List<Integer> allCigaretteKindId = gKindCPer.getCigaretteKindId();
+//																	final List<Integer> allCigaretteKindId = gKindCPer.getCigaretteKindId();
 																	//处理销售单的增加以及打印
 																
 																	final ArrayList<String> goodsNameList = new ArrayList<String>();//存储商品名字的List
@@ -236,13 +235,15 @@ public class PaymentManagement extends RMSBaseView {
 																	for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 																		String theBarcode = barcodeList.get(i-1);
 																		
-																		int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
+//																		int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
 																		int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
 															
 																	
 																		double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
-																		if(allCigaretteKindId.contains(kindId)){
+																		int isCigarette = gPriceCPer.getIsCigaretteByBarcode(theBarcode);//根据条形码判断是否是香烟，1代表香烟，0代表非香烟 
+																		if(isCigarette == 1){//香烟
 																			totalMoney += goodsCount*outPrice*vipDiscountRate;
+//																			cigaretteMoney += goodsCount*outPrice;
 																		 
 																			flagList.add("*");//如果是烟类有打折，用*标志
 																			tMoneyList.add(goodsCount*outPrice*vipDiscountRate+"");
@@ -291,8 +292,8 @@ public class PaymentManagement extends RMSBaseView {
 																		
 																					double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
 																					double outPrice = Double.parseDouble(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(2)).getText().toString());
-																					
-																					if(allCigaretteKindId.contains(kindId)){
+																					int isCigarette = gPriceCPer.getIsCigaretteByBarcode(theBarcode);
+																					if(isCigarette == 1){//香烟
 																					 
 																						sItemCPer.addSalesItem(newSBillId, goodsCount, theBarcode, inPrice, outPrice, vipDiscountRate);//如果是烟类，则打折
 																						 
