@@ -12,7 +12,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
-import com.tobacco.pos.contentProvider.Loginer;
 import com.tobacco.pos.handler.InventoryBillHandler;
 
 public class Main extends RMSBaseView {
@@ -36,6 +35,10 @@ public class Main extends RMSBaseView {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+
+		
+		
 		ListView saleList = (ListView)findViewById(R.id.listSaleMan);
 		ListView adminList = (ListView)findViewById(R.id.listAdmin);
 		

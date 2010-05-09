@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import com.tobacco.R;
 
+import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer; 
@@ -15,6 +17,7 @@ import com.tobacco.pos.contentProvider.PurchaseBillCPer;
 import com.tobacco.pos.contentProvider.PurchaseItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.entity.SinglePrice;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,7 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class PurchaseManagement extends Activity {
+public class PurchaseManagement extends RMSBaseView {
  
 	private GoodsCPer gCPer = null;
 	private PurchaseBillCPer pBillCPer = null;
@@ -77,6 +80,9 @@ public class PurchaseManagement extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.purchasemanagement);
+		
+		this.setActivityPrivList(new int[]{BCodeConst.USER_PRIV_ADMIN});
+		this.checkActivityPriv();
 	
 	 
 		gCPer = new GoodsCPer();

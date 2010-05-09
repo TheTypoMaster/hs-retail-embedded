@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
 import com.tobacco.pos.contentProvider.PurchaseBillCPer;
@@ -32,7 +34,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReportManagement extends Activity {
+public class ReportManagement extends RMSBaseView {
 
 	private PurchaseBillCPer pBillCPer = null;
 	private PurchaseItemCPer pItemCPer = null;
@@ -47,6 +49,9 @@ public class ReportManagement extends Activity {
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        
+			this.setActivityPrivList(new int[]{BCodeConst.USER_PRIV_ADMIN});
+			this.checkActivityPriv();
+		
 	        pBillCPer = new PurchaseBillCPer();
 	        pItemCPer = new PurchaseItemCPer();
 	        gPriceCPer = new GoodsPriceCPer();

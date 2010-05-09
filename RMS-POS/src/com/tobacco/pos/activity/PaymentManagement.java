@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer; 
@@ -70,6 +71,9 @@ public class PaymentManagement extends RMSBaseView {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.paymentmanagement);
+		
+		this.setActivityPrivList(new int[]{BCodeConst.USER_PRIV_OPERATOR});
+		this.checkActivityPriv();
 		
 		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
 		this.registerReceiver(new ScanReceiver(), filter);
