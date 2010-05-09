@@ -222,7 +222,7 @@ public class ConsumeInsert extends RMSBaseView{
 						
 						new AlertDialog.Builder(ConsumeInsert.this).setTitle("修改数量").setView(numberText)
 						.setPositiveButton("确定", new OnClickListener(){
-							@Override
+							 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								if(!RegexCheck.checkInteger(numberText.getText().toString())){
@@ -234,7 +234,7 @@ public class ConsumeInsert extends RMSBaseView{
 								}				
 							}			
 						}).setNegativeButton("取消", new OnClickListener(){
-							@Override
+						 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 							}			
