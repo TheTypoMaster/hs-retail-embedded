@@ -1,6 +1,6 @@
 package com.tobacco.onlinesrv.activity;
 
-import com.tobacco.onlinesrv.R;
+import com.tobacco.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,7 @@ public class OptionActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.onlinemain);
 		tobaccoBtn = (Button) this.findViewById(R.id.tobaccoManageBtn);
 		tobaccoBtn.setOnClickListener(new OnClickListener() {
 			

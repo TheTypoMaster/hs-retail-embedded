@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.tobacco.onlinesrv.R;
+import com.tobacco.R;
 import com.tobacco.onlinesrv.entities.Tobacco;
 
 public class TobaccoActivity extends Activity {
