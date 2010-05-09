@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.tobacco.onlinesrv.R;
+import com.tobacco.R;
 import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
