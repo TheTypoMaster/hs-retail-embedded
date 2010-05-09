@@ -121,7 +121,7 @@ public class ReturnInsert extends RMSBaseView{
 			
 			new AlertDialog.Builder(this).setTitle("是否会员").setView(VIPNumText)
 			.setPositiveButton("确定", new OnClickListener(){
-				@Override
+			 
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					String vipValue = InputCheck.checkVIP(ReturnInsert.this,VIPNumText.getText().toString());
@@ -134,7 +134,7 @@ public class ReturnInsert extends RMSBaseView{
 					}				
 				}			
 			}).setNegativeButton("否", new OnClickListener(){
-				@Override
+			 
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					for(ReturnModel goods : returnGoods)
@@ -246,8 +246,7 @@ public class ReturnInsert extends RMSBaseView{
 						
 						new AlertDialog.Builder(ReturnInsert.this).setTitle("修改数量").setView(numberText)
 						.setPositiveButton("确定", new OnClickListener(){
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
+						 	public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								if(!RegexCheck.checkInteger(numberText.getText().toString())){
 									Toast.makeText(ReturnInsert.this, "数量输入无效", Toast.LENGTH_SHORT).show();
@@ -258,7 +257,7 @@ public class ReturnInsert extends RMSBaseView{
 								}				
 							}			
 						}).setNegativeButton("取消", new OnClickListener(){
-							@Override
+						 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 							}			
