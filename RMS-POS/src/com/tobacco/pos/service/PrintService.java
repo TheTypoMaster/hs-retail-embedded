@@ -70,7 +70,7 @@ public class PrintService extends Service {
 				Log.d("lyq", goodsNameList.get(i) + "-" + countList.get(i) + "-" + outPriceList.get(i) + "-" + tMoneyList.get(i) + "-" + flagList.get(i));
 			}
 			rph.printFoot(fd, totalMoney+"", payMoney+"", (payMoney - totalMoney)+"");
-			
+			rph.close(fd);
 			
 		}
 	}
