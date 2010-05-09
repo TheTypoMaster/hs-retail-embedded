@@ -158,8 +158,11 @@ public class EditOrderActivity extends Activity {
 					result = updateOrderDetail(brand, formatStr, price, count,
 							amount, idList.get(i - 2));
 				}
-				if (number != 0 && result != 0)
+				if (number != 0 && result != 0){
 					openSuccessDialog();
+					Intent resultIntent = new Intent(EditOrderActivity.this,QueryOrderActivity.class);
+					EditOrderActivity.this.setResult(RESULT_OK,resultIntent);
+				}
 				else
 					Toast.makeText(EditOrderActivity.this, "修改失败，请检查数据",
 							Toast.LENGTH_SHORT).show();

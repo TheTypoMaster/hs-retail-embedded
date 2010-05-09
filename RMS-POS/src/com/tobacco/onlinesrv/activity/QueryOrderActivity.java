@@ -41,6 +41,7 @@ import com.tobacco.onlinesrv.util.FieldSupport;
 public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号" };
+	private final static int EDITINTENT = 2;
 	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
 			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE, "statusName",
 			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
@@ -476,7 +477,20 @@ public class QueryOrderActivity extends Activity {
 		for (int i = 0; i < dataDetailMaps.size(); i++)
 			detailMap.put(i, dataDetailMaps.get(i));
 		intent.putExtra("detailMap", detailMap);
-		startActivity(intent);
+		startActivityForResult(intent, EDITINTENT);
+	}
+
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		//super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode==EDITINTENT&&resultCode==RESULT_OK)
+		{
+			fillDataMaps(getCurrentOrder(), null);
+			setListAdapter(getFillMaps());
+			setDetailListAdapter();
+		}
 	}
 
 	private void actionForRecieveMenuItem(String recieveStr, int location,
