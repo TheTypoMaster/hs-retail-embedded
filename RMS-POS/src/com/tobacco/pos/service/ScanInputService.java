@@ -23,6 +23,8 @@ public class ScanInputService extends Service {
 		ScanThread thread = new ScanThread("scanthread");
 		Log.e("lqz", "thread start.");
 		thread.start();
+		
+		
 
 	}
 
