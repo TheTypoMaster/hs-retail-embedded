@@ -15,6 +15,6 @@ public class RegexCheck{
   }
   
   public static boolean checkBarcode(String value){
-	  return value.matches("gb[0-9]{1,5}");
+	  return value.matches("[0-9]{1,13}");
   }
 }
