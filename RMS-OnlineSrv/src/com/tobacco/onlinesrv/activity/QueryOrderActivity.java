@@ -42,10 +42,9 @@ public class QueryOrderActivity extends Activity {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号" };
 	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
-			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE,
-			FieldSupport.KEY_VIPID, "statusName", FieldSupport.KEY_AGENTCYID,
-			FieldSupport.KEY_AMOUNT, FieldSupport.KEY_DESCRIPTION,
-			"recieveName" };
+			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE, "statusName",
+			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
+			FieldSupport.KEY_DESCRIPTION, "recieveName" };
 
 	private String fromForOrderDetail[] = new String[] {
 			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
@@ -319,7 +318,7 @@ public class QueryOrderActivity extends Activity {
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
 		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.dateItem,
-				R.id.userItem, R.id.vipItem, R.id.statusItem, R.id.agencyItem,
+				R.id.userItem, R.id.statusItem, R.id.agencyItem,
 				R.id.amountItem, R.id.descItem, R.id.actionItem };
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
 				R.layout.grid_item, from, to);
@@ -415,7 +414,6 @@ public class QueryOrderActivity extends Activity {
 		int ORDER_ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ORDER_ID);
 		int DATE_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DATE);
 		int USERNAME_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_USERNAME);
-		int VIP_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_VIPID);
 		int AMOUNT_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AMOUNT);
 		int AGENCY_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_AGENTCYID);
 		int DESC_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_DESCRIPTION);
@@ -425,7 +423,6 @@ public class QueryOrderActivity extends Activity {
 		String orderId = cursor.getString(ORDER_ID_COLUMN);
 		map.put(FieldSupport.KEY_ORDER_ID, orderId);
 		map.put(FieldSupport.KEY_USERNAME, cursor.getString(USERNAME_COLUMN));
-		map.put(FieldSupport.KEY_VIPID, cursor.getString(VIP_COLUMN));
 		map.put(FieldSupport.KEY_DATE, cursor.getString(DATE_COLUMN));
 		map.put(FieldSupport.KEY_AMOUNT, cursor.getString(AMOUNT_COLUMN));
 		map.put(FieldSupport.KEY_AGENTCYID, cursor.getString(AGENCY_COLUMN));

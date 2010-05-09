@@ -29,11 +29,10 @@ public class OrderProvider extends ContentProvider {
 			+ DATABASE_TABLE_NAME + "(" + Order.KEY_ID
 			+ " integer primary key autoincrement, " + Order.KEY_ORDER_ID
 			+ " varchar(20) , " + Order.KEY_DATE + " date, "
-			+ Order.KEY_USERNAME + " varchar(20), " + Order.KEY_VIPID
-			+ " integer, " + Order.KEY_AMOUNT + " float, "
-			+ Order.KEY_AGENTCYID + " integer, " + Order.KEY_DESCRIPTION
-			+ " text, " + Order.KEY_STATUS + " char(1)," + Order.KEY_RECIEVE
-			+ " char(1))";
+			+ Order.KEY_USERNAME + " varchar(20), " + Order.KEY_AMOUNT
+			+ " float, " + Order.KEY_AGENTCYID + " integer, "
+			+ Order.KEY_DESCRIPTION + " text, " + Order.KEY_STATUS
+			+ " char(1)," + Order.KEY_RECIEVE + " char(1))";
 	private DatabaseHelper orderHelper = null;
 
 	@Override
@@ -115,8 +114,8 @@ public class OrderProvider extends ContentProvider {
 		private void createtable(SQLiteDatabase db) {
 //			 db.execSQL("drop table orderinfo");
 			db.execSQL(DATABASE_CREATE);
-//			if (getAllCount(db) == 0)
-//				initData(db);
+			// if (getAllCount(db) == 0)
+			// initData(db);
 			Log.i(TAG, "Table created...");
 
 		}

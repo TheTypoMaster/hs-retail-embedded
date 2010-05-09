@@ -53,9 +53,6 @@
 					<TextView android:id="@+id/dateItem"
 						android:layout_height="wrap_content" android:text="@string/date2_name"
 						android:width="80dip" android:layout_width="wrap_content"></TextView>
-					<TextView android:id="@+id/vipItem" android:layout_height="wrap_content"
-						android:text="@string/vip2_name" android:width="40dip"
-						android:layout_width="wrap_content"></TextView>
 					<TextView android:id="@+id/statusItem"
 						android:layout_height="wrap_content" android:text="@string/status2_name"
 						android:width="50dip" android:layout_width="wrap_content"></TextView>

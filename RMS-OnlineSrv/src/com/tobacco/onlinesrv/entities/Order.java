@@ -10,7 +10,6 @@ public class Order {
 	public static final String KEY_ORDER_ID = "orderid";
 	public static final String KEY_DATE = "date";
 	public static final String KEY_USERNAME = "username";
-	public static final String KEY_VIPID = "vipid";
 	public static final String KEY_AMOUNT = "amount";
 	public static final String KEY_AGENTCYID = "agencyid";
 	public static final String KEY_DESCRIPTION = "description";

@@ -11,9 +11,6 @@
 	<EditText android:id="@+id/brandCountText"
 		android:layout_width="@dimen/labelWidth" android:layout_height="wrap_content"
 		android:layout_marginRight="20dip" android:maxLines="1"></EditText>
-	<EditText android:id="@+id/vipText" android:layout_width="@dimen/labelWidth"
-		android:layout_height="wrap_content" android:layout_marginRight="20dip"
-		android:maxLines="1"></EditText>
 	<EditText android:id="@+id/amountText" android:layout_width="@dimen/labelWidth"
 		android:layout_height="wrap_content" android:maxLines="1"
 		android:layout_marginRight="20dip"></EditText>

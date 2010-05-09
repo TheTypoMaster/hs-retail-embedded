@@ -28,10 +28,10 @@ public class PreOrderProvider extends ContentProvider {
 			+ DATABASE_TABLE_NAME + "(" + PreOrder.KEY_ID
 			+ " integer primary key autoincrement, " + PreOrder.KEY_PREORDER_ID
 			+ " varchar(20), " + PreOrder.KEY_PREDATE + " date, "
-			+ PreOrder.KEY_USERNAME + " varchar(20), " + PreOrder.KEY_VIPID
-			+ " integer, " + PreOrder.KEY_AMOUNT + " float, "
-			+ PreOrder.KEY_AGENTCYID + " integer, " + PreOrder.KEY_DESCRIPTION
-			+ " text, " + PreOrder.KEY_STATUS + " char(1))";
+			+ PreOrder.KEY_USERNAME + " varchar(20), " + PreOrder.KEY_AMOUNT
+			+ " float, " + PreOrder.KEY_AGENTCYID + " integer, "
+			+ PreOrder.KEY_DESCRIPTION + " text, " + PreOrder.KEY_STATUS
+			+ " char(1))";
 	private DatabaseHelper preOrderHelper = null;
 
 	@Override
@@ -109,8 +109,8 @@ public class PreOrderProvider extends ContentProvider {
 		private void createtable(SQLiteDatabase db) {
 //			 db.execSQL("drop table preorderinfo");
 			db.execSQL(DATABASE_CREATE);
-//			if (getAllCount(db) == 0)
-//				initData(db);
+			// if (getAllCount(db) == 0)
+			// initData(db);
 			Log.i(TAG, "Table created...");
 
 		}

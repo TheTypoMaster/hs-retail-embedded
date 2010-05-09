@@ -134,12 +134,11 @@ public class EditOrderActivity extends Activity {
 				if (typeSp.getSelectedItemPosition() == 0) {
 					number = updateOrder(PreOrder.CONTENT_URI,
 							PreOrder.KEY_PREDATE, PreOrder.KEY_AMOUNT,
-							PreOrder.KEY_AGENTCYID, PreOrder.KEY_VIPID,
-							PreOrder.KEY_DESCRIPTION);
+							PreOrder.KEY_AGENTCYID, PreOrder.KEY_DESCRIPTION);
 				} else {
 					number = updateOrder(Order.CONTENT_URI, Order.KEY_DATE,
 							Order.KEY_AMOUNT, Order.KEY_AGENTCYID,
-							Order.KEY_VIPID, Order.KEY_DESCRIPTION);
+							Order.KEY_DESCRIPTION);
 				}
 				for (int i = 2; i < linearScroll.getChildCount(); i++) {
 					String brand = brandType[((Spinner) linearScroll
@@ -348,7 +347,7 @@ public class EditOrderActivity extends Activity {
 	}
 
 	private int updateOrder(Uri uriType, String date, String amount,
-			String agencyId, String vipId, String desc) {
+			String agencyId, String desc) {
 		ContentValues values = new ContentValues();
 		values.put(date, dateEdt.getText().toString());
 		values.put(amount, totalAmount);

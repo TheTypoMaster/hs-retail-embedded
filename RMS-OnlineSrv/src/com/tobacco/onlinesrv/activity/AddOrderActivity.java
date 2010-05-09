@@ -55,7 +55,6 @@ public class AddOrderActivity extends Activity {
 	private EditText dateEdt;
 	private EditText amountEdt;
 	private TextView agencyTxt;
-	private EditText vipEdt;
 	private EditText descEdt;
 	private TextView priceTxt;
 	private LinearLayout linearScroll;
@@ -78,9 +77,9 @@ public class AddOrderActivity extends Activity {
 	private String[] fieldString = { FieldSupport.KEY_ORDER_ID,
 			FieldSupport.KEY_BRANDCODE, FieldSupport.KEY_BRANDCOUNT,
 			FieldSupport.KEY_DATE, FieldSupport.KEY_USERNAME,
-			FieldSupport.KEY_VIPID, FieldSupport.KEY_FORMAT,
-			FieldSupport.KEY_AMOUNT, FieldSupport.KEY_AGENTCYID,
-			FieldSupport.KEY_DESCRIPTION, FieldSupport.KEY_STATUS };
+			FieldSupport.KEY_FORMAT, FieldSupport.KEY_AMOUNT,
+			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_DESCRIPTION,
+			FieldSupport.KEY_STATUS };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +101,6 @@ public class AddOrderActivity extends Activity {
 		dateEdt = (EditText) this.findViewById(R.id.dateText);
 		amountEdt = (EditText) this.findViewById(R.id.amountText);
 		agencyTxt = (TextView) this.findViewById(R.id.unitText);
-		vipEdt = (EditText) this.findViewById(R.id.vipText);
 		descEdt = (EditText) this.findViewById(R.id.descText);
 		typeSp = (Spinner) this.findViewById(R.id.typeSp);
 		okBtn = (Button) this.findViewById(R.id.orderOkBtn);
@@ -172,7 +170,7 @@ public class AddOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-			
+
 				if (position == 1) {
 					priceTxt.setText(packetPrice[brandNameSp
 							.getSelectedItemPosition()]);
@@ -191,7 +189,7 @@ public class AddOrderActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-			
+
 				if (position == 0) {
 					dateEdt.setEnabled(true);
 				} else {
@@ -202,7 +200,6 @@ public class AddOrderActivity extends Activity {
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
 
 			}
 		});
@@ -235,14 +232,12 @@ public class AddOrderActivity extends Activity {
 						uri = AddOrder(preorderUri, PreOrder.KEY_PREORDER_ID,
 								PreOrder.KEY_PREDATE, PreOrder.KEY_AMOUNT,
 								PreOrder.KEY_AGENTCYID, PreOrder.KEY_USERNAME,
-								PreOrder.KEY_VIPID, PreOrder.KEY_DESCRIPTION,
-								PreOrder.KEY_STATUS);
+								PreOrder.KEY_DESCRIPTION, PreOrder.KEY_STATUS);
 					} else {
 						uri = AddOrder(orderUri, Order.KEY_ORDER_ID,
 								Order.KEY_DATE, Order.KEY_AMOUNT,
 								Order.KEY_AGENTCYID, Order.KEY_USERNAME,
-								Order.KEY_VIPID, Order.KEY_DESCRIPTION,
-								Order.KEY_STATUS);
+								Order.KEY_DESCRIPTION, Order.KEY_STATUS);
 					}
 					if (uri != null) {
 						for (int i = 1; i < linearScroll.getChildCount(); i++) {
@@ -284,7 +279,7 @@ public class AddOrderActivity extends Activity {
 		addTxt.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 				final LinearLayout linearContent = (LinearLayout) inflater
 						.inflate(R.layout.order_item, null);
@@ -312,7 +307,7 @@ public class AddOrderActivity extends Activity {
 
 							public void onItemSelected(AdapterView<?> arg0,
 									View arg1, int position, long arg3) {
-								
+
 								if (formatSpinner.getSelectedItemPosition() == 1) {
 									priceTxt.setText(packetPrice[position]);
 								} else
@@ -323,7 +318,6 @@ public class AddOrderActivity extends Activity {
 							}
 
 							public void onNothingSelected(AdapterView<?> arg0) {
-								
 
 							}
 						});
@@ -332,7 +326,7 @@ public class AddOrderActivity extends Activity {
 
 							public void onItemSelected(AdapterView<?> arg0,
 									View arg1, int position, long arg3) {
-								
+
 								if (position == 1) {
 									priceTxt.setText(packetPrice[brandSpinner
 											.getSelectedItemPosition()]);
@@ -346,14 +340,13 @@ public class AddOrderActivity extends Activity {
 							}
 
 							public void onNothingSelected(AdapterView<?> arg0) {
-								
 
 							}
 						});
 				countEdt.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 					public void onFocusChange(View v, boolean hasFocus) {
-						
+
 						String count = countEdt.getText().toString();
 						if (!hasFocus
 								&& !countEdt.getText().toString().equals("")) {
@@ -424,8 +417,8 @@ public class AddOrderActivity extends Activity {
 	}
 
 	private Uri AddOrder(Uri uriType, String orderId, String date,
-			String amount, String agencyId, String userName, String vipId,
-			String desc, String status) {
+			String amount, String agencyId, String userName, String desc,
+			String status) {
 		ContentValues values = new ContentValues();
 		if (uriType == PreOrder.CONTENT_URI) {
 			values.put(orderId, NumberGenerate
@@ -439,16 +432,15 @@ public class AddOrderActivity extends Activity {
 		values.put(amount, totalAmount);
 		values.put(agencyId, agencyid);
 		values.put(userName, "cry");
-		values.put(vipId, Integer.parseInt(vipEdt.getText().toString()));
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
 		Uri uri = getContentResolver().insert(uriType, values);
-		try {
-			putToJson(uriType);
-			// getJsonDataAndUpdate(obj);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			putToJson(uriType);
+//			// getJsonDataAndUpdate(obj);
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
 		return uri;
 	}
 
@@ -525,7 +517,7 @@ public class AddOrderActivity extends Activity {
 			if (dateOfSelectedDay.getTime() - dateOfToday.getTime() >= 0)
 				return true;
 		} catch (ParseException e) {
-		
+
 			e.printStackTrace();
 		}
 		return false;
@@ -535,8 +527,6 @@ public class AddOrderActivity extends Activity {
 		String tag = "";
 		if (!isInteger(countEdt.getText().toString()))
 			tag += "请在商品数量中输入数字\n";
-		if (!isInteger(vipEdt.getText().toString()))
-			tag += "请在商品折扣中输入数字\n";
 		if (!isValidDate())
 			tag += "日期不能小于今天";
 		if (tag.equals(""))
@@ -567,7 +557,6 @@ public class AddOrderActivity extends Activity {
 				.parseFloat(amountEdt.getText().toString()));
 		obj.put(fieldString[6], agencyid);
 		obj.put(fieldString[7], "cry");
-		obj.put(fieldString[8], Integer.parseInt(vipEdt.getText().toString()));
 		obj.put(fieldString[9], descEdt.getText().toString());
 		obj.put(fieldString[10], "0");
 	}
