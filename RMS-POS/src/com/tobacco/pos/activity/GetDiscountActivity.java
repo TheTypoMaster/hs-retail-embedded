@@ -13,7 +13,7 @@ public class GetDiscountActivity extends Activity {
 		String VIPNum = this.getIntent().getStringExtra("VIPNum");
 		
 		Intent discountResultIntent = new Intent(this, PaymentManagement.class);
-		discountResultIntent.putExtra("VIPId", 2);
+		discountResultIntent.putExtra("VIPId", -1);
 		discountResultIntent.putExtra("VIPDiscount", 0.6+"");
 		discountResultIntent.putExtra("VIPName", "腾讯TM");
 	 
