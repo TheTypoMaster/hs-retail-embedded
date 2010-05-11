@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.entity.ReturnFull;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.DateTool;
 
@@ -276,7 +277,7 @@ public class ReturnCPer extends ContentProvider{
 			c.moveToFirst();
 			return c.getString(0);
 		}else{
-			return null;
+			return "";
 		}
 	}
    
@@ -286,7 +287,25 @@ public class ReturnCPer extends ContentProvider{
 			c.moveToFirst();
 			return c.getString(0);
 		}else{
-			return null;
+			return "";
 		}
 	}
+    
+    public int getTotalReturnByPriceId(int priceId){
+    	
+    	int total = 0;
+    	Cursor c = this.query(AllTables.Return.CONTENT_URI, new String[]{Return.NUMBER}, Return.GOODS_ID+" = "+"'"+priceId+"'" , null, null);
+    	
+    	if(c.getCount()>0){ 		
+    		c.moveToFirst();
+    		
+    		for(int i=0;i<c.getCount();i++){
+    			total+=Integer.valueOf(c.getString(0)).intValue();
+    			c.moveToNext();
+    		}
+					
+		}
+    	
+    	return total;
+    }
 }

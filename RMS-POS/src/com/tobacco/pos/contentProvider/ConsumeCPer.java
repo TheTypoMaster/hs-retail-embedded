@@ -276,7 +276,7 @@ public class ConsumeCPer extends ContentProvider{
 			c.moveToFirst();
 			return c.getString(0);
 		}else{
-			return null;
+			return "";
 		}
 	}
    
@@ -286,7 +286,29 @@ public class ConsumeCPer extends ContentProvider{
 			c.moveToFirst();
 			return c.getString(0);
 		}else{
-			return null;
+			return "";
 		}
 	}
+    
+    public int getTotalConsumeByPriceId(int priceId){
+    	
+    	int total = 0;
+    	Cursor c = this.query(AllTables.Consume.CONTENT_URI, new String[]{Consume.NUMBER,Consume.FLAG}, Consume.GOODS+" = "+"'"+priceId+"'" , null, null);
+    	
+    	if(c.getCount()>0){ 		
+    		c.moveToFirst();
+    		
+    		for(int i=0;i<c.getCount();i++){
+    			int flag = c.getInt(1);
+    			int number = c.getInt(0);
+    			number = (flag==0)?-number:number;
+    			
+    			total += number;
+    			c.moveToNext();
+    		}
+					
+		}
+    	
+    	return total;
+    }
 }
