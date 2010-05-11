@@ -271,4 +271,19 @@ public class PurchaseItemCPer extends ContentProvider {
 	    	}
 	    	return new ArrayList<ArrayList<Integer>>();
 	    }
+	    
+	    public int getAllPNumByPriceId(int priceId){//根据商品的价格ID查找历史上所有进货量
+	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " pPriceId = ? ", new String[]{priceId+""}, null);
+	    	
+	    	if(c.getCount()>0){
+	    		int totalNum = 0;	    		
+	    		c.moveToFirst();
+	    		for(int i=0;i<c.getCount();i++){
+	    			totalNum += c.getInt(2);
+	    			c.moveToNext();
+	    		}
+	    		return totalNum;
+	    	}
+	    	return 0;
+	    }
 }

@@ -310,4 +310,19 @@ public class SalesItemCPer extends ContentProvider {
 	    		
 	    	}
 	    }
+	    public int getSNumByBarcode(String barcode){
+	    	Cursor c = this.query(AllTables.SalesItem.CONTENT_URI, null, " barcode = ? ", new String[]{barcode}, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		int totalSNum = 0;
+	    		for(int i=0;i<c.getCount();i++){
+	    			totalSNum += c.getInt(2);
+	    			c.moveToNext();
+	    		}
+	    		return totalSNum;
+	    	}
+	    	else
+	    		return 0;
+	    }
 }

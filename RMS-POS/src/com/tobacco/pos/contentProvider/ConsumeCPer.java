@@ -270,4 +270,23 @@ public class ConsumeCPer extends ContentProvider{
 		consumeProjectionMap.put(Consume.COMMENT, Consume.COMMENT);
 	}
 
+	public String getAttributeById(String attribute,String id){
+		Cursor c = this.query(AllTables.Consume.CONTENT_URI, new String[]{attribute}, " _id = "+"'"+id+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
+	}
+   
+    public String getAttributeByAttribute(String attribute,String attribute2,String value){
+		Cursor c = this.query(AllTables.Consume.CONTENT_URI, new String[]{attribute}, attribute2+" = "+"'"+value+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
+	}
 }

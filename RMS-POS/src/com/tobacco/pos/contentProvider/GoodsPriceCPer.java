@@ -400,8 +400,8 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	}
 	    	return null;
 		}
-	    public String getBarcodeIdByGoodsPriceId(String id){
-	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? " , new String[]{id}, null);
+	    public String getBarcodeIdByGoodsPriceId(int priceId){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, " _id = ? " , new String[]{priceId+""}, null);
 	    	
 	    	if(c.getCount()>0){
 	    		c.moveToFirst();
@@ -464,5 +464,22 @@ public class GoodsPriceCPer extends ContentProvider {
 				return null;
 			}
 		}
+	    
+	    public List<Integer> getAllPriceId(){
+	    	Cursor c = this.query(AllTables.GoodsPrice.CONTENT_URI, null, null, null, null);
+	    	
+	    	if(c.getCount()>0){
+	    		c.moveToFirst();
+	    		List<Integer> allPriceId = new ArrayList<Integer>();
+	    		for(int i=0;i<c.getCount();i++){
+	    			allPriceId.add(c.getInt(0));
+	    			c.moveToNext();
+	    		}
+	    		return allPriceId;
+	    	}
+	    	else
+	    		return new ArrayList<Integer>();
+	    }
+	
 
 }

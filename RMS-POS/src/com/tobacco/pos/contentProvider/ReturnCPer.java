@@ -18,9 +18,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tobacco.pos.entity.ConsumeFull;
+import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.entity.ReturnFull;
-import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.DateTool;
 
@@ -269,5 +268,25 @@ public class ReturnCPer extends ContentProvider{
 		returnProjectionMap.put(Return.NUMBER, Return.NUMBER);
 		returnProjectionMap.put(Return.CONTENT, Return.CONTENT);
 		returnProjectionMap.put(Return.COMMENT, Return.COMMENT);
+	}
+	
+	public String getAttributeById(String attribute,String id){
+		Cursor c = this.query(AllTables.Return.CONTENT_URI, new String[]{attribute}, " _id = "+"'"+id+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
+	}
+   
+    public String getAttributeByAttribute(String attribute,String attribute2,String value){
+		Cursor c = this.query(AllTables.Return.CONTENT_URI, new String[]{attribute}, attribute2+" = "+"'"+value+"'" , null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			return c.getString(0);
+		}else{
+			return null;
+		}
 	}
 }
