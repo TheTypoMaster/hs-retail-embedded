@@ -35,6 +35,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
@@ -43,7 +44,7 @@ import com.tobacco.onlinesrv.entities.Tobacco;
 import com.tobacco.onlinesrv.util.FieldSupport;
 import com.tobacco.onlinesrv.util.NumberGenerate;
 
-public class AddOrderActivity extends Activity {
+public class AddOrderActivity extends RMSBaseView {
 	private int mYear;
 	private int mMonth;
 	private int mDay;

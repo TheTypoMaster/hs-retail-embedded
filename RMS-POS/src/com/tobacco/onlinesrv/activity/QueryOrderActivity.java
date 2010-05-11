@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,12 +35,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.util.FieldSupport;
 
-public class QueryOrderActivity extends Activity {
+public class QueryOrderActivity extends RMSBaseView {
 	private String orderType[] = { "预订单", "订单" };
 	private String queryType[] = { "单号" };
 	private final static int EDITINTENT = 2;
@@ -268,55 +271,6 @@ public class QueryOrderActivity extends Activity {
 
 	}
 
-	private int getAllPages() {
-		if (dataMaps != null) {
-			int dataLength = dataMaps.size();
-			if (dataLength % pageCount == 0)
-				return dataLength / pageCount;
-			else
-				return dataLength / pageCount + 1;
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		MenuInflater inflater = this.getMenuInflater();
-		inflater.inflate(R.menu.option_menu, menu);
-		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
-		menu.findItem(R.id.menuDel).setIcon(android.R.drawable.ic_menu_delete);
-		menu.findItem(R.id.menuRecieve).setIcon(
-				android.R.drawable.ic_menu_agenda);
-		return true;
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
-		int tempPosition = listView.getSelectedItemPosition();
-		if (tempPosition >= 0)
-			listPosition = tempPosition;
-		int location = (pageNum - 1) * pageCount + listPosition;
-		switch (item.getItemId()) {
-		case R.id.menuEdit:
-			actionForEditMenuItem(location);
-			break;
-		case R.id.menuRecieve:
-			TextView recieveText = (TextView) listView.getChildAt(listPosition)
-					.findViewById(R.id.actionItem);
-			TextView statusText = (TextView) listView.getChildAt(listPosition)
-					.findViewById(R.id.statusItem);
-			actionForRecieveMenuItem(recieveText.getText().toString(),
-					location, statusText.getText().toString());
-			break;
-		case R.id.menuDel:
-			actionForDelMenuItem(location);
-			break;
-		}
-		return true;
-	}
-
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
 		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.dateItem,
 				R.id.userItem, R.id.statusItem, R.id.agencyItem,
@@ -410,6 +364,122 @@ public class QueryOrderActivity extends Activity {
 		return null;
 	}
 
+	private void fillDataDetailMap(String orderId, Uri detailUri) {
+		Cursor cursor = null;
+		dataDetailMaps = new ArrayList<HashMap<String, String>>();
+		if (detailUri == PreOrder.CONTENT_URI)
+			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
+					" preorderid = " + Integer.parseInt(orderId), null, null);
+		else
+			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
+					" orderid = " + Integer.parseInt(orderId), null, null);
+		if (cursor.getCount() != 0) {
+			cursor.moveToFirst();
+			do {
+				HashMap<String, String> map = new HashMap<String, String>();
+				for (int i = 0; i < KEY_FIELDS.length; i++) {
+					String value = cursor.getString(cursor
+							.getColumnIndex(KEY_FIELDS[i]));
+
+					map.put(KEY_FIELDS[i], value);
+				}
+
+				dataDetailMaps.add(map);
+			} while (cursor.moveToNext());
+		}
+	}
+
+	private int getAllPages() {
+		if (dataMaps != null) {
+			int dataLength = dataMaps.size();
+			if (dataLength % pageCount == 0)
+				return dataLength / pageCount;
+			else
+				return dataLength / pageCount + 1;
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = this.getMenuInflater();
+		inflater.inflate(R.menu.option_menu, menu);
+		menu.findItem(R.id.menuEdit).setIcon(android.R.drawable.ic_menu_edit);
+		menu.findItem(R.id.menuDel).setIcon(android.R.drawable.ic_menu_delete);
+		menu.findItem(R.id.menuRecieve).setIcon(
+				android.R.drawable.ic_menu_agenda);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+		int tempPosition = listView.getSelectedItemPosition();
+		if (tempPosition >= 0)
+			listPosition = tempPosition;
+		int location = (pageNum - 1) * pageCount + listPosition;
+		switch (item.getItemId()) {
+		case R.id.menuEdit:
+			actionForEditMenuItem(location);
+			break;
+		case R.id.menuRecieve:
+			TextView recieveText = (TextView) listView.getChildAt(listPosition)
+					.findViewById(R.id.actionItem);
+			TextView statusText = (TextView) listView.getChildAt(listPosition)
+					.findViewById(R.id.statusItem);
+			openRecieveDialog(recieveText.getText().toString(), location,
+					statusText.getText().toString());
+			break;
+		case R.id.menuDel:
+			openDeleteDialog(location);
+			break;
+		}
+		return true;
+	}
+
+	private void openRecieveDialog(final String recieve, final int location,
+			final String status) {
+		new AlertDialog.Builder(QueryOrderActivity.this).setTitle("")
+				.setMessage("确定是否收货").setPositiveButton("是",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								actionForRecieveMenuItem(recieve, location,
+										status);
+								dialog.dismiss();
+							}
+						}).setNegativeButton("否",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).show();
+	}
+
+	private void openDeleteDialog(final int location) {
+		new AlertDialog.Builder(QueryOrderActivity.this).setTitle("")
+				.setMessage("确定是否删除").setPositiveButton("是",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								actionForDelMenuItem(location);
+								dialog.dismiss();
+							}
+						}).setNegativeButton("否",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).show();
+	}
+
 	private void putOrderMap(Cursor cursor, HashMap<String, String> map) {
 		int ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ID);
 		int ORDER_ID_COLUMN = cursor.getColumnIndex(FieldSupport.KEY_ORDER_ID);
@@ -443,31 +513,6 @@ public class QueryOrderActivity extends Activity {
 
 	}
 
-	private void fillDataDetailMap(String orderId, Uri detailUri) {
-		Cursor cursor = null;
-		dataDetailMaps = new ArrayList<HashMap<String, String>>();
-		if (detailUri == PreOrder.CONTENT_URI)
-			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
-					" preorderid = " + Integer.parseInt(orderId), null, null);
-		else
-			cursor = this.managedQuery(OrderDetail.CONTENT_URI, null,
-					" orderid = " + Integer.parseInt(orderId), null, null);
-		if (cursor.getCount() != 0) {
-			cursor.moveToFirst();
-			do {
-				HashMap<String, String> map = new HashMap<String, String>();
-				for (int i = 0; i < KEY_FIELDS.length; i++) {
-					String value = cursor.getString(cursor
-							.getColumnIndex(KEY_FIELDS[i]));
-
-					map.put(KEY_FIELDS[i], value);
-				}
-
-				dataDetailMaps.add(map);
-			} while (cursor.moveToNext());
-		}
-	}
-
 	private void actionForEditMenuItem(int location) {
 		HashMap<String, String> map = dataMaps.get(location);
 		Intent intent = new Intent();
@@ -480,13 +525,11 @@ public class QueryOrderActivity extends Activity {
 		startActivityForResult(intent, EDITINTENT);
 	}
 
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		//super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode==EDITINTENT&&resultCode==RESULT_OK)
-		{
+		// super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == EDITINTENT && resultCode == RESULT_OK) {
 			fillDataMaps(getCurrentOrder(), null);
 			setListAdapter(getFillMaps());
 			setDetailListAdapter();

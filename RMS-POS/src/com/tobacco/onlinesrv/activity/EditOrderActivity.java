@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.tobacco.R;
+import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
@@ -41,7 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class EditOrderActivity extends Activity {
+public class EditOrderActivity extends RMSBaseView {
 	private int mYear;
 	private int mMonth;
 	private int mDay;
