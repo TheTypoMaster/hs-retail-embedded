@@ -11,7 +11,7 @@ public class RegexCheck{
   }
   
   public static boolean checkVIPNum(String value){
-	  return value.matches("vip[0-9_]{1,5}$");
+	  return value.matches("[0-9]{1,5}$");
   }
   
   public static boolean checkBarcode(String value){
