@@ -157,6 +157,8 @@ public class ReturnInsert extends RMSBaseView{
 		state = SAVE_STATE;
 		TableLayout table = (TableLayout)findViewById(R.id.returnInsertTable);
 		table.removeViews(1, table.getChildCount()-1);
+		returnGoods.clear();
+		mapping.clear();
 		onResume();
 	}
 
@@ -168,7 +170,7 @@ public class ReturnInsert extends RMSBaseView{
 			if(resultCode == RESULT_OK){
 				String barcode = data.getExtras().getString(GoodsPrice.barcode);
 				int count = Integer.valueOf(data.getExtras().getString(Return.NUMBER));
-				String content = data.getExtras().getString(Return.CONTENT);
+				String content = data.getExtras().getString(Return.COMMENT);
 	
 				ReturnModel goods = handler.fillVacancy(barcode,count,content);
 				addReturnGoods(goods);
@@ -208,7 +210,7 @@ public class ReturnInsert extends RMSBaseView{
 		unitText.setText(goods.getUnit());
 		numberText.setText(""+goods.getNumber());
 		priceText.setText(""+goods.getInPrice());
-		contentText.setText(goods.getContent());
+		contentText.setText(goods.getComment());
 		final TableLayout table = (TableLayout)findViewById(R.id.returnInsertTable);		
 
 		mapping.put(row, goods);
@@ -240,20 +242,20 @@ public class ReturnInsert extends RMSBaseView{
 
 					public boolean onMenuItemClick(MenuItem item) {
 						// TODO Auto-generated method stub										
-						final EditText numberText = new EditText(ReturnInsert.this);
-						numberText.setWidth(100);
-						numberText.setSingleLine(true);
+						final EditText modifyNumber = new EditText(ReturnInsert.this);
+						modifyNumber.setWidth(100);
+						modifyNumber.setSingleLine(true);
 						
-						new AlertDialog.Builder(ReturnInsert.this).setTitle("修改数量").setView(numberText)
+						new AlertDialog.Builder(ReturnInsert.this).setTitle("修改数量").setView(modifyNumber)
 						.setPositiveButton("确定", new OnClickListener(){
 						 	public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
-								if(!RegexCheck.checkInteger(numberText.getText().toString())){
+								if(!RegexCheck.checkInteger(modifyNumber.getText().toString())){
 									Toast.makeText(ReturnInsert.this, "数量输入无效", Toast.LENGTH_SHORT).show();
 								}else{
 									ReturnModel model = (ReturnModel)mapping.get(row);
-									model.setNumber(Integer.valueOf(numberText.getText().toString()).intValue());
-									numberText.setText(numberText.getText().toString());
+									model.setNumber(Integer.valueOf(modifyNumber.getText().toString()).intValue());
+									numberText.setText(modifyNumber.getText().toString());
 								}				
 							}			
 						}).setNegativeButton("取消", new OnClickListener(){

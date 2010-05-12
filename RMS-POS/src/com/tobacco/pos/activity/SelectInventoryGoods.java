@@ -111,9 +111,9 @@ public class SelectInventoryGoods extends RMSBaseView {
 						}
 						
 						treeNodes.add(goodsNode);
-					}					
-					goodsPricec.moveToNext();
-				}		
+					}										
+				}	
+				goodsPricec.moveToNext();
 			}
 		}
         

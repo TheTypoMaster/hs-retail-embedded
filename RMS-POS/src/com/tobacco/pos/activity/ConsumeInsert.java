@@ -130,6 +130,8 @@ public class ConsumeInsert extends RMSBaseView{
 		state = SAVE_STATE;
 		TableLayout table = (TableLayout)findViewById(R.id.consumeInsertTable);
 		table.removeViews(1, table.getChildCount()-1);
+		consumeGoods.clear();
+		mapping.clear();
 		onResume();
 	}
 	

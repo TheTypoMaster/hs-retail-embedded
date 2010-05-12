@@ -29,29 +29,29 @@ public class ComplaintModel extends BaseModel {
 	
 	private Date createDate;
 	
-	private String content;
+//	private String content;
 
 	public ComplaintModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ComplaintModel(int customerId, int goodsPriceId, String content) {
-		super();
+	public ComplaintModel(int customerId, int goodsPriceId, String comment) {
+		super(comment);
 		this.customerId = customerId;
 		this.goodsPriceId = goodsPriceId;
-		this.content = content;
+//		this.content = content;
 	}
 
 	public ComplaintModel(String operator, String customer, int goodsPriceId,
-			String goodsName, Date createDate, String content) {
-		super();
+			String goodsName, Date createDate, String comment) {
+		super(comment);
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
 		this.createDate = createDate;
-		this.content = content;
+//		this.content = content;
 	}
 
 	public int getId() {
@@ -110,13 +110,13 @@ public class ComplaintModel extends BaseModel {
 		this.createDate = createDate;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
+//	public String getContent() {
+//		return content;
+//	}
+//
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
 	
 	public ContentValues genContentValues(){
 		Date today = Calendar.getInstance().getTime();
@@ -124,7 +124,7 @@ public class ComplaintModel extends BaseModel {
 		
 		ContentValues values = new ContentValues();
 //		values.put(Complaint.COMMENT,number);
-		values.put(Complaint.CONTENT,content);
+		values.put(Complaint.COMMENT,comment);
 		values.put(Complaint.CREATE_DATE,now);
 		values.put(Complaint.GOODS_ID,goodsPriceId);
 		values.put(Complaint.OPERATOR,operator);
@@ -142,7 +142,7 @@ public class ComplaintModel extends BaseModel {
 	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "writeToParcel()");
-		dest.writeString(content);
+		dest.writeString(comment);
 		dest.writeString(DateTool.formatDateToString(createDate));
 		dest.writeInt(goodsPriceId);
 		dest.writeString(operator);
@@ -164,7 +164,7 @@ public class ComplaintModel extends BaseModel {
 	private ComplaintModel(Parcel in) {
 		Log.i(TAG, "ComplaintModel()");
 		
-		content = in.readString();
+		comment = in.readString();
 		createDate = DateTool.formatStringToDate(in.readString());
 		goodsPriceId = in.readInt();	
 		operator = in.readString();

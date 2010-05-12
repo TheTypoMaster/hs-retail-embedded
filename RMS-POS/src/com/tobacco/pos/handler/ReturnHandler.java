@@ -113,7 +113,7 @@ public class ReturnHandler {
 		String time = cursor.getString(timeIndex);
 		Date createDate = DateTool.formatStringToDate(time);
 		
-		int contentIndex = cursor.getColumnIndex(Return.CONTENT);
+		int contentIndex = cursor.getColumnIndex(Return.COMMENT);
 		String content = cursor.getString(contentIndex);
 		
 		int numberIndex = cursor.getColumnIndex(Return.NUMBER);

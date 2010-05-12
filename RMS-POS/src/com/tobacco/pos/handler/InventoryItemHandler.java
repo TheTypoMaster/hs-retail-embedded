@@ -7,8 +7,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.tobacco.pos.contentProvider.ConsumeCPer;
 import com.tobacco.pos.contentProvider.GoodsCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer;
+import com.tobacco.pos.contentProvider.PurchaseItemCPer;
+import com.tobacco.pos.contentProvider.ReturnCPer;
+import com.tobacco.pos.contentProvider.SalesItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.entity.InventoryItemFull;
 import com.tobacco.pos.entity.InventoryItemModel;
@@ -21,6 +25,9 @@ import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.searchStrategy.SearchStrategyFactory;
 
 public class InventoryItemHandler {
+	
+	private String TAG = "InventoryItemHandler";
+	
 	/**
 	 * record the context which invoke this class.
 	 */
@@ -201,6 +208,10 @@ public class InventoryItemHandler {
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		GoodsCPer goodsCPer = new GoodsCPer();
 		UnitCPer unitCPer = new UnitCPer();
+		ConsumeCPer cCPer = new ConsumeCPer();
+    	ReturnCPer rCPer = new ReturnCPer();
+    	SalesItemCPer sItemCPer = new SalesItemCPer();
+    	PurchaseItemCPer pItemCPer = new PurchaseItemCPer();
 
 		ArrayList<InventoryItemModel> itemModels = new ArrayList<InventoryItemModel>();
 		
@@ -216,8 +227,13 @@ public class InventoryItemHandler {
 			
 			double goodsPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 			
-			int expectNum = 100;
-			
+			int pNum = pItemCPer.getAllPNumByPriceId(goodsPriceId);
+			String theBarcode = goodsPriceCPer.getBarcodeIdByGoodsPriceId(goodsPriceId);
+    		int sNum = sItemCPer.getSNumByBarcode(theBarcode);
+    		int cNum = cCPer.getTotalConsumeByPriceId(goodsPriceId);	        	 
+    		int rNum = rCPer.getTotalReturnByPriceId(goodsPriceId);
+			int expectNum = pNum - sNum + cNum - rNum;
+    		
 			InventoryItemModel item = new InventoryItemModel(goodsName, goodsPriceId, goodsPrice, unitName, expectNum);
 			itemModels.add(item);
 		}

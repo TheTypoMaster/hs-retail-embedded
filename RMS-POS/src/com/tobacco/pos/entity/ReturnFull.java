@@ -63,7 +63,7 @@ public class ReturnFull implements BaseColumns{
 	 * The reason for Return
 	 * <p>TypE: TEXT</>
 	 */
-	public static final String CONTENT = "Return."+Return.CONTENT;
+	public static final String COMMENT = "Return."+Return.COMMENT;
 	/**
 	 * The count for Return
 	 * <p>TypE: TEXT</>
@@ -74,5 +74,5 @@ public class ReturnFull implements BaseColumns{
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,CONTENT,GOODS_PRICE_ID,NUMBER};
+	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER};
 }

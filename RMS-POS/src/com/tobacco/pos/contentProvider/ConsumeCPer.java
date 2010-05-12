@@ -66,16 +66,22 @@ public class ConsumeCPer extends ContentProvider{
 		public void onCreate(SQLiteDatabase db) {
 			// TODO Auto-generated method stub
 			Log.i("lqz", "start to create table");
-			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
-					+Consume._ID+" INTEGER PRIMARY KEY,"
-					+Consume.NUMBER+" INTEGER,"
-					+Consume.GOODS+" INTEGER,"
-					+Consume._COUNT+" INTEGER,"
-					+Consume.CREATED_DATE+ " TEXT,"
-					+Consume.OPERATOR+" TEXT,"
-					+Consume.FLAG+" BOOLEAN,"				
-					+Consume.COMMENT+" TEXT"
-					+");");
+			try {
+				db.query(TABLE_NAME, null, null, null, null, null, null);
+			} catch (Exception e) {
+				db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
+						+Consume._ID+" INTEGER PRIMARY KEY,"
+						+Consume.NUMBER+" INTEGER,"
+						+Consume.GOODS+" INTEGER,"
+						//+Consume._COUNT+" INTEGER,"
+						+Consume.CREATED_DATE+ " TEXT,"
+						+Consume.OPERATOR+" TEXT,"
+						+Consume.FLAG+" BOOLEAN,"				
+						+Consume.COMMENT+" TEXT"
+						+");");
+				init(db);
+			}
+			
 			Log.i("lqz", "finish create table.");
 		}
 
@@ -268,6 +274,110 @@ public class ConsumeCPer extends ContentProvider{
 		consumeProjectionMap.put(Consume.FLAG, Consume.FLAG);
 		consumeProjectionMap.put(Consume.OPERATOR, Consume.OPERATOR);
 		consumeProjectionMap.put(Consume.COMMENT, Consume.COMMENT);
+	}
+	
+	public static boolean init(SQLiteDatabase db){
+		Date today = Calendar.getInstance().getTime();
+		String now = DateTool.formatDateToString(today);
+		ContentValues value = new ContentValues();
+		
+		value.clear();
+		value.put(Consume.NUMBER, 1);
+		value.put(Consume.GOODS, 1);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 2);
+		value.put(Consume.GOODS, 2);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 3);
+		value.put(Consume.GOODS, 3);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 4);
+		value.put(Consume.GOODS, 4);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 5);
+		value.put(Consume.GOODS, 6);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 6);
+		value.put(Consume.GOODS, 6);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 7);
+		value.put(Consume.GOODS, 7);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 8);
+		value.put(Consume.GOODS, 8);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 9);
+		value.put(Consume.GOODS, 9);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 10);
+		value.put(Consume.GOODS, 10);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 11);
+		value.put(Consume.GOODS, 11);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 1);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Consume.NUMBER, 12);
+		value.put(Consume.GOODS, 12);
+		value.put(Consume.CREATED_DATE, now);
+		value.put(Consume.FLAG, 0);
+		value.put(Consume.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		return true;
 	}
 
 	public String getAttributeById(String attribute,String id){

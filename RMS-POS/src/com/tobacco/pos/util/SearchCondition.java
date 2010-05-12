@@ -73,7 +73,7 @@ public class SearchCondition extends LinearLayout {
 	
 		contentText = new EditText(context);
 		contentText.setSingleLine();
-		contentText.setOnKeyListener(keyListener);
+//		contentText.setOnKeyListener(keyListener);
 		this.addView(contentText, 6, new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
 	}
 
@@ -133,15 +133,15 @@ public class SearchCondition extends LinearLayout {
 						Log.i("time", time);
 						startSelected = true;
 						Log.i("time", "startTime:"+startTime.getText().toString());
-						if(startSelected&&endSelected){
-							instance.setSelectionFactor(SearchState.TIME, new String[]{timeTable,timeTable},
-									new String[]{DateTool.fillComplete(startTime.getText().toString()),DateTool.addDay(endTime.getText().toString())});
-							Log.i("time", "startTimeFill:"+DateTool.fillComplete(startTime.getText().toString()));
-							Log.i("time", "endTimeFill:"+DateTool.addDay(endTime.getText().toString()));
-							Log.i("SearchCondition", "setSelectionFactor:"+SearchState.TIME);
-							startSelected = false;
-							endSelected = false;
-						}
+//						if(startSelected&&endSelected){
+//							instance.setSelectionFactor(SearchState.TIME, new String[]{timeTable,timeTable},
+//									new String[]{DateTool.fillComplete(startTime.getText().toString()),DateTool.addDay(endTime.getText().toString())});
+//							Log.i("time", "startTimeFill:"+DateTool.fillComplete(startTime.getText().toString()));
+//							Log.i("time", "endTimeFill:"+DateTool.addDay(endTime.getText().toString()));
+//							Log.i("SearchCondition", "setSelectionFactor:"+SearchState.TIME);
+//							startSelected = false;
+//							endSelected = false;
+//						}
 					}
 					
 				});
@@ -172,15 +172,15 @@ public class SearchCondition extends LinearLayout {
 						Log.i("time", time);
 						endSelected = true;
 						Log.i("time", "endTime:"+endTime.getText().toString());
-						if(startSelected&&endSelected){
-							instance.setSelectionFactor(SearchState.TIME, new String[]{timeTable,timeTable},
-									new String[]{DateTool.fillComplete(startTime.getText().toString()),DateTool.addDay(endTime.getText().toString())});
-							Log.i("time", "startTimeFill:"+DateTool.fillComplete(startTime.getText().toString()));
-							Log.i("time", "endTimeFill:"+DateTool.addDay(endTime.getText().toString()));
-							Log.i("SearchCondition", "setSelectionFactor:"+SearchState.TIME);
-							startSelected = false;
-							endSelected = false;
-						}
+//						if(startSelected&&endSelected){
+//							instance.setSelectionFactor(SearchState.TIME, new String[]{timeTable,timeTable},
+//									new String[]{DateTool.fillComplete(startTime.getText().toString()),DateTool.addDay(endTime.getText().toString())});
+//							Log.i("time", "startTimeFill:"+DateTool.fillComplete(startTime.getText().toString()));
+//							Log.i("time", "endTimeFill:"+DateTool.addDay(endTime.getText().toString()));
+//							Log.i("SearchCondition", "setSelectionFactor:"+SearchState.TIME);
+//							startSelected = false;
+//							endSelected = false;
+//						}
 					}
 					
 				});
@@ -198,25 +198,25 @@ public class SearchCondition extends LinearLayout {
 		return true;
 	}
 	
-	private OnKeyListener keyListener = new OnKeyListener() {
-		
-	 
-		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			// TODO Auto-generated method stub
-			String content = ((EditText)v).getText().toString();
-			if(content!=null && content.length()>0 && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
-		
-				int position = conditionSpinner.getSelectedItemPosition();
-				Log.i("TestStrategy", "select"+position);
-				Log.i("TestStrategy", "type:"+mappingType.get(position));
-				Log.i("TestStrategy", "selection:"+mappingSel.get(position));
-				instance.setSelectionFactor(mappingType.get(position), new String[]{mappingSel.get(position)}, new String[]{content});
-				Log.i("SearchCondition", "setSelectionFactor:"+mappingType.get(position));
-				return true;
-			}
-			return false;
-		}
-	};
+//	private OnKeyListener keyListener = new OnKeyListener() {
+//		
+//	 
+//		public boolean onKey(View v, int keyCode, KeyEvent event) {
+//			// TODO Auto-generated method stub
+//			String content = ((EditText)v).getText().toString();
+//			if(content!=null && content.length()>0 && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+//		
+//				int position = conditionSpinner.getSelectedItemPosition();
+//				Log.i("TestStrategy", "select"+position);
+//				Log.i("TestStrategy", "type:"+mappingType.get(position));
+//				Log.i("TestStrategy", "selection:"+mappingSel.get(position));
+//				instance.setSelectionFactor(mappingType.get(position), new String[]{mappingSel.get(position)}, new String[]{content});
+//				Log.i("SearchCondition", "setSelectionFactor:"+mappingType.get(position));
+//				return true;
+//			}
+//			return false;
+//		}
+//	};
 
 	protected boolean mouseInFStart(MotionEvent event){
 		if((event.getX()>startTime.getLeft())&&(event.getX()<startTime.getLeft()+startTime.getWidth()))
@@ -233,6 +233,28 @@ public class SearchCondition extends LinearLayout {
 	}
 	
 	public void reset(){
+		
+		if(startSelected&&endSelected){
+			instance.setSelectionFactor(SearchState.TIME, new String[]{timeTable,timeTable},
+					new String[]{DateTool.fillComplete(startTime.getText().toString()),DateTool.addDay(endTime.getText().toString())});
+			Log.i("time", "startTimeFill:"+DateTool.fillComplete(startTime.getText().toString()));
+			Log.i("time", "endTimeFill:"+DateTool.addDay(endTime.getText().toString()));
+			Log.i("SearchCondition", "setSelectionFactor:"+SearchState.TIME);
+			startSelected = false;
+			endSelected = false;
+		}
+		
+		String content = contentText.getText().toString();
+		if(content!=null && content.length()>0){
+			
+			int position = conditionSpinner.getSelectedItemPosition();
+			Log.i("TestStrategy", "select"+position);
+			Log.i("TestStrategy", "type:"+mappingType.get(position));
+			Log.i("TestStrategy", "selection:"+mappingSel.get(position));
+			instance.setSelectionFactor(mappingType.get(position), new String[]{mappingSel.get(position)}, new String[]{content});
+			Log.i("SearchCondition", "setSelectionFactor:"+mappingType.get(position));
+		}
+		
 		startTime.setText("开始时间");
 		endTime.setText("结束时间");
 		startSelected = false;

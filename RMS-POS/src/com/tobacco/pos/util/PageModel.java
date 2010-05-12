@@ -83,6 +83,7 @@ public class PageModel extends LinearLayout {
 		this.rowsCount = rowsCount;
 		this.recordCount = recordCount;
 		pageCount = (recordCount%rowsCount>0)?recordCount/rowsCount+1:recordCount/rowsCount;
+		this.setVisibility(View.VISIBLE);
 		if(pageCount<2)
 			this.setVisibility(View.GONE);
 		Log.i("pagetest", "currentIndex:"+this.currentIndex);

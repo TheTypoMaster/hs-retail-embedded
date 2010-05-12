@@ -259,7 +259,7 @@ public class AllTables {
 		 * The reason for complaint
 		 * <p>TypE: TEXT</>
 		 */
-		public static final String CONTENT = "content";
+//		public static final String CONTENT = "content";
 		/**
 		 * The comment for this complaint
 		 * <p>TypE: TEXT</>
@@ -316,7 +316,7 @@ public static class Return implements BaseColumns{
 		 * The reason for complaint
 		 * <p>TypE: TEXT</>
 		 */
-		public static final String CONTENT = "content";
+//		public static final String CONTENT = "content";
 		/**
 		 * The comment for this complaint
 		 * <p>TypE: TEXT</>

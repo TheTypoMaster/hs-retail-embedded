@@ -67,11 +67,11 @@ public class ComplaintFull implements BaseColumns{
 	 * The reason for complaint
 	 * <p>TypE: TEXT</>
 	 */
-	public static final String CONTENT = "Complaint."+Complaint.CONTENT;
+	public static final String COMMENT = "Complaint."+Complaint.COMMENT;
 	/**
 	 * The default sort order for this table
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,CONTENT,GOODS_PRICE_ID};
+	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID};
 }

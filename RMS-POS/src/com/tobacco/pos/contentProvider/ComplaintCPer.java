@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.tobacco.pos.entity.ComplaintFull;
 import com.tobacco.pos.entity.AllTables.Complaint;
+import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.util.DateTool;
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -60,15 +61,21 @@ public class ComplaintCPer extends ContentProvider{
 		public void onCreate(SQLiteDatabase db) {
 			// TODO Auto-generated method stub
 			Log.i("lqz", "start to create table complaint");
-			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
-					+Complaint._ID+" INTEGER PRIMARY KEY,"
-					+Complaint.OPERATOR+" TEXT,"
-					+Complaint.CREATE_DATE+" TEXT,"
-					+Complaint.VIP_ID+" INTEGER,"
-					+Complaint.GOODS_ID+ " INTEGER,"
-					+Complaint.CONTENT+" TEXT,"
-					+Complaint.COMMENT+" TEXT"				
-					+");");
+			try {
+				db.query(TABLE_NAME, null, null, null, null, null, null);
+			} catch (Exception e) {
+				db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
+						+Complaint._ID+" INTEGER PRIMARY KEY,"
+						+Complaint.OPERATOR+" TEXT,"
+						+Complaint.CREATE_DATE+" TEXT,"
+						+Complaint.VIP_ID+" INTEGER,"
+						+Complaint.GOODS_ID+ " INTEGER,"
+//						+Complaint.CONTENT+" TEXT,"
+						+Complaint.COMMENT+" TEXT"				
+						+");");
+				init(db);
+			}
+			
 			Log.i("lqz", "finish create table complaint.");
 		}
 		@Override
@@ -132,9 +139,9 @@ public class ComplaintCPer extends ContentProvider{
 		if(values.containsKey(Complaint.GOODS_ID)==false){
 			values.put(Complaint.GOODS_ID, 0);
 		}
-		if(values.containsKey(Complaint.CONTENT)==false){
-			values.put(Complaint.CONTENT, "");
-		}
+//		if(values.containsKey(Complaint.CONTENT)==false){
+//			values.put(Complaint.CONTENT, "");
+//		}
 		if(values.containsKey(Complaint.COMMENT)==false){
 			values.put(Complaint.COMMENT, "");
 		}
@@ -259,8 +266,100 @@ public class ComplaintCPer extends ContentProvider{
 		complaintProjectionMap.put(Complaint.CREATE_DATE, Complaint.CREATE_DATE);
 		complaintProjectionMap.put(Complaint.VIP_ID, Complaint.VIP_ID);
 		complaintProjectionMap.put(Complaint.GOODS_ID, Complaint.GOODS_ID);
-		complaintProjectionMap.put(Complaint.CONTENT, Complaint.CONTENT);
+//		complaintProjectionMap.put(Complaint.CONTENT, Complaint.CONTENT);
 		complaintProjectionMap.put(Complaint.COMMENT, Complaint.COMMENT);
+	}
+	
+	public static boolean init(SQLiteDatabase db){
+		Date today = Calendar.getInstance().getTime();
+		String now = DateTool.formatDateToString(today);
+		ContentValues value = new ContentValues();
+		
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 1);
+		value.put(Complaint.GOODS_ID, 1);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 2);
+		value.put(Complaint.GOODS_ID, 2);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 3);
+		value.put(Complaint.GOODS_ID, 3);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 4);
+		value.put(Complaint.GOODS_ID, 4);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 5);
+		value.put(Complaint.GOODS_ID, 5);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 6);
+		value.put(Complaint.GOODS_ID, 6);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 1);
+		value.put(Complaint.GOODS_ID, 7);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 2);
+		value.put(Complaint.GOODS_ID, 8);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 3);
+		value.put(Complaint.GOODS_ID, 9);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 4);
+		value.put(Complaint.GOODS_ID, 10);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 5);
+		value.put(Complaint.GOODS_ID, 11);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+
+		value.clear();
+		value.put(Complaint.CREATE_DATE, now);
+		value.put(Complaint.VIP_ID, 6);
+		value.put(Complaint.GOODS_ID, 12);
+		value.put(Complaint.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		return true;
 	}
 	
 }

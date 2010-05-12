@@ -111,7 +111,7 @@ public class ComplaintHandler {
 		String time = cursor.getString(timeIndex);
 		Date createDate = DateTool.formatStringToDate(time);
 		
-		int contentIndex = cursor.getColumnIndex(Complaint.CONTENT);
+		int contentIndex = cursor.getColumnIndex(Complaint.COMMENT);
 		String content = cursor.getString(contentIndex);
 		
 		ComplaintModel goods = new ComplaintModel(operator, customer, goodsPriceId, goodsName, createDate, content);

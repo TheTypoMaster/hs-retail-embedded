@@ -116,7 +116,7 @@ public class ComplaintSelect extends RMSBaseView{
 							// TODO Auto-generated method stub
 							new AlertDialog.Builder(ComplaintSelect.this)
 							.setTitle("投诉原因")
-							.setMessage(goods.getContent()).show();
+							.setMessage(goods.getComment()).show();
 							return true;
 						}
 						
@@ -151,11 +151,12 @@ public class ComplaintSelect extends RMSBaseView{
 			instance.setSelectionFactor(SearchState.ALL, null, null);
 			break;
 		case MENU_SHOW_BY_FACTORS:
-			if(instance.getStrategyObjects().size()==0)
-				return false;
+//			if(instance.getStrategyObjects().size()==0)
+//				return false;
+			search.reset();
 			break;
 		}
-		search.reset();
+//		search.reset();
 		int recordCount = handler.search(instance);
 		LinearLayout layout = (LinearLayout)findViewById(R.id.complaintSelectLinearLayout);
 		if(pageModel == null){

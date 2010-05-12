@@ -91,7 +91,7 @@ public class ReturnSelect extends RMSBaseView{
 			vipNameText.setText(goods.getCustomer());
 			String time = DateTool.formatDateToString(goods.getCreateDate());
 			timeText.setText(time.substring(0, time.length()-3));
-			contentText.setText(goods.getContent());
+			contentText.setText(goods.getComment());
 			operatorText.setText(goods.getOperator());				
 								
 			table = (TableLayout)findViewById(R.id.returnSelectTable);		
@@ -123,7 +123,7 @@ public class ReturnSelect extends RMSBaseView{
 							// TODO Auto-generated method stub
 							new AlertDialog.Builder(ReturnSelect.this)
 							.setTitle("退货原因")
-							.setMessage(goods.getContent()).show();
+							.setMessage(goods.getComment()).show();
 							return true;
 						}
 						
@@ -157,11 +157,12 @@ public class ReturnSelect extends RMSBaseView{
 			instance.setSelectionFactor(SearchState.ALL, null, null);
 			break;
 		case MENU_SHOW_BY_FACTORS:
-			if(instance.getStrategyObjects().size()==0)
-				return false;
+//			if(instance.getStrategyObjects().size()==0)
+//				return false;
+			search.reset();
 			break;
 		}
-		search.reset();
+//		search.reset();
 		int recordCount = handler.search(instance);
 		LinearLayout layout = (LinearLayout)findViewById(R.id.returnSelectLinearLayout);
 		if(pageModel == null){

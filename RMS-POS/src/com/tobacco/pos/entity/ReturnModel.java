@@ -31,7 +31,7 @@ public class ReturnModel extends BaseModel {
 	
 	private Date createDate;
 	
-	private String content;
+	private String comment;
 	
 	private int number;
 
@@ -42,26 +42,26 @@ public class ReturnModel extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReturnModel(String unit, int goodsPriceId, double inPrice, String goodsName, String content,
+	public ReturnModel(String unit, int goodsPriceId, double inPrice, String goodsName, String comment,
 			int number) {
-		super();
+		super(comment);
 		this.unit = unit;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-		this.content = content;
+//		this.content = content;
 		this.number = number;
 		this.inPrice = inPrice;
 	}
 
 	public ReturnModel(String operator, String customer, int goodsPriceId,
-			String goodsName, Date createDate, String content, int number,double inPrice) {
-		super();
+			String goodsName, Date createDate, String comment, int number,double inPrice) {
+		super(comment);
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
 		this.createDate = createDate;
-		this.content = content;
+//		this.content = content;
 		this.number = number;
 		this.inPrice = inPrice;
 	}
@@ -130,13 +130,13 @@ public class ReturnModel extends BaseModel {
 		this.createDate = createDate;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
+//	public String getContent() {
+//		return content;
+//	}
+//
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
 
 	public int getNumber() {
 		return number;
@@ -159,7 +159,7 @@ public class ReturnModel extends BaseModel {
 		
 		ContentValues values = new ContentValues();
 //		values.put(Return.COMMENT,number);
-		values.put(Return.CONTENT,content);
+		values.put(Return.COMMENT,comment);
 		values.put(Return.CREATE_DATE,now);
 		values.put(Return.GOODS_ID,goodsPriceId);
 		values.put(Return.NUMBER,number);
@@ -178,7 +178,7 @@ public class ReturnModel extends BaseModel {
 	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "writeToParcel()");
-		dest.writeString(content);
+		dest.writeString(comment);
 		dest.writeString(DateTool.formatDateToString(createDate));
 		dest.writeInt(goodsPriceId);
 		dest.writeInt(number);
@@ -201,7 +201,7 @@ public class ReturnModel extends BaseModel {
 	private ReturnModel(Parcel in) {
 		Log.i(TAG, "ReturnModel()");
 		
-		content = in.readString();
+		comment = in.readString();
 		createDate = DateTool.formatStringToDate(in.readString());
 		goodsPriceId = in.readInt();
 		number = in.readInt();

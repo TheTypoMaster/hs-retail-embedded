@@ -57,7 +57,7 @@ public class ReturnInsertDialog extends RMSBaseView{
 					Intent intent = new Intent();
 					intent.putExtra(GoodsPrice.barcode, goodsBarcode.getText().toString());
 					intent.putExtra(Return.NUMBER, goodsNumber.getText().toString());
-					intent.putExtra(Return.CONTENT, content.getText().toString());
+					intent.putExtra(Return.COMMENT, content.getText().toString());
 					setResult(RESULT_OK,intent);
 					finish();
 				}

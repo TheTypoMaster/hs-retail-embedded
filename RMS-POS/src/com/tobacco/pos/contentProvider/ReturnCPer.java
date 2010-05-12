@@ -63,16 +63,22 @@ public class ReturnCPer extends ContentProvider{
 		public void onCreate(SQLiteDatabase db) {
 			// TODO Auto-generated method stub
 			Log.i("lqz", "start to create table return");
-			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
-					+Return._ID+" INTEGER PRIMARY KEY,"
-					+Return.OPERATOR+" TEXT,"
-					+Return.CREATE_DATE+" TEXT,"
-					+Return.VIP_ID+" INTEGER,"
-					+Return.GOODS_ID+ " INTEGER,"
-					+Return.NUMBER+ " INTEGER,"
-					+Return.CONTENT+" TEXT,"
-					+Return.COMMENT+" TEXT"				
-					+");");
+			try {
+				db.query(TABLE_NAME, null, null, null, null, null, null);
+			} catch (Exception e) {
+				db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
+						+Return._ID+" INTEGER PRIMARY KEY,"
+						+Return.OPERATOR+" TEXT,"
+						+Return.CREATE_DATE+" TEXT,"
+						+Return.VIP_ID+" INTEGER,"
+						+Return.GOODS_ID+ " INTEGER,"
+						+Return.NUMBER+ " INTEGER,"
+//						+Return.CONTENT+" TEXT,"
+						+Return.COMMENT+" TEXT"				
+						+");");
+				init(db);
+			}
+			
 			Log.i("lqz", "finish create table return.");
 		}
 		@Override
@@ -139,9 +145,9 @@ public class ReturnCPer extends ContentProvider{
 		if(values.containsKey(Return.NUMBER)==false){
 			values.put(Return.NUMBER, 0);
 		}
-		if(values.containsKey(Return.CONTENT)==false){
-			values.put(Return.CONTENT, "");
-		}
+//		if(values.containsKey(Return.CONTENT)==false){
+//			values.put(Return.CONTENT, "");
+//		}
 		if(values.containsKey(Return.COMMENT)==false){
 			values.put(Return.COMMENT, "");
 		}
@@ -267,8 +273,113 @@ public class ReturnCPer extends ContentProvider{
 		returnProjectionMap.put(Return.VIP_ID, Return.VIP_ID);
 		returnProjectionMap.put(Return.GOODS_ID, Return.GOODS_ID);
 		returnProjectionMap.put(Return.NUMBER, Return.NUMBER);
-		returnProjectionMap.put(Return.CONTENT, Return.CONTENT);
+//		returnProjectionMap.put(Return.CONTENT, Return.CONTENT);
 		returnProjectionMap.put(Return.COMMENT, Return.COMMENT);
+	}
+	
+	public static boolean init(SQLiteDatabase db){
+		Date today = Calendar.getInstance().getTime();
+		String now = DateTool.formatDateToString(today);
+		ContentValues value = new ContentValues();
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 1);
+		value.put(Return.GOODS_ID, 1);
+		value.put(Return.NUMBER, 1);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 2);
+		value.put(Return.GOODS_ID, 2);
+		value.put(Return.NUMBER, 2);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 3);
+		value.put(Return.GOODS_ID, 3);
+		value.put(Return.NUMBER, 3);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 4);
+		value.put(Return.GOODS_ID, 4);
+		value.put(Return.NUMBER, 4);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 5);
+		value.put(Return.GOODS_ID, 5);
+		value.put(Return.NUMBER, 5);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 6);
+		value.put(Return.GOODS_ID, 6);
+		value.put(Return.NUMBER, 6);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 1);
+		value.put(Return.GOODS_ID, 7);
+		value.put(Return.NUMBER, 7);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 2);
+		value.put(Return.GOODS_ID, 8);
+		value.put(Return.NUMBER, 8);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 3);
+		value.put(Return.GOODS_ID, 9);
+		value.put(Return.NUMBER, 9);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 4);
+		value.put(Return.GOODS_ID, 10);
+		value.put(Return.NUMBER, 10);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 5);
+		value.put(Return.GOODS_ID, 11);
+		value.put(Return.NUMBER, 11);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+		value.clear();
+		value.put(Return.CREATE_DATE, now);
+		value.put(Return.VIP_ID, 6);
+		value.put(Return.GOODS_ID, 12);
+		value.put(Return.NUMBER, 12);
+		value.put(Return.COMMENT, "init");
+		db.insertOrThrow(TABLE_NAME, null, value);
+		
+
+		return true;
 	}
 	
 	public String getAttributeById(String attribute,String id){
