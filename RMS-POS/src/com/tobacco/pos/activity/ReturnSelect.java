@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 
 import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.pos.activity.ConsumeSelect.Task;
 import com.tobacco.pos.entity.ReturnFull;
 import com.tobacco.pos.entity.ReturnModel;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
@@ -38,11 +42,15 @@ public class ReturnSelect extends RMSBaseView{
 	private static final int MENU_SHOW_COMMENT = Menu.FIRST+1;
 	private static final int MENU_SHOW_ALL = Menu.FIRST+2;
 	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+3;
+
+	private final int TASK_COMPLETE = 1;
+	private int recordCount = 0;
 	
 	private ReturnHandler handler = new ReturnHandler(this);
 	ArrayList<ReturnModel> goodsList = new ArrayList<ReturnModel>();
 	PageModel pageModel;
 	SearchCondition search;
+	ProgressDialog pd;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -65,6 +73,9 @@ public class ReturnSelect extends RMSBaseView{
     	search = (SearchCondition)findViewById(R.id.returnSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
 
+    	LinearLayout layout = (LinearLayout)findViewById(R.id.returnSelectLinearLayout);
+    	pageModel = new PageModel(ReturnSelect.this,6,recordCount);
+		layout.addView(pageModel);
 	}
 	
 	protected void showReturnGoods(){	
@@ -89,7 +100,7 @@ public class ReturnSelect extends RMSBaseView{
 			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
 			goodsNameText.setText(goods.getGoodsName());
 			vipNameText.setText(goods.getCustomer());
-			String time = DateTool.formatDateToString(goods.getCreateDate());
+			String time = goods.getCreateDate();
 			timeText.setText(time.substring(0, time.length()-3));
 			contentText.setText(goods.getComment());
 			operatorText.setText(goods.getOperator());				
@@ -157,24 +168,54 @@ public class ReturnSelect extends RMSBaseView{
 			instance.setSelectionFactor(SearchState.ALL, null, null);
 			break;
 		case MENU_SHOW_BY_FACTORS:
-//			if(instance.getStrategyObjects().size()==0)
-//				return false;
 			search.reset();
 			break;
 		}
-//		search.reset();
-		int recordCount = handler.search(instance);
-		LinearLayout layout = (LinearLayout)findViewById(R.id.returnSelectLinearLayout);
-		if(pageModel == null){
-			pageModel = new PageModel(this,6,recordCount);
-			layout.addView(pageModel);
-		}else
-			pageModel.init(6, recordCount);
 		
-		goodsList = handler.getPage((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount(), pageModel.getRowsCount());
-		showReturnGoods();
+		startTask();
 		return true;
 	}	 
+	
+	public void startTask(){   
+		Log.e(TAG, "startTask()");		
+		showDialog();            
+        Thread task = new Thread(new Task());  
+        task.start();  
+    } 
+
+	private void showDialog(){
+		Log.e(TAG, "showDialog()");
+		pd = ProgressDialog.show(this, "请稍候...", "Loading...", true,  
+                false);
+	}
+	
+	public class Task implements Runnable {  
+        @Override  
+        public void run() {  
+            // TODO Auto-generated method stub  
+        	Log.e(TAG, "Task.run()");
+        	SearchState instance = SearchState.getInstance();
+        	recordCount = handler.search(instance);
+    		goodsList = handler.getPage(0, 6);	
+            messageListener.sendEmptyMessage(TASK_COMPLETE);             
+        }  
+          
+    }  
+	
+	private Handler messageListener = new Handler(){  
+        public void handleMessage(Message msg) {  
+        	Log.e(TAG, "messageListener.handleMessage()");
+            switch(msg.what){  
+            case TASK_COMPLETE:   
+            	Log.e(TAG, "Message:TASK_COMPLETE");
+                pd.dismiss(); 
+                pageModel.init(6, recordCount);
+                showReturnGoods();
+                break;  
+                  
+            }  
+        }  
+    }; 
 	
 	@Override
 	protected void onDestroy() {

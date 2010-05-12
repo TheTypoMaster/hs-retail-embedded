@@ -27,7 +27,7 @@ public class ComplaintModel extends BaseModel {
 	
 	private String goodsName;
 	
-	private Date createDate;
+//	private Date createDate;
 	
 //	private String content;
 
@@ -44,13 +44,13 @@ public class ComplaintModel extends BaseModel {
 	}
 
 	public ComplaintModel(String operator, String customer, int goodsPriceId,
-			String goodsName, Date createDate, String comment) {
-		super(comment);
+			String goodsName, String createDate, String comment) {
+		super(createDate,comment);
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-		this.createDate = createDate;
+//		this.createDate = createDate;
 //		this.content = content;
 	}
 
@@ -102,13 +102,13 @@ public class ComplaintModel extends BaseModel {
 		this.goodsName = goodsName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+//	public String getCreateDate() {
+//		return createDate;
+//	}
+//
+//	public void setCreateDate(Date createDate) {
+//		this.createDate = createDate;
+//	}
 
 //	public String getContent() {
 //		return content;
@@ -143,7 +143,7 @@ public class ComplaintModel extends BaseModel {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "writeToParcel()");
 		dest.writeString(comment);
-		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(createDate);
 		dest.writeInt(goodsPriceId);
 		dest.writeString(operator);
 		dest.writeInt(customerId);
@@ -165,7 +165,7 @@ public class ComplaintModel extends BaseModel {
 		Log.i(TAG, "ComplaintModel()");
 		
 		comment = in.readString();
-		createDate = DateTool.formatStringToDate(in.readString());
+		createDate = in.readString();
 		goodsPriceId = in.readInt();	
 		operator = in.readString();
 		customerId = in.readInt();

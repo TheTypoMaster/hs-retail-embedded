@@ -111,7 +111,7 @@ public class ReturnHandler {
 		
 		int timeIndex = cursor.getColumnIndex(Return.CREATE_DATE);
 		String time = cursor.getString(timeIndex);
-		Date createDate = DateTool.formatStringToDate(time);
+//		Date createDate = DateTool.formatStringToDate(time);
 		
 		int contentIndex = cursor.getColumnIndex(Return.COMMENT);
 		String content = cursor.getString(contentIndex);
@@ -125,7 +125,7 @@ public class ReturnHandler {
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 		
-		ReturnModel goods = new ReturnModel(operator, customer, goodsPriceId, goodsName, createDate, content, number,inPrice);
+		ReturnModel goods = new ReturnModel(operator, customer, goodsPriceId, goodsName, time, content, number,inPrice);
 		return goods;
 	}
 	

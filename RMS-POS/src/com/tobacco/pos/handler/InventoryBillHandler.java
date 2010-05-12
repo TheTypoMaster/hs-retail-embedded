@@ -166,12 +166,12 @@ public class InventoryBillHandler {
 		
 		int inventoryTimeIndex = cursor.getColumnIndex(InventoryBillFull.CREATE_DATE);
 		String inventoryTime = cursor.getString(inventoryTimeIndex);
-		Date createDate = DateTool.formatStringToDate(inventoryTime);
+//		Date createDate = DateTool.formatStringToDate(inventoryTime);
 		
 		int operatorIndex = cursor.getColumnIndex(InventoryBillFull.OPER_NAME);
 		String operName = cursor.getString(operatorIndex);
 		
-		InventoryBillModel goods = new InventoryBillModel(operName, iBillId, iBillNum, finished, result, createDate);
+		InventoryBillModel goods = new InventoryBillModel(operName, iBillId, iBillNum, finished, result, inventoryTime);
 		
 		return goods;
 	}

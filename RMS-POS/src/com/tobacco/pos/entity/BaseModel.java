@@ -12,7 +12,7 @@ public class BaseModel implements Parcelable{
 	/**
 	 * the create time of this object.
 	 */
-	protected Date createDate;
+	protected String createDate;
 	
 	/**
 	 * the comment for this object.
@@ -28,18 +28,18 @@ public class BaseModel implements Parcelable{
 		super();
 		this.comment = comment;
 	}
-
-	public BaseModel(Date createDate, String comment) {
+	
+	public BaseModel(String createDate, String comment) {
 		super();
 		this.createDate = createDate;
 		this.comment = comment;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -61,7 +61,7 @@ public class BaseModel implements Parcelable{
 	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "writeToParcel()");
-		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(createDate);
 		dest.writeString(comment);
 	}
 	
@@ -80,7 +80,7 @@ public class BaseModel implements Parcelable{
 	private BaseModel(Parcel in) {
 		
 		Log.i(TAG, "BaseModel()");
-		createDate = DateTool.formatStringToDate(in.readString());
+		createDate = in.readString();
 		comment = in.readString();
 
 	}

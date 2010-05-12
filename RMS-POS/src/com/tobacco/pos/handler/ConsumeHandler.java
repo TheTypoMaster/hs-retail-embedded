@@ -26,6 +26,7 @@ import com.tobacco.pos.util.DateTool;
 
 public class ConsumeHandler {
 
+	private final String TAG = "ConsumeHandler";
 	/**
 	 * record the context which invoke this class.
 	 */
@@ -118,7 +119,7 @@ public class ConsumeHandler {
 		String operName = cursor.getString(operNameIndex);
 		int timeIndex = cursor.getColumnIndex(Consume.CREATED_DATE);
 		String time = cursor.getString(timeIndex);
-		Date createDate = DateTool.formatStringToDate(time);
+//		Date createDate = DateTool.formatStringToDate(time);
 		int commentIndex = cursor.getColumnIndex(Consume.COMMENT);
 		String comment = cursor.getString(commentIndex);
 		int typeIndex = cursor.getColumnIndex(Consume.FLAG);
@@ -132,7 +133,7 @@ public class ConsumeHandler {
 		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
 		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 		
-		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, createDate, type);
+		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, time, type);
 		return goods;
 	}
 	

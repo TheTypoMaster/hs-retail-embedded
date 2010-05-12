@@ -20,7 +20,7 @@ public class InventoryBillModel extends BaseModel {
 	
 	private double result;
 	
-	private Date createDate;
+//	private Date createDate;
 
 	public InventoryBillModel() {
 		super();
@@ -35,7 +35,7 @@ public class InventoryBillModel extends BaseModel {
 	}
 
 	public InventoryBillModel(String operator, int iBillId, String iBillNum,
-			boolean finished, double result, Date createDate) {
+			boolean finished, double result, String createDate) {
 		super();
 		this.operator = operator;
 		this.iBillId = iBillId;
@@ -85,13 +85,13 @@ public class InventoryBillModel extends BaseModel {
 		this.result = result;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+//	public Date getCreateDate() {
+//		return createDate;
+//	}
+//
+//	public void setCreateDate(Date createDate) {
+//		this.createDate = createDate;
+//	}
 	
 	public ContentValues genContentValues(){
 		Date today = Calendar.getInstance().getTime();

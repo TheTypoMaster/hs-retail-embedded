@@ -3,8 +3,11 @@ package com.tobacco.pos.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.main.entities.globalconstant.BCodeConst;
+import com.tobacco.pos.activity.ConsumeSelect.Task;
 import com.tobacco.pos.entity.InventoryBillFull;
 import com.tobacco.pos.entity.InventoryBillModel;
 import com.tobacco.pos.entity.AllTables.InventoryBill;
@@ -40,10 +44,14 @@ public class InventoryBillSelect extends RMSBaseView{
 	private static final int MENU_SHOW_ALL = Menu.FIRST+1;
 	private static final int MENU_SHOW_BY_FACTORS = Menu.FIRST+2;
 	
+	private final int TASK_COMPLETE = 1;
+	private int recordCount = 0;
+	
 	private InventoryBillHandler handler = new InventoryBillHandler(this);
 	ArrayList<InventoryBillModel> billList = new ArrayList<InventoryBillModel>();
 	PageModel pageModel;
 	SearchCondition search;
+	ProgressDialog pd;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +78,9 @@ public class InventoryBillSelect extends RMSBaseView{
     	search = (SearchCondition)findViewById(R.id.inventoryBillSelectSearch);
     	search.init(timeTable,conditionStr, mappingType, mappingSel);
 
+    	LinearLayout layout = (LinearLayout)findViewById(R.id.inventoryBillSelectLinearLayout);
+    	pageModel = new PageModel(InventoryBillSelect.this,6,recordCount);
+		layout.addView(pageModel);
 	}
 	
 	protected void showInventoryBill(){
@@ -91,7 +102,7 @@ public class InventoryBillSelect extends RMSBaseView{
 			inventoryNumText.setText(""+bill.getiBillNum());
 			inventoryFlagText.setText(bill.isFinished()?"是":"否");
 			inventoryResultText.setText(""+bill.getResult());
-			String time = DateTool.formatDateToString(bill.getCreateDate());
+			String time = bill.getCreateDate();
 			inventoryTimeText.setText(time.substring(0, time.length()-3));
 			inventoryOperatorText.setText(bill.getOperator());			
 								
@@ -144,24 +155,54 @@ public class InventoryBillSelect extends RMSBaseView{
 			instance.setSelectionFactor(SearchState.ALL, null, null);
 			break;
 		case MENU_SHOW_BY_FACTORS:
-//			if(instance.getStrategyObjects().size()==0)
-//				return false;
 			search.reset();
 			break;
 		}
-//		search.reset();
-		int recordCount = handler.search(instance);
-		LinearLayout layout = (LinearLayout)findViewById(R.id.inventoryBillSelectLinearLayout);
-		if(pageModel == null){
-			pageModel = new PageModel(this,6,recordCount);
-			layout.addView(pageModel);
-		}else
-			pageModel.init(6, recordCount);
 		
-		billList = handler.getPage((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount(), pageModel.getRowsCount());
-		showInventoryBill();
+		startTask();
 		return true;
 	}
+	
+	public void startTask(){   
+		Log.e(TAG, "startTask()");		
+		showDialog();            
+        Thread task = new Thread(new Task());  
+        task.start();  
+    } 
+
+	private void showDialog(){
+		Log.e(TAG, "showDialog()");
+		pd = ProgressDialog.show(this, "请稍候...", "Loading...", true,  
+                false);
+	}
+	
+	public class Task implements Runnable {  
+        @Override  
+        public void run() {  
+            // TODO Auto-generated method stub  
+        	Log.e(TAG, "Task.run()");
+        	SearchState instance = SearchState.getInstance();
+        	recordCount = handler.search(instance);
+        	billList = handler.getPage(0, 6);	
+            messageListener.sendEmptyMessage(TASK_COMPLETE);             
+        }  
+          
+    }  
+	
+	private Handler messageListener = new Handler(){  
+        public void handleMessage(Message msg) {  
+        	Log.e(TAG, "messageListener.handleMessage()");
+            switch(msg.what){  
+            case TASK_COMPLETE:   
+            	Log.e(TAG, "Message:TASK_COMPLETE");
+                pd.dismiss(); 
+                pageModel.init(6, recordCount);
+                showInventoryBill();
+                break;  
+                  
+            }  
+        }  
+    }; 
 	
 	@Override
 	protected void onDestroy() {

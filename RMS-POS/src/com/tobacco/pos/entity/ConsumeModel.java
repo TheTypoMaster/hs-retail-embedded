@@ -73,7 +73,7 @@ public class ConsumeModel extends BaseModel{
 	}
 
 	public ConsumeModel(String operator, int number, String goodsName,
-			String unitName, int goodsPriceId, double inPrice,String comment,Date createDate, String type) {
+			String unitName, int goodsPriceId, double inPrice,String comment,String createDate, String type) {
 		super(createDate,comment);
 		this.operator = operator;
 		this.number = number;
@@ -166,7 +166,7 @@ public class ConsumeModel extends BaseModel{
 		Log.i(TAG, "writeToParcel()");
 		dest.writeInt(number);
 		dest.writeInt(goodsPriceId);
-		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(createDate);
 		dest.writeString(operator);
 		dest.writeInt((type.equals("溢")?1:0));
 		dest.writeString(comment);
@@ -189,7 +189,7 @@ public class ConsumeModel extends BaseModel{
 		
 		number = in.readInt();
 		goodsPriceId = in.readInt();
-		createDate = DateTool.formatStringToDate(in.readString());
+		createDate = in.readString();
 		operator = in.readString();
 		type = (in.readInt()==1)?"溢":"耗";
 		comment = in.readString();

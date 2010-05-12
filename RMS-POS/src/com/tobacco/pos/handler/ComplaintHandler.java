@@ -109,12 +109,12 @@ public class ComplaintHandler {
 		
 		int timeIndex = cursor.getColumnIndex(Complaint.CREATE_DATE);
 		String time = cursor.getString(timeIndex);
-		Date createDate = DateTool.formatStringToDate(time);
+//		Date createDate = DateTool.formatStringToDate(time);
 		
 		int contentIndex = cursor.getColumnIndex(Complaint.COMMENT);
 		String content = cursor.getString(contentIndex);
 		
-		ComplaintModel goods = new ComplaintModel(operator, customer, goodsPriceId, goodsName, createDate, content);
+		ComplaintModel goods = new ComplaintModel(operator, customer, goodsPriceId, goodsName, time, content);
 		return goods;
 	}
 	

@@ -29,9 +29,9 @@ public class ReturnModel extends BaseModel {
 	
 	private String goodsName;
 	
-	private Date createDate;
-	
-	private String comment;
+//	private Date createDate;
+//	
+//	private String comment;
 	
 	private int number;
 
@@ -54,13 +54,13 @@ public class ReturnModel extends BaseModel {
 	}
 
 	public ReturnModel(String operator, String customer, int goodsPriceId,
-			String goodsName, Date createDate, String comment, int number,double inPrice) {
-		super(comment);
+			String goodsName, String createDate, String comment, int number,double inPrice) {
+		super(createDate,comment);
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-		this.createDate = createDate;
+//		this.createDate = createDate;
 //		this.content = content;
 		this.number = number;
 		this.inPrice = inPrice;
@@ -122,13 +122,13 @@ public class ReturnModel extends BaseModel {
 		this.goodsName = goodsName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+//	public Date getCreateDate() {
+//		return createDate;
+//	}
+//
+//	public void setCreateDate(Date createDate) {
+//		this.createDate = createDate;
+//	}
 
 //	public String getContent() {
 //		return content;
@@ -179,7 +179,7 @@ public class ReturnModel extends BaseModel {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "writeToParcel()");
 		dest.writeString(comment);
-		dest.writeString(DateTool.formatDateToString(createDate));
+		dest.writeString(createDate);
 		dest.writeInt(goodsPriceId);
 		dest.writeInt(number);
 		dest.writeString(operator);
@@ -202,7 +202,7 @@ public class ReturnModel extends BaseModel {
 		Log.i(TAG, "ReturnModel()");
 		
 		comment = in.readString();
-		createDate = DateTool.formatStringToDate(in.readString());
+		createDate = in.readString();
 		goodsPriceId = in.readInt();
 		number = in.readInt();
 		operator = in.readString();
