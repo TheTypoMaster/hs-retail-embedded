@@ -5,8 +5,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import com.tobacco.R;
 import com.tobacco.pos.contentProvider.UnitCPer;
+import com.tobacco.pos.service.ScanInputService;
 
 public class AddGoodsPrice extends Activity {
 	private Spinner unitNameSpinner = null;
@@ -37,6 +41,11 @@ public class AddGoodsPrice extends Activity {
 		 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addgoodsprice);
+		
+		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
+		this.registerReceiver(new ScanReceiver(), filter);
+	
+		this.startService(new Intent(this,ScanInputService.class));
 		
 		unitCPer = new UnitCPer();
 		
@@ -154,6 +163,21 @@ public class AddGoodsPrice extends Activity {
 			
 		});
 		
+		
+	}
+	
+
+	public class ScanReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+ 
+			String barcode = intent.getStringExtra("BARCODE");
+		
+			barcodeEText.setText("" + barcode);
+			
+			
+		}
 		
 	}
 }

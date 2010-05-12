@@ -17,8 +17,6 @@ import com.tobacco.pos.contentProvider.ReturnCPer;
 import com.tobacco.pos.contentProvider.SalesItemCPer;
 import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.contentProvider.VIPInfoCPer;
-import com.tobacco.pos.entity.AllTables.Consume;
-import com.tobacco.pos.entity.AllTables.Return;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -531,43 +529,47 @@ public class ReportManagement extends RMSBaseView {
 	        		int mId = Integer.parseInt(gCPer.getAttributeById("manufacturerId", gId+""));//查找到厂家的ID
 	        		String mName = mCPer.getMNameByMId(mId);
 	        		String kindName = gCPer.getKindNameByGoodsId(gId);//根据商品的ID查找种类名称
+	        		if(kindName.contains("->"))
+	        			kindName = kindName.substring(kindName.indexOf("->") + 2);
 	        		
 	        		int surplusNum = pNum - sNum + cNum - rNum;//剩余量
-	        		String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(thePriceId));//通过价格ID查找单位ID
 	        		
-	        		double inPrice = gPriceCPer.getInPriceByGoodsPriceId(thePriceId);
-	        		double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(thePriceId);
+	        		if(surplusNum>0){
+	        			String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(thePriceId));//通过价格ID查找单位ID
 	        		
-	        		TableRow t = new TableRow(this);
+	        			double inPrice = gPriceCPer.getInPriceByGoodsPriceId(thePriceId);
+	        			double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(thePriceId);
+	        			
+	        			TableRow t = new TableRow(this);
 	        		
-	        		TextView gNameTView = new TextView(this);
-	        		gNameTView.setText(gName);
-	        		TextView mTView = new TextView(this);
-	        		mTView.setText(mName);
-	        		TextView kindTView = new TextView(this);
-	        		kindTView.setText(kindName);
-	        		TextView surplusNumTView = new TextView(this);
-	        		surplusNumTView.setText(surplusNum+"");
-	        		TextView unitTView = new TextView(this);
-	        		unitTView.setText(unitName);
-	        		TextView inTView = new TextView(this);
-	        		inTView.setText(inPrice+"");
-	        		TextView outTView = new TextView(this);
-	        		outTView.setText(outPrice+"");
+	        			TextView gNameTView = new TextView(this);
+	        			gNameTView.setText(gName);
+	        			TextView mTView = new TextView(this);
+	        			mTView.setText(mName);
+	        			TextView kindTView = new TextView(this);
+	        			kindTView.setText(kindName);
+	        			TextView surplusNumTView = new TextView(this);
+	        			surplusNumTView.setText(surplusNum+"");
+	        			TextView unitTView = new TextView(this);
+	        			unitTView.setText(unitName);
+	        			TextView inTView = new TextView(this);
+	        			inTView.setText(inPrice+"");
+	        			TextView outTView = new TextView(this);
+	        			outTView.setText(outPrice+"");
 	        		
-	        		t.addView(gNameTView);
-	        		t.addView(mTView);
-	        		t.addView(kindTView);
-	        		t.addView(surplusNumTView);
-	        		t.addView(unitTView);
-	        		t.addView(inTView);
-	        		t.addView(outTView);
+	        			t.addView(gNameTView);
+	        			t.addView(mTView);
+	        			t.addView(kindTView);
+	        			t.addView(surplusNumTView);
+	        			t.addView(unitTView);
+	        			t.addView(inTView);
+	        			t.addView(outTView);
 	        		
-	        		inventoryReportTable.addView(t);
+	        			inventoryReportTable.addView(t);
 	        		
-	        		
+	        		}
 	        		Log.d("lyq", thePriceId + "..." + theBarcode + "..." + pNum + "..." + sNum + "..." + cNum + "..." + rNum + "..." + surplusNum);
-	        		
+	        	
 	        	}
 
 	        }

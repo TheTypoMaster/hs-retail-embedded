@@ -6,7 +6,6 @@ import java.util.List;
 import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.contentProvider.GoodsCPer;
-import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.contentProvider.GoodsPriceCPer; 
 import com.tobacco.pos.contentProvider.SalesBillCPer;
 import com.tobacco.pos.contentProvider.SalesItemCPer;
@@ -24,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,7 +45,7 @@ public class PaymentManagement extends RMSBaseView {
 	private SalesBillCPer sBillCPer = null;
 	private SalesItemCPer sItemCPer = null;
 	private VIPInfoCPer vipInfoCPer = null;
-	private GoodsKindCPer gKindCPer = null;
+//	private GoodsKindCPer gKindCPer = null;
 	
 	private TextView paymentWelcome;
 	
@@ -63,8 +61,8 @@ public class PaymentManagement extends RMSBaseView {
 	
 	private int newSBillId = -1;//新增的销售单Id
 	private double totalMoney = 0;	
-	private double cigaretteMoney = 0;//在一张单中香烟的总价
-	private double otherMoney = 0;//在一张单中其他商品的总价
+//	private double cigaretteMoney = 0;//在一张单中香烟的总价
+//	private double otherMoney = 0;//在一张单中其他商品的总价
 	
 	private List<String> barcodeList = new ArrayList<String>();
 	
@@ -409,7 +407,7 @@ public class PaymentManagement extends RMSBaseView {
 	
 	protected void postInputVIPNum(){
 
-			gKindCPer = new GoodsKindCPer();
+//			gKindCPer = new GoodsKindCPer();
 
 			//处理销售单的增加以及打印
 		
@@ -474,7 +472,7 @@ public class PaymentManagement extends RMSBaseView {
 						for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 							String theBarcode = barcodeList.get(i-1);
 							
-							int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
+//							int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
 							int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
 				
 							double inPrice = gPriceCPer.getInPriceByBarcode(theBarcode);
