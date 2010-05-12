@@ -19,19 +19,19 @@
 				android:layout_height="wrap_content">
 			 
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="名称               " />
+					android:layout_height="wrap_content" android:text="名称               " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="厂家               " />
+					android:layout_height="wrap_content" android:text="厂家               " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="种类   " />
+					android:layout_height="wrap_content" android:text="种类   " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="数量   " />
+					android:layout_height="wrap_content" android:text="剩余数量   " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="单位   " />
+					android:layout_height="wrap_content" android:text="单位   " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="进价   " />
+					android:layout_height="wrap_content" android:text="进价   " style="@style/TextViewTitleStyle"/>
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:text="售价   " />
+					android:layout_height="wrap_content" android:text="售价   " style="@style/TextViewTitleStyle"/>
 			</TableRow>
 		</TableLayout>
 	</ScrollView>
