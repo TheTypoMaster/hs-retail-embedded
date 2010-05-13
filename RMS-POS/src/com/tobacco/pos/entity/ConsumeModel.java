@@ -62,13 +62,13 @@ public class ConsumeModel extends BaseModel{
 	}
 	
 	public ConsumeModel(int number, String goodsName,
-			String unitName, int goodsPriceId, double inPrice,String comment, String type) {
+			String unitName, int goodsPriceId, String comment, String type) {
 		super(comment);
 		this.number = number;
 		this.goodsName = goodsName;
 		this.unitName = unitName;
 		this.goodsPriceId = goodsPriceId;
-		this.inPrice = inPrice;
+//		this.inPrice = inPrice;
 		this.type = type;
 	}
 

@@ -93,8 +93,8 @@ public class ReturnSelect extends RMSBaseView{
 			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_six1);
 			TextView goodsNameText = (TextView)row.findViewById(R.id.text_six2);
 			TextView vipNameText = (TextView)row.findViewById(R.id.text_six3);
-			TextView timeText = (TextView)row.findViewById(R.id.text_six4);
-			TextView contentText = (TextView)row.findViewById(R.id.text_six5);
+			TextView numberText = (TextView)row.findViewById(R.id.text_six4);
+			TextView timeText = (TextView)row.findViewById(R.id.text_six5);			
 			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
 
 			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
@@ -102,7 +102,7 @@ public class ReturnSelect extends RMSBaseView{
 			vipNameText.setText(goods.getCustomer());
 			String time = goods.getCreateDate();
 			timeText.setText(time.substring(0, time.length()-3));
-			contentText.setText(goods.getComment());
+			numberText.setText(""+goods.getNumber());
 			operatorText.setText(goods.getOperator());				
 								
 			table = (TableLayout)findViewById(R.id.returnSelectTable);		
@@ -119,9 +119,10 @@ public class ReturnSelect extends RMSBaseView{
 
 						public boolean onMenuItemClick(MenuItem item) {
 							// TODO Auto-generated method stub
-							Intent intent = new Intent("com.tobacco.pos.activity.ShowCountGoodsDetail");		
+//							Intent intent = new Intent("com.tobacco.pos.activity.ShowCountGoodsDetail");	
+							Intent intent = new Intent("com.tobacco.pos.activity.ShowGoodsDetail");	
 							intent.putExtra(GoodsPrice._ID, ""+goods.getGoodsPriceId());
-							intent.putExtra("COUNT", ""+goods.getNumber());
+//							intent.putExtra("COUNT", ""+goods.getNumber());
 							ReturnSelect.this.startActivity(intent);
 							return true;
 						}

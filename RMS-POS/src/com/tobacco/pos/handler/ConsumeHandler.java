@@ -172,9 +172,9 @@ public class ConsumeHandler {
 		String goodsName = goodsCPer.getAttributeById(Goods.goodsName, goodsId);		
 		String unitId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice.unitId, GoodsPrice.barcode, barcode);
 		String unitName = unitCPer.getAttributeById(Unit.name, unitId);
-		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
+//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
 		
-		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, inPrice,comment,type);
+		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, comment,type);
 		return consume;
 	}
 	

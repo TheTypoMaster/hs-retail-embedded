@@ -174,9 +174,9 @@ public class ReturnHandler {
 		
 		String unitId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice.unitId, GoodsPrice.barcode, barcode);
 		String unit = unitCPer.getAttributeById(Unit.name, unitId);
-		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
+//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
 //		ReturnModel goods = new ReturnModel(customerId, customer, unit, goodsPriceId, goodsName, content, number);
-		ReturnModel goods = new ReturnModel(unit, goodsPriceId, inPrice,goodsName, content, number);
+		ReturnModel goods = new ReturnModel(unit, goodsPriceId, goodsName, content, number);
 		
 		return goods;
 	}

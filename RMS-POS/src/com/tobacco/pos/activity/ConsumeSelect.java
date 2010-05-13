@@ -90,21 +90,24 @@ public class ConsumeSelect extends RMSBaseView{
 		for(final ConsumeModel goods : goodsList){
 			
 			LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);  
-			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_seven,null);  
+			final TableRow row = (TableRow)inflater.inflate(R.layout.table_row_six,null);  
 			
-			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_seven1);
-			TextView goodsNameText = (TextView)row.findViewById(R.id.text_seven2);	
-			TextView typeText = (TextView)row.findViewById(R.id.text_seven3);	
-			TextView unitNameText = (TextView)row.findViewById(R.id.text_seven4);
-			TextView inPriceText = (TextView)row.findViewById(R.id.text_seven5);
-			TextView timeText = (TextView)row.findViewById(R.id.text_seven6);
-			TextView operatorText = (TextView)row.findViewById(R.id.text_seven7);
+			TextView goodsIndexText = (TextView)row.findViewById(R.id.text_six1);
+			TextView goodsNameText = (TextView)row.findViewById(R.id.text_six2);	
+//			TextView typeText = (TextView)row.findViewById(R.id.text_six3);	
+			TextView unitNameText = (TextView)row.findViewById(R.id.text_six3);
+			TextView numberText = (TextView)row.findViewById(R.id.text_six4);
+			TextView timeText = (TextView)row.findViewById(R.id.text_six5);
+			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
 
 			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
 			goodsNameText.setText(goods.getGoodsName());
-			typeText.setText(goods.getType());
+//			typeText.setText(goods.getType());
 			unitNameText.setText(goods.getUnitName());					
-			inPriceText.setText(""+goods.getInPrice());
+//			inPriceText.setText(""+goods.getInPrice());
+			
+			String number = (goods.getType().equals("溢"))?" "+goods.getNumber():""+-goods.getNumber();
+			numberText.setText(number);
 			String time = goods.getCreateDate();	
 			timeText.setText(time.substring(0, time.length()-3));
 			operatorText.setText(goods.getOperator());					

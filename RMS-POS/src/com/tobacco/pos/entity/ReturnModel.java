@@ -42,7 +42,7 @@ public class ReturnModel extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReturnModel(String unit, int goodsPriceId, double inPrice, String goodsName, String comment,
+	public ReturnModel(String unit, int goodsPriceId, String goodsName, String comment,
 			int number) {
 		super(comment);
 		this.unit = unit;
@@ -50,7 +50,7 @@ public class ReturnModel extends BaseModel {
 		this.goodsName = goodsName;
 //		this.content = content;
 		this.number = number;
-		this.inPrice = inPrice;
+//		this.inPrice = inPrice;
 	}
 
 	public ReturnModel(String operator, String customer, int goodsPriceId,

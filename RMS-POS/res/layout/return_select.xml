@@ -36,7 +36,7 @@
 				  android:layout_weight="1"
 				  style="@style/TextViewTitleStyle"/>     
 				<TextView
-		          android:text="进价"
+		          android:text="数量"
 				  android:layout_weight="1"
 				  style="@style/TextViewTitleStyle"/>
 				<TextView
