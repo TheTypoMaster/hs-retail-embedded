@@ -10,8 +10,8 @@
 		</TextView>
  
 	
-	<ScrollView android:layout_width="wrap_content"
-		android:layout_height="wrap_content">
+<!--  	<ScrollView android:layout_width="wrap_content"
+		android:layout_height="wrap_content">-->
 		<TableLayout android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/inventoryReportTable">
@@ -34,6 +34,15 @@
 					android:layout_height="wrap_content" android:text="售价   " style="@style/TextViewTitleStyle"/>
 			</TableRow>
 		</TableLayout>
-	</ScrollView>
+		<LinearLayout android:layout_width="wrap_content" android:layout_height="15sp" android:layout_gravity="center_horizontal">
+		</LinearLayout>
+		<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="&lt;&lt;" android:id="@+id/previous"/>
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/currentPage"/>
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="/"/>
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/pageCount"/>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="&gt;&gt;" android:id="@+id/next"/>
+		</LinearLayout>
+	<!--  </ScrollView>-->
 
 </LinearLayout>
