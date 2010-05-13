@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
-import com.tobacco.pos.entity.AllTables.UserInfo;
 import com.tobacco.pos.entity.AllTables.VIPInfo;
 
 public class InputCheck{
@@ -19,9 +18,15 @@ public class InputCheck{
     Cursor c = ctx.getContentResolver().query(VIPInfo.CONTENT_URI,null,VIPInfo.VIPNum+" = ? ",new String[]{value},null);
     if(c.getCount()==0)
     	return "此VIP客户不存在";
-	return null;
+    else
+    {
+    	Log.d("lyq","....." + c.getInt(0));
+    	return c.getInt(0)+"";//存在用户的话返回ID
+    }
+	
   }
-
+  
+ 
   public static String checkBarcode(Context ctx, String value){
 	  
 	if(value.equals(""))
