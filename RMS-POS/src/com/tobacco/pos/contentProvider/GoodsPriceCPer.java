@@ -5,7 +5,6 @@ import static android.provider.BaseColumns._ID;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.tobacco.pos.entity.AllTables;
 
 import android.content.ContentProvider;
@@ -13,7 +12,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -214,11 +212,13 @@ public class GoodsPriceCPer extends ContentProvider {
 	        sqlDB = dbHelper.getWritableDatabase();
 	        long rowId = sqlDB.insert(TABLE_NAME, "", contentvalues);
 	        if (rowId > 0) {
-	            Uri rowUri = ContentUris.appendId(AllTables.Unit.CONTENT_URI.buildUpon(), rowId).build();
+	            Uri rowUri = ContentUris.appendId(AllTables.GoodsPrice.CONTENT_URI.buildUpon(), rowId).build();
 	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
-	        throw new SQLException("Failed to insert row into " + uri);
+	        return null;
+	   //     throw new SQLException("Failed to insert row into " + uri);
+	    
 	    } 
 
 	    @Override
@@ -320,7 +320,7 @@ public class GoodsPriceCPer extends ContentProvider {
 	    	}
 	    	return new ArrayList<Integer>();
 	    }
-	    public boolean addGoodsPrice(int goodsId, int unitId, String barcode, double inPrice, double outPrice){
+	    public boolean addGoodsPrice(int goodsId, int unitId, String barcode, double inPrice, double outPrice, Integer isCigarette){
 			ContentValues value = new ContentValues();
 			value.clear();
 			value.put("goodsId", goodsId);
@@ -328,6 +328,7 @@ public class GoodsPriceCPer extends ContentProvider {
 			value.put("barcode", barcode);
 			value.put("inPrice", inPrice);
 			value.put("outPrice", outPrice);
+			value.put("isCigarette", isCigarette);
 			
 			Uri uri = this.insert(AllTables.GoodsPrice.CONTENT_URI, value);
 			if(uri!=null)

@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class PurchaseItemCPer extends ContentProvider {
 
@@ -193,6 +194,7 @@ public class PurchaseItemCPer extends ContentProvider {
 	    }
 
 	    public boolean addPItem(int pBillId, int priceId, int count){
+	    	Log.d("lyq", "add Purchase Item...................");
 	    	Cursor c = this.query(AllTables.PurchaseItem.CONTENT_URI, null, " purchaseBillId = ? and pPriceId = ? ", new String[]{pBillId+"", priceId+""}, null);
 	    	if(c.getCount() == 0){
 	    	
