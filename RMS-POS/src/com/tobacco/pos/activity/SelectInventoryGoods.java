@@ -2,9 +2,14 @@ package com.tobacco.pos.activity;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,27 +18,50 @@ import android.widget.Button;
 
 import com.tobacco.R;
 import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.pos.activity.ConsumeSelect.Task;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsKind;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Unit;
+import com.tobacco.pos.searchStrategy.SearchState;
+import com.tobacco.pos.util.db.POSDbHelper;
 import com.tobacco.pos.util.tree.CheckTreeView;
 import com.tobacco.pos.util.tree.TreeNode;
 
 public class SelectInventoryGoods extends RMSBaseView {
     /** Called when the activity is first created. */
 	
+	private static String TAG = "SelectInventoryGoods";
+	
 	ArrayList<TreeNode> treeNodes;
+	TreeNode root;
+	ArrayList<Integer> exitsGoodsPrice;
+	ProgressDialog pd;
+	final int TASK_COMPLETE = 1;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_tree_view);
-        Intent intent = getIntent();
-        ArrayList<Integer> exitsGoodsPrice = intent.getIntegerArrayListExtra(GoodsPrice._ID);
+        Log.i(TAG, "onCreate");
         
+        Intent intent = getIntent();
+        exitsGoodsPrice = intent.getIntegerArrayListExtra(GoodsPrice._ID);
         treeNodes = new ArrayList<TreeNode>();
-		Cursor kindc = managedQuery(GoodsKind.CONTENT_URI, new String[]{GoodsKind._ID,GoodsKind.name,GoodsKind.parent,GoodsKind.level}, null, null, null);
+        root = new TreeNode(true,"Root");
+        
+        this.setVisible(false);
+        startTask();
+ 
+        Button confirm = (Button)findViewById(R.id.selectInventoryGoodsConfirm);
+        Button cancel = (Button)findViewById(R.id.selectInventoryGoodsCancel);
+        confirm.setOnClickListener(listener);
+        cancel.setOnClickListener(listener);
+        Log.i(TAG, "show all nodes");      
+    }
+    
+    private void getKindNodes(){
+    	Cursor kindc = managedQuery(GoodsKind.CONTENT_URI, new String[]{GoodsKind._ID,GoodsKind.name,GoodsKind.parent,GoodsKind.level}, null, null, null);
 		if(kindc.getCount()>0){
 			kindc.moveToFirst();
 			for(int i = 0; i < kindc.getCount(); i++){
@@ -53,10 +81,11 @@ public class SelectInventoryGoods extends RMSBaseView {
 				kindc.moveToNext();
 			}
 		}
-		
-		TreeNode root = new TreeNode(true,"Root");
-		
-		for(TreeNode node: treeNodes){
+		Log.i(TAG, "get all kind nodes");
+    }
+    
+    private void setKindNodes(){
+    	for(TreeNode node: treeNodes){
 			
 			for(TreeNode node2 : treeNodes){
 				if (node2.getpId() == node.getId()) {
@@ -70,62 +99,80 @@ public class SelectInventoryGoods extends RMSBaseView {
 			}
 				
 		}
+		Log.i(TAG, "set all kind nodes");
+    }
+    
+    private void getAndSetGoodsNodes(){
+    	POSDbHelper databaseHelper = new POSDbHelper(this);
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		String[] projection = new String[]{"GoodsPrice."+GoodsPrice._ID,"Goods."+Goods.goodsName,"Unit."+Unit.name,"Goods."+Goods.kindId};
+		String selection = "GoodsPrice."+GoodsPrice.goodsId+" =Goods."+Goods._ID+" AND "+"GoodsPrice."+GoodsPrice.unitId+" =Unit."+Unit._ID;
 		
-		Cursor goodsPricec = managedQuery(GoodsPrice.CONTENT_URI, new String[]{GoodsPrice._ID,GoodsPrice.goodsId,GoodsPrice.unitId}, null, null, null);
-		if(goodsPricec.getCount()>0){
-			goodsPricec.moveToFirst();
-			for(int i = 0; i<goodsPricec.getCount(); i++){
-				
-				int gpIdIndex = goodsPricec.getColumnIndex(GoodsPrice._ID);
-				int goodsPriceId = goodsPricec.getInt(gpIdIndex);
-				
+ 		Cursor c = db.query("GoodsPrice,Goods,Unit", projection, selection, null, null, null, null);
+		if(c.getCount()>0){
+			c.moveToFirst();
+			for(int i = 0; i<c.getCount();i++){
+				int goodsPriceId = c.getInt(0);
 				if(exitsGoodsPrice==null||!exitsGoodsPrice.contains(Integer.valueOf(goodsPriceId))){
-					int gdIdIndex = goodsPricec.getColumnIndex(GoodsPrice.goodsId);
-					String goodsId = goodsPricec.getString(gdIdIndex);
-					int unitIdIndex = goodsPricec.getColumnIndex(GoodsPrice.unitId);
-					String unitId = goodsPricec.getString(unitIdIndex);
-					
-					Cursor unitc = managedQuery(Unit.CONTENT_URI, new String[]{Unit.name}, Unit._ID+" = ? ", new String[]{unitId}, null);
-					String unitName = "";
-					if(unitc.getCount()>0){
-						unitc.moveToFirst();
-						int unitNameIndex = unitc.getColumnIndex(Unit.name);
-						unitName = unitc.getString(unitNameIndex);
+					for(TreeNode kind : treeNodes){
+						if(kind.getId()==c.getInt(3)){
+							TreeNode goodsNode = new TreeNode(c.getString(1)+" "+c.getString(2),goodsPriceId,"goods");						
+							kind.addNode(goodsNode);						
+							goodsNode.setLevel(kind.getLevel()+1);
+						}						
 					}
-					
-					Cursor goodsc = managedQuery(Goods.CONTENT_URI, new String[]{Goods.goodsName,Goods.kindId}, Goods._ID+" = ? ", new String[]{goodsId}, null);
-					if(goodsc.getCount()>0){
-						goodsc.moveToFirst();
-						int goodsNameIndex = goodsc.getColumnIndex(Goods.goodsName);
-						String goodsName = goodsc.getString(goodsNameIndex);
-						int kindIdIndex = goodsc.getColumnIndex(Goods.kindId);
-						int kindId = goodsc.getInt(kindIdIndex);
-						
-						TreeNode goodsNode = new TreeNode(goodsName+" "+unitName,goodsPriceId,"goods");
-						
-						for(TreeNode kind : treeNodes){
-							if(kind.getId()==kindId){
-								kind.addNode(goodsNode);						
-								goodsNode.setLevel(kind.getLevel()+1);
-							}						
-						}
-						
-						treeNodes.add(goodsNode);
-					}										
-				}	
-				goodsPricec.moveToNext();
+				}
 			}
 		}
-        
-        CheckTreeView tree = (CheckTreeView)findViewById(R.id.tree);
-        tree.init(root);
-        
-        Button confirm = (Button)findViewById(R.id.selectInventoryGoodsConfirm);
-        Button cancel = (Button)findViewById(R.id.selectInventoryGoodsCancel);
-        confirm.setOnClickListener(listener);
-        cancel.setOnClickListener(listener);
-        
+ 
+		Log.i(TAG, "get all goods node and add to kind nodes");
     }
+    
+    private void showInventoryGoods(){
+    	CheckTreeView tree = (CheckTreeView)findViewById(R.id.tree);
+        tree.init(root);
+        this.setVisible(true);
+    }
+    
+    private void startTask(){   
+		Log.e(TAG, "startTask()");		
+		showDialog();            
+        Thread task = new Thread(new Task());  
+        task.start();  
+    } 
+
+	private void showDialog(){
+		Log.e(TAG, "showDialog()");
+		pd = ProgressDialog.show(this, "请稍候...", "Loading...", true,  
+                false);
+	}
+	
+	public class Task implements Runnable {  
+        @Override  
+        public void run() {  
+            // TODO Auto-generated method stub  
+        	Log.e(TAG, "Task.run()");
+        	getKindNodes();      		
+    		setKindNodes();		
+    		getAndSetGoodsNodes();
+            messageListener.sendEmptyMessage(TASK_COMPLETE);             
+        }  
+          
+    }  
+	
+	private Handler messageListener = new Handler(){  
+        public void handleMessage(Message msg) {  
+        	Log.e(TAG, "messageListener.handleMessage()");
+            switch(msg.what){  
+            case TASK_COMPLETE:   
+            	Log.e(TAG, "Message:TASK_COMPLETE");
+                pd.dismiss(); 
+                showInventoryGoods();
+                break;  
+                  
+            }  
+        }  
+    }; 
     
     private OnClickListener listener = new OnClickListener() {
 		
