@@ -13,6 +13,7 @@ import com.tobacco.pos.contentProvider.VIPInfoCPer;
 import com.tobacco.pos.entity.ComplaintFull;
 import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.entity.AllTables.Complaint;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.UserInfo;
@@ -95,7 +96,10 @@ public class ComplaintHandler {
 	 * @return return the ConsumeEntity obeject.
 	 */
 	private ComplaintModel genComplaintEntity(Cursor cursor){
-		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
+		int idIndex = cursor.getColumnIndex(Complaint._ID);
+		int id = cursor.getInt(idIndex);
+		
+		int goodsPriceIdIndex = cursor.getColumnIndex(Complaint.GOODS_ID);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
 		
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
@@ -114,7 +118,7 @@ public class ComplaintHandler {
 		int contentIndex = cursor.getColumnIndex(Complaint.COMMENT);
 		String content = cursor.getString(contentIndex);
 		
-		ComplaintModel goods = new ComplaintModel(operator, customer, goodsPriceId, goodsName, time, content);
+		ComplaintModel goods = new ComplaintModel(id, operator, customer, goodsPriceId, goodsName, time, content);
 		return goods;
 	}
 	

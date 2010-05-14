@@ -97,7 +97,8 @@ public class ReturnSelect extends RMSBaseView{
 			TextView timeText = (TextView)row.findViewById(R.id.text_six5);			
 			TextView operatorText = (TextView)row.findViewById(R.id.text_six6);
 
-			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
+//			goodsIndexText.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));
+			goodsIndexText.setText(""+goods.getId());
 			goodsNameText.setText(goods.getGoodsName());
 			vipNameText.setText(goods.getCustomer());
 			String time = goods.getCreateDate();

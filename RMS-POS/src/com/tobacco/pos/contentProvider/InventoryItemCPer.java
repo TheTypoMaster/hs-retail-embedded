@@ -10,7 +10,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -18,6 +17,7 @@ import android.util.Log;
 
 import com.tobacco.pos.entity.InventoryItemFull;
 import com.tobacco.pos.entity.AllTables.InventoryItem;
+import com.tobacco.pos.util.db.POSDbHelper;
 
 public class InventoryItemCPer extends ContentProvider{
 	
@@ -35,56 +35,58 @@ public class InventoryItemCPer extends ContentProvider{
 	private static final UriMatcher uriMatcher;
 	private static HashMap<String,String> inventoryItemProjectionMap;
 	private static Context ct = null;
-	
-	private static class DatabaseHelper extends SQLiteOpenHelper{
-		private SQLiteDatabase db = null;
-		private Context ctx = null;
-		
-		DatabaseHelper(Context context){
-			super(context,DATABASE_NAME,null,DATABASE_VERSION);
-			Log.i("lqz", "initial the databasehelp InventoryItem");
-			//add
-			ctx = context;
-			ct = context;
-			
-			db = openDatabase(DATABASE_NAME);
-			onCreate(db);
-		}
-		private SQLiteDatabase openDatabase(String databaseName) {
-			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
-			return db;
-		}
-		@Override	
-		public void onCreate(SQLiteDatabase db) {
-			// TODO Auto-generated method stub
-			Log.i("lqz", "start to create table InventoryItem");	
-			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
-					+InventoryItem._ID+" INTEGER PRIMARY KEY,"
-					+InventoryItem.IBILL_ID+" INTEGER,"				
-					+InventoryItem.GOODS_PRICE_ID+" INTEGER,"
-					+InventoryItem.EXPECT_NUM+" INTEGER,"		
-					+InventoryItem.REAL_NUM+ " INTEGER,"
-					+InventoryItem.ITEM_RESULT+ " DOUBLE,"
-					+InventoryItem.COMMENT+" TEXT"				
-					+");");
-			Log.i("lqz", "finish create table InventoryItem.");
-		}
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
-			Log.w(TAG, "Upgrading database from version "+oldVersion+ "to "+newVersion+",which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS InventoryItem");
-			onCreate(db);
-		}
-		
-	}
 
-	private DatabaseHelper databaseHelper;
+	private POSDbHelper databaseHelper;
+	
+//	private static class DatabaseHelper extends SQLiteOpenHelper{
+//		private SQLiteDatabase db = null;
+//		private Context ctx = null;
+//		
+//		DatabaseHelper(Context context){
+//			super(context,DATABASE_NAME,null,DATABASE_VERSION);
+//			Log.i("lqz", "initial the databasehelp InventoryItem");
+//			//add
+//			ctx = context;
+//			ct = context;
+//			
+//			db = openDatabase(DATABASE_NAME);
+//			onCreate(db);
+//		}
+//		private SQLiteDatabase openDatabase(String databaseName) {
+//			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+//			return db;
+//		}
+//		@Override	
+//		public void onCreate(SQLiteDatabase db) {
+//			// TODO Auto-generated method stub
+//			Log.i("lqz", "start to create table InventoryItem");	
+//			db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
+//					+InventoryItem._ID+" INTEGER PRIMARY KEY,"
+//					+InventoryItem.IBILL_ID+" INTEGER,"				
+//					+InventoryItem.GOODS_PRICE_ID+" INTEGER,"
+//					+InventoryItem.EXPECT_NUM+" INTEGER,"		
+//					+InventoryItem.REAL_NUM+ " INTEGER,"
+//					+InventoryItem.ITEM_RESULT+ " DOUBLE,"
+//					+InventoryItem.COMMENT+" TEXT"				
+//					+");");
+//			Log.i("lqz", "finish create table InventoryItem.");
+//		}
+//		@Override
+//		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//			// TODO Auto-generated method stub
+//			Log.w(TAG, "Upgrading database from version "+oldVersion+ "to "+newVersion+",which will destroy all old data");
+//			db.execSQL("DROP TABLE IF EXISTS InventoryItem");
+//			onCreate(db);
+//		}
+//		
+//	}
+
 
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
-		databaseHelper = new DatabaseHelper(this.getContext());
+		databaseHelper = new POSDbHelper(this.getContext());
+		ct = this.getContext();
 		Log.e(TAG,"new DatabaseHelper"+this.getContext());
 		return true;
 	}
@@ -198,7 +200,7 @@ public class InventoryItemCPer extends ContentProvider{
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		// TODO Auto-generated method stub
-		databaseHelper = new DatabaseHelper(ct);
+		databaseHelper = new POSDbHelper(ct);
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		Log.e("lqz", uri+"projection:"+projection+"selection:"+selection+"selectionArgs"+selectionArgs);
 		switch(uriMatcher.match(uri)){

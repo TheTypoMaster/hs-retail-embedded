@@ -43,7 +43,7 @@ public class ReturnFull implements BaseColumns{
 	 * The id of the goodsPrice
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String GOODS_PRICE_ID = "GoodsPrice."+GoodsPrice._ID;
+	public static final String GOODS_PRICE_ID = "Return."+Return.GOODS_ID;
 	/**
 	 * The id of the goods
 	 * <p>TypE: INTEGER</>
@@ -54,6 +54,7 @@ public class ReturnFull implements BaseColumns{
 	 * <p>TypE: TEXT</>
 	 */
 //	public static final String UNIT_NAME = "Unit."+Unit.name;
+	public static final String ID = "Return."+Return._ID;
 	/**
 	 * The time Return create;
 	 * <p>TypE: TEXT</>
@@ -74,5 +75,5 @@ public class ReturnFull implements BaseColumns{
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER};
+	public static final String[] PROJECTION = new String[]{ID,GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER};
 }

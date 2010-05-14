@@ -14,6 +14,7 @@ import com.tobacco.pos.contentProvider.UnitCPer;
 import com.tobacco.pos.contentProvider.VIPInfoCPer;
 import com.tobacco.pos.entity.ReturnFull;
 import com.tobacco.pos.entity.ReturnModel;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
@@ -98,7 +99,8 @@ public class ReturnHandler {
 	 * @return return the ConsumeEntity obeject.
 	 */
 	private ReturnModel genReturnEntity(Cursor cursor){
-		
+		int idIndex = cursor.getColumnIndex(Return._ID);
+		int id = cursor.getInt(idIndex);
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
 		String goodsName = cursor.getString(goodsNameIndex);
 //		int unitNameIndex = cursor.getColumnIndex(Unit.name);
@@ -119,13 +121,13 @@ public class ReturnHandler {
 		int numberIndex = cursor.getColumnIndex(Return.NUMBER);
 		int number = cursor.getInt(numberIndex);	
 		
-		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
+		int goodsPriceIdIndex = cursor.getColumnIndex(Return.GOODS_ID);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
 		
-		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
-		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
+//		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
+//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 		
-		ReturnModel goods = new ReturnModel(operator, customer, goodsPriceId, goodsName, time, content, number,inPrice);
+		ReturnModel goods = new ReturnModel(id, operator, customer, goodsPriceId, goodsName, time, content, number);
 		return goods;
 	}
 	
@@ -174,9 +176,9 @@ public class ReturnHandler {
 		
 		String unitId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice.unitId, GoodsPrice.barcode, barcode);
 		String unit = unitCPer.getAttributeById(Unit.name, unitId);
-//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
+		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
 //		ReturnModel goods = new ReturnModel(customerId, customer, unit, goodsPriceId, goodsName, content, number);
-		ReturnModel goods = new ReturnModel(unit, goodsPriceId, goodsName, content, number);
+		ReturnModel goods = new ReturnModel(unit, goodsPriceId, goodsName, content, number, inPrice);
 		
 		return goods;
 	}

@@ -38,12 +38,15 @@ public class ConsumeFull implements BaseColumns {
 	 * The id of the goodsPrice
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String GOODS_PRICE_ID = "GoodsPrice."+GoodsPrice._ID;
+//	public static final String GOODS_PRICE_ID = "GoodsPrice."+GoodsPrice._ID;
+	public static final String GOODS_PRICE_ID = "Consume."+Consume.GOODS;
 	/**
 	 * The id of the goods
 	 * <p>TypE: INTEGER</>
 	 */
 	public static final String GOODS_NAME = "Goods."+Goods.goodsName;
+	
+	public static final String ID = "Consume."+Consume._ID;
 	/**
 	 * The time complaint create;
 	 * <p>TypE: TEXT</>
@@ -69,5 +72,5 @@ public class ConsumeFull implements BaseColumns {
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,UNIT_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER,FLAG};
+	public static final String[] PROJECTION = new String[]{ID,GOODS_NAME,UNIT_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER,FLAG};
 }

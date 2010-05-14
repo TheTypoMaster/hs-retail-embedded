@@ -43,9 +43,10 @@ public class ComplaintModel extends BaseModel {
 //		this.content = content;
 	}
 
-	public ComplaintModel(String operator, String customer, int goodsPriceId,
+	public ComplaintModel(int id, String operator, String customer, int goodsPriceId,
 			String goodsName, String createDate, String comment) {
 		super(createDate,comment);
+		this.id = id;
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;

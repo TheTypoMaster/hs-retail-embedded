@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 
 import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.entity.AllTables.Complaint;
+import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Unit;
@@ -52,12 +53,14 @@ public class ComplaintFull implements BaseColumns{
 	 * The id of the goodsPrice
 	 * <p>TypE: INTEGER</>
 	 */
-	public static final String GOODS_PRICE_ID = "GoodsPrice."+GoodsPrice._ID;
+	public static final String GOODS_PRICE_ID = "Complaint."+Complaint.GOODS_ID;
 	/**
 	 * The id of the goods
 	 * <p>TypE: INTEGER</>
 	 */
 	public static final String GOODS_NAME = "Goods."+Goods.goodsName;
+	
+	public static final String ID = "Complaint."+Complaint._ID;
 	/**
 	 * The time complaint create;
 	 * <p>TypE: TEXT</>
@@ -73,5 +76,5 @@ public class ComplaintFull implements BaseColumns{
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID};
+	public static final String[] PROJECTION = new String[]{ID, GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID};
 }

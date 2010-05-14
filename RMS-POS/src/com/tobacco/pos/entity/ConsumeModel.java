@@ -14,6 +14,8 @@ import android.util.Log;
 public class ConsumeModel extends BaseModel{
 	
 	private static String TAG = "ConsumeModel";
+	
+	private int id;
 	/**
 	 * the operator's name who deal with this consume goods.
 	 */
@@ -62,8 +64,21 @@ public class ConsumeModel extends BaseModel{
 	}
 	
 	public ConsumeModel(int number, String goodsName,
-			String unitName, int goodsPriceId, String comment, String type) {
+			String unitName, int goodsPriceId, double inPrice, String comment, String type) {
 		super(comment);
+		this.number = number;
+		this.goodsName = goodsName;
+		this.unitName = unitName;
+		this.goodsPriceId = goodsPriceId;
+		this.inPrice = inPrice;
+		this.type = type;
+	}
+
+	public ConsumeModel(int id, String operator, int number, String goodsName,
+			String unitName, int goodsPriceId, String comment,String createDate, String type) {
+		super(createDate,comment);
+		this.id = id;
+		this.operator = operator;
 		this.number = number;
 		this.goodsName = goodsName;
 		this.unitName = unitName;
@@ -72,16 +87,12 @@ public class ConsumeModel extends BaseModel{
 		this.type = type;
 	}
 
-	public ConsumeModel(String operator, int number, String goodsName,
-			String unitName, int goodsPriceId, double inPrice,String comment,String createDate, String type) {
-		super(createDate,comment);
-		this.operator = operator;
-		this.number = number;
-		this.goodsName = goodsName;
-		this.unitName = unitName;
-		this.goodsPriceId = goodsPriceId;
-		this.inPrice = inPrice;
-		this.type = type;
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getOperator() {

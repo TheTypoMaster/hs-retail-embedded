@@ -110,7 +110,8 @@ public class ConsumeHandler {
 	 * @return return the ConsumeEntity obeject.
 	 */
 	private ConsumeModel genConsumeEntity(Cursor cursor){
-		
+		int idIndex = cursor.getColumnIndex(Consume._ID);
+		int id = cursor.getInt(idIndex);
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
 		String goodsName = cursor.getString(goodsNameIndex);
 		int unitNameIndex = cursor.getColumnIndex(Unit.name);
@@ -127,13 +128,14 @@ public class ConsumeHandler {
 		
 		int numberIndex = cursor.getColumnIndex(Consume.NUMBER);
 		int number = cursor.getInt(numberIndex);		
-		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
+//		int goodsPriceIdIndex = cursor.getColumnIndex(GoodsPrice._ID);
+		int goodsPriceIdIndex = cursor.getColumnIndex(Consume.GOODS);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
 		
-		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
-		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
+//		GoodsPriceCPer goodsPriceCPer = new GoodsPriceCPer();
+//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeById(GoodsPrice.inPrice, String.valueOf(goodsPriceId)));
 		
-		ConsumeModel goods = new ConsumeModel(operName, number, goodsName, unitName, goodsPriceId, inPrice, comment, time, type);
+		ConsumeModel goods = new ConsumeModel(id,operName, number, goodsName, unitName, goodsPriceId, comment, time, type);
 		return goods;
 	}
 	
@@ -172,75 +174,10 @@ public class ConsumeHandler {
 		String goodsName = goodsCPer.getAttributeById(Goods.goodsName, goodsId);		
 		String unitId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice.unitId, GoodsPrice.barcode, barcode);
 		String unitName = unitCPer.getAttributeById(Unit.name, unitId);
-//		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
+		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
 		
-		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, comment,type);
+		ConsumeModel consume = new ConsumeModel(count, goodsName,unitName, goodsPriceId, inPrice, comment,type);
 		return consume;
 	}
-	
-	
-//	/**
-//	 * send to the contentProvider, and contentProvider use this uri to select the operation.
-//	 */
-//	private final Uri QUERY_CONTENT_URI = Uri.parse("content://" + Consume.AUTHORITY + "/consumes_full");
-//
-//	/**
-//	 * The id of the operator
-//	 * <p>TypE: INTEGER</>
-//	 */
-//	private final String OPER_NAME = "UserInfo."+UserInfo.userName;
-//	/**
-//	 * The name of the Unit 
-//	 * <p>TypE: TEXT</>
-//	 */
-//	private final String UNIT_NAME = "Unit."+Unit.name;
-//	/**
-//	 * The id of the goodsPrice
-//	 * <p>TypE: INTEGER</>
-//	 */
-//	private final String GOODS_PRICE_ID = "GoodsPrice."+GoodsPrice._ID;
-//	/**
-//	 * The id of the goods
-//	 * <p>TypE: INTEGER</>
-//	 */
-//	private final String GOODS_NAME = "Goods."+Goods.goodsName;
-//	/**
-//	 * The time complaint create;
-//	 * <p>TypE: TEXT</>
-//	 */
-//	private final String CREATE_DATE = "Consume."+Consume.CREATED_DATE;
-//	/**
-//	 * The reason for complaint
-//	 * <p>TypE: TEXT</>
-//	 */
-//	private final String COMMENT = "Consume."+Consume.COMMENT;
-//	/**
-//	 * The count for Consume
-//	 * <p>TypE: TEXT</>
-//	 */
-//	private final String NUMBER = "Consume."+Consume.NUMBER;
-//	/**
-//	 * The default sort order for this table
-//	 */
-//	private final String DEFAULT_SORT_ORDER = "modified DESC";
-//	
-//	/**
-//	 * in query operation, need to to join this tables.
-//	 */
-//	private final String TABLES = "Consume,UserInfo,Unit,Goods,GoodsPrice";
-//	
-//	/**
-//	 * join operation factors
-//	 */
-//	private final String append1 = "Consume."+Consume.GOODS+" = GoodsPrice." + GoodsPrice._ID;
-//	private final String append2 = "GoodsPrice."+GoodsPrice.goodsId+" =Goods."+Goods._ID;
-//	private final String append3 = "GoodsPrice."+GoodsPrice.unitId+" =Unit."+Unit._ID;
-//	private final String append4 = "Consume."+Consume.OPERATOR+" =UserInfo."+UserInfo._ID;
-//	private final String APPEND_WHERE = append1+" AND "+append2+" AND "+append3+" AND "+append4;
-//
-//	/**
-//	 * the projection column in query operation.
-//	 */
-//	private final String[] PROJECTION = new String[]{GOODS_NAME,UNIT_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,NUMBER};
 
 }

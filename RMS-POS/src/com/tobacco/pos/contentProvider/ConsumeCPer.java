@@ -12,7 +12,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -22,13 +21,14 @@ import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.entity.ConsumeFull;
 import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.util.DateTool;
+import com.tobacco.pos.util.db.POSDbHelper;
 
 public class ConsumeCPer extends ContentProvider{
 
 	private static final String TAG = "Consume";
 	
-	private static final String DATABASE_NAME = "AllTables.db";
-	private static final int DATABASE_VERSION = 1;
+//	private static final String DATABASE_NAME = "AllTables.db";
+//	private static final int DATABASE_VERSION = 1;
 	private static final String TABLE_NAME = "Consume";
 	
 	private static final int CONSUMES = 1;
@@ -39,62 +39,63 @@ public class ConsumeCPer extends ContentProvider{
 	private static final UriMatcher cUriMatcher;
 	private static HashMap<String,String> consumeProjectionMap;
 	private static Context ct = null;
-	
-	private static class DatabaseHelper extends SQLiteOpenHelper {
-		//add
-		private SQLiteDatabase db = null;
-		private Context ctx = null;
-		//
-		DatabaseHelper(Context context){
-			super(context,DATABASE_NAME,null,DATABASE_VERSION);
-			Log.i("lqz", "initial the databasehelp");
-			//add
-			ctx = context;
-			ct = context;
-			
-			db = openDatabase(DATABASE_NAME);
-			onCreate(db);
-			//
-		}
-		//add
-		private SQLiteDatabase openDatabase(String databaseName) {
-			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
-			return db;
-		}
-		//
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			// TODO Auto-generated method stub
-			Log.i("lqz", "start to create table");
-			try {
-				db.query(TABLE_NAME, null, null, null, null, null, null);
-			} catch (Exception e) {
-				db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
-						+Consume._ID+" INTEGER PRIMARY KEY,"
-						+Consume.NUMBER+" INTEGER,"
-						+Consume.GOODS+" INTEGER,"
-						//+Consume._COUNT+" INTEGER,"
-						+Consume.CREATED_DATE+ " TEXT,"
-						+Consume.OPERATOR+" TEXT,"
-						+Consume.FLAG+" BOOLEAN,"				
-						+Consume.COMMENT+" TEXT"
-						+");");
-				init(db);
-			}
-			
-			Log.i("lqz", "finish create table.");
-		}
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
-			Log.w(TAG, "Upgrading database from version "+oldVersion+ "to "+newVersion+",which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS consume");
-			onCreate(db);
-		}
-	}
+	private POSDbHelper databaseHelper;
 	
-	private DatabaseHelper databaseHelper;
+//	private static class DatabaseHelper extends SQLiteOpenHelper {
+//		//add
+//		private SQLiteDatabase db = null;
+//		private Context ctx = null;
+//		//
+//		DatabaseHelper(Context context){
+//			super(context,DATABASE_NAME,null,DATABASE_VERSION);
+//			Log.i("lqz", "initial the databasehelp");
+//			//add
+//			ctx = context;
+//			ct = context;
+//			
+//			db = openDatabase(DATABASE_NAME);
+//			onCreate(db);
+//			//
+//		}
+//		//add
+//		private SQLiteDatabase openDatabase(String databaseName) {
+//			db = ctx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+//			return db;
+//		}
+//		//
+//		@Override
+//		public void onCreate(SQLiteDatabase db) {
+//			// TODO Auto-generated method stub
+//			Log.i("lqz", "start to create table");
+//			try {
+//				db.query(TABLE_NAME, null, null, null, null, null, null);
+//			} catch (Exception e) {
+//				db.execSQL("CREATE TABLE if not exists "+TABLE_NAME+" ("
+//						+Consume._ID+" INTEGER PRIMARY KEY,"
+//						+Consume.NUMBER+" INTEGER,"
+//						+Consume.GOODS+" INTEGER,"
+//						//+Consume._COUNT+" INTEGER,"
+//						+Consume.CREATED_DATE+ " TEXT,"
+//						+Consume.OPERATOR+" TEXT,"
+//						+Consume.FLAG+" BOOLEAN,"				
+//						+Consume.COMMENT+" TEXT"
+//						+");");
+//				init(db);
+//			}
+//			
+//			Log.i("lqz", "finish create table.");
+//		}
+//
+//		@Override
+//		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//			// TODO Auto-generated method stub
+//			Log.w(TAG, "Upgrading database from version "+oldVersion+ "to "+newVersion+",which will destroy all old data");
+//			db.execSQL("DROP TABLE IF EXISTS consume");
+//			onCreate(db);
+//		}
+//	}
+	
 	
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) {
@@ -185,7 +186,8 @@ public class ConsumeCPer extends ContentProvider{
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
-		databaseHelper = new DatabaseHelper(this.getContext());
+		databaseHelper = new POSDbHelper(this.getContext());
+		ct = this.getContext();
 		return true;
 	}
 
@@ -193,7 +195,7 @@ public class ConsumeCPer extends ContentProvider{
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		// TODO Auto-generated method stub
-		databaseHelper = new DatabaseHelper(ct);
+		databaseHelper = new POSDbHelper(ct);
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		Log.e("lqz", uri+"projection:"+projection+"selection:"+selection+"selectionArgs"+selectionArgs);
 		switch(cUriMatcher.match(uri)){
@@ -274,110 +276,6 @@ public class ConsumeCPer extends ContentProvider{
 		consumeProjectionMap.put(Consume.FLAG, Consume.FLAG);
 		consumeProjectionMap.put(Consume.OPERATOR, Consume.OPERATOR);
 		consumeProjectionMap.put(Consume.COMMENT, Consume.COMMENT);
-	}
-	
-	public static boolean init(SQLiteDatabase db){
-		Date today = Calendar.getInstance().getTime();
-		String now = DateTool.formatDateToString(today);
-		ContentValues value = new ContentValues();
-		
-		value.clear();
-		value.put(Consume.NUMBER, 1);
-		value.put(Consume.GOODS, 1);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 2);
-		value.put(Consume.GOODS, 2);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 3);
-		value.put(Consume.GOODS, 3);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 4);
-		value.put(Consume.GOODS, 4);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 5);
-		value.put(Consume.GOODS, 6);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 6);
-		value.put(Consume.GOODS, 6);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 7);
-		value.put(Consume.GOODS, 7);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 8);
-		value.put(Consume.GOODS, 8);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 9);
-		value.put(Consume.GOODS, 9);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 10);
-		value.put(Consume.GOODS, 10);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 11);
-		value.put(Consume.GOODS, 11);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 1);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-		
-		value.clear();
-		value.put(Consume.NUMBER, 12);
-		value.put(Consume.GOODS, 12);
-		value.put(Consume.CREATED_DATE, now);
-		value.put(Consume.FLAG, 0);
-		value.put(Consume.COMMENT, "init");
-		db.insertOrThrow(TABLE_NAME, null, value);
-
-		return true;
 	}
 
 	public String getAttributeById(String attribute,String id){

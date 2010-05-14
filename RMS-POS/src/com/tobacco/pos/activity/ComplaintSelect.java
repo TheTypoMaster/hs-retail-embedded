@@ -95,7 +95,8 @@ public class ComplaintSelect extends RMSBaseView{
 			TextView timeText = (TextView)row.findViewById(R.id.text_five4);
 			TextView operator = (TextView)row.findViewById(R.id.text_five5);
 
-			goodsIndex.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));	
+//			goodsIndex.setText(""+((pageModel.getCurrentIndex()-1)*pageModel.getRowsCount()+1+i++));	
+			goodsIndex.setText(""+goods.getId());
 			goodsName.setText(goods.getGoodsName());
 			customerName.setText(goods.getCustomer());
 			String time = goods.getCreateDate();

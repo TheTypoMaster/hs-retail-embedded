@@ -43,19 +43,20 @@ public class ReturnModel extends BaseModel {
 	}
 
 	public ReturnModel(String unit, int goodsPriceId, String goodsName, String comment,
-			int number) {
+			int number,double inPrice) {
 		super(comment);
 		this.unit = unit;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
 //		this.content = content;
 		this.number = number;
-//		this.inPrice = inPrice;
+		this.inPrice = inPrice;
 	}
 
-	public ReturnModel(String operator, String customer, int goodsPriceId,
-			String goodsName, String createDate, String comment, int number,double inPrice) {
+	public ReturnModel(int id, String operator, String customer, int goodsPriceId,
+			String goodsName, String createDate, String comment, int number) {
 		super(createDate,comment);
+		this.id = id;
 		this.operator = operator;
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
@@ -63,7 +64,7 @@ public class ReturnModel extends BaseModel {
 //		this.createDate = createDate;
 //		this.content = content;
 		this.number = number;
-		this.inPrice = inPrice;
+//		this.inPrice = inPrice;
 	}
 
 	public int getId() {
