@@ -104,6 +104,11 @@ public class PurchaseManagement extends RMSBaseView {
 		
 		addGoodsIntoPBillTable.setVisibility(8);
 		addGoodsTable.setVisibility(8);
+		
+		goodsVector = new ArrayList<Vector>();
+		newGoods = new ArrayList<Vector>();
+		newGoodsIds = new ArrayList<Integer>();
+
 	
 	}
 
@@ -173,7 +178,7 @@ public class PurchaseManagement extends RMSBaseView {
 				
 				TextView hiddenTView = new TextView(this);
 				hiddenTView.setText(data.getStringExtra("goodsKind"));
-				hiddenTView.setVisibility(2);
+				hiddenTView.setVisibility(4);
 				
 				content.addView(nameTV);
 				content.addView(mTV);
@@ -202,10 +207,7 @@ public class PurchaseManagement extends RMSBaseView {
 
 				public void onClick(View v) {
 					
-					goodsVector = new ArrayList<Vector>();
-					newGoods = new ArrayList<Vector>();
-					newGoodsIds = new ArrayList<Integer>();
-
+			
 					for(int i=1;i<newGoodsTable.getChildCount()-1;i++){
 					
 						TableRow row = (TableRow)newGoodsTable.getChildAt(i);
@@ -243,8 +245,7 @@ public class PurchaseManagement extends RMSBaseView {
 						}
 						
 					}
-					if(addGoodsFlag)
-						Toast.makeText(PurchaseManagement.this, "成功增加所有新商品", Toast.LENGTH_SHORT).show();
+				
 
 					for(int i=1;i<newGoodsTable.getChildCount()-1;i++){//取得新加商品的ID
 						TableRow row = (TableRow)newGoodsTable.getChildAt(i);
@@ -268,11 +269,19 @@ public class PurchaseManagement extends RMSBaseView {
 							double theInPrice = Double.parseDouble(inPrice.getText().toString());
 							double theOutPrice = Double.parseDouble(outPrice.getText().toString());
 							
-							gPriceCPer.addGoodsPrice(theGoodsId, theUnitId, theBarcode, theInPrice, theOutPrice);//往商品价格表里增加数据
+							if(!gPriceCPer.addGoodsPrice(theGoodsId, theUnitId, theBarcode, theInPrice, theOutPrice, 0))//往商品价格表里增加数据
+							{
+								addGoodsFlag = false;
+								break;
+							}
 							
 						}
 						
 					}
+					if(addGoodsFlag)
+						Toast.makeText(PurchaseManagement.this, "成功增加所有新商品", Toast.LENGTH_SHORT).show();
+					else
+						Toast.makeText(PurchaseManagement.this, "增加新商品失败", Toast.LENGTH_SHORT).show();
 					
 					newGoodsTable.removeViews(1, newGoodsTable.getChildCount()-1);
 
@@ -377,8 +386,7 @@ public class PurchaseManagement extends RMSBaseView {
 		this.addPItem(goodsIntoPBillTable);
 	}
 	private void addPItem(final TableLayout goodsIntoPBillTable){//增加进货项
-		if(goodsIntoPBillTable.getChildCount()>1)
-			goodsIntoPBillTable.removeViewAt(goodsIntoPBillTable.getChildCount()-1);
+		
 		final Map<Integer, String> allGoodsMap = gCPer.getAllGoodsName();//取得所有的商品名字，格式是商品ID+商品名字。
 		List<String> allGoodsName = new ArrayList<String>();//取得所有商品的名字（不包含商品ID）。
 		
