@@ -20,8 +20,11 @@ import com.tobacco.pos.contentProvider.VIPInfoCPer;
 import com.tobacco.pos.entity.InventoryItemObject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -50,6 +53,8 @@ public class ReportManagement extends RMSBaseView {
 	 private int currentPage = 1;
 	 private int pageCount = 0;
 	 private TableLayout inventoryReportTable = null;//库存表格
+	 private ProgressDialog pD = null;
+	 private int surplusCount = 0;//最后一页的数量
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -505,228 +510,246 @@ public class ReportManagement extends RMSBaseView {
 	        	
 	        }
 	        else if(reportKind == 2){
-	        	final int pageSize = 2;//每页的个数
-	        	int surplusCount = 0;//最后一页的数量
-
-	        	Toast.makeText(ReportManagement.this, "查询正在进行,请稍等...", Toast.LENGTH_SHORT).show();
-	        	
+	        	final int pageSize = 5;//每页的个数
+	        
 	        	setContentView(R.layout.inventoryreport);	        	
 	        	
-	        	ConsumeCPer cCPer = new ConsumeCPer();
-	        	ReturnCPer rCPer = new ReturnCPer();
-	        	UnitCPer unitCPer = new UnitCPer();
-	        	ManufacturerCPer mCPer = new ManufacturerCPer();
+	        	final ConsumeCPer cCPer = new ConsumeCPer();
+	        	final ReturnCPer rCPer = new ReturnCPer();
+	        	final UnitCPer unitCPer = new UnitCPer();
+	        	final ManufacturerCPer mCPer = new ManufacturerCPer();
 	        	
 	        	inventoryReportTable = (TableLayout)this.findViewById(R.id.inventoryReportTable);
 	        	
-	        	List<Integer> allPriceId = gPriceCPer.getAllPriceId();
+	        	final List<Integer> allPriceId = gPriceCPer.getAllPriceId();
 	        	
 	        	final List<InventoryItemObject> allInventoryItem = new ArrayList<InventoryItemObject>();
 	        	
 	        	final Button previous = (Button)this.findViewById(R.id.previous);
 	        	final Button next = (Button)this.findViewById(R.id.next);
 	        	final TextView currentPageTView = (TextView)this.findViewById(R.id.currentPage);
-	        	TextView pageCountTView = (TextView)this.findViewById(R.id.pageCount);
+	        	final TextView pageCountTView = (TextView)this.findViewById(R.id.pageCount);
 	        	
-	        	for(int i=0;i<allPriceId.size();i++){
-	        		int thePriceId = allPriceId.get(i);
-	        		String theBarcode = gPriceCPer.getBarcodeIdByGoodsPriceId(thePriceId);
-	        		
-	        		int pNum = pItemCPer.getAllPNumByPriceId(thePriceId);
-	        		int sNum = sItemCPer.getSNumByBarcode(theBarcode);
-	        		int cNum = cCPer.getTotalConsumeByPriceId(thePriceId);	        	 
-	        		int rNum = rCPer.getTotalReturnByPriceId(thePriceId);
 	        	
-	        		int surplusNum = pNum - sNum + cNum - rNum;//剩余量
-	        		
-	        		if(surplusNum>0){
-	        			int gId = gPriceCPer.getGoodsIdByGoodsPriceId(thePriceId);
-		        		String gName = gCPer.getGoodsNameByGoodsId(gId);//根据价格ID查找到商品ID，再查找商品名字
-		        		int mId = Integer.parseInt(gCPer.getAttributeById("manufacturerId", gId+""));//查找到厂家的ID
-		        		String mName = mCPer.getMNameByMId(mId);
-		        		String kindName = gCPer.getKindNameByGoodsId(gId);//根据商品的ID查找种类名称
-		        		if(kindName.contains("->"))
-		        			kindName = kindName.substring(kindName.indexOf("->") + 2);
-		        		
-	        			String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(thePriceId));//通过价格ID查找单位ID
-	        		
-	        			double inPrice = gPriceCPer.getInPriceByGoodsPriceId(thePriceId);
-	        			double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(thePriceId);
-	        			
-	        			InventoryItemObject iItemObject = new InventoryItemObject();
-	        			iItemObject.setIndex(allInventoryItem.size()+1);
-	        			iItemObject.setGoodsName(gName);
-	        			iItemObject.setMName(mName);
-	        			iItemObject.setKind(kindName);
-	        			iItemObject.setSurplusNum(surplusNum+"");
-	        			iItemObject.setUnitName(unitName);
-	        			iItemObject.setInPrice(inPrice+"");
-	        			iItemObject.setOutPrice(outPrice+"");
-	        			
-	        			allInventoryItem.add(iItemObject);
-	        			
-	        			if(inventoryReportTable.getChildCount()-1<pageSize){
-		        			    TableRow t = new TableRow(this);
+	        	final Handler messageListener = new Handler(){
+	        		   public void handleMessage(Message msg) {
+	        			   switch(msg.what) {
+	        			   case 1:
+	        				   for(int i=0;i<allInventoryItem.size();i++){
+	    	        			if(inventoryReportTable.getChildCount()-1<pageSize){
+	    	        					InventoryItemObject iItemObject = allInventoryItem.get(i);
+	    		        			    TableRow t = new TableRow(ReportManagement.this);
+	    	    	        		
+	    	    	        			TextView gNameTView = new TextView(ReportManagement.this);
+	    	    	        			gNameTView.setText(iItemObject.getGoodsName());
+	    	    	        			TextView mTView = new TextView(ReportManagement.this);
+	    	    	        			mTView.setText(iItemObject.getMName());
+	    	    	        			TextView kindTView = new TextView(ReportManagement.this);
+	    	    	        			kindTView.setText(iItemObject.getKind());
+	    	    	        			TextView surplusNumTView = new TextView(ReportManagement.this);
+	    	    	        			surplusNumTView.setText(iItemObject.getSurplusNum());
+	    	    	        			TextView unitTView = new TextView(ReportManagement.this);
+	    	    	        			unitTView.setText(iItemObject.getUnitName());
+	    	    	        			TextView inTView = new TextView(ReportManagement.this);
+	    	    	        			inTView.setText(iItemObject.getInPrice());
+	    	    	        			TextView outTView = new TextView(ReportManagement.this);
+	    	    	        			outTView.setText(iItemObject.getOutPrice());
+	    	    	        		
+	    	    	        			t.addView(gNameTView);
+	    	    	        			t.addView(mTView);
+	    	    	        			t.addView(kindTView);
+	    	    	        			t.addView(surplusNumTView);
+	    	    	        			t.addView(unitTView);
+	    	    	        			t.addView(inTView);
+	    	    	        			t.addView(outTView);
+	    	    	        		
+	    	    	        			inventoryReportTable.addView(t);
+	    	        			}
+	        				   }
+	        				   pD.dismiss();
+	        				pageCount = allInventoryItem.size()/pageSize;
+	        	        	surplusCount = allInventoryItem.size()%pageSize;
+	        	        	
+	        	        	if(surplusCount > 0)
+	        	        		pageCount += 1;
+	        	        	
+	        	        	if(pageCount == 0)
+	        	        		pageCount += 1;
+	                		
+	                		if(pageCount == 1){
+	                			previous.setEnabled(false);
+	                			next.setEnabled(false);
+	                			
+	                			currentPageTView.setText("1");
+	                			pageCountTView.setText("1");
+	                		}
+	                		else{
+	                			previous.setEnabled(true);
+	                			next.setEnabled(true);
+	                			
+	                			currentPageTView.setText("1");
+	                			pageCountTView.setText("" + pageCount);
+	                		}
+	                		firstItemIndex = 1;
+	                		previous.setEnabled(false);
+	        	        	
+	        	        	previous.setOnClickListener(new OnClickListener(){
+
+	        					public void onClick(View arg0) {
+	        						next.setEnabled(true);
+	        						currentPage--;
+	        						currentPageTView.setText(currentPage+"");
+	        						if(currentPage == 1){
+	        							((Button)arg0).setEnabled(false);
+	        						}
+	        						inventoryReportTable.removeViews(1, inventoryReportTable.getChildCount()-1);
+	        						
+	        						firstItemIndex -= pageSize;
+	        						for(int i=0;i<pageSize;i++){
+	        							int index = firstItemIndex+i;
+	        							if(index<=allInventoryItem.size()){//如果没有越界
+	        								InventoryItemObject iItemObject = allInventoryItem.get(firstItemIndex+i-1);
+	        								
+	        								TableRow t = new TableRow(ReportManagement.this);
+	        				    	        		
+	        							    TextView gNameTView = new TextView(ReportManagement.this);
+	        			    	        	gNameTView.setText(iItemObject.getGoodsName());
+	        			    	        	TextView mTView = new TextView(ReportManagement.this);
+	        			    	        	mTView.setText(iItemObject.getMName());
+	        			    	        	TextView kindTView = new TextView(ReportManagement.this);
+	        			    	        	kindTView.setText(iItemObject.getKind());
+	        			    	        	TextView surplusNumTView = new TextView(ReportManagement.this);
+	        			    	        	surplusNumTView.setText(iItemObject.getSurplusNum());
+	        			    	        	TextView unitTView = new TextView(ReportManagement.this);
+	        			    	        	unitTView.setText(iItemObject.getUnitName());
+	        			    	        	TextView inTView = new TextView(ReportManagement.this);
+	        			    	        	inTView.setText(iItemObject.getInPrice());
+	        			    	        	TextView outTView = new TextView(ReportManagement.this);
+	        			    	        	outTView.setText(iItemObject.getOutPrice());
+	        			    	        		
+	        			    	        	t.addView(gNameTView);
+	        			    	        	t.addView(mTView);
+	        			    	        	t.addView(kindTView);
+	        			    	        	t.addView(surplusNumTView);
+	        			    	        	t.addView(unitTView);
+	        			    	        	t.addView(inTView);
+	        			    	        	t.addView(outTView);
+	        			    	        		
+	        			    	        	inventoryReportTable.addView(t);
+	        							}
+	        								
+	        							
+	        						}
+	        							
+	        					}
+	        	        		
+	        	        	});
+	        	        	next.setOnClickListener(new OnClickListener(){
+
+	        					public void onClick(View arg0) {
+	        						previous.setEnabled(true);
+	        						currentPage++;
+	        						currentPageTView.setText(currentPage+"");
+	        						if(currentPage == pageCount){
+	        							((Button)arg0).setEnabled(false);
+	        						}
+
+	        						inventoryReportTable.removeViews(1, inventoryReportTable.getChildCount()-1);
+	        							
+	        						firstItemIndex += pageSize;
+	        						for(int i=0;i<pageSize;i++){
+	        							int index = firstItemIndex+i;
+	        							if(index<=allInventoryItem.size()){//如果没有越界
+	        								InventoryItemObject iItemObject = allInventoryItem.get(firstItemIndex+i-1);
+	        								
+	        								TableRow t = new TableRow(ReportManagement.this);
+	        				    	        		
+	        							    TextView gNameTView = new TextView(ReportManagement.this);
+	        			    	        	gNameTView.setText(iItemObject.getGoodsName());
+	        			    	        	TextView mTView = new TextView(ReportManagement.this);
+	        			    	        	mTView.setText(iItemObject.getMName());
+	        			    	        	TextView kindTView = new TextView(ReportManagement.this);
+	        			    	        	kindTView.setText(iItemObject.getKind());
+	        			    	        	TextView surplusNumTView = new TextView(ReportManagement.this);
+	        			    	        	surplusNumTView.setText(iItemObject.getSurplusNum());
+	        			    	        	TextView unitTView = new TextView(ReportManagement.this);
+	        			    	        	unitTView.setText(iItemObject.getUnitName());
+	        			    	        	TextView inTView = new TextView(ReportManagement.this);
+	        			    	        	inTView.setText(iItemObject.getInPrice());
+	        			    	        	TextView outTView = new TextView(ReportManagement.this);
+	        			    	        	outTView.setText(iItemObject.getOutPrice());
+	        			    	        		
+	        			    	        	t.addView(gNameTView);
+	        			    	        	t.addView(mTView);
+	        			    	        	t.addView(kindTView);
+	        			    	        	t.addView(surplusNumTView);
+	        			    	        	t.addView(unitTView);
+	        			    	        	t.addView(inTView);
+	        			    	        	t.addView(outTView);
+	        			    	        		
+	        			    	        	inventoryReportTable.addView(t);
+	        							}
+	        								
+	        							
+	        						}
+
+	        					}
+	        	        		
+	        	        	});
+	        	        	break;
+	        		   }
+	        		   }
+	        	};
+	        	pD = ProgressDialog.show(this, "请稍候...", "Loading...", true,  
+	                    false);
+	        	new Thread(){
+	        		public void run() {
+	        			for(int i=0;i<allPriceId.size();i++){
+	    	        		int thePriceId = allPriceId.get(i);
+	    	        		String theBarcode = gPriceCPer.getBarcodeIdByGoodsPriceId(thePriceId);
 	    	        		
-	    	        			TextView gNameTView = new TextView(this);
-	    	        			gNameTView.setText(gName);
-	    	        			TextView mTView = new TextView(this);
-	    	        			mTView.setText(mName);
-	    	        			TextView kindTView = new TextView(this);
-	    	        			kindTView.setText(kindName);
-	    	        			TextView surplusNumTView = new TextView(this);
-	    	        			surplusNumTView.setText(surplusNum+"");
-	    	        			TextView unitTView = new TextView(this);
-	    	        			unitTView.setText(unitName);
-	    	        			TextView inTView = new TextView(this);
-	    	        			inTView.setText(inPrice+"");
-	    	        			TextView outTView = new TextView(this);
-	    	        			outTView.setText(outPrice+"");
+	    	        		int pNum = pItemCPer.getAllPNumByPriceId(thePriceId);
+	    	        		int sNum = sItemCPer.getSNumByBarcode(theBarcode);
+	    	        		int cNum = cCPer.getTotalConsumeByPriceId(thePriceId);	        	 
+	    	        		int rNum = rCPer.getTotalReturnByPriceId(thePriceId);
+	    	        	
+	    	        		int surplusNum = pNum - sNum + cNum - rNum;//剩余量
 	    	        		
-	    	        			t.addView(gNameTView);
-	    	        			t.addView(mTView);
-	    	        			t.addView(kindTView);
-	    	        			t.addView(surplusNumTView);
-	    	        			t.addView(unitTView);
-	    	        			t.addView(inTView);
-	    	        			t.addView(outTView);
+	    	        		if(surplusNum>0){
+	    	        			int gId = gPriceCPer.getGoodsIdByGoodsPriceId(thePriceId);
+	    		        		String gName = gCPer.getGoodsNameByGoodsId(gId);//根据价格ID查找到商品ID，再查找商品名字
+	    		        		int mId = Integer.parseInt(gCPer.getAttributeById("manufacturerId", gId+""));//查找到厂家的ID
+	    		        		String mName = mCPer.getMNameByMId(mId);
+	    		        		String kindName = gCPer.getKindNameByGoodsId(gId);//根据商品的ID查找种类名称
+	    		        		if(kindName.contains("->"))
+	    		        			kindName = kindName.substring(kindName.indexOf("->") + 2);
+	    		        		
+	    	        			String unitName = unitCPer.getUnitNameById(gPriceCPer.getUnitIdByGoodsPriceId(thePriceId));//通过价格ID查找单位ID
 	    	        		
-	    	        			inventoryReportTable.addView(t);
-	        			}
-	        		
-	        			totalItemCount += 1;
+	    	        			double inPrice = gPriceCPer.getInPriceByGoodsPriceId(thePriceId);
+	    	        			double outPrice = gPriceCPer.getOutPriceByGoodsPriceId(thePriceId);
+	    	        			
+	    	        			InventoryItemObject iItemObject = new InventoryItemObject();
+	    	        			iItemObject.setIndex(allInventoryItem.size()+1);
+	    	        			iItemObject.setGoodsName(gName);
+	    	        			iItemObject.setMName(mName);
+	    	        			iItemObject.setKind(kindName);
+	    	        			iItemObject.setSurplusNum(surplusNum+"");
+	    	        			iItemObject.setUnitName(unitName);
+	    	        			iItemObject.setInPrice(inPrice+"");
+	    	        			iItemObject.setOutPrice(outPrice+"");
+	    	        			
+	    	        			allInventoryItem.add(iItemObject);
+	    	        			     		
+	    	        			totalItemCount += 1;
+	    	        		}
+	    	       
+	    	        	}
+	        			
+	        			 messageListener.sendEmptyMessage(1);  
 	        		}
-	       
-	        	}
-	        	pageCount = allInventoryItem.size()/pageSize;
-	        	surplusCount = allInventoryItem.size()%pageSize;
-	        	
-	        	if(surplusCount > 0)
-	        		pageCount += 1;
-	        	
-	        	if(pageCount == 0)
-	        		pageCount += 1;
-        		
-        		if(pageCount == 1){
-        			previous.setEnabled(false);
-        			next.setEnabled(false);
-        			
-        			currentPageTView.setText("1");
-        			pageCountTView.setText("1");
-        		}
-        		else{
-        			previous.setEnabled(true);
-        			next.setEnabled(true);
-        			
-        			currentPageTView.setText("1");
-        			pageCountTView.setText("" + pageCount);
-        		}
-        		firstItemIndex = 1;
-        		previous.setEnabled(false);
-	        	
-	        	previous.setOnClickListener(new OnClickListener(){
-
-					public void onClick(View arg0) {
-						next.setEnabled(true);
-						currentPage--;
-						currentPageTView.setText(currentPage+"");
-						if(currentPage == 1){
-							((Button)arg0).setEnabled(false);
-						}
-						inventoryReportTable.removeViews(1, inventoryReportTable.getChildCount()-1);
-						
-						firstItemIndex -= pageSize;
-						for(int i=0;i<pageSize;i++){
-							int index = firstItemIndex+i;
-							if(index<=allInventoryItem.size()){//如果没有越界
-								InventoryItemObject iItemObject = allInventoryItem.get(firstItemIndex+i-1);
-								
-								TableRow t = new TableRow(ReportManagement.this);
-				    	        		
-							    TextView gNameTView = new TextView(ReportManagement.this);
-			    	        	gNameTView.setText(iItemObject.getGoodsName());
-			    	        	TextView mTView = new TextView(ReportManagement.this);
-			    	        	mTView.setText(iItemObject.getMName());
-			    	        	TextView kindTView = new TextView(ReportManagement.this);
-			    	        	kindTView.setText(iItemObject.getKind());
-			    	        	TextView surplusNumTView = new TextView(ReportManagement.this);
-			    	        	surplusNumTView.setText(iItemObject.getSurplusNum());
-			    	        	TextView unitTView = new TextView(ReportManagement.this);
-			    	        	unitTView.setText(iItemObject.getUnitName());
-			    	        	TextView inTView = new TextView(ReportManagement.this);
-			    	        	inTView.setText(iItemObject.getInPrice());
-			    	        	TextView outTView = new TextView(ReportManagement.this);
-			    	        	outTView.setText(iItemObject.getOutPrice());
-			    	        		
-			    	        	t.addView(gNameTView);
-			    	        	t.addView(mTView);
-			    	        	t.addView(kindTView);
-			    	        	t.addView(surplusNumTView);
-			    	        	t.addView(unitTView);
-			    	        	t.addView(inTView);
-			    	        	t.addView(outTView);
-			    	        		
-			    	        	inventoryReportTable.addView(t);
-							}
-								
-							
-						}
-							
-					}
-	        		
-	        	});
-	        	next.setOnClickListener(new OnClickListener(){
-
-					public void onClick(View arg0) {
-						previous.setEnabled(true);
-						currentPage++;
-						currentPageTView.setText(currentPage+"");
-						if(currentPage == pageCount){
-							((Button)arg0).setEnabled(false);
-						}
-
-						inventoryReportTable.removeViews(1, inventoryReportTable.getChildCount()-1);
-							
-						firstItemIndex += pageSize;
-						for(int i=0;i<pageSize;i++){
-							int index = firstItemIndex+i;
-							if(index<=allInventoryItem.size()){//如果没有越界
-								InventoryItemObject iItemObject = allInventoryItem.get(firstItemIndex+i-1);
-								
-								TableRow t = new TableRow(ReportManagement.this);
-				    	        		
-							    TextView gNameTView = new TextView(ReportManagement.this);
-			    	        	gNameTView.setText(iItemObject.getGoodsName());
-			    	        	TextView mTView = new TextView(ReportManagement.this);
-			    	        	mTView.setText(iItemObject.getMName());
-			    	        	TextView kindTView = new TextView(ReportManagement.this);
-			    	        	kindTView.setText(iItemObject.getKind());
-			    	        	TextView surplusNumTView = new TextView(ReportManagement.this);
-			    	        	surplusNumTView.setText(iItemObject.getSurplusNum());
-			    	        	TextView unitTView = new TextView(ReportManagement.this);
-			    	        	unitTView.setText(iItemObject.getUnitName());
-			    	        	TextView inTView = new TextView(ReportManagement.this);
-			    	        	inTView.setText(iItemObject.getInPrice());
-			    	        	TextView outTView = new TextView(ReportManagement.this);
-			    	        	outTView.setText(iItemObject.getOutPrice());
-			    	        		
-			    	        	t.addView(gNameTView);
-			    	        	t.addView(mTView);
-			    	        	t.addView(kindTView);
-			    	        	t.addView(surplusNumTView);
-			    	        	t.addView(unitTView);
-			    	        	t.addView(inTView);
-			    	        	t.addView(outTView);
-			    	        		
-			    	        	inventoryReportTable.addView(t);
-							}
-								
-							
-						}
-
-					}
-	        		
-	        	});
+	        	}.start();
+	        
 	         
 
 	        }
