@@ -2,6 +2,7 @@
 <resources>
     <string name="hello">Hello World, main!</string>
     <string name="app_name">POS</string>
+    <string name="search">搜索</string>
     <string name="kind">类别管理</string>
     <string name="payment">收银管理</string>
     <string name="purchase">进货管理</string>
