@@ -27,6 +27,7 @@
 		  <activity android:name=".pos.activity.AddGoods" android:theme="@android:style/Theme.Dialog"></activity>  
 		  <activity android:name=".pos.activity.AddGoodsPrice" android:theme="@android:style/Theme.Dialog"></activity>
 		   <activity android:name=".pos.activity.GetDiscountActivity"></activity>
+		    <activity android:name=".pos.activity.SendCigaretteMoneyActivity"></activity>
 		 
 		  <activity android:name=".pos.activity.AddPBill" android:theme="@android:style/Theme.Dialog"></activity>
 		  <activity android:name=".pos.activity.ConsumeInsert"  android:label="Consume_Insert">
