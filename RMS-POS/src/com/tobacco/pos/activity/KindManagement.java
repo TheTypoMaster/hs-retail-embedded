@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.tobacco.main.activity.view.RMSBaseView;
+import com.tobacco.main.entities.globalconstant.BCodeConst;
 import com.tobacco.pos.contentProvider.GoodsKindCPer;
 import com.tobacco.pos.entity.AllTables;
 import com.tobacco.pos.util.ProcessStr;
@@ -13,8 +15,7 @@ import com.tobacco.pos.util.TreeLeafNode;
 import com.tobacco.pos.util.TreeNode;
 import com.tobacco.R;
 
-
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
 
-public class KindManagement extends Activity {
+public class KindManagement extends RMSBaseView {
 	private GoodsKindCPer kindCPer = null;
 	
 	private TextView kindInfoTView;//显示某种类的详细信息
@@ -47,10 +48,15 @@ public class KindManagement extends Activity {
 	public int selectedId = -1;//选择种类的ID
 	
 	private Map<Integer, Integer> clickCount = new Hashtable<Integer, Integer>();
-
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		this.setActivityPrivList(new int[]{BCodeConst.USER_PRIV_ADMIN});
+		this.checkActivityPriv();
+		
 		setContentView(R.layout.kindmanagement);
 		
 		TextView kindManagementWelcome = (TextView)this.findViewById(R.id.kindManagementWelcome);

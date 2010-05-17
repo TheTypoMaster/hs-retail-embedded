@@ -179,14 +179,21 @@ public class ReportManagement extends RMSBaseView {
 	        	
 	        	final EditText contentEText = (EditText)this.findViewById(R.id.contentEText);
 	        	Button pSearchButton = (Button) this.findViewById(R.id.pSearchButton);
-	        	pSearchButton.setText("搜索");
+	        
 	        	pSearchButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
-						String content = contentEText.getText().toString();
+					
+						
+						final String content = contentEText.getText().toString();
 
 						if(content!=null && content.length()>0 ){
-					
+							
+							final Handler pSearchHandler = new Handler(){
+								 public void handleMessage(Message msg) {
+				        			   switch(msg.what) {
+				        			   case 3:
+				        					pD.dismiss();
 							if(conditionSpinner.getSelectedItemId() == 0){//以进货单号的条件进行查询
 								
 								int searchPBillId = pBillCPer.getPBillIdByTimeAndPBillNum(startTimeButton.getText().toString(), endTimeButton.getText().toString(), content);
@@ -225,7 +232,6 @@ public class ReportManagement extends RMSBaseView {
 									}
 								}
 					
-//								pDialog.dismiss();
 							}
 							else if(conditionSpinner.getSelectedItemId() == 1){//以商品名称进行模糊搜索
 								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
@@ -248,7 +254,6 @@ public class ReportManagement extends RMSBaseView {
 										
 									}
 								}
-//								pDialog.dismiss();
 							}
 							else if(conditionSpinner.getSelectedItemId() == 2){//根据商品的种类查找，要支持模糊搜索
 								purchaseReportTable.removeViews(1, purchaseReportTable.getChildCount()-1);
@@ -272,9 +277,25 @@ public class ReportManagement extends RMSBaseView {
 									}
 								}
 							}
-			
-					
-							((TextView)v).setText("");
+				        	 }}
+							};
+							pD = ProgressDialog.show(ReportManagement.this, "请稍候...", "Loading...", true,  
+				                    false);
+							new Thread(){
+								public void run() {
+									try {
+										sleep(1500);
+									
+									} catch (InterruptedException e) {
+									 
+									}finally{
+										 
+										pSearchHandler.sendEmptyMessage(3);
+										 
+									}
+								}
+							}.start();
+						
 						}
 						
 						 
@@ -393,12 +414,19 @@ public class ReportManagement extends RMSBaseView {
 	        	
 	        	final EditText salesContentTView = (EditText)this.findViewById(R.id.salesContentEText);
 	        	Button sSearchButton = (Button)this.findViewById(R.id.sSearchButton);
-	        	sSearchButton.setText("搜索");
+	        	
 	        	sSearchButton.setOnClickListener(new OnClickListener(){
 
 					public void onClick(View v) {
-						String content = salesContentTView.getText().toString();
+						final String content = salesContentTView.getText().toString();
+					
 						if(content.length()>0){
+							
+							final Handler sSearchHandler = new Handler(){
+								   public void handleMessage(Message msg) {
+				        			   switch(msg.what) {
+				        			   case 1:
+				        pD.dismiss();
 							if(salesConditionSpinner.getSelectedItemId() == 0){//根据销售单号查找，准确查找
 								salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);//清除上次的记录
 								Map<String,ArrayList<ArrayList<String>>> sItemResultMap = sItemCPer.getSalesInfoBySalesBillNum(salesStartTimeButton.getText().toString(), salesEndTimeButton.getText().toString(), content);
@@ -472,7 +500,7 @@ public class ReportManagement extends RMSBaseView {
 							}
 							else if(salesConditionSpinner.getSelectedItemId() == 3){//根据客户编号，VIPNum
 								vipInfoCPer = new VIPInfoCPer();
-								int VIPId = vipInfoCPer.getVIPIdByVIPNum(((TextView)v).getText().toString());
+								int VIPId = vipInfoCPer.getVIPIdByVIPNum(content);
 								if(VIPId == -1){
 									salesReportTable.removeViews(1, salesReportTable.getChildCount()-1);
 									Toast.makeText(ReportManagement.this, "抱歉，没有该VIP客户", Toast.LENGTH_SHORT).show();
@@ -500,7 +528,25 @@ public class ReportManagement extends RMSBaseView {
 									}
 								}
 							}
-							((TextView)v).setText("");
+				        			   }
+								   }
+							};
+						 	pD = ProgressDialog.show(ReportManagement.this, "请稍候...", "Loading...", true,  
+				                    false);
+						 	new Thread(){
+						 		public void run() {
+						 			try {
+										sleep(1500);
+									} catch (InterruptedException e) {
+									 
+									}finally{
+										sSearchHandler.sendEmptyMessage(1);
+									}
+						 			
+						 		}
+						 	}.start();
+							
+							
 						}
 					 
 					}

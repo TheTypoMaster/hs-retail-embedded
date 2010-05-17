@@ -21,9 +21,12 @@ import com.tobacco.main.entities.globalconstant.BCodeConst;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -76,6 +79,9 @@ public class PurchaseManagement extends RMSBaseView {
 	private List<Vector> goodsVector;
 	private List<Vector> newGoods;
 	private List<Integer> newGoodsIds;//新增加的商品ID
+	
+	private ProgressDialog pD = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -353,7 +359,30 @@ public class PurchaseManagement extends RMSBaseView {
 				addGoods();
 				break;
 			case 1://添加进货商品
-				addGoodsIntoPBill();
+				pD = ProgressDialog.show(this, "请稍候...", "Loading...", true,  
+	                    false);
+				final Handler messageListener = new Handler(){
+					public void handleMessage(Message msg) {
+	        			   switch(msg.what) {
+	        			   case 1:
+	        				   pD.dismiss();
+	        				   addGoodsIntoPBill();
+	        				   break;
+	        			   }
+					}
+				};
+				
+				new Thread(){
+	        		public void run() {
+	        			try{
+	        				sleep(5000);
+	        			}catch(Exception e){
+	        				
+	        			}finally{
+	        				messageListener.sendEmptyMessage(1);
+	        			}
+	        		}
+				}.start();
 				break;
 			}
 		return super.onOptionsItemSelected(item);
@@ -539,6 +568,7 @@ public class PurchaseManagement extends RMSBaseView {
 					Toast.makeText(PurchaseManagement.this, "请输入商品的进货量", Toast.LENGTH_SHORT).show();
 				}
 				else{
+					goodsIntoPBillTable.removeViewAt(goodsIntoPBillTable.getChildCount()-1);
 					addPItem(goodsIntoPBillTable);
 				}
 			}
