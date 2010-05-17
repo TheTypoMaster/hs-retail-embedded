@@ -216,7 +216,11 @@ public class GoodsPriceCPer extends ContentProvider {
 	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
-	        return null;
+	        else
+	        {
+	        	sqlDB.close();
+	        	return null;
+	        }
 	   //     throw new SQLException("Failed to insert row into " + uri);
 	    
 	    } 

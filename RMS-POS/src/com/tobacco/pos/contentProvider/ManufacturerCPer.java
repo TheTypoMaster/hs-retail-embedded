@@ -137,7 +137,11 @@ public class ManufacturerCPer extends ContentProvider {
 	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
-	        throw new SQLException("Failed to insert row into " + uri);
+	        else
+	        {
+	        	sqlDB.close();
+	        	throw new SQLException("Failed to insert row into " + uri);
+	        }
 	    } 
 
 	    @Override

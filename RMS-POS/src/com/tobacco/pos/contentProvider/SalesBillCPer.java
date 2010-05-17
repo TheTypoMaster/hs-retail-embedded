@@ -19,7 +19,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
 
 public class SalesBillCPer extends ContentProvider {
 
@@ -106,7 +105,11 @@ public class SalesBillCPer extends ContentProvider {
 	            ct.getContentResolver().notifyChange(rowUri, null);
 	            return rowUri;
 	        }
-	        throw new SQLException("Failed to insert row into " + uri);
+	        else
+	        {
+	        	sqlDB.close();
+	        	throw new SQLException("Failed to insert row into " + uri);
+	        }
 	    } 
 
 	    @Override

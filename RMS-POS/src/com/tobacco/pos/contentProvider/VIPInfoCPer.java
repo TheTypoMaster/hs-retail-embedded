@@ -14,7 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
 
 public class VIPInfoCPer extends ContentProvider {
 
@@ -136,7 +135,11 @@ public class VIPInfoCPer extends ContentProvider {
 			getContext().getContentResolver().notifyChange(rowUri, null);
 			return rowUri;
 		}
-		throw new SQLException("Failed to insert row into " + uri);
+		else
+		{
+			sqlDB.close();	
+			throw new SQLException("Failed to insert row into " + uri);
+		}
 	}
 
 	@Override
