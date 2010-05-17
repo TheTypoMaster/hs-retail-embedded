@@ -61,7 +61,7 @@ public class PaymentManagement extends RMSBaseView {
 	
 	private int newSBillId = -1;//新增的销售单Id
 	private double totalMoney = 0;	
-//	private double cigaretteMoney = 0;//在一张单中香烟的总价
+	private double cigaretteMoney = 0;//在一张单中香烟的总价
 //	private double otherMoney = 0;//在一张单中其他商品的总价
 	
 	private List<String> barcodeList = new ArrayList<String>();
@@ -407,10 +407,8 @@ public class PaymentManagement extends RMSBaseView {
 	
 	protected void postInputVIPNum(){
 
-//			gKindCPer = new GoodsKindCPer();
-
 			//处理销售单的增加以及打印
-		
+			
 			final ArrayList<String> goodsNameList = new ArrayList<String>();//存储商品名字的List
 			final ArrayList<String> countList = new ArrayList<String>();//存储销量的List
 			final ArrayList<String> outPriceList = new ArrayList<String>();//存储单价的List
@@ -419,16 +417,14 @@ public class PaymentManagement extends RMSBaseView {
 		
 			for(int i=1;i<salesBillTable.getChildCount()-1;i++){//存储最后的销售项
 				String theBarcode = barcodeList.get(i-1);
-				
-//				int kindId = gCPer.getGoodsKindIdByGoodsId(gPriceCPer.getGoodsIdByBarcode(theBarcode));//根据条形码找出商品的Id，再根据商品的Id查找其类别的Id
+			
 				int goodsCount = Integer.parseInt(((TextView)((TableRow)salesBillTable.getChildAt(i)).getChildAt(1)).getText().toString());
 	
-			
 				double outPrice = gPriceCPer.getOutPriceByBarcode(theBarcode);
 				int isCigarette = gPriceCPer.getIsCigaretteByBarcode(theBarcode);//根据条形码判断是否是香烟，1代表香烟，0代表非香烟 
 				if(isCigarette == 1){//香烟
 					totalMoney += goodsCount*outPrice*vipDiscountRate;
-//					cigaretteMoney += goodsCount*outPrice;
+					cigaretteMoney += goodsCount*outPrice*vipDiscountRate;
 				 
 					flagList.add("*");//如果是烟类有打折，用*标志
 					tMoneyList.add(goodsCount*outPrice*vipDiscountRate+"");
@@ -496,9 +492,7 @@ public class PaymentManagement extends RMSBaseView {
 						salesBillTable.removeViews(1, salesBillTable.getChildCount()-1);//删除所有的销售项
 						barcodeList.clear();
 					
-						vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
-						vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
-						vipName = "";
+					
 					
 						//开始打印销售单
 						Intent printService = new Intent();
@@ -513,14 +507,28 @@ public class PaymentManagement extends RMSBaseView {
 						printService.putStringArrayListExtra("outPriceList", outPriceList);
 						printService.putStringArrayListExtra("tMoneyList", tMoneyList);
 						printService.putStringArrayListExtra("flagList", flagList);
+						
+						Intent cMoneyIntent = new Intent(PaymentManagement.this, SendCigaretteMoneyActivity.class);
+						cMoneyIntent.putExtra("cigaretteMoney", cigaretteMoney);
+						cMoneyIntent.putExtra("vipId", cigaretteMoney);
+						
+						PaymentManagement.this.startActivityForResult(cMoneyIntent, 11);
 					
 						PaymentManagement.this.startService(printService);
 					
 						totalMoney = 0;
+						cigaretteMoney = 0;
+						vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
+						vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
+						vipName = "";
 					}
 					else{
 						Toast.makeText(PaymentManagement.this, "付款怎能比总额少呢！", Toast.LENGTH_SHORT).show();
 						totalMoney = 0;
+						cigaretteMoney = 0;
+						vipId = -1;//完成一单后要将VIPId重新设置为-1，要不还会是上次那个VIP客户的。
+						vipDiscountRate = 1;//完成一单后腰将VIPDiscountRate设置为1，要不还会用上的那个折扣
+						vipName = "";
 					}
 					
 				}catch(NumberFormatException e){
