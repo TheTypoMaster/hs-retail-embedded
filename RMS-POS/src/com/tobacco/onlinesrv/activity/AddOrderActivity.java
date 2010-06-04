@@ -56,7 +56,7 @@ public class AddOrderActivity extends RMSBaseView {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.order);
 		initView();
-		setDateOfToday();
+		dateEdt.setText(Validation.getToday());
 		fillBrandSpinner();
 		fillAgencyText();
 		setListeners();
@@ -198,6 +198,7 @@ public class AddOrderActivity extends RMSBaseView {
 								Order.KEY_DESCRIPTION, Order.KEY_STATUS);
 					}
 					if (uri != null) {
+						HashMapUtil.setOrderMap(dateEdt.getText().toString(), totalAmount+"", agencyName, "cry", descEdt.getText().toString(), "0", "0");
 						for (int i = 1; i < linearScroll.getChildCount(); i++) {
 							String brand = FieldSupport.brandType[((Spinner) linearScroll
 									.getChildAt(i).findViewById(
@@ -218,9 +219,11 @@ public class AddOrderActivity extends RMSBaseView {
 									.toString();
 							Uri detailUri = addOrderDetail(brand, formatStr,
 									price, count, amount);
-							if (detailUri != null)
-								
+							if (detailUri != null){
+								HashMapUtil.setDetailMapList(brand, formatStr, price, count, amount);
+								sendDataToServer();
 								openSuccessDialog();
+							}
 						}
 						HashMapUtil.printData();
 
@@ -382,7 +385,7 @@ public class AddOrderActivity extends RMSBaseView {
 		values.put(OrderDetail.KEY_PRICE, price);
 		values.put(OrderDetail.KEY_BRANDCOUNT, count);
 		values.put(OrderDetail.KEY_AMOUNT, amount);
-		HashMapUtil.setDetailMapList(brand, format, price, count, amount);
+		
 		Uri uri = getContentResolver().insert(OrderDetail.CONTENT_URI, values);
 		return uri;
 	}
@@ -405,9 +408,19 @@ public class AddOrderActivity extends RMSBaseView {
 		values.put(userName, "cry");
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
-		HashMapUtil.setOrderMap(dateEdt.getText().toString(), totalAmount+"", agencyName, "cry", descEdt.getText().toString(), "0", "0");
+		
 		Uri uri = getContentResolver().insert(uriType, values);
 		return uri;
+	}
+	
+	private void orderValidated(Uri uriType,String orderId){
+		ContentValues values = new ContentValues();
+		int number = getContentResolver().update(uriType, values, " orderid = '"+orderId+"'", null);
+		if(uriType==preorderUri){
+			
+		}
+		if(number!=0)
+			Toast.makeText(AddOrderActivity.this, "订单审核通过", Toast.LENGTH_LONG).show();
 	}
 
 	private int getAllCount(Uri uri) {
@@ -419,6 +432,43 @@ public class AddOrderActivity extends RMSBaseView {
 			return 0;
 	}
 
+	private boolean validation() {
+		String tag = "";
+		String date = dateEdt.getText().toString();
+		int countNumber = 0;
+		for (int i = 1; i < linearScroll.getChildCount(); i++) {
+			String count = ((EditText) linearScroll.getChildAt(i).findViewById(
+					R.id.brandCountText)).getText().toString();
+			if (!Validation.isInteger(count)||count.equals("0"))
+				countNumber++;
+		}
+
+		if (countNumber != 0)
+			tag += "请确定数量是否正确\n";
+		if (!Validation.isValidDate(date))
+			tag += "日期不能小于今天";
+		else {
+			if(isExistOrder(getCurrentUri(), date)){
+				Toast.makeText(AddOrderActivity.this, "该日期已有订单", Toast.LENGTH_LONG)
+				.show();
+				return false;
+			}
+//			Intent intent = new Intent();
+//			intent.setAction("android.intent.action.service");
+//			HashMap dateMap = new HashMap();
+//			dateMap.put("date", date);
+//			dateMap.put("uri", getCurrentUri());
+//			startActivityForResult(intent, IFEXIST);
+		}
+		if (tag.equals(""))
+			return true;
+		else {
+			Toast.makeText(AddOrderActivity.this, tag, Toast.LENGTH_LONG)
+					.show();
+			return false;
+		}
+	}
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -459,56 +509,15 @@ public class AddOrderActivity extends RMSBaseView {
 				}).show();
 	}
 
-	private void setDateOfToday() {
-		dateEdt.setText(Validation.getToday());
-	}
-
-	private boolean validation() {
-		String tag = "";
-		String date = dateEdt.getText().toString();
-		int countNumber = 0;
-		for (int i = 1; i < linearScroll.getChildCount(); i++) {
-			String count = ((EditText) linearScroll.getChildAt(i).findViewById(
-					R.id.brandCountText)).getText().toString();
-			if (!Validation.isInteger(count)||count.equals("0"))
-				countNumber++;
-		}
-
-		if (countNumber != 0)
-			tag += "请确定数量是否正确\n";
-		if (!Validation.isValidDate(date))
-			tag += "日期不能小于今天";
-		else {
-			if(isExistOrder(getCurrentUri(), date)){
-				Toast.makeText(AddOrderActivity.this, "该日期已有订单", Toast.LENGTH_LONG)
-				.show();
-				return false;
-			}
-//			Intent intent = new Intent();
-//			intent.setAction("android.intent.action.service");
-//			HashMap dateMap = new HashMap();
-//			dateMap.put("date", date);
-//			dateMap.put("uri", getCurrentUri());
-//			startActivityForResult(intent, IFEXIST);
-		}
-		if (tag.equals(""))
-			return true;
-		else {
-			Toast.makeText(AddOrderActivity.this, tag, Toast.LENGTH_LONG)
-					.show();
-			return false;
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == IFEXIST && resultCode == RESULT_OK) {
-			Boolean result = data.getExtras().getBoolean("isExist");
-			System.out.println(result);
-		}
-	}
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		// TODO Auto-generated method stub
+//		super.onActivityResult(requestCode, resultCode, data);
+//		if (requestCode == IFEXIST && resultCode == RESULT_OK) {
+//			Boolean result = data.getExtras().getBoolean("isExist");
+//			System.out.println(result);
+//		}
+//	}
 
 	private Uri getCurrentUri() {
 		if (typeSp.getSelectedItemPosition() == 0) {
