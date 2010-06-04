@@ -1,5 +1,6 @@
 package com.tobacco.onlinesrv.activity;
 
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,24 +43,8 @@ import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.util.FieldSupport;
 
 public class QueryOrderActivity extends RMSBaseView {
-	private String orderType[] = { "预订单", "订单" };
-	private String queryType[] = { "单号" };
+
 	private final static int EDITINTENT = 2;
-	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
-			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE, "statusName",
-			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
-			FieldSupport.KEY_DESCRIPTION, "recieveName" };
-
-	private String fromForOrderDetail[] = new String[] {
-			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
-			OrderDetail.KEY_FORMAT, OrderDetail.KEY_PRICE,
-			OrderDetail.KEY_AMOUNT };
-	private String[] KEY_FIELDS = { OrderDetail.KEY_ID,
-			OrderDetail.KEY_PREORDER_ID, OrderDetail.KEY_ORDER_ID,
-			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
-			OrderDetail.KEY_FORMAT, OrderDetail.KEY_PRICE,
-			OrderDetail.KEY_AMOUNT };
-
 	private Spinner orderTypeSp;
 	private Spinner queryTypeSp;
 	private ListView listView;
@@ -110,10 +95,10 @@ public class QueryOrderActivity extends RMSBaseView {
 	private void initView() {
 		orderTypeSp = (Spinner) this.findViewById(R.id.Spinner01);
 		orderTypeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, orderType)));
+				android.R.layout.simple_spinner_item, FieldSupport.orderType)));
 		queryTypeSp = (Spinner) this.findViewById(R.id.Spinner02);
 		queryTypeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, queryType)));
+				android.R.layout.simple_spinner_item, FieldSupport.queryType)));
 		queryEdt = (EditText) this.findViewById(R.id.queryText);
 		startDateEdt = (EditText) this.findViewById(R.id.startDateText);
 		endDateEdt = (EditText) this.findViewById(R.id.endDateText);
@@ -272,11 +257,11 @@ public class QueryOrderActivity extends RMSBaseView {
 	}
 
 	private void setListAdapter(List<HashMap<String, String>> fillMaps) {
-		int[] to = new int[] { R.id.item1, R.id.orderItem, R.id.dateItem,
-				R.id.userItem, R.id.statusItem, R.id.agencyItem,
+		int[] to = new int[] { R.id.item1, R.id.orderItem, 
+				R.id.userItem, R.id.dateItem,R.id.statusItem, R.id.agencyItem,
 				R.id.amountItem, R.id.descItem, R.id.actionItem };
 		SimpleAdapter adapter = new SimpleAdapter(this, fillMaps,
-				R.layout.grid_item, from, to);
+				R.layout.grid_item, FieldSupport.fromForOrder, to);
 		listView.setAdapter(adapter);
 
 		if (!isEmpty) {
@@ -305,7 +290,7 @@ public class QueryOrderActivity extends RMSBaseView {
 					R.id.formatItem, R.id.priceItem, R.id.amount2Item };
 			SimpleAdapter adapterForOrderDetail = new SimpleAdapter(
 					QueryOrderActivity.this, dataDetailMaps,
-					R.layout.orderdetal_item, fromForOrderDetail,
+					R.layout.orderdetal_item, FieldSupport.fromForOrderDetail,
 					toForOrderDetail);
 			detailList.setAdapter(adapterForOrderDetail);
 		} else
@@ -377,11 +362,11 @@ public class QueryOrderActivity extends RMSBaseView {
 			cursor.moveToFirst();
 			do {
 				HashMap<String, String> map = new HashMap<String, String>();
-				for (int i = 0; i < KEY_FIELDS.length; i++) {
+				for (int i = 0; i < FieldSupport.KEY_FIELDS.length; i++) {
 					String value = cursor.getString(cursor
-							.getColumnIndex(KEY_FIELDS[i]));
+							.getColumnIndex(FieldSupport.KEY_FIELDS[i]));
 
-					map.put(KEY_FIELDS[i], value);
+					map.put(FieldSupport.KEY_FIELDS[i], value);
 				}
 
 				dataDetailMaps.add(map);

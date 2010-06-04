@@ -53,8 +53,6 @@ public class EditOrderActivity extends RMSBaseView {
 	private EditText descEdt;
 	private Button okBtn;
 	private Button cancelBtn;
-	private String format[] = { "条", "包" };
-	private String type[] = { "预订单", "订单" };
 	private List<String> idList = null;
 	private LinearLayout linearScroll;
 	private LinearLayout linearContent;
@@ -92,7 +90,7 @@ public class EditOrderActivity extends RMSBaseView {
 				android.R.layout.simple_spinner_item, FieldSupport.brandType)));
 
 		typeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, type)));
+				android.R.layout.simple_spinner_item, FieldSupport.type)));
 	}
 
 	private void fillAgencyText() {
@@ -127,7 +125,7 @@ public class EditOrderActivity extends RMSBaseView {
 					String brand = FieldSupport.brandType[((Spinner) linearScroll
 							.getChildAt(i).findViewById(R.id.brandNameSp))
 							.getSelectedItemPosition()];
-					String formatStr = format[((Spinner) linearScroll
+					String formatStr = FieldSupport.format[((Spinner) linearScroll
 							.getChildAt(i).findViewById(R.id.formatSp))
 							.getSelectedItemPosition()];
 					String price = ((TextView) linearScroll.getChildAt(i)
@@ -199,7 +197,7 @@ public class EditOrderActivity extends RMSBaseView {
 					.findViewById(R.id.formatSp);
 			formatSpinner.setAdapter((new ArrayAdapter<String>(
 					EditOrderActivity.this,
-					android.R.layout.simple_spinner_item, format)));
+					android.R.layout.simple_spinner_item, FieldSupport.format)));
 			formatSpinner.setSelection(getFormatPosition(detailMap.get(i).get(
 					OrderDetail.KEY_FORMAT)));
 			final TextView priceTxt = (TextView) linearContent
@@ -329,8 +327,8 @@ public class EditOrderActivity extends RMSBaseView {
 	}
 
 	private int getFormatPosition(String formatName) {
-		for (int i = 0; i < format.length; i++) {
-			if (format[i].equals(format)) {
+		for (int i = 0; i < FieldSupport.format.length; i++) {
+			if (FieldSupport.format[i].equals(formatName)) {
 				return i;
 			}
 		}

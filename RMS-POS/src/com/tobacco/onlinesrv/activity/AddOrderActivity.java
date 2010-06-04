@@ -1,21 +1,14 @@
 package com.tobacco.onlinesrv.activity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,9 +33,9 @@ import com.tobacco.onlinesrv.entities.Agency;
 import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
-import com.tobacco.onlinesrv.entities.Tobacco;
 import com.tobacco.onlinesrv.util.FieldSupport;
 import com.tobacco.onlinesrv.util.NumberGenerate;
+import com.tobacco.onlinesrv.util.Validation;
 
 public class AddOrderActivity extends RMSBaseView {
 	private int mYear;
@@ -65,19 +58,10 @@ public class AddOrderActivity extends RMSBaseView {
 	private TextView addTxt;
 	private Uri preorderUri = PreOrder.CONTENT_URI;
 	private Uri orderUri = Order.CONTENT_URI;
-	private String formatStr;
-	private String format[] = { "条", "包" };
-	private String type[] = { "预订单", "订单" };
 	private String agencyid = "";
 	private String agencyName;
-	private JSONObject obj;
 	private float totalAmount = 0;
-	private String[] fieldString = { FieldSupport.KEY_ORDER_ID,
-			FieldSupport.KEY_BRANDCODE, FieldSupport.KEY_BRANDCOUNT,
-			FieldSupport.KEY_DATE, FieldSupport.KEY_USERNAME,
-			FieldSupport.KEY_FORMAT, FieldSupport.KEY_AMOUNT,
-			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_DESCRIPTION,
-			FieldSupport.KEY_STATUS };
+	private static int IFEXIST = 3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +98,9 @@ public class AddOrderActivity extends RMSBaseView {
 				android.R.layout.simple_spinner_item, FieldSupport.brandType)));
 
 		formatSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, format)));
+				android.R.layout.simple_spinner_item, FieldSupport.format)));
 		typeSp.setAdapter((new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, type)));
+				android.R.layout.simple_spinner_item, FieldSupport.type)));
 	}
 
 	private void fillAgencyText() {
@@ -191,7 +175,8 @@ public class AddOrderActivity extends RMSBaseView {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus)
 					if (!countEdt.getText().toString().equals("")
-							&& isInteger(countEdt.getText().toString()))
+							&& Validation.isInteger(countEdt.getText()
+									.toString()))
 						setAmountText();
 					else
 						Toast.makeText(AddOrderActivity.this, "输入不合法，请重新输入",
@@ -210,7 +195,6 @@ public class AddOrderActivity extends RMSBaseView {
 			public void onClick(View v) {
 				if (validation()) {
 					Uri uri = null;
-					formatStr = format[formatSp.getSelectedItemPosition()];
 					if (typeSp.getSelectedItemPosition() == 0) {
 						uri = AddOrder(preorderUri, PreOrder.KEY_PREORDER_ID,
 								PreOrder.KEY_PREDATE, PreOrder.KEY_AMOUNT,
@@ -228,7 +212,7 @@ public class AddOrderActivity extends RMSBaseView {
 									.getChildAt(i).findViewById(
 											R.id.brandNameSp))
 									.getSelectedItemPosition()];
-							String formatStr = format[((Spinner) linearScroll
+							String formatStr = FieldSupport.format[((Spinner) linearScroll
 									.getChildAt(i).findViewById(R.id.formatSp))
 									.getSelectedItemPosition()];
 							String price = ((TextView) linearScroll.getChildAt(
@@ -277,7 +261,8 @@ public class AddOrderActivity extends RMSBaseView {
 						.findViewById(R.id.formatSp);
 				formatSpinner.setAdapter((new ArrayAdapter<String>(
 						AddOrderActivity.this,
-						android.R.layout.simple_spinner_item, format)));
+						android.R.layout.simple_spinner_item,
+						FieldSupport.format)));
 				final TextView priceTxt = (TextView) linearContent
 						.findViewById(R.id.priceText);
 				priceTxt.setText(FieldSupport.itemPrice[brandSpinner
@@ -338,7 +323,7 @@ public class AddOrderActivity extends RMSBaseView {
 						String count = countEdt.getText().toString();
 						if (!hasFocus
 								&& !countEdt.getText().toString().equals("")) {
-							if (isInteger(count))
+							if (Validation.isInteger(count))
 								setAmountTextForNew(amountEdt, count, priceTxt
 										.getText().toString());
 						}
@@ -423,12 +408,6 @@ public class AddOrderActivity extends RMSBaseView {
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
 		Uri uri = getContentResolver().insert(uriType, values);
-		// try {
-		// putToJson(uriType);
-		// // getJsonDataAndUpdate(obj);
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
 		return uri;
 	}
 
@@ -481,42 +460,36 @@ public class AddOrderActivity extends RMSBaseView {
 				}).show();
 	}
 
-	private boolean isInteger(String number) {
-		Pattern pattern = Pattern.compile("^-?\\d+$");
-		Matcher match = pattern.matcher(number);
-		return match.matches();
-	}
-
 	private void setDateOfToday() {
-		today = Calendar.getInstance().get(Calendar.YEAR) + "-"
-				+ (Calendar.getInstance().get(Calendar.MONTH) + 1) + "-"
-				+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		dateEdt.setText(today);
-	}
-
-	private boolean isValidDate() {
-		String date = dateEdt.getText().toString();
-		Date dateOfToday = null;
-		Date dateOfSelectedDay = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			dateOfToday = sdf.parse(today);
-			dateOfSelectedDay = sdf.parse(date);
-			if (dateOfSelectedDay.getTime() - dateOfToday.getTime() >= 0)
-				return true;
-		} catch (ParseException e) {
-
-			e.printStackTrace();
-		}
-		return false;
+		dateEdt.setText(Validation.getToday());
 	}
 
 	private boolean validation() {
 		String tag = "";
-		if (!isInteger(countEdt.getText().toString()))
-			tag += "请在商品数量中输入数字\n";
-		if (!isValidDate())
+		String date = dateEdt.getText().toString();
+		int countNumber = 0;
+		for (int i = 1; i < linearScroll.getChildCount(); i++) {
+			String count = ((EditText) linearScroll.getChildAt(i).findViewById(
+					R.id.brandCountText)).getText().toString();
+			if (!Validation.isInteger(count))
+				countNumber++;
+		}
+
+		if (countNumber != 0)
+			tag += "请确定数量是否正确\n";
+		if (!Validation.isValidDate(date))
 			tag += "日期不能小于今天";
+		else {
+			if(isExistOrder(getCurrentUri(), date))
+				Toast.makeText(AddOrderActivity.this, "该日期已有订单", Toast.LENGTH_LONG)
+				.show();
+//			Intent intent = new Intent();
+//			intent.setAction("android.intent.action.service");
+//			HashMap dateMap = new HashMap();
+//			dateMap.put("date", date);
+//			dateMap.put("uri", getCurrentUri());
+//			startActivityForResult(intent, IFEXIST);
+		}
 		if (tag.equals(""))
 			return true;
 		else {
@@ -526,47 +499,27 @@ public class AddOrderActivity extends RMSBaseView {
 		}
 	}
 
-	private void putToJson(Uri uriType) throws JSONException {
-		obj = new JSONObject();
-		if (uriType == preorderUri)
-			obj.put(fieldString[0], NumberGenerate
-					.preOrderIdGeneration(getAllCount(uriType)));
-		else
-			obj.put(fieldString[0], NumberGenerate
-					.orderIdGeneration(getAllCount(uriType)));
-		obj.put(fieldString[1], FieldSupport.brandType[brandNameSp
-				.getSelectedItemPosition()]);
-		obj
-				.put(fieldString[2], Integer.parseInt(countEdt.getText()
-						.toString()));
-		obj.put(fieldString[3], dateEdt.getText().toString());
-		obj.put(fieldString[4], formatStr);
-		obj.put(fieldString[5], Float
-				.parseFloat(amountEdt.getText().toString()));
-		obj.put(fieldString[6], agencyid);
-		obj.put(fieldString[7], "cry");
-		obj.put(fieldString[9], descEdt.getText().toString());
-		obj.put(fieldString[10], "0");
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == IFEXIST && resultCode == RESULT_OK) {
+			Boolean result = data.getExtras().getBoolean("isExist");
+			System.out.println(result);
+		}
 	}
 
-	private void getJsonDataAndUpdate(JSONObject object) throws JSONException {
-		object = obj;
-		ContentValues values = new ContentValues();
-		Uri uriType = preorderUri;
-		String orderId = "";
-		for (String str : fieldString) {
-			if (str.equals(FieldSupport.KEY_ORDER_ID)) {
-				orderId = obj.getString(str);
-				if (orderId.contains("O"))
-					uriType = orderUri;
-			}
-			System.out.println(obj.getString(str));
-			values.put(str, obj.getString(str));
-		}
-		int number = getContentResolver().update(uriType, values,
-				"orderid = \"" + orderId + "\"", null);
-		if (number != 0)
-			System.out.println("update success" + number);
-
+	private Uri getCurrentUri() {
+		if (typeSp.getSelectedItemPosition() == 0) {
+			return preorderUri;
+		} else
+			return orderUri;
+	}
+	
+	private boolean isExistOrder(Uri uri ,String date){
+		Cursor cursor = this.managedQuery(uri, null, "date = "+date, null, null);
+		if(cursor.getCount()!=0)
+			return true;
+		return false;
 	}
 }
