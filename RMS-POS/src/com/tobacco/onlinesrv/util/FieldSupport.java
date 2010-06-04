@@ -7,6 +7,7 @@ public class FieldSupport {
 	public static final String KEY_ORDER_ID = "orderid";
 	public static final String KEY_BRANDCODE = "brandcode";
 	public static final String KEY_BRANDCOUNT = "brandcount";
+	public static final String KEY_PRICE = "price";
 	public static final String KEY_DATE = "date";
 	public static final String KEY_USERNAME = "username";
 	public static final String KEY_VIPID = "vipid";

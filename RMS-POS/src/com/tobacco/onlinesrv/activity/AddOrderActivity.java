@@ -34,6 +34,7 @@ import com.tobacco.onlinesrv.entities.Order;
 import com.tobacco.onlinesrv.entities.OrderDetail;
 import com.tobacco.onlinesrv.entities.PreOrder;
 import com.tobacco.onlinesrv.util.FieldSupport;
+import com.tobacco.onlinesrv.util.HashMapUtil;
 import com.tobacco.onlinesrv.util.NumberGenerate;
 import com.tobacco.onlinesrv.util.Validation;
 
@@ -42,26 +43,13 @@ public class AddOrderActivity extends RMSBaseView {
 	private int mMonth;
 	private int mDay;
 	private String today;
-	private Spinner brandNameSp;
-	private Spinner formatSp;
-	private Spinner typeSp;
-	private EditText countEdt;
-	private EditText dateEdt;
-	private EditText amountEdt;
-	private TextView agencyTxt;
-	private EditText descEdt;
-	private TextView priceTxt;
-	private LinearLayout linearScroll;
-	private EditText totalAmountTxt;
-	private Button okBtn;
-	private Button cancelBtn;
-	private TextView addTxt;
-	private Uri preorderUri = PreOrder.CONTENT_URI;
-	private Uri orderUri = Order.CONTENT_URI;
 	private String agencyid = "";
 	private String agencyName;
 	private float totalAmount = 0;
 	private static int IFEXIST = 3;
+	
+	private Uri preorderUri = PreOrder.CONTENT_URI;
+	private Uri orderUri = Order.CONTENT_URI;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,9 +166,11 @@ public class AddOrderActivity extends RMSBaseView {
 							&& Validation.isInteger(countEdt.getText()
 									.toString()))
 						setAmountText();
-					else
-						Toast.makeText(AddOrderActivity.this, "输入不合法，请重新输入",
+					else{
+						if(!countEdt.getText().toString().equals(""))
+							Toast.makeText(AddOrderActivity.this, "输入不合法，请重新输入",
 								Toast.LENGTH_SHORT).show();
+					}
 			}
 		});
 
@@ -194,6 +184,7 @@ public class AddOrderActivity extends RMSBaseView {
 		okBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (validation()) {
+					HashMapUtil.init();
 					Uri uri = null;
 					if (typeSp.getSelectedItemPosition() == 0) {
 						uri = AddOrder(preorderUri, PreOrder.KEY_PREORDER_ID,
@@ -228,8 +219,10 @@ public class AddOrderActivity extends RMSBaseView {
 							Uri detailUri = addOrderDetail(brand, formatStr,
 									price, count, amount);
 							if (detailUri != null)
+								
 								openSuccessDialog();
 						}
+						HashMapUtil.printData();
 
 					} else
 						Toast.makeText(AddOrderActivity.this, "添加失败，请检查数据",
@@ -336,6 +329,10 @@ public class AddOrderActivity extends RMSBaseView {
 			}
 		});
 	}
+	
+	private void sendDataToServer(){
+		
+	}
 
 	private void setAmountText() {
 		if (countEdt.getText() != null
@@ -385,6 +382,7 @@ public class AddOrderActivity extends RMSBaseView {
 		values.put(OrderDetail.KEY_PRICE, price);
 		values.put(OrderDetail.KEY_BRANDCOUNT, count);
 		values.put(OrderDetail.KEY_AMOUNT, amount);
+		HashMapUtil.setDetailMapList(brand, format, price, count, amount);
 		Uri uri = getContentResolver().insert(OrderDetail.CONTENT_URI, values);
 		return uri;
 	}
@@ -407,6 +405,7 @@ public class AddOrderActivity extends RMSBaseView {
 		values.put(userName, "cry");
 		values.put(desc, descEdt.getText().toString());
 		values.put(status, "0");
+		HashMapUtil.setOrderMap(dateEdt.getText().toString(), totalAmount+"", agencyName, "cry", descEdt.getText().toString(), "0", "0");
 		Uri uri = getContentResolver().insert(uriType, values);
 		return uri;
 	}
@@ -471,7 +470,7 @@ public class AddOrderActivity extends RMSBaseView {
 		for (int i = 1; i < linearScroll.getChildCount(); i++) {
 			String count = ((EditText) linearScroll.getChildAt(i).findViewById(
 					R.id.brandCountText)).getText().toString();
-			if (!Validation.isInteger(count))
+			if (!Validation.isInteger(count)||count.equals("0"))
 				countNumber++;
 		}
 
@@ -480,9 +479,11 @@ public class AddOrderActivity extends RMSBaseView {
 		if (!Validation.isValidDate(date))
 			tag += "日期不能小于今天";
 		else {
-			if(isExistOrder(getCurrentUri(), date))
+			if(isExistOrder(getCurrentUri(), date)){
 				Toast.makeText(AddOrderActivity.this, "该日期已有订单", Toast.LENGTH_LONG)
 				.show();
+				return false;
+			}
 //			Intent intent = new Intent();
 //			intent.setAction("android.intent.action.service");
 //			HashMap dateMap = new HashMap();
@@ -517,9 +518,27 @@ public class AddOrderActivity extends RMSBaseView {
 	}
 	
 	private boolean isExistOrder(Uri uri ,String date){
-		Cursor cursor = this.managedQuery(uri, null, "date = "+date, null, null);
+		Cursor cursor = this.managedQuery(uri, null, "date = '"+date+"'", null, null);
 		if(cursor.getCount()!=0)
 			return true;
 		return false;
 	}
+	
+	/**
+	 * UI  Elements
+	 */
+	private Spinner brandNameSp;
+	private Spinner formatSp;
+	private Spinner typeSp;
+	private EditText countEdt;
+	private EditText dateEdt;
+	private EditText amountEdt;
+	private TextView agencyTxt;
+	private EditText descEdt;
+	private TextView priceTxt;
+	private LinearLayout linearScroll;
+	private EditText totalAmountTxt;
+	private Button okBtn;
+	private Button cancelBtn;
+	private TextView addTxt;
 }

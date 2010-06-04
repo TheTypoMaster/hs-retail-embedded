@@ -158,14 +158,26 @@ public class QueryOrderActivity extends RMSBaseView {
 		okBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int queryType = queryTypeSp.getSelectedItemPosition();
-				selection = queryOrderMap.get(queryType) + "=\""
-						+ queryEdt.getText().toString() + "\"";
-				if (!startDateEdt.getText().toString().equals("开始时间")
-						&& !endDateEdt.getText().toString().equals("结束时间"))
-					selection += " and date between " + "\""
-							+ startDateEdt.getText().toString() + "\""
-							+ " and " + "\"" + endDateEdt.getText().toString()
-							+ "\"";
+				String orderStr = queryEdt.getText().toString();
+				if(!orderStr.equals("")){
+					selection = queryOrderMap.get(queryType) + "=\""
+							+ queryEdt.getText().toString() + "\"";
+					if (!startDateEdt.getText().toString().equals("开始时间")
+							&& !endDateEdt.getText().toString().equals("结束时间"))
+						selection += " and date between " + "\""
+								+ startDateEdt.getText().toString() + "\""
+								+ " and " + "\"" + endDateEdt.getText().toString()
+								+ "\"";
+				}else{
+					selection = "";
+					if (!startDateEdt.getText().toString().equals("开始时间")
+							&& !endDateEdt.getText().toString().equals("结束时间"))
+						selection += "date between " + "\""
+								+ startDateEdt.getText().toString() + "\""
+								+ " and " + "\"" + endDateEdt.getText().toString()
+								+ "\"";
+				}
+				
 				fillDataMaps(getCurrentOrder(), selection);
 				setListAdapter(getFillMaps());
 			}
