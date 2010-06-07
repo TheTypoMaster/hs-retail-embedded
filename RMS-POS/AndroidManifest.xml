@@ -13,8 +13,9 @@
         </activity>
         
         <!-- 
-        	<action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
+        
+        <action android:name="android.intent.action.MAIN" />
+            	<category android:name="android.intent.category.LAUNCHER" />	
         -->
 
         <!--POS Activity -->
@@ -30,20 +31,20 @@
 		    <activity android:name=".pos.activity.SendCigaretteMoneyActivity"></activity>
 		 
 		  <activity android:name=".pos.activity.AddPBill" android:theme="@android:style/Theme.Dialog"></activity>
-		  <activity android:name=".pos.activity.ConsumeInsert"  android:label="Consume_Insert">
+		  <activity android:name=".pos.activity.ConsumeInsert"  android:label="溢耗处理">
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.CosumeInsert" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-          <activity android:name=".pos.activity.ConsumeInsertDialog" android:label="Consume_Insert_Dialog"
+          <activity android:name=".pos.activity.ConsumeInsertDialog" android:label="溢耗处理输入"
         		  android:theme="@android:style/Theme.Dialog">
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ConsumeInsertDialog" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-          <activity android:name=".pos.activity.ConsumeSelect" android:label="Consume_Select" >
+          <activity android:name=".pos.activity.ConsumeSelect" android:label="溢耗查询" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ConsumeSelect" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -56,13 +57,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-		  <activity android:name=".pos.activity.ComplaintSelect" android:label="Complaint_Select" >
+		  <activity android:name=".pos.activity.ComplaintSelect" android:label="投诉查询" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ComplaintSelect" />
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-		  <activity android:name=".pos.activity.ReturnInsert" android:label="Return_Insert" >
+		  <activity android:name=".pos.activity.ReturnInsert" android:label="退货处理" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ReturnInsert" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -75,7 +76,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
-		  <activity android:name=".pos.activity.ReturnSelect" android:label="Return_Select" >
+		  <activity android:name=".pos.activity.ReturnSelect" android:label="退货查询" >
 			  <intent-filter>
                 <action android:name="com.tobacco.pos.activity.ReturnSelect" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -123,6 +124,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
               </intent-filter>
 		  </activity>
+		  <activity android:name=".pos.test.DBInit">
+			  <intent-filter>
+                <action android:name="com.tobacco.pos.test.DBInit.INIT_DB" />
+                <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+		  </activity>
 		
 		  
 		  <!-- ContentProvider -->
@@ -156,15 +163,19 @@
 
    	
 		<service android:name=".pos.service.ScanInputService"/> 
-
+		<service android:name=".pos.service.TestSendObjectService"/>
+		
 		
 		
 		<!-- rongyi -->
 			<activity android:name=".onlinesrv.activity.OptionActivity"
 			android:label="@string/app_name">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+			<!-- 
+			<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
+			 -->
+				
 			</intent-filter>
 		</activity>
 		<activity android:name=".onlinesrv.activity.TobaccoActivity"
