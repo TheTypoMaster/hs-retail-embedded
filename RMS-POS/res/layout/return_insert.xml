@@ -29,7 +29,7 @@
 		          android:layout_weight="1"
 				  style="@style/TextViewTitleStyle"/>
 				<TextView
-		          android:text="退货理由"
+		          android:text="合计金额"
 		          android:layout_weight="1"
 				  style="@style/TextViewTitleStyle"/>
 			</TableRow>
