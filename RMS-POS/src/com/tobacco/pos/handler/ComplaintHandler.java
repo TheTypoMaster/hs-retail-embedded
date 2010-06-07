@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -51,6 +52,14 @@ public class ComplaintHandler {
 	 */
 	public Uri insert(ComplaintModel goods){
 		Uri uri = ctx.getContentResolver().insert(Complaint.CONTENT_URI, goods.genContentValues());
+		
+		Log.i("complaint", "send object");
+		if(goods.isCigarette()){
+			Intent intent = new Intent("com.tobacco.action.net.object");
+			intent.putExtra("object", goods);
+			ctx.sendBroadcast(intent);
+		}
+		
 		return uri;
 	}
 	
@@ -101,6 +110,9 @@ public class ComplaintHandler {
 		
 		int goodsPriceIdIndex = cursor.getColumnIndex(Complaint.GOODS_ID);
 		int goodsPriceId = cursor.getInt(goodsPriceIdIndex);
+		
+//		int isCigaretteIndex = cursor.getColumnIndex(Complaint.GOODS_ID);
+//		boolean isCigarette = (cursor.getInt(isCigaretteIndex)==1)?true:false;
 		
 		int goodsNameIndex = cursor.getColumnIndex(Goods.goodsName);
 		String goodsName = cursor.getString(goodsNameIndex);
@@ -155,7 +167,9 @@ public class ComplaintHandler {
 		}	
 		int	customerId = Integer.valueOf(vipInfoCPer.getAttributeByAttribute(VIPInfo._ID, VIPInfo.VIPNum, vipNum)).intValue();
 		int goodsPriceId = Integer.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice._ID, GoodsPrice.barcode, barcode)).intValue();	
-		ComplaintModel goods = new ComplaintModel(customerId, goodsPriceId, content);
+		boolean isCigarette = (Integer.valueOf(goodsPriceCPer.getAttributeByAttribute(
+				GoodsPrice.isCigarette, GoodsPrice.barcode, barcode)).intValue()==1)?true:false;
+		ComplaintModel goods = new ComplaintModel(customerId, goodsPriceId, isCigarette, content);
 		
 		return goods;
 	}

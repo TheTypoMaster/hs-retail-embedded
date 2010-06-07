@@ -208,9 +208,15 @@ public class InventoryBillHandler {
 	
 	public void clearInventory(){
 		Log.e("state", "clearInventory:state:"+state);
-		if(state == STATE_CONTINUE){
-			ctx.getContentResolver().delete(InventoryBill.CONTENT_URI, InventoryBill.FINISHED+" = ?", new String[]{"0"});			
-		}else if(state == STATE_PAUSE){
+//		if(state == STATE_CONTINUE){
+//			ctx.getContentResolver().delete(InventoryBill.CONTENT_URI, InventoryBill.FINISHED+" = ?", new String[]{"0"});			
+//		}else if(state == STATE_PAUSE){
+//			int billId = getUnfinishedBillId();		
+//			itemHandler.removeUfItems(billId);
+//			ctx.getContentResolver().delete(InventoryBill.CONTENT_URI, InventoryBill.FINISHED+" = ?", new String[]{"0"});
+//		}
+		
+		if(state != STATE_NORMAL){
 			int billId = getUnfinishedBillId();		
 			itemHandler.removeUfItems(billId);
 			ctx.getContentResolver().delete(InventoryBill.CONTENT_URI, InventoryBill.FINISHED+" = ?", new String[]{"0"});

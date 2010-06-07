@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -54,6 +55,13 @@ public class ReturnHandler {
 	 */
 	public Uri insert(ReturnModel goods){
 		Uri uri = ctx.getContentResolver().insert(Return.CONTENT_URI, goods.genContentValues());
+		
+		if(goods.isCigarette()){
+			Intent intent = new Intent("com.tobacco.action.net.object");
+			intent.putExtra("object", goods);
+			ctx.sendBroadcast(intent);
+		}
+		
 		return uri;
 	}
 	
@@ -177,8 +185,11 @@ public class ReturnHandler {
 		String unitId = goodsPriceCPer.getAttributeByAttribute(GoodsPrice.unitId, GoodsPrice.barcode, barcode);
 		String unit = unitCPer.getAttributeById(Unit.name, unitId);
 		Double inPrice = Double.valueOf(goodsPriceCPer.getAttributeByAttribute(GoodsPrice.inPrice, GoodsPrice.barcode, barcode));
-//		ReturnModel goods = new ReturnModel(customerId, customer, unit, goodsPriceId, goodsName, content, number);
-		ReturnModel goods = new ReturnModel(unit, goodsPriceId, goodsName, content, number, inPrice);
+
+		boolean isCigarette = (Integer.valueOf(goodsPriceCPer.getAttributeByAttribute(
+				GoodsPrice.isCigarette, GoodsPrice.barcode, barcode)).intValue()==1)?true:false;
+		//		ReturnModel goods = new ReturnModel(customerId, customer, unit, goodsPriceId, goodsName, content, number);
+		ReturnModel goods = new ReturnModel(unit, goodsPriceId, goodsName, content, number, inPrice,isCigarette);
 		
 		return goods;
 	}

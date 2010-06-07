@@ -1,9 +1,9 @@
 package com.tobacco.pos.handler;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -18,11 +18,9 @@ import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.Goods;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Unit;
-import com.tobacco.pos.entity.AllTables.UserInfo;
 import com.tobacco.pos.searchStrategy.ISearchStrategy;
 import com.tobacco.pos.searchStrategy.SearchState;
 import com.tobacco.pos.searchStrategy.SearchStrategyFactory;
-import com.tobacco.pos.util.DateTool;
 
 public class ConsumeHandler {
 
@@ -52,7 +50,8 @@ public class ConsumeHandler {
 	 * @return the record uri in database.
 	 */
 	public Uri insert(ConsumeModel goods){
-		Uri uri = ctx.getContentResolver().insert(Consume.CONTENT_URI, goods.genContentValues());
+		
+		Uri uri = ctx.getContentResolver().insert(Consume.CONTENT_URI, goods.genContentValues());	
 		return uri;
 	}
 	

@@ -54,6 +54,8 @@ public class ComplaintFull implements BaseColumns{
 	 * <p>TypE: INTEGER</>
 	 */
 	public static final String GOODS_PRICE_ID = "Complaint."+Complaint.GOODS_ID;
+	
+	public static final String IS_CIGARETTE = "GoodsPrice."+GoodsPrice.isCigarette;
 	/**
 	 * The id of the goods
 	 * <p>TypE: INTEGER</>
@@ -76,5 +78,5 @@ public class ComplaintFull implements BaseColumns{
 	 */
 	public static final String DEFAULT_SORT_ORDER = "modified DESC";
 	
-	public static final String[] PROJECTION = new String[]{ID, GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID};
+	public static final String[] PROJECTION = new String[]{ID, GOODS_NAME,VIP_NAME,CREATE_DATE,OPER_NAME,COMMENT,GOODS_PRICE_ID,IS_CIGARETTE};
 }

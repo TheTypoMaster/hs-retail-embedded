@@ -91,4 +91,5 @@ public class ShowInventoryItem extends RMSBaseView{
 			table.addView(row);
 		}
 	}
+	
 }

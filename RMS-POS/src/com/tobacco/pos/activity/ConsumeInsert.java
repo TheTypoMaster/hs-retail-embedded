@@ -33,6 +33,7 @@ import com.tobacco.pos.entity.AllTables.Consume;
 import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.handler.ConsumeHandler;
 import com.tobacco.pos.service.ScanInputService;
+import com.tobacco.pos.service.TestSendObjectService;
 import com.tobacco.pos.util.RegexCheck;
 
 public class ConsumeInsert extends RMSBaseView{
@@ -67,6 +68,7 @@ public class ConsumeInsert extends RMSBaseView{
 		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
 		this.registerReceiver(new ScanReceiver(), filter);
 		this.startService(new Intent(this,ScanInputService.class));
+
 	}
 
 	@Override

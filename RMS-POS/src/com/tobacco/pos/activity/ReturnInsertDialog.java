@@ -81,10 +81,10 @@ public class ReturnInsertDialog extends RMSBaseView{
 			return false;
 		}
 		
-		if(content.getText().toString().equals("")){
-			Toast.makeText(this, "退货原因不可为空", Toast.LENGTH_SHORT).show();
-			return false;
-		} 
+//		if(content.getText().toString().equals("")){
+//			Toast.makeText(this, "退货原因不可为空", Toast.LENGTH_SHORT).show();
+//			return false;
+//		} 
 		return true;
 	}
 }

@@ -15,27 +15,55 @@ public class ReturnModel extends BaseModel {
 
 	private static String TAG = "ReturnModel";
 	
+	/**
+	 * the id of this object
+	 */
 	private int id;
-	
+
+	/**
+	 * the operator who deal with this return operation.
+	 */
 	private String operator;
-	
+
+	/**
+	 * the name of the customer who return the goods. maybe a vip or not
+	 */
 	private String customer;
-	
+
+	/**
+	 * the id of the customer who return the goods. maybe a vip or not
+	 */
 	private int customerId;
 	
+	/**
+	 * the unit of the returned goods.
+	 */
 	private String unit;
-	
+
+	/**
+	 * the id of the rturned goods.
+	 */
 	private int goodsPriceId;
-	
+
+	/**
+	 * the name of the rturned goods.
+	 */
 	private String goodsName;
 	
-//	private Date createDate;
-//	
-//	private String comment;
-	
+	/**
+	 * the number of the returned goods.
+	 */
 	private int number;
 
+	/**
+	 * the inPrice of the returned goods.
+	 */
 	private double inPrice;
+
+	/**
+	 * the cigarette flag.
+	 */
+	private boolean isCigarette;
 
 	public ReturnModel() {
 		super();
@@ -43,14 +71,14 @@ public class ReturnModel extends BaseModel {
 	}
 
 	public ReturnModel(String unit, int goodsPriceId, String goodsName, String comment,
-			int number,double inPrice) {
+			int number,double inPrice, boolean isCigarette) {
 		super(comment);
 		this.unit = unit;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-//		this.content = content;
 		this.number = number;
 		this.inPrice = inPrice;
+		this.isCigarette = isCigarette;
 	}
 
 	public ReturnModel(int id, String operator, String customer, int goodsPriceId,
@@ -61,10 +89,7 @@ public class ReturnModel extends BaseModel {
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-//		this.createDate = createDate;
-//		this.content = content;
 		this.number = number;
-//		this.inPrice = inPrice;
 	}
 
 	public int getId() {
@@ -123,22 +148,6 @@ public class ReturnModel extends BaseModel {
 		this.goodsName = goodsName;
 	}
 
-//	public Date getCreateDate() {
-//		return createDate;
-//	}
-//
-//	public void setCreateDate(Date createDate) {
-//		this.createDate = createDate;
-//	}
-
-//	public String getContent() {
-//		return content;
-//	}
-//
-//	public void setContent(String content) {
-//		this.content = content;
-//	}
-
 	public int getNumber() {
 		return number;
 	}
@@ -154,12 +163,21 @@ public class ReturnModel extends BaseModel {
 		this.inPrice = inPrice;
 	}
 
+	public boolean isCigarette() {
+		return isCigarette;
+	}
+
+	public void setCigarette(boolean isCigarette) {
+		this.isCigarette = isCigarette;
+	}
+	
 	public ContentValues genContentValues(){
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
 		
+		this.createDate = now;
+		
 		ContentValues values = new ContentValues();
-//		values.put(Return.COMMENT,number);
 		values.put(Return.COMMENT,comment);
 		values.put(Return.CREATE_DATE,now);
 		values.put(Return.GOODS_ID,goodsPriceId);

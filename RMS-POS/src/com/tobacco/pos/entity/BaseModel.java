@@ -1,7 +1,5 @@
 package com.tobacco.pos.entity;
 
-import java.util.Date;
-import com.tobacco.pos.util.DateTool;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.tobacco.R;
@@ -36,8 +37,6 @@ public class Main extends RMSBaseView {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-
-		
 		
 		ListView saleList = (ListView)findViewById(R.id.listSaleMan);
 		ListView adminList = (ListView)findViewById(R.id.listAdmin);
@@ -49,6 +48,7 @@ public class Main extends RMSBaseView {
 		adminList.setOnItemClickListener(listener);
 		
 		inventoryHandler = new InventoryBillHandler(this); 
+
 	}
 	
 	@Override

@@ -14,36 +14,55 @@ import com.tobacco.pos.util.DateTool;
 public class ComplaintModel extends BaseModel {
 
 	private static String TAG = "ComplaintModel";
-	
+	/**
+	 * the id of this object
+	 */
 	private int id;
 	
+	/**
+	 * the operator who deal with this complaint operation.
+	 */
 	private String operator;
 	
+	/**
+	 * the name of the customer who complaint the goods. maybe a vip or not
+	 */
 	private String customer;
 	
+	/**
+	 * the id of the customer who complaint the goods. maybe a vip or not
+	 */
 	private int customerId;
 	
+	/**
+	 * the id of the complainted goods.
+	 */
 	private int goodsPriceId;
 	
+	/**
+	 * the name of the complainted goods.
+	 */
 	private String goodsName;
 	
-//	private Date createDate;
-	
-//	private String content;
+	/**
+	 * the cigarette flag.
+	 */
+	private boolean isCigarette;
+
 
 	public ComplaintModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ComplaintModel(int customerId, int goodsPriceId, String comment) {
+	public ComplaintModel(int customerId, int goodsPriceId, boolean isCigarette, String comment) {
 		super(comment);
 		this.customerId = customerId;
 		this.goodsPriceId = goodsPriceId;
-//		this.content = content;
+		this.isCigarette = isCigarette;
 	}
 
-	public ComplaintModel(int id, String operator, String customer, int goodsPriceId,
+	public ComplaintModel(int id, String operator, String customer, int goodsPriceId, 
 			String goodsName, String createDate, String comment) {
 		super(createDate,comment);
 		this.id = id;
@@ -51,8 +70,7 @@ public class ComplaintModel extends BaseModel {
 		this.customer = customer;
 		this.goodsPriceId = goodsPriceId;
 		this.goodsName = goodsName;
-//		this.createDate = createDate;
-//		this.content = content;
+
 	}
 
 	public int getId() {
@@ -103,28 +121,21 @@ public class ComplaintModel extends BaseModel {
 		this.goodsName = goodsName;
 	}
 
-//	public String getCreateDate() {
-//		return createDate;
-//	}
-//
-//	public void setCreateDate(Date createDate) {
-//		this.createDate = createDate;
-//	}
+	public boolean isCigarette() {
+		return isCigarette;
+	}
 
-//	public String getContent() {
-//		return content;
-//	}
-//
-//	public void setContent(String content) {
-//		this.content = content;
-//	}
-	
+	public void setCigarette(boolean isCigarette) {
+		this.isCigarette = isCigarette;
+	}
+
 	public ContentValues genContentValues(){
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
 		
+		this.createDate = now;
+		
 		ContentValues values = new ContentValues();
-//		values.put(Complaint.COMMENT,number);
 		values.put(Complaint.COMMENT,comment);
 		values.put(Complaint.CREATE_DATE,now);
 		values.put(Complaint.GOODS_ID,goodsPriceId);

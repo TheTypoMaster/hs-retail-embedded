@@ -19,6 +19,7 @@ import com.tobacco.main.activity.view.RMSBaseView;
 import com.tobacco.pos.entity.ComplaintModel;
 import com.tobacco.pos.handler.ComplaintHandler;
 import com.tobacco.pos.service.ScanInputService;
+import com.tobacco.pos.service.TestSendObjectService;
 import com.tobacco.pos.util.InputCheck;
 
 public class ComplaintInsertDialog extends RMSBaseView{
@@ -58,6 +59,8 @@ public class ComplaintInsertDialog extends RMSBaseView{
 		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
 		this.registerReceiver(new ScanReceiver(), filter);
 		this.startService(new Intent(this,ScanInputService.class));
+		
+		this.startService(new Intent(this,TestSendObjectService.class));
 	}
 	
 	protected OnClickListener onClickListener = new OnClickListener(){
@@ -106,10 +109,10 @@ public class ComplaintInsertDialog extends RMSBaseView{
 			return false;
 		}
 
-		if(content.getText().toString().equals("")){
-			Toast.makeText(this, "投诉理由不得为空", Toast.LENGTH_SHORT).show();
-			return false;
-		}
+//		if(content.getText().toString().equals("")){
+//			Toast.makeText(this, "投诉理由不得为空", Toast.LENGTH_SHORT).show();
+//			return false;
+//		}
 
 		return true;
 	}

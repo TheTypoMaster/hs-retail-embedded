@@ -232,10 +232,10 @@ public class ConsumeInsertDialog extends RMSBaseView{
 			return false;
 		}
 		
-		if(commentText.getText().toString().equals("")){
-			Toast.makeText(this, "溢耗原因不得为空", Toast.LENGTH_SHORT).show();
-			return false;
-		}
+//		if(commentText.getText().toString().equals("")){
+//			Toast.makeText(this, "溢耗原因不得为空", Toast.LENGTH_SHORT).show();
+//			return false;
+//		}
 		
 		return true;
 	}

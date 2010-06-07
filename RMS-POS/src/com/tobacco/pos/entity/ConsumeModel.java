@@ -155,6 +155,8 @@ public class ConsumeModel extends BaseModel{
 		Date today = Calendar.getInstance().getTime();
 		String now = DateTool.formatDateToString(today);
 		
+		this.createDate = now;
+		
 		ContentValues values = new ContentValues();
 		values.put(Consume.NUMBER,number);
 		values.put(Consume.GOODS,goodsPriceId);

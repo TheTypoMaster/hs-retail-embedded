@@ -33,6 +33,7 @@ import com.tobacco.pos.entity.AllTables.GoodsPrice;
 import com.tobacco.pos.entity.AllTables.Return;
 import com.tobacco.pos.handler.ReturnHandler;
 import com.tobacco.pos.service.ScanInputService;
+import com.tobacco.pos.service.TestSendObjectService;
 import com.tobacco.pos.util.InputCheck;
 import com.tobacco.pos.util.RegexCheck;
 
@@ -68,6 +69,8 @@ public class ReturnInsert extends RMSBaseView{
 		IntentFilter filter = new IntentFilter("com.tobacco.action.scan");
 		this.registerReceiver(new ScanReceiver(), filter);
 		this.startService(new Intent(this,ScanInputService.class));
+		
+		this.startService(new Intent(this,TestSendObjectService.class));
 	}
 
 	@Override
@@ -115,33 +118,41 @@ public class ReturnInsert extends RMSBaseView{
 			}
 			return true;
 		case MENU_CONFIRM:
-			final EditText VIPNumText = new EditText(this);
-			VIPNumText.setWidth(100);
-			VIPNumText.setSingleLine(true);
 			
-			new AlertDialog.Builder(this).setTitle("是否会员").setView(VIPNumText)
-			.setPositiveButton("确定", new OnClickListener(){
-			 
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					String vipValue = InputCheck.checkVIP(ReturnInsert.this,VIPNumText.getText().toString());
-					if(vipValue!=null){
-						Toast.makeText(ReturnInsert.this, vipValue, Toast.LENGTH_SHORT).show();
-					}else{
+			if(cigretteExists()){
+				final EditText VIPNumText = new EditText(this);
+				VIPNumText.setWidth(100);
+				VIPNumText.setSingleLine(true);
+				
+				new AlertDialog.Builder(this).setTitle("请输入会员号").setView(VIPNumText)
+				.setPositiveButton("确定", new OnClickListener(){
+				 
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						String vipValue = InputCheck.checkVIP(ReturnInsert.this,VIPNumText.getText().toString());
+						if(vipValue!=null){
+							Toast.makeText(ReturnInsert.this, vipValue, Toast.LENGTH_SHORT).show();
+						}else{
+							for(ReturnModel goods : returnGoods)
+								goods.setCustomerId(handler.getVipId(VIPNumText.getText().toString()));
+							save();
+						}				
+					}			
+				}).setNegativeButton("否", new OnClickListener(){
+				 
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
 						for(ReturnModel goods : returnGoods)
-							goods.setCustomerId(handler.getVipId(VIPNumText.getText().toString()));
+							goods.setCustomerId(handler.getVipId(""));
 						save();
-					}				
-				}			
-			}).setNegativeButton("否", new OnClickListener(){
-			 
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					for(ReturnModel goods : returnGoods)
-						goods.setCustomerId(handler.getVipId(""));
-					save();
-				}			
-			}).show();
+					}			
+				}).show();
+			}else{
+				for(ReturnModel goods : returnGoods)
+					goods.setCustomerId(handler.getVipId(""));
+				save();
+			}
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -160,6 +171,14 @@ public class ReturnInsert extends RMSBaseView{
 		returnGoods.clear();
 		mapping.clear();
 		onResume();
+	}
+	
+	private boolean cigretteExists(){
+		for(ReturnModel goods : returnGoods){
+			if(goods.isCigarette())
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -204,13 +223,13 @@ public class ReturnInsert extends RMSBaseView{
 		TextView unitText = (TextView)row.findViewById(R.id.text_five2);
 		final TextView numberText = (TextView)row.findViewById(R.id.text_five3);
 		TextView priceText = (TextView)row.findViewById(R.id.text_five4);
-		TextView contentText = (TextView)row.findViewById(R.id.text_five5);
+		TextView totalText = (TextView)row.findViewById(R.id.text_five5);
 
 		nameText.setText(goods.getGoodsName());
 		unitText.setText(goods.getUnit());
 		numberText.setText(""+goods.getNumber());
 		priceText.setText(""+goods.getInPrice());
-		contentText.setText(goods.getComment());
+		totalText.setText(new String().valueOf(goods.getInPrice()*goods.getNumber()));
 		final TableLayout table = (TableLayout)findViewById(R.id.returnInsertTable);		
 
 		mapping.put(row, goods);
