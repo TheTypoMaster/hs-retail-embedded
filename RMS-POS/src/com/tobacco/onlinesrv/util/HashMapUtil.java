@@ -17,14 +17,14 @@ public class HashMapUtil {
 
 	public static void setOrderMap(String date,
 			String amount, String agency, String userName, String description,
-			String status,String recieve) {
+			String status,String receive) {
 		orderMap.put(FieldSupport.KEY_DATE, date);
 		orderMap.put(FieldSupport.KEY_AMOUNT, amount);
 		orderMap.put(FieldSupport.KEY_AGENTCYID, agency);
 		orderMap.put(FieldSupport.KEY_USERNAME, userName);
 		orderMap.put(FieldSupport.KEY_DESCRIPTION, description);
 		orderMap.put(FieldSupport.KEY_STATUS, status);
-		orderMap.put(FieldSupport.KEY_RECIEVE, recieve);
+		orderMap.put(FieldSupport.KEY_RECIEVE, receive);
 	}
 	
 	public static void setDetailMapList(String brand, String format, String price,

@@ -35,5 +35,5 @@ public class FieldSupport {
 	public static final String KEY_AGENTCYID = "agencyid";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_STATUS = "status";
-	public static final String KEY_RECIEVE = "recieve";
+	public static final String KEY_RECIEVE = "receive";
 }

@@ -16,7 +16,7 @@ public class FieldSupport {
 	public static final String KEY_AGENTCYID = "agencyid";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_STATUS = "status";
-	public static final String KEY_RECIEVE = "recieve";
+	public static final String KEY_RECIEVE = "receive";
 
 	public static String[] brandType;
 	public static String[] packetPrice;
@@ -28,7 +28,7 @@ public class FieldSupport {
 
 	public static String fromForOrder[] = new String[] { "count", KEY_ORDER_ID,
 			KEY_USERNAME, KEY_DATE, "statusName", KEY_AGENTCYID, KEY_AMOUNT,
-			KEY_DESCRIPTION, "recieveName" };
+			KEY_DESCRIPTION, "receiveName" };
 
 	public static String fromForOrderDetail[] = new String[] {
 			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,

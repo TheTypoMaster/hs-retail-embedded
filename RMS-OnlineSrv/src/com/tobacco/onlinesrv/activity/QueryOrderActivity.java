@@ -44,7 +44,7 @@ public class QueryOrderActivity extends Activity {
 	private String from[] = new String[] { "count", FieldSupport.KEY_ORDER_ID,
 			FieldSupport.KEY_USERNAME, FieldSupport.KEY_DATE, "statusName",
 			FieldSupport.KEY_AGENTCYID, FieldSupport.KEY_AMOUNT,
-			FieldSupport.KEY_DESCRIPTION, "recieveName" };
+			FieldSupport.KEY_DESCRIPTION, "receiveName" };
 
 	private String fromForOrderDetail[] = new String[] {
 			OrderDetail.KEY_BRANDCODE, OrderDetail.KEY_BRANDCOUNT,
@@ -302,11 +302,11 @@ public class QueryOrderActivity extends Activity {
 			actionForEditMenuItem(location);
 			break;
 		case R.id.menuRecieve:
-			TextView recieveText = (TextView) listView.getChildAt(listPosition)
+			TextView receiveText = (TextView) listView.getChildAt(listPosition)
 					.findViewById(R.id.actionItem);
 			TextView statusText = (TextView) listView.getChildAt(listPosition)
 					.findViewById(R.id.statusItem);
-			actionForRecieveMenuItem(recieveText.getText().toString(),
+			actionForRecieveMenuItem(receiveText.getText().toString(),
 					location, statusText.getText().toString());
 			break;
 		case R.id.menuDel:
@@ -379,12 +379,12 @@ public class QueryOrderActivity extends Activity {
 				if (uri == Order.CONTENT_URI) {
 					int RECIEVE_COLUMN = cursor
 							.getColumnIndex(FieldSupport.KEY_RECIEVE);
-					String recieve = cursor.getString(RECIEVE_COLUMN);
-					firstMap.put("recieve", recieve);
-					if (recieve.equals("0")) {
-						firstMap.put("recieveName", "否");
+					String receive = cursor.getString(RECIEVE_COLUMN);
+					firstMap.put("receive", receive);
+					if (receive.equals("0")) {
+						firstMap.put("receiveName", "否");
 					} else
-						firstMap.put("recieveName", "是");
+						firstMap.put("receiveName", "是");
 				}
 
 				dataMaps.add(firstMap);
@@ -479,12 +479,12 @@ public class QueryOrderActivity extends Activity {
 		startActivity(intent);
 	}
 
-	private void actionForRecieveMenuItem(String recieveStr, int location,
+	private void actionForRecieveMenuItem(String receiveStr, int location,
 			String statusStr) {
 		HashMap<String, String> map = dataMaps.get(location);
 		if (getCurrentOrder() == Order.CONTENT_URI) {
 			if (statusStr.equals("已提交")) {
-				if (recieveStr.equals("否")) {
+				if (receiveStr.equals("否")) {
 					ContentValues values = new ContentValues();
 					values.put(Order.KEY_RECIEVE, "1");
 					int num = getContentResolver().update(Order.CONTENT_URI,

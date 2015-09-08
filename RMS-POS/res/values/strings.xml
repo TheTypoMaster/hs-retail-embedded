@@ -64,7 +64,7 @@
 	
 	<string name="editOrder_name">编辑订单</string>
 	<string name="delOrder_name">删除订单</string>
-	<string name="recieveOrder_name">确认收货</string>
+	<string name="receiveOrder_name">确认收货</string>
 	<!-- queryTobaccoUI -->
 	<string name="orderPrice1_name">进货价/包</string>
 	<string name="orderPrice2_name">进货价/条</string>
